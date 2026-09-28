@@ -2,6 +2,10 @@ node_modules/
 lib/
 !packages/**/src/lib/
 !packages/**/src/lib/**
+!src/lib/
+!src/lib/**
+!packages/example/lib/
+!packages/example/lib/**
 esm/
 es/
 !docs/docs/es
