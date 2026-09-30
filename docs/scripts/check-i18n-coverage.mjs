@@ -48,7 +48,7 @@ async function readChangedFiles(args) {
   }
   if (process.stdin.isTTY) {
     console.error('没有从 stdin 收到改动文件列表，也没传 --files=<path>');
-    console.error('用法示例：gh pr view <pr> --json files --jq \'.files[].path\' | node check-i18n-coverage.mjs');
+    console.error("用法示例：gh pr view <pr> --json files --jq '.files[].path' | node check-i18n-coverage.mjs");
     process.exit(2);
   }
   const chunks = [];

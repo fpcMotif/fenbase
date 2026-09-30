@@ -20,7 +20,7 @@ export default class RequestInstruction extends Instruction {
   description = tExpr(
     'Send HTTP request to a URL. You can use the variables in the upstream nodes as request headers, parameters and request body.',
   );
-  icon = (<GlobalOutlined />);
+  icon = <GlobalOutlined />;
   testable = true;
   FieldsetLoader = () => import('./components/RequestFieldset').then((module) => ({ default: module.RequestFieldset }));
 

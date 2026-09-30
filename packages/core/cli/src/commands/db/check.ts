@@ -17,11 +17,7 @@ import {
   formatDbCheckAddress,
   readExternalDbConnectionConfig,
 } from '../../lib/db-connection-check.ts';
-import {
-  DEFAULT_DOCKER_REGISTRY,
-  DEFAULT_DOCKER_VERSION,
-  resolveDockerImageRef,
-} from '../../lib/docker-image.ts';
+import { DEFAULT_DOCKER_REGISTRY, DEFAULT_DOCKER_VERSION, resolveDockerImageRef } from '../../lib/docker-image.ts';
 import { commandOutput } from '../../lib/run-npm.js';
 import { validateTcpPort } from '../../lib/prompt-validators.ts';
 
@@ -94,11 +90,12 @@ function resolveDbConfigFromFlags(
     dbPort: resolveRequiredDbField(flags['db-port'], envConfig?.dbPort),
     dbDatabase: resolveRequiredDbField(flags['db-database'], envConfig?.dbDatabase),
     dbUser: resolveRequiredDbField(flags['db-user'], envConfig?.dbUser),
-    dbPassword: flags['db-password'] !== undefined
-      ? String(flags['db-password'] ?? '')
-      : envConfig?.dbPassword !== undefined
-        ? String(envConfig.dbPassword ?? '')
-        : undefined,
+    dbPassword:
+      flags['db-password'] !== undefined
+        ? String(flags['db-password'] ?? '')
+        : envConfig?.dbPassword !== undefined
+          ? String(envConfig.dbPassword ?? '')
+          : undefined,
   };
 }
 
@@ -172,10 +169,7 @@ async function resolveDbCheckInput(
   };
 }
 
-function buildConnectionConfigOrThrow(
-  command: Pick<DbCheck, 'error'>,
-  dbConfig: ResolvedDbCheckInput['dbConfig'],
-) {
+function buildConnectionConfigOrThrow(command: Pick<DbCheck, 'error'>, dbConfig: ResolvedDbCheckInput['dbConfig']) {
   const connectionConfig = readExternalDbConnectionConfig(dbConfig);
   if (!connectionConfig) {
     command.error('Unsupported or incomplete database settings for connectivity check.');
@@ -183,10 +177,7 @@ function buildConnectionConfigOrThrow(
   return connectionConfig!;
 }
 
-async function runExplicitDbCheck(
-  command: Pick<DbCheck, 'error'>,
-  dbConfig: ResolvedDbCheckInput['dbConfig'],
-) {
+async function runExplicitDbCheck(command: Pick<DbCheck, 'error'>, dbConfig: ResolvedDbCheckInput['dbConfig']) {
   const connectionConfig = buildConnectionConfigOrThrow(command, dbConfig);
   const address = formatDbCheckAddress(connectionConfig);
   const validationError = await checkExternalDbConnection(connectionConfig);
@@ -209,12 +200,7 @@ async function runDockerDbCheck(
     defaultRegistry: DEFAULT_DOCKER_REGISTRY,
     defaultVersion: DEFAULT_DOCKER_VERSION,
   });
-  const args = [
-    'run',
-    '--rm',
-    '--network',
-    runtime.dockerNetworkName || runtime.workspaceName,
-  ];
+  const args = ['run', '--rm', '--network', runtime.dockerNetworkName || runtime.workspaceName];
   const dockerPlatform = normalizeDockerPlatform(config.dockerPlatform);
   if (dockerPlatform) {
     args.push('--platform', dockerPlatform);
@@ -338,14 +324,20 @@ export default class DbCheck extends Command {
       : await runExplicitDbCheck(this, input.dbConfig);
 
     if (flags.json) {
-      this.log(JSON.stringify({
-        ok: result.ok,
-        env: input.envName,
-        kind: input.kind,
-        dialect: result.dialect,
-        address: result.address,
-        error: result.error,
-      }, null, 2));
+      this.log(
+        JSON.stringify(
+          {
+            ok: result.ok,
+            env: input.envName,
+            kind: input.kind,
+            dialect: result.dialect,
+            address: result.address,
+            error: result.error,
+          },
+          null,
+          2,
+        ),
+      );
       return;
     }
 

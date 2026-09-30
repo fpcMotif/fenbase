@@ -329,7 +329,7 @@ export const KanbanGroupOptionsTable = observer(
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
-          gap: optionsError ? token.marginXS ?? 8 : 0,
+          gap: optionsError ? (token.marginXS ?? 8) : 0,
         }}
       >
         {optionsError ? <Alert type="error" message={optionsError} showIcon /> : null}

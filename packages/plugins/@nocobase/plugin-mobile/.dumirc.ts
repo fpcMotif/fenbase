@@ -8,7 +8,7 @@ export default defineConfig({
   mfsu: false,
   cacheDirectoryPath: `node_modules/.docs-mobile-cache`,
   alias: {
-    ...umiConfig.alias
+    ...umiConfig.alias,
   },
   resolve: {
     atomDirs: [
@@ -16,10 +16,12 @@ export default defineConfig({
       { type: 'component', dir: 'src/server' },
     ],
   },
-  styles: [`
+  styles: [
+    `
     .dumi-mobile-demo-layout { padding: 0 !important; }
     .dumi-default-previewer-sources{ flex: 0 !important; margin-top: 50px; }
-  `],
+  `,
+  ],
   metas: [
     {
       name: 'viewport',

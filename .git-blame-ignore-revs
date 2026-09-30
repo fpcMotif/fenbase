@@ -1,0 +1,2 @@
+# Format codebase with oxfmt (migration to Oxc toolchain)
+# Run `git config blame.ignoreRevsFile .git-blame-ignore-revs` to configure git blame

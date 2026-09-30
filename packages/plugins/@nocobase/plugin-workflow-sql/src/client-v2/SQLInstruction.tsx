@@ -21,7 +21,7 @@ export default class SQLInstruction extends Instruction {
   type = SQL_INSTRUCTION_TYPE;
   group = 'collection';
   description = t('Execute a SQL statement in database.');
-  icon = (<ConsoleSqlOutlined />);
+  icon = <ConsoleSqlOutlined />;
   testable = true;
   FieldsetLoader: LoaderOf = () => import('./components/SQLFieldset').then((m) => ({ default: m.SQLFieldset }));
 

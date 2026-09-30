@@ -101,8 +101,9 @@ export const CollectionFieldInterfaceSelect = observer(
       }
     }, [initOptions, record?.possibleTypes, targetType]);
     if (['oho', 'obo', 'o2m', 'm2o', 'm2m'].includes(record.interface) || disabled || !options.length) {
-      const relationInterface = initOptions.find((h) => h.key === 'relation')?.children?.find((v) => v.name === value)
-        ?.label;
+      const relationInterface = initOptions
+        .find((h) => h.key === 'relation')
+        ?.children?.find((v) => v.name === value)?.label;
 
       return <Tag key={value}>{compile(relationInterface || getInterfaceTitle(value, record, getInterface))}</Tag>;
     }

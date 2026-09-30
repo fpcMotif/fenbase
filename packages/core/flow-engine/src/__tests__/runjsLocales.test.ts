@@ -13,7 +13,7 @@ import { setupRunJSContexts } from '../runjs-context/setup';
 import { FlowContext } from '../flowContext';
 
 function getRunJSDocText(doc: unknown) {
-  return typeof doc === 'string' ? doc : (doc as any)?.description ?? (doc as any)?.detail ?? '';
+  return typeof doc === 'string' ? doc : ((doc as any)?.description ?? (doc as any)?.detail ?? '');
 }
 
 describe('RunJS locales patch (engine doc)', () => {

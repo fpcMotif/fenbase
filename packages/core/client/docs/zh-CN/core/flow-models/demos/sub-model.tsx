@@ -6,9 +6,9 @@ import { Button, Tabs } from 'antd';
 import _ from 'lodash';
 import React from 'react';
 
-class FlowModelRepository
-  implements IFlowModelRepository<FlowModel<{ parent: never; subModels: { tabs: TabFlowModel[] } }>>
-{
+class FlowModelRepository implements IFlowModelRepository<
+  FlowModel<{ parent: never; subModels: { tabs: TabFlowModel[] } }>
+> {
   get models() {
     const models = new Map();
     for (let i = 0; i < localStorage.length; i++) {

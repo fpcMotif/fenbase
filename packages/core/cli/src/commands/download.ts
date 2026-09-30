@@ -8,11 +8,7 @@
  */
 
 export { defaultDockerRegistryForLang } from './source/download.js';
-export type {
-  DownloadCommandResult,
-  DownloadParsedFlags,
-  DownloadResolvedFlags,
-} from './source/download.js';
+export type { DownloadCommandResult, DownloadParsedFlags, DownloadResolvedFlags } from './source/download.js';
 import SourceDownload from './source/download.js';
 
 export default class Download extends SourceDownload {

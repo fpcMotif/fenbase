@@ -18,11 +18,7 @@ interface CrossRef {
   aliasRoute: string;
 }
 
-type SidebarNode =
-  | SidebarItem
-  | SidebarGroup
-  | SidebarSectionHeader
-  | SidebarDivider;
+type SidebarNode = SidebarItem | SidebarGroup | SidebarSectionHeader | SidebarDivider;
 
 // ── 递归收集所有叶子 link（用于跨模块检测）────────────────────────────
 
@@ -34,12 +30,7 @@ function isExternalLink(link: string): boolean {
   return link.startsWith('http://') || link.startsWith('https://');
 }
 
-function resolveSidebarLink(
-  obj: Record<string, unknown>,
-  link: string,
-  crossRefs: CrossRef[],
-  topDir: string,
-): string {
+function resolveSidebarLink(obj: Record<string, unknown>, link: string, crossRefs: CrossRef[], topDir: string): string {
   if (!shouldProxyLink(obj)) {
     return isExternalLink(link) ? link : encodeTargetBlankHref(link);
   }
@@ -51,11 +42,7 @@ function collectLeafLinks(entries: unknown[]): string[] {
   const links: string[] = [];
   for (const entry of entries) {
     const obj = entry as Record<string, unknown>;
-    if (
-      typeof obj?.link === 'string' &&
-      !Array.isArray(obj.items) &&
-      shouldProxyLink(obj)
-    ) {
+    if (typeof obj?.link === 'string' && !Array.isArray(obj.items) && shouldProxyLink(obj)) {
       links.push(obj.link as string);
     }
     if (Array.isArray(obj?.items)) {
@@ -121,13 +108,7 @@ function resolveEntries(
       if (Array.isArray(obj.items)) {
         result.push({
           text: (obj.label as string) || '',
-          items: resolveEntries(
-            root,
-            relDir,
-            obj.items as unknown[],
-            crossRefs,
-            topDir,
-          ),
+          items: resolveEntries(root, relDir, obj.items as unknown[], crossRefs, topDir),
           collapsible: true,
           collapsed: obj.collapsed !== false,
         });
@@ -148,19 +129,14 @@ function resolveEntries(
 
     // type: "file" 或 { type: "file", name: "xxx" }
     if (type === 'file' && typeof obj.name === 'string') {
-      const route =
-        obj.name === 'index' ? relDir || '/' : relDir + '/' + obj.name;
+      const route = obj.name === 'index' ? relDir || '/' : relDir + '/' + obj.name;
       const label = typeof obj.label === 'string' ? obj.label : obj.name;
       result.push({ text: label, link: route });
       continue;
     }
 
     // type: "dir" 带 name（无 items）→ 递归读子目录的 _meta.json
-    if (
-      (type === 'dir' || type === 'custom-link') &&
-      typeof obj.name === 'string' &&
-      !Array.isArray(obj.items)
-    ) {
+    if ((type === 'dir' || type === 'custom-link') && typeof obj.name === 'string' && !Array.isArray(obj.items)) {
       const subDir = relDir + '/' + obj.name;
       const subItems = readSubDirMeta(root, subDir, crossRefs, topDir);
       const label = typeof obj.label === 'string' ? obj.label : obj.name;
@@ -184,29 +160,15 @@ function resolveEntries(
     }
 
     // custom-link / dir 带 items → 显式分组
-    if (
-      (type === 'custom-link' || type === 'dir') &&
-      Array.isArray(obj.items)
-    ) {
+    if ((type === 'custom-link' || type === 'dir') && Array.isArray(obj.items)) {
       const group: SidebarGroup = {
         text: (obj.label as string) || '',
-        items: resolveEntries(
-          root,
-          relDir,
-          obj.items as unknown[],
-          crossRefs,
-          topDir,
-        ),
+        items: resolveEntries(root, relDir, obj.items as unknown[], crossRefs, topDir),
         collapsible: obj.collapsible !== false,
         collapsed: obj.collapsed === true,
       };
       if (typeof obj.link === 'string') {
-        group.link = resolveSidebarLink(
-          obj,
-          obj.link as string,
-          crossRefs,
-          topDir,
-        );
+        group.link = resolveSidebarLink(obj, obj.link as string, crossRefs, topDir);
       }
       result.push(group);
       continue;
@@ -226,12 +188,7 @@ function resolveEntries(
 }
 
 /** 读子目录的 _meta.json，不存在则自动发现文件 */
-function readSubDirMeta(
-  root: string,
-  relDir: string,
-  crossRefs: CrossRef[],
-  topDir: string,
-): SidebarNode[] {
+function readSubDirMeta(root: string, relDir: string, crossRefs: CrossRef[], topDir: string): SidebarNode[] {
   const metaFile = path.join(root, relDir, '_meta.json');
   if (fs.existsSync(metaFile)) {
     const meta: unknown = JSON.parse(fs.readFileSync(metaFile, 'utf-8'));
@@ -248,14 +205,12 @@ function autoDiscoverFiles(root: string, relDir: string): SidebarNode[] {
   if (!fs.existsSync(absDir)) return [];
 
   const items: SidebarNode[] = [];
-  for (const entry of fs
-    .readdirSync(absDir, { withFileTypes: true })
-    .sort((a, b) => {
-      // index 文件排最前
-      if (a.name.startsWith('index.')) return -1;
-      if (b.name.startsWith('index.')) return 1;
-      return a.name.localeCompare(b.name);
-    })) {
+  for (const entry of fs.readdirSync(absDir, { withFileTypes: true }).sort((a, b) => {
+    // index 文件排最前
+    if (a.name.startsWith('index.')) return -1;
+    if (b.name.startsWith('index.')) return 1;
+    return a.name.localeCompare(b.name);
+  })) {
     if (entry.name.startsWith('.') || entry.name.startsWith('_')) continue;
     if (entry.isFile() && /\.(md|mdx)$/.test(entry.name)) {
       const name = entry.name.replace(/\.(md|mdx)$/, '');
@@ -267,14 +222,8 @@ function autoDiscoverFiles(root: string, relDir: string): SidebarNode[] {
 }
 
 /** 如果是跨模块链接则改写为虚拟路由路径，保留 # 锚点 */
-function rewriteIfCrossRef(
-  link: string,
-  crossRefs: CrossRef[],
-  topDir: string,
-): string {
-  const ref = crossRefs.find(
-    (r) => r.sourceDir === topDir && r.targetLink === link,
-  );
+function rewriteIfCrossRef(link: string, crossRefs: CrossRef[], topDir: string): string {
+  const ref = crossRefs.find((r) => r.sourceDir === topDir && r.targetLink === link);
   if (!ref) return link;
   const hashIndex = link.indexOf('#');
   const hash = hashIndex !== -1 ? link.slice(hashIndex) : '';
@@ -324,16 +273,11 @@ export function pluginCrossRefSidebar(): RspressPlugin {
         hasTargetBlankLinks = hasTargetBlankLinks || hasUnproxiedLinks(meta);
 
         for (const link of collectLeafLinks(meta)) {
-          if (link.startsWith('http://') || link.startsWith('https://'))
-            continue;
+          if (link.startsWith('http://') || link.startsWith('https://')) continue;
           const linkPath = link.split('#')[0];
           if (linkPath !== topDir && !linkPath.startsWith(topDir + '/')) {
             // 避免重复
-            if (
-              !crossRefs.some(
-                (r) => r.sourceDir === topDir && r.targetLink === link,
-              )
-            ) {
+            if (!crossRefs.some((r) => r.sourceDir === topDir && r.targetLink === link)) {
               crossRefs.push({
                 sourceDir: topDir,
                 targetLink: link,
@@ -356,12 +300,7 @@ export function pluginCrossRefSidebar(): RspressPlugin {
 
       for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
         if (!entry.isDirectory()) continue;
-        if (
-          entry.name.startsWith('.') ||
-          entry.name === 'node_modules' ||
-          entry.name === 'public'
-        )
-          continue;
+        if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'public') continue;
 
         const relDir = '/' + entry.name;
         const metaFile = path.join(root, entry.name, '_meta.json');
@@ -404,13 +343,7 @@ export function pluginCrossRefSidebar(): RspressPlugin {
       // 按语言隔离临时目录，避免并行构建（CI 中多语言同时跑）共用同名文件 cross-ref-N.md
       // 导致后写覆盖先写，使虚拟路由的源内容串到错误的语言。
       const lang = process.env.DOCS_LANG || 'en';
-      const tempDir = path.join(
-        process.cwd(),
-        'node_modules',
-        '.rspress',
-        'cross-ref',
-        lang,
-      );
+      const tempDir = path.join(process.cwd(), 'node_modules', '.rspress', 'cross-ref', lang);
       fs.mkdirSync(tempDir, { recursive: true });
 
       return crossRefs
@@ -422,21 +355,14 @@ export function pluginCrossRefSidebar(): RspressPlugin {
           const rawContent = fs.readFileSync(filepath, 'utf-8');
           // 源文件里的相对链接是相对源目录的，拷到临时目录后会失效——按源目录改写成
           // 相对 lang 根的绝对路径，让 rspress 在 alias route 上也能解析。
-          const srcRelDir =
-            '/' +
-            path
-              .relative(root, path.dirname(filepath))
-              .split(path.sep)
-              .join('/');
+          const srcRelDir = '/' + path.relative(root, path.dirname(filepath)).split(path.sep).join('/');
           const content = rewriteRelativeMarkdownLinks(rawContent, srcRelDir);
           // 写成 .md 而不是让 Rspress 默认写成 .mdx，避免 MDX 严格模式导致 HTML 注释报错
           const tempFile = path.join(tempDir, `cross-ref-${index}.md`);
           fs.writeFileSync(tempFile, content);
           return { routePath: ref.aliasRoute, filepath: tempFile };
         })
-        .filter(
-          (p): p is { routePath: string; filepath: string } => p !== null,
-        );
+        .filter((p): p is { routePath: string; filepath: string } => p !== null);
     },
   };
 }
@@ -445,23 +371,17 @@ export function pluginCrossRefSidebar(): RspressPlugin {
 
 /** 把 markdown 里的相对链接（./xxx、../xxx）按源目录改写成相对 lang 根的绝对路径。
  *  跳过图片（!\[...\]）、外链、锚点链接和已经是绝对路径的目标。 */
-function rewriteRelativeMarkdownLinks(
-  content: string,
-  srcRelDir: string,
-): string {
-  return content.replace(
-    /(!?)(\[[^\]\n]*\])\(([^)\s]+)(\s+"[^"]*")?\)/g,
-    (match, bang, label, target, title) => {
-      if (bang) return match;
-      if (!target.startsWith('./') && !target.startsWith('../')) return match;
-      const hashIdx = target.search(/[#?]/);
-      const base = hashIdx >= 0 ? target.slice(0, hashIdx) : target;
-      const suffix = hashIdx >= 0 ? target.slice(hashIdx) : '';
-      const resolved = path.posix.normalize(path.posix.join(srcRelDir, base));
-      const absolute = resolved.startsWith('/') ? resolved : '/' + resolved;
-      return `${label}(${absolute}${suffix}${title || ''})`;
-    },
-  );
+function rewriteRelativeMarkdownLinks(content: string, srcRelDir: string): string {
+  return content.replace(/(!?)(\[[^\]\n]*\])\(([^)\s]+)(\s+"[^"]*")?\)/g, (match, bang, label, target, title) => {
+    if (bang) return match;
+    if (!target.startsWith('./') && !target.startsWith('../')) return match;
+    const hashIdx = target.search(/[#?]/);
+    const base = hashIdx >= 0 ? target.slice(0, hashIdx) : target;
+    const suffix = hashIdx >= 0 ? target.slice(hashIdx) : '';
+    const resolved = path.posix.normalize(path.posix.join(srcRelDir, base));
+    const absolute = resolved.startsWith('/') ? resolved : '/' + resolved;
+    return `${label}(${absolute}${suffix}${title || ''})`;
+  });
 }
 
 function resolveSourceFile(root: string, link: string): string | null {

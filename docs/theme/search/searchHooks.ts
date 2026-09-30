@@ -10,11 +10,7 @@
  */
 import type { DefaultMatchResult, OnSearch } from '@rspress/core/theme';
 import { searchSections } from 'virtual-search-sections';
-import {
-  PLUGIN_SECTION_ID,
-  resolveSection,
-  type SearchSection,
-} from '../../shared/searchSections';
+import { PLUGIN_SECTION_ID, resolveSection, type SearchSection } from '../../shared/searchSections';
 
 type DefaultMatchResultItem = DefaultMatchResult['result'][number];
 
@@ -77,10 +73,7 @@ function rankOf(item: DefaultMatchResultItem, query: string): number {
  * 只在前面所有判据都打平时才用得上。例如英文站 `/template-print/`（Template Printing）和
  * `/template-print/http-api`（Template Print HTTP API）同为前缀命中，这时短的更「正题」。
  */
-function compareTitleLength(
-  a: DefaultMatchResultItem,
-  b: DefaultMatchResultItem,
-): number {
+function compareTitleLength(a: DefaultMatchResultItem, b: DefaultMatchResultItem): number {
   if (a.type !== 'title' || b.type !== 'title') {
     return 0;
   }
@@ -88,12 +81,8 @@ function compareTitleLength(
 }
 
 /** 取一条结果的分组标记；没打上标记（理论上不会）时返回 undefined，由渲染层回落到兜底分组。 */
-export function getSectionOf(
-  item: DefaultMatchResultItem | undefined,
-): SearchSection | undefined {
-  return item && 'section' in item
-    ? (item as SectionedMatchResultItem).section
-    : undefined;
+export function getSectionOf(item: DefaultMatchResultItem | undefined): SearchSection | undefined {
+  return item && 'section' in item ? (item as SectionedMatchResultItem).section : undefined;
 }
 
 /** 合并后的正文预览最多展示几个片段。再多卡片会长到喧宾夺主。 */
@@ -102,9 +91,7 @@ const MAX_MERGED_STATEMENTS = 3;
 /** 合并正文片段时的分隔符。 */
 const STATEMENT_SEPARATOR = ' … ';
 
-function isContentMatch(
-  item: DefaultMatchResultItem,
-): item is Extract<DefaultMatchResultItem, { type: 'content' }> {
+function isContentMatch(item: DefaultMatchResultItem): item is Extract<DefaultMatchResultItem, { type: 'content' }> {
   return item.type === 'content';
 }
 
@@ -113,9 +100,7 @@ function isContentMatch(
  *
  * 高亮位置是相对 statement 的偏移量，拼接后必须整体右移各自片段在结果串里的起点，否则高亮会错位。
  */
-function mergeContentMatches(
-  matches: Extract<DefaultMatchResultItem, { type: 'content' }>[],
-): DefaultMatchResultItem {
+function mergeContentMatches(matches: Extract<DefaultMatchResultItem, { type: 'content' }>[]): DefaultMatchResultItem {
   const [first] = matches;
   if (matches.length === 1) {
     return first;
@@ -154,16 +139,10 @@ function mergeContentMatches(
 }
 
 /** 去重 + 打标 + 排序。抽成纯函数，方便脱离 rspress 运行时验证。 */
-export function organizeSearchResult(
-  items: DefaultMatchResultItem[],
-  query: string,
-): SectionedMatchResultItem[] {
+export function organizeSearchResult(items: DefaultMatchResultItem[], query: string): SectionedMatchResultItem[] {
   // 同一页面的多条正文命中先合并成一条，多个片段进同一条预览。
   // 用不带锚点的路由做 key：正文片段的锚点是按所在小节推出来的，同一页不同段落锚点可能不同。
-  const contentByPage = new Map<
-    string,
-    Extract<DefaultMatchResultItem, { type: 'content' }>[]
-  >();
+  const contentByPage = new Map<string, Extract<DefaultMatchResultItem, { type: 'content' }>[]>();
   for (const item of items) {
     if (!isContentMatch(item)) {
       continue;
@@ -197,10 +176,7 @@ export function organizeSearchResult(
     deduped.push(mergedContent.get(pageKey) ?? item);
   }
 
-  const bestByLink = new Map<
-    string,
-    { item: DefaultMatchResultItem; index: number }
-  >();
+  const bestByLink = new Map<string, { item: DefaultMatchResultItem; index: number }>();
 
   deduped.forEach((item, index) => {
     const existing = bestByLink.get(item.link);
@@ -264,10 +240,6 @@ export function organizeSearchResult(
 export const onSearch: OnSearch = (query, matchedResult) => {
   for (const group of matchedResult) {
     // 原地替换：rspress 把这个数组直接交给渲染层，返回新数组不会生效。
-    group.result.splice(
-      0,
-      group.result.length,
-      ...organizeSearchResult(group.result, query),
-    );
+    group.result.splice(0, group.result.length, ...organizeSearchResult(group.result, query));
   }
 };

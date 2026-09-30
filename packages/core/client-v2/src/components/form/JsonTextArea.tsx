@@ -101,7 +101,7 @@ const JsonTextAreaComponent = React.forwardRef<TextAreaRef, JsonTextAreaProps>((
       try {
         const parsed = parseText(event.target.value);
         setError(undefined);
-        setText(parsed == null ? '' : json.stringify(parsed, undefined, space) ?? '');
+        setText(parsed == null ? '' : (json.stringify(parsed, undefined, space) ?? ''));
         onChange?.(parsed);
       } catch (err) {
         setError(err instanceof Error ? err.message : String(err));

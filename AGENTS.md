@@ -43,7 +43,7 @@ If a file `AGENTS.local.md` exists in this repository root, read it once at the 
 
 ## Pre-Commit Workflow
 
-- Run `yarn eslint --fix` on touched files before reporting work as done. Resolve type errors and lint warnings rather than disabling them.
+- Run `bun run lint` and `bun run format` on touched files before reporting work as done. Resolve type errors and lint warnings rather than disabling them.
 
 ## Commit Conventions
 

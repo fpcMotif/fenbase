@@ -13,15 +13,15 @@ import { failTask, printInfo, startTask, succeedTask } from '../../lib/ui.js';
 
 function formatPublishFailure(message: string): string {
   if (
-    message.includes('The specified --cwd does not exist:')
-    || message.includes('The specified --cwd is not a directory:')
-    || message.includes('Couldn\'t find a NocoBase source project from --cwd:')
+    message.includes('The specified --cwd does not exist:') ||
+    message.includes('The specified --cwd is not a directory:') ||
+    message.includes("Couldn't find a NocoBase source project from --cwd:")
   ) {
     return message;
   }
 
   return [
-    'Couldn\'t publish a source snapshot.',
+    "Couldn't publish a source snapshot.",
     'Check that Docker is running, the target npm registry is reachable, and the current directory is a NocoBase source repo.',
     `Details: ${message}`,
   ].join('\n');
@@ -51,7 +51,8 @@ export default class SourcePublish extends Command {
       required: false,
     }),
     cwd: Flags.string({
-      description: 'Source repository path. Defaults to the nearest detected NocoBase source root from the current working directory',
+      description:
+        'Source repository path. Defaults to the nearest detected NocoBase source root from the current working directory',
       required: false,
     }),
     'no-build': Flags.boolean({
@@ -92,13 +93,19 @@ export default class SourcePublish extends Command {
       });
 
       if (flags.json) {
-        this.log(JSON.stringify({
-          version: result.version,
-          npmRegistry: result.npmRegistry,
-          gitSha: result.gitSha,
-          projectRoot: result.projectRoot,
-          suggestedInitCommand: buildSuggestedInitCommand(result),
-        }, null, 2));
+        this.log(
+          JSON.stringify(
+            {
+              version: result.version,
+              npmRegistry: result.npmRegistry,
+              gitSha: result.gitSha,
+              projectRoot: result.projectRoot,
+              suggestedInitCommand: buildSuggestedInitCommand(result),
+            },
+            null,
+            2,
+          ),
+        );
         return;
       }
 
@@ -110,9 +117,15 @@ export default class SourcePublish extends Command {
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       if (flags.json) {
-        this.logToStderr(JSON.stringify({
-          error: formatPublishFailure(message),
-        }, null, 2));
+        this.logToStderr(
+          JSON.stringify(
+            {
+              error: formatPublishFailure(message),
+            },
+            null,
+            2,
+          ),
+        );
         this.exit(1);
       }
 

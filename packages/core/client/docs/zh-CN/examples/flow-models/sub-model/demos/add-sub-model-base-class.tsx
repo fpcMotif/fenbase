@@ -73,7 +73,6 @@ class Sub4BlockModel extends BlockModel {
   }
 }
 
-
 Sub2BlockModel.define({
   label: 'Sub2 Block',
   hide: (ctx) => ctx.model.title !== 'HelloBlockModel',

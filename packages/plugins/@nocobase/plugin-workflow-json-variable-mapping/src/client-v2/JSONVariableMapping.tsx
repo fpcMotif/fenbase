@@ -37,7 +37,7 @@ export default class JSONVariableMappingInstruction extends Instruction {
   type = 'json-variable-mapping';
   group = 'control';
   description = tExpr('Used for mapping any JSON data to structured variables for usage in subsequent nodes.');
-  icon = (<SwapRightOutlined />);
+  icon = <SwapRightOutlined />;
   FieldsetLoader = () =>
     import('./components/JSONVariableMappingFieldset').then((module) => ({
       default: module.JSONVariableMappingFieldset,

@@ -1,0 +1,17 @@
+{
+  "$schema": "../node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "trailingComma": "all",
+  "printWidth": 120,
+  "ignorePatterns": [
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "yarn.lock",
+    "dist/**",
+    "node_modules/**",
+    "**/*.md",
+    "**/*.mdx",
+    "**/*.svg",
+    "**/*.html"
+  ]
+}

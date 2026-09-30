@@ -205,7 +205,7 @@ function TranslationTaskConfirmContent(props: {
         </div>
       ) : null}
       <div>
-        <Text strong>{t('Entries to translate')}</Text>: {previewLoading ? t('Loading...') : preview?.count ?? 0}
+        <Text strong>{t('Entries to translate')}</Text>: {previewLoading ? t('Loading...') : (preview?.count ?? 0)}
       </div>
       <div>
         <Text strong>{t('Provider')}</Text>: {providerLabel || '-'}

@@ -20,7 +20,7 @@ export default class extends Instruction {
   title = t('Multi conditions');
   group = 'control';
   description = `{{t('From left to right, attempt each branch sequentially based on the configured conditions. Only branches that meet the conditions will be executed. Otherwise, the next branch will be attempted. If none of the branches meet the conditions, it can either exit the process or continue to the next node based on configuration.', { ns: "${NAMESPACE}" })}}`;
-  icon = (<ClusterOutlined />);
+  icon = <ClusterOutlined />;
   branching = [
     {
       label: t('First condition'),

@@ -181,7 +181,7 @@ export default class LicenseActivate extends Command {
       env: runtime.envName,
       kind: runtime.kind,
       instanceId: shouldResolveInstanceId
-        ? interactiveKeyFlowInstanceId ?? (await ensureInstanceId(runtime))
+        ? (interactiveKeyFlowInstanceId ?? (await ensureInstanceId(runtime)))
         : undefined,
       mode: 'key',
       key: redactLicenseKey(resolvedKey),

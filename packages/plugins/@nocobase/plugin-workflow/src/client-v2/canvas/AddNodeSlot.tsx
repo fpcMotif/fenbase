@@ -147,8 +147,8 @@ export function AddNodeSlot({
 
   const loading = Boolean(
     addNodeContext?.creating &&
-      addNodeContext.creating.upstreamId === (upstream?.id ?? null) &&
-      addNodeContext.creating.branchIndex === branchIndex,
+    addNodeContext.creating.upstreamId === (upstream?.id ?? null) &&
+    addNodeContext.creating.branchIndex === branchIndex,
   );
 
   if (!workflow || !addNodeContext || branchContext?.addable === false) {

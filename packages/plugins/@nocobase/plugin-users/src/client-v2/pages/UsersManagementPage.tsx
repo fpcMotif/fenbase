@@ -100,7 +100,11 @@ function UsersTable() {
         title: t('Roles'),
         dataIndex: 'roles',
         render: (roles: User['roles']) => (
-          <Space wrap>{roles?.map((role) => <Tag key={role.name}>{t(role.title)}</Tag>)}</Space>
+          <Space wrap>
+            {roles?.map((role) => (
+              <Tag key={role.name}>{t(role.title)}</Tag>
+            ))}
+          </Space>
         ),
       },
       {

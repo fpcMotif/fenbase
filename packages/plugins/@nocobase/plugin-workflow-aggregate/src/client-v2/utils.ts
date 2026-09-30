@@ -18,8 +18,8 @@ export function matchToManyField(field: CollectionTriggerField): boolean {
 export function isAggregateValueField(field: CollectionTriggerField): boolean {
   return Boolean(
     !field.hidden &&
-      field.interface &&
-      !RELATION_FIELD_TYPES.includes(field.type as (typeof RELATION_FIELD_TYPES)[number]),
+    field.interface &&
+    !RELATION_FIELD_TYPES.includes(field.type as (typeof RELATION_FIELD_TYPES)[number]),
   );
 }
 

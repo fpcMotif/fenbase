@@ -25,7 +25,7 @@ export class FormGridModel<T extends DefaultFormGridStructure = DefaultFormGridS
     return { ...super.serialize(), variableContractType: { type: 'formGrid', use: this.use } };
   }
 
-  itemFallback = (<Skeleton.Input block size="small" style={{ marginBottom: '0.5rem' }} />);
+  itemFallback = <Skeleton.Input block size="small" style={{ marginBottom: '0.5rem' }} />;
   itemSettingsMenuLevel = 2;
   itemFlowSettings = {
     showBackground: true,

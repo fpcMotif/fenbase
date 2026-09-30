@@ -115,7 +115,7 @@ export class FilterFormGridModel extends GridModel {
       sizes: source?.sizes ?? this.props.sizes ?? params.sizes,
       rowOrder: source?.rowOrder ?? this.props.rowOrder ?? params.rowOrder,
       // 折叠态只保留当前可见字段，避免归一化时把被裁掉的字段重新补回布局。
-      itemUids: useVisibleItemUids ? this.normalizedItemUidsOverride ?? this.getItemUids() : this.getItemUids(),
+      itemUids: useVisibleItemUids ? (this.normalizedItemUidsOverride ?? this.getItemUids()) : this.getItemUids(),
       gridUid: this.uid,
       logger: console,
     });

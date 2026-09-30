@@ -28,9 +28,7 @@ export function fail<E>(error: E): EffectResult<never, E> {
   return { _tag: 'Failure', error };
 }
 
-export async function runEffectPromise<A>(
-  effectFn: () => Promise<A>,
-): Promise<EffectResult<A, ConvexRpcError>> {
+export async function runEffectPromise<A>(effectFn: () => Promise<A>): Promise<EffectResult<A, ConvexRpcError>> {
   try {
     const value = await effectFn();
     return succeed(value);

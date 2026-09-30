@@ -73,9 +73,16 @@ function parseArgs(argv) {
     } else if (arg === '--remove-unresolved-meta') {
       parsed.removeUnresolvedMeta = true;
     } else if (arg === '--langs') {
-      parsed.langs = readValue(argv, (index += 1), arg).split(',').map(s => s.trim()).filter(Boolean);
+      parsed.langs = readValue(argv, (index += 1), arg)
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
     } else if (arg.startsWith('--langs=')) {
-      parsed.langs = arg.slice('--langs='.length).split(',').map(s => s.trim()).filter(Boolean);
+      parsed.langs = arg
+        .slice('--langs='.length)
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
     } else if (arg === '--root') {
       parsed.root = readValue(argv, (index += 1), arg);
     } else if (arg.startsWith('--root=')) {
@@ -118,18 +125,16 @@ Notes:
 function listLanguageDirs(root) {
   return fs
     .readdirSync(root, { withFileTypes: true })
-    .filter(entry =>
-      entry.isDirectory() &&
-      !entry.name.startsWith('.') &&
-      entry.name !== 'public' &&
-      !SKIP_LANGS.has(entry.name),
+    .filter(
+      (entry) =>
+        entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'public' && !SKIP_LANGS.has(entry.name),
     )
-    .map(entry => entry.name)
+    .map((entry) => entry.name)
     .sort();
 }
 
 function normalizeMetaLinks(langRoot, options) {
-  const files = walk(langRoot, file => path.basename(file) === '_meta.json');
+  const files = walk(langRoot, (file) => path.basename(file) === '_meta.json');
   const changes = [];
 
   for (const file of files) {
@@ -293,7 +298,7 @@ function existsIndex(absDir) {
 
 function summarizeChanges(changes, keys) {
   const summary = {};
-  for (const key of keys) summary[key] = changes.filter(change => change.type === key).length;
+  for (const key of keys) summary[key] = changes.filter((change) => change.type === key).length;
   return { summary, changes };
 }
 
@@ -323,7 +328,7 @@ function printSection(name, section) {
 
   console.log(`  ${name}: ${total} item${total === 1 ? '' : 's'} found`);
   for (const type of Object.keys(section.summary)) {
-    const changes = section.changes.filter(change => change.type === type);
+    const changes = section.changes.filter((change) => change.type === type);
     if (changes.length === 0) continue;
 
     console.log(`    ${labelForType(type)}: ${changes.length}`);

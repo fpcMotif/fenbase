@@ -112,8 +112,8 @@ type FileStreamDataSource = {
 function supportsFileStream(dataSource: unknown): dataSource is FileStreamDataSource {
   return Boolean(
     dataSource &&
-      typeof dataSource === 'object' &&
-      typeof (dataSource as { getFileStream?: unknown }).getFileStream === 'function',
+    typeof dataSource === 'object' &&
+    typeof (dataSource as { getFileStream?: unknown }).getFileStream === 'function',
   );
 }
 

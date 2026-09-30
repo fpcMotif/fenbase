@@ -110,7 +110,7 @@ describe('flowRunJSContext registry and doc', () => {
       const doc = getRunJSDocFor(ctx as any, { version: 'v1' });
       const message = doc?.properties?.message;
       const messageText =
-        typeof message === 'string' ? message : (message as any)?.description ?? (message as any)?.detail ?? '';
+        typeof message === 'string' ? message : ((message as any)?.description ?? (message as any)?.detail ?? '');
       expect(String(messageText)).toMatch(/Ant Design 全局消息/);
       expect((doc?.methods?.render as any)?.completion?.requires).toContain('element');
       expect((doc?.properties?.viewer as any)?.properties?.popover?.completion?.requires).toContain('element');

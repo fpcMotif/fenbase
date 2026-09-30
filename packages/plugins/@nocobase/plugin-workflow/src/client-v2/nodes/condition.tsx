@@ -37,7 +37,7 @@ export default class extends Instruction {
   // Inline single-quote `{{t('…')}}` template (mirrors v1's `condition.tsx`): the text contains inner double-quotes, so
   // the key must be single-quoted to avoid terminating the template early. `useT()` expands it in the drawer.
   description = `{{t('Based on boolean result of the calculation to determine whether to "continue" or "exit" the process, or continue on different branches of "yes" and "no".', { ns: "${NAMESPACE}" })}}`;
-  icon = (<QuestionCircleOutlined />);
+  icon = <QuestionCircleOutlined />;
   testable = true;
   // Branch into "Yes"/"No" when not in reject-on-false mode (mirrors v1).
   branching = ({ rejectOnFalse = true } = {}) =>

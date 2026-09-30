@@ -23,7 +23,7 @@ export default class DateCalculationInstruction extends Instruction {
   title = tExpr('Date calculation');
   group = 'calculation';
   description = tExpr('Used for doing a series of date related calculation on an input value.');
-  icon = (<CalendarOutlined />);
+  icon = <CalendarOutlined />;
   testable = true;
 
   createDefaultConfig() {

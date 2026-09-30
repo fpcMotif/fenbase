@@ -1,15 +1,14 @@
 env:
-  DB_DIALECT: "mysql"
-  DB_HOST: "localhost"
-  DB_PORT: "5432"
-  DB_DATABASE: "nocobase"
-  DB_USER: "nocobase"
-  DB_PASSWORD: "nocobase"
-  APP_PORT: "13000"
-  DB_CONTAINER_NAME: "nocobase-db"
+  DB_DIALECT: 'mysql'
+  DB_HOST: 'localhost'
+  DB_PORT: '5432'
+  DB_DATABASE: 'nocobase'
+  DB_USER: 'nocobase'
+  DB_PASSWORD: 'nocobase'
+  APP_PORT: '13000'
+  DB_CONTAINER_NAME: 'nocobase-db'
 
 tasks:
-
   - name: Start MySQL
     before: |
       container_id=$(docker ps --all --quiet --filter "name=${DB_CONTAINER_NAME}")
@@ -28,7 +27,7 @@ tasks:
       echo "Database started"
       gp sync-done db-ready
       exit 0
-  
+
   - name: Setup Environment
     init: |
       cat > .env << EOL

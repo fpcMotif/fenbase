@@ -17,4 +17,4 @@ export const useLangPrefix = () => {
   const { site } = useSite();
   const lang = useLang();
   return lang === site.lang ? '' : lang;
-}
+};

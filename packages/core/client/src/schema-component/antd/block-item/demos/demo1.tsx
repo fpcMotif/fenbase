@@ -1,5 +1,3 @@
-
-
 import { observer, useFieldSchema } from '@formily/react';
 import { uid } from '@formily/shared';
 import { BlockItem, DndContext, DragHandler, SchemaComponent, SchemaComponentProvider } from '@nocobase/client';

@@ -8,22 +8,12 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core';
-import {
-  type PromptInitialValues,
-  type PromptsCatalog,
-  runPromptCatalog,
-} from '../../lib/prompt-catalog.ts';
-import {
-  applyCliLocale,
-  CLI_LOCALE_FLAG_DESCRIPTION,
-  CLI_LOCALE_FLAG_OPTIONS,
-} from '../../lib/cli-locale.ts';
+import { type PromptInitialValues, type PromptsCatalog, runPromptCatalog } from '../../lib/prompt-catalog.ts';
+import { applyCliLocale, CLI_LOCALE_FLAG_DESCRIPTION, CLI_LOCALE_FLAG_OPTIONS } from '../../lib/cli-locale.ts';
 import { type RunPromptCatalogWebUIStage, runPromptCatalogWebUI } from '../../lib/prompt-web-ui.ts';
 import PromptsTest from './prompts-test.ts';
 
-function buildWebUiStagesFromTestPrompts(
-  c: (typeof PromptsTest)['prompts'],
-): RunPromptCatalogWebUIStage[] {
+function buildWebUiStagesFromTestPrompts(c: (typeof PromptsTest)['prompts']): RunPromptCatalogWebUIStage[] {
   return [
     {
       sectionTitle: 'Step 1',

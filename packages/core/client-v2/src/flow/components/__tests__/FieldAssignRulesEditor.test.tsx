@@ -1178,7 +1178,9 @@ describe('FieldAssignRulesEditor', () => {
     expect(attributesNode).toBeTruthy();
 
     const attributeChildren =
-      typeof attributesNode?.children === 'function' ? await attributesNode.children() : attributesNode?.children ?? [];
+      typeof attributesNode?.children === 'function'
+        ? await attributesNode.children()
+        : (attributesNode?.children ?? []);
     const aaaNode = (attributeChildren as MetaTreeNode[]).find((node) => node.name === 'AAA') as any;
 
     expect(aaaNode?.interface).toBe('multipleSelect');

@@ -20,7 +20,7 @@ const commercialLicense = `
  * This program is offered under a commercial license.
  * For more information, see <https://www.nocobase.com/agreement>
  */
-`.trim()
+`.trim();
 const openSourceLicense = `
 /**
  * This file is part of the NocoBase (R) project.
@@ -30,7 +30,7 @@ const openSourceLicense = `
  * This project is dual-licensed under AGPL-3.0 and NocoBase Commercial License.
  * For more information, please refer to: https://www.nocobase.com/agreement.
  */
-`.trim()
+`.trim();
 
 function getLicenseText(packageDir: string) {
   return packageDir.includes('/pro-plugins') ? commercialLicense : openSourceLicense;
@@ -47,7 +47,12 @@ function addLicenseToFile(filePath: string | Buffer, licenseText: string) {
 }
 
 export async function addLicense(cwd: string, log: PkgLog) {
-  const stream = fg.globStream('**/*.{js,jsx,ts,tsx}', { cwd, ignore: ['node_modules', '**/*.d.ts'], absolute: true, onlyFiles: true });
+  const stream = fg.globStream('**/*.{js,jsx,ts,tsx}', {
+    cwd,
+    ignore: ['node_modules', '**/*.d.ts'],
+    absolute: true,
+    onlyFiles: true,
+  });
 
   const licenseText = getLicenseText(cwd);
   for await (const filePath of stream) {

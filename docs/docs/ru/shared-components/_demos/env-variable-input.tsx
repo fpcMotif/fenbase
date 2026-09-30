@@ -10,10 +10,7 @@ function DemoPage() {
       initialValues={{ accessKeySecret: '{{ $env.ACCESS_KEY_SECRET }}' }}
     >
       <Form.Item name="accessKeySecret" label="Access Key Secret">
-        <EnvVariableInput
-          password
-          placeholder="Input secret or select env variable"
-        />
+        <EnvVariableInput password placeholder="Input secret or select env variable" />
       </Form.Item>
     </Form>
   );

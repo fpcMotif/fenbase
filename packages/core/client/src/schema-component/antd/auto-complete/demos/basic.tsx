@@ -1,10 +1,7 @@
-
-
 import { useField } from '@formily/react';
 import { mockApp } from '@nocobase/client/demo-utils';
 import React from 'react';
 import { SchemaComponent, Plugin } from '@nocobase/client';
-
 
 const mockVal = (str: string, repeat = 1) => ({
   value: str.repeat(repeat),
@@ -36,7 +33,7 @@ const schema = {
       'x-use-component-props': 'useAutoCompleteProps',
     },
   },
-}
+};
 
 const Demo = () => {
   return <SchemaComponent schema={schema} scope={{ useAutoCompleteProps }} />;
@@ -44,7 +41,7 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 

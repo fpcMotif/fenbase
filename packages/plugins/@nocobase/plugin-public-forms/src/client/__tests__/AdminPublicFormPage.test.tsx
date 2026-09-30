@@ -102,7 +102,11 @@ vi.mock('antd', async () => {
   return {
     ...actual,
     Breadcrumb: ({ items }: { items?: { title?: React.ReactNode }[] }) => (
-      <nav>{items?.map((item, index) => <span key={index}>{item.title}</span>)}</nav>
+      <nav>
+        {items?.map((item, index) => (
+          <span key={index}>{item.title}</span>
+        ))}
+      </nav>
     ),
     Button: ({ children }: React.PropsWithChildren) => <button>{children}</button>,
     Dropdown: ({ children }: React.PropsWithChildren) => <div>{children}</div>,

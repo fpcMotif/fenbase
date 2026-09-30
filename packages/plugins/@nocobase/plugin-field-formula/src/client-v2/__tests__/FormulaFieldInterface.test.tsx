@@ -158,21 +158,19 @@ describe('FormulaFieldInterface', () => {
     expect(dateOperatorValues).not.toContain('$dateNotBefore');
     expect(dateOperatorValues).not.toContain('$dateNotAfter');
 
-    const numberOperators = fieldInterface.filterable.operators.filter(
-      (operator) =>
-        operator.visible?.({
-          options: {
-            dataType: 'double',
-          },
-        }),
+    const numberOperators = fieldInterface.filterable.operators.filter((operator) =>
+      operator.visible?.({
+        options: {
+          dataType: 'double',
+        },
+      }),
     );
-    const stringOperators = fieldInterface.filterable.operators.filter(
-      (operator) =>
-        operator.visible?.({
-          options: {
-            dataType: 'string',
-          },
-        }),
+    const stringOperators = fieldInterface.filterable.operators.filter((operator) =>
+      operator.visible?.({
+        options: {
+          dataType: 'string',
+        },
+      }),
     );
 
     expect(numberOperators.length).toBeGreaterThan(0);

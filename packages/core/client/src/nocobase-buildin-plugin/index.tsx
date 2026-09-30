@@ -29,25 +29,25 @@ import { BlockTemplateDetails, BlockTemplatePage } from '../schema-templates';
 import { SystemSettingsPlugin } from '../system-settings';
 import { CurrentUserProvider, CurrentUserSettingsMenuProvider } from '../user';
 import { LocalePlugin } from './plugins/LocalePlugin';
+/**
+ * Redirect component for root path:
+ * - If there is a token, go to `/admin` (existing behavior)
+ * - If not logged in, go to `/signin?redirect=/admin`
+ * This avoids the race where `/` first jumps to `/admin` before auth check.
+ */
+const RootRedirect: FC = () => {
+  const api = useAPIClient();
+  const hasToken = !!api?.auth?.token;
+  const to = hasToken ? '/admin' : '/signin?redirect=/admin';
+  return <Navigate replace to={to} />;
+};
 
 export class NocoBaseBuildInPlugin extends Plugin {
+  private static RootRedirect: FC = RootRedirect;
+
   async afterAdd() {
     await this.addPlugins();
   }
-
-  /**
-   * Redirect component for root path:
-   * - If there is a token, go to `/admin` (existing behavior)
-   * - If not logged in, go to `/signin?redirect=/admin`
-   * This avoids the race where `/` first jumps to `/admin` before auth check.
-   */
-  private static RootRedirect: FC = () => {
-    const api = useAPIClient();
-    const hasToken = !!api?.auth?.token;
-    const to = hasToken ? '/admin' : '/signin?redirect=/admin';
-    return <Navigate replace to={to} />;
-  };
-
   async load() {
     this.addComponents();
     this.addRoutes();

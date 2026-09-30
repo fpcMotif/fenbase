@@ -7,7 +7,6 @@
 import { Application, Plugin } from '@nocobase/client-v2';
 import { FlowModelRenderer } from '@nocobase/flow-engine';
 
-
 /**
  * PluginHelloModel adalah kelas plugin yang mendaftarkan HelloModel dan menambahkannya ke route.
  * - Metode load akan dieksekusi saat plugin dimuat.
@@ -22,7 +21,7 @@ class PluginHelloModel extends Plugin {
         // Dynamic import, modul akan dimuat hanya saat model ini benar-benar digunakan untuk pertama kalinya
         loader: () => import('@docs/cn/flow-engine/_demos/HelloModel'),
       },
-     });
+    });
 
     // Membuat instance HelloModel (hanya untuk contoh)
     const model = await this.flowEngine.createModelAsync({

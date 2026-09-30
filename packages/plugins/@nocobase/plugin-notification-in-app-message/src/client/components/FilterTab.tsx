@@ -13,7 +13,7 @@ import { observer } from '@nocobase/flow-engine';
 import { fetchChannels, channelStatusFilterObs, ChannelStatus } from '../observables';
 import { useLocalTranslation } from '../../locale';
 
-const _FilterTab = () => {
+const FilterTabComponent = () => {
   const { t } = useLocalTranslation();
   interface TabItem {
     label: string;
@@ -42,5 +42,5 @@ const _FilterTab = () => {
   );
 };
 
-const FilterTab = observer(_FilterTab);
+const FilterTab = observer(FilterTabComponent);
 export default FilterTab;

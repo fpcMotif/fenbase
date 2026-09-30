@@ -299,8 +299,7 @@ export const T2797: PageConfig = {
                                                                                             'x-index': 1,
                                                                                             properties: {
                                                                                               i7919iug0zf: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -308,8 +307,7 @@ export const T2797: PageConfig = {
                                                                                                 'x-index': 1,
                                                                                                 properties: {
                                                                                                   fnfowdb69of: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -317,14 +315,12 @@ export const T2797: PageConfig = {
                                                                                                     'x-index': 1,
                                                                                                     properties: {
                                                                                                       '7a1tbf51g8v': {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-acl-action-props':
                                                                                                           {
-                                                                                                            skipScopeCheck:
-                                                                                                              false,
+                                                                                                            skipScopeCheck: false,
                                                                                                           },
                                                                                                         'x-acl-action':
                                                                                                           'users:update',
@@ -352,8 +348,7 @@ export const T2797: PageConfig = {
                                                                                                         'x-index': 1,
                                                                                                         properties: {
                                                                                                           nn34pmsspnz: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -368,8 +363,7 @@ export const T2797: PageConfig = {
                                                                                                             properties:
                                                                                                               {
                                                                                                                 grid: {
-                                                                                                                  _isJSONSchemaObject:
-                                                                                                                    true,
+                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                   version:
                                                                                                                     '2.0',
                                                                                                                   type: 'void',
@@ -380,13 +374,11 @@ export const T2797: PageConfig = {
                                                                                                                   'x-index': 1,
                                                                                                                   'x-uid':
                                                                                                                     'k9p2rqt49v1',
-                                                                                                                  'x-async':
-                                                                                                                    false,
+                                                                                                                  'x-async': false,
                                                                                                                 },
                                                                                                                 actions:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -408,8 +400,7 @@ export const T2797: PageConfig = {
                                                                                                                       {
                                                                                                                         m1d82kfi4wj:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             title:
@@ -437,26 +428,22 @@ export const T2797: PageConfig = {
                                                                                                                             'x-index': 1,
                                                                                                                             'x-uid':
                                                                                                                               '9mm8kvh4o2m',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'on41cr8zg41',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'y6uigc4n4vm',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'fnj75090iwa',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                       },
                                                                                                     },
                                                                                                     'x-uid':
@@ -868,8 +855,7 @@ export const T2838: PageConfig = {
                                                                                             'x-index': 1,
                                                                                             properties: {
                                                                                               nclrn6m8w40: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -877,8 +863,7 @@ export const T2838: PageConfig = {
                                                                                                 'x-index': 1,
                                                                                                 properties: {
                                                                                                   '986i76o9mkl': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -886,8 +871,7 @@ export const T2838: PageConfig = {
                                                                                                     'x-index': 1,
                                                                                                     properties: {
                                                                                                       ofcetydqvzr: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-acl-action':
@@ -902,8 +886,7 @@ export const T2838: PageConfig = {
                                                                                                               'm2oField1',
                                                                                                             association:
                                                                                                               'general.m2oField0',
-                                                                                                            readPretty:
-                                                                                                              true,
+                                                                                                            readPretty: true,
                                                                                                             action:
                                                                                                               'get',
                                                                                                             useParams:
@@ -918,15 +901,13 @@ export const T2838: PageConfig = {
                                                                                                         'x-index': 1,
                                                                                                         properties: {
                                                                                                           bt4u5tt1zeu: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
                                                                                                             'x-component':
                                                                                                               'FormV2',
-                                                                                                            'x-read-pretty':
-                                                                                                              true,
+                                                                                                            'x-read-pretty': true,
                                                                                                             'x-component-props':
                                                                                                               {
                                                                                                                 useProps:
@@ -937,8 +918,7 @@ export const T2838: PageConfig = {
                                                                                                               {
                                                                                                                 actions:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -960,8 +940,7 @@ export const T2838: PageConfig = {
                                                                                                                           {
                                                                                                                             'x-uid':
                                                                                                                               'pqbio7v3v18',
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -979,8 +958,7 @@ export const T2838: PageConfig = {
                                                                                                                                   'drawer',
                                                                                                                                 icon: 'EditOutlined',
                                                                                                                                 type: 'primary',
-                                                                                                                                danger:
-                                                                                                                                  false,
+                                                                                                                                danger: false,
                                                                                                                               },
                                                                                                                             'x-decorator':
                                                                                                                               'ACLActionProvider',
@@ -989,8 +967,7 @@ export const T2838: PageConfig = {
                                                                                                                               {
                                                                                                                                 drawer:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'void',
@@ -1007,8 +984,7 @@ export const T2838: PageConfig = {
                                                                                                                                     properties:
                                                                                                                                       {
                                                                                                                                         tabs: {
-                                                                                                                                          _isJSONSchemaObject:
-                                                                                                                                            true,
+                                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                                           version:
                                                                                                                                             '2.0',
                                                                                                                                           type: 'void',
@@ -1022,8 +998,7 @@ export const T2838: PageConfig = {
                                                                                                                                           properties:
                                                                                                                                             {
                                                                                                                                               tab1: {
-                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                  true,
+                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                 version:
                                                                                                                                                   '2.0',
                                                                                                                                                 type: 'void',
@@ -1039,8 +1014,7 @@ export const T2838: PageConfig = {
                                                                                                                                                 properties:
                                                                                                                                                   {
                                                                                                                                                     grid: {
-                                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                                        true,
+                                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                                       version:
                                                                                                                                                         '2.0',
                                                                                                                                                       type: 'void',
@@ -1053,8 +1027,7 @@ export const T2838: PageConfig = {
                                                                                                                                                         {
                                                                                                                                                           '4xh2eecmles':
                                                                                                                                                             {
-                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                true,
+                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                               version:
                                                                                                                                                                 '2.0',
                                                                                                                                                               type: 'void',
@@ -1065,8 +1038,7 @@ export const T2838: PageConfig = {
                                                                                                                                                                 {
                                                                                                                                                                   '0lk0jurc203':
                                                                                                                                                                     {
-                                                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                                                        true,
+                                                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                                                       version:
                                                                                                                                                                         '2.0',
                                                                                                                                                                       type: 'void',
@@ -1077,15 +1049,13 @@ export const T2838: PageConfig = {
                                                                                                                                                                         {
                                                                                                                                                                           qxyhsdqsjnk:
                                                                                                                                                                             {
-                                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                                true,
+                                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                                               version:
                                                                                                                                                                                 '2.0',
                                                                                                                                                                               type: 'void',
                                                                                                                                                                               'x-acl-action-props':
                                                                                                                                                                                 {
-                                                                                                                                                                                  skipScopeCheck:
-                                                                                                                                                                                    false,
+                                                                                                                                                                                  skipScopeCheck: false,
                                                                                                                                                                                 },
                                                                                                                                                                               'x-acl-action':
                                                                                                                                                                                 'general.m2oField0:update',
@@ -1117,8 +1087,7 @@ export const T2838: PageConfig = {
                                                                                                                                                                                 {
                                                                                                                                                                                   tzajxyqd9k3:
                                                                                                                                                                                     {
-                                                                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                                                                        true,
+                                                                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                                                                       version:
                                                                                                                                                                                         '2.0',
                                                                                                                                                                                       type: 'void',
@@ -1133,8 +1102,7 @@ export const T2838: PageConfig = {
                                                                                                                                                                                       properties:
                                                                                                                                                                                         {
                                                                                                                                                                                           grid: {
-                                                                                                                                                                                            _isJSONSchemaObject:
-                                                                                                                                                                                              true,
+                                                                                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                                                                                             version:
                                                                                                                                                                                               '2.0',
                                                                                                                                                                                             type: 'void',
@@ -1147,8 +1115,7 @@ export const T2838: PageConfig = {
                                                                                                                                                                                               {
                                                                                                                                                                                                 '1nzk8lmeo35':
                                                                                                                                                                                                   {
-                                                                                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                                                                                      true,
+                                                                                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                                                                                     version:
                                                                                                                                                                                                       '2.0',
                                                                                                                                                                                                     type: 'void',
@@ -1159,8 +1126,7 @@ export const T2838: PageConfig = {
                                                                                                                                                                                                       {
                                                                                                                                                                                                         '0od1vb7dltp':
                                                                                                                                                                                                           {
-                                                                                                                                                                                                            _isJSONSchemaObject:
-                                                                                                                                                                                                              true,
+                                                                                                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                                                                                                             version:
                                                                                                                                                                                                               '2.0',
                                                                                                                                                                                                             type: 'void',
@@ -1171,8 +1137,7 @@ export const T2838: PageConfig = {
                                                                                                                                                                                                               {
                                                                                                                                                                                                                 'm2oField1.m2oField2':
                                                                                                                                                                                                                   {
-                                                                                                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                                                                                                      true,
+                                                                                                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                                                                                                     version:
                                                                                                                                                                                                                       '2.0',
                                                                                                                                                                                                                     type: 'string',
@@ -1180,12 +1145,10 @@ export const T2838: PageConfig = {
                                                                                                                                                                                                                       'FormItem.Designer',
                                                                                                                                                                                                                     'x-component':
                                                                                                                                                                                                                       'CollectionField',
-                                                                                                                                                                                                                    'x-read-pretty':
-                                                                                                                                                                                                                      true,
+                                                                                                                                                                                                                    'x-read-pretty': true,
                                                                                                                                                                                                                     'x-component-props':
                                                                                                                                                                                                                       {
-                                                                                                                                                                                                                        'pattern-disable':
-                                                                                                                                                                                                                          true,
+                                                                                                                                                                                                                        'pattern-disable': true,
                                                                                                                                                                                                                         fieldNames:
                                                                                                                                                                                                                           {
                                                                                                                                                                                                                             label:
@@ -1201,31 +1164,26 @@ export const T2838: PageConfig = {
                                                                                                                                                                                                                     'x-index': 1,
                                                                                                                                                                                                                     'x-uid':
                                                                                                                                                                                                                       'n3hj825kfud',
-                                                                                                                                                                                                                    'x-async':
-                                                                                                                                                                                                                      false,
+                                                                                                                                                                                                                    'x-async': false,
                                                                                                                                                                                                                   },
                                                                                                                                                                                                               },
                                                                                                                                                                                                             'x-uid':
                                                                                                                                                                                                               '0kh8ua794y5',
-                                                                                                                                                                                                            'x-async':
-                                                                                                                                                                                                              false,
+                                                                                                                                                                                                            'x-async': false,
                                                                                                                                                                                                           },
                                                                                                                                                                                                       },
                                                                                                                                                                                                     'x-uid':
                                                                                                                                                                                                       'op5kvbrfosf',
-                                                                                                                                                                                                    'x-async':
-                                                                                                                                                                                                      false,
+                                                                                                                                                                                                    'x-async': false,
                                                                                                                                                                                                   },
                                                                                                                                                                                               },
                                                                                                                                                                                             'x-uid':
                                                                                                                                                                                               '3qpo7t4qeu1',
-                                                                                                                                                                                            'x-async':
-                                                                                                                                                                                              false,
+                                                                                                                                                                                            'x-async': false,
                                                                                                                                                                                           },
                                                                                                                                                                                           actions:
                                                                                                                                                                                             {
-                                                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                                                true,
+                                                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                                                               version:
                                                                                                                                                                                                 '2.0',
                                                                                                                                                                                               type: 'void',
@@ -1247,8 +1205,7 @@ export const T2838: PageConfig = {
                                                                                                                                                                                                 {
                                                                                                                                                                                                   el9dzf2keqq:
                                                                                                                                                                                                     {
-                                                                                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                                                                                        true,
+                                                                                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                                                                                       version:
                                                                                                                                                                                                         '2.0',
                                                                                                                                                                                                       title:
@@ -1276,76 +1233,63 @@ export const T2838: PageConfig = {
                                                                                                                                                                                                       'x-index': 1,
                                                                                                                                                                                                       'x-uid':
                                                                                                                                                                                                         'gptcyd5atoh',
-                                                                                                                                                                                                      'x-async':
-                                                                                                                                                                                                        false,
+                                                                                                                                                                                                      'x-async': false,
                                                                                                                                                                                                     },
                                                                                                                                                                                                 },
                                                                                                                                                                                               'x-uid':
                                                                                                                                                                                                 'glo1qwk9c3h',
-                                                                                                                                                                                              'x-async':
-                                                                                                                                                                                                false,
+                                                                                                                                                                                              'x-async': false,
                                                                                                                                                                                             },
                                                                                                                                                                                         },
                                                                                                                                                                                       'x-uid':
                                                                                                                                                                                         '97l65a4xla1',
-                                                                                                                                                                                      'x-async':
-                                                                                                                                                                                        false,
+                                                                                                                                                                                      'x-async': false,
                                                                                                                                                                                     },
                                                                                                                                                                                 },
                                                                                                                                                                               'x-uid':
                                                                                                                                                                                 'vaa7w1uq7hz',
-                                                                                                                                                                              'x-async':
-                                                                                                                                                                                false,
+                                                                                                                                                                              'x-async': false,
                                                                                                                                                                             },
                                                                                                                                                                         },
                                                                                                                                                                       'x-uid':
                                                                                                                                                                         'o8ill8n44c1',
-                                                                                                                                                                      'x-async':
-                                                                                                                                                                        false,
+                                                                                                                                                                      'x-async': false,
                                                                                                                                                                     },
                                                                                                                                                                 },
                                                                                                                                                               'x-uid':
                                                                                                                                                                 '3eyyh9i881u',
-                                                                                                                                                              'x-async':
-                                                                                                                                                                false,
+                                                                                                                                                              'x-async': false,
                                                                                                                                                             },
                                                                                                                                                         },
                                                                                                                                                       'x-uid':
                                                                                                                                                         'afrbgindhtc',
-                                                                                                                                                      'x-async':
-                                                                                                                                                        false,
+                                                                                                                                                      'x-async': false,
                                                                                                                                                     },
                                                                                                                                                   },
                                                                                                                                                 'x-uid':
                                                                                                                                                   'q45xug6fmaa',
-                                                                                                                                                'x-async':
-                                                                                                                                                  false,
+                                                                                                                                                'x-async': false,
                                                                                                                                               },
                                                                                                                                             },
                                                                                                                                           'x-uid':
                                                                                                                                             'nv8ngiz2t9g',
-                                                                                                                                          'x-async':
-                                                                                                                                            false,
+                                                                                                                                          'x-async': false,
                                                                                                                                         },
                                                                                                                                       },
                                                                                                                                     'x-uid':
                                                                                                                                       'yn1oabiw8em',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                   },
                                                                                                                               },
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'ag9hkuuvbf8',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                   },
                                                                                                                 grid: {
-                                                                                                                  _isJSONSchemaObject:
-                                                                                                                    true,
+                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                   version:
                                                                                                                     '2.0',
                                                                                                                   type: 'void',
@@ -1356,20 +1300,17 @@ export const T2838: PageConfig = {
                                                                                                                   'x-index': 2,
                                                                                                                   'x-uid':
                                                                                                                     '1et421zrsz4',
-                                                                                                                  'x-async':
-                                                                                                                    false,
+                                                                                                                  'x-async': false,
                                                                                                                 },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'dd6b494mglm',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'ojkwzn3j25x',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                       },
                                                                                                     },
                                                                                                     'x-uid':
@@ -3033,8 +2974,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -3042,8 +2982,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                   'popup:common:addBlock',
                                                                                                 properties: {
                                                                                                   '7ztzwrpq8qz': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -3052,8 +2991,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                       '1.2.11-alpha',
                                                                                                     properties: {
                                                                                                       nw14g9cyne8: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -3064,8 +3002,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                           wrn8vg1jmwm: {
                                                                                                             'x-uid':
                                                                                                               'q6ofkksvfia',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -3079,8 +3016,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                               },
                                                                                                             'x-component':
                                                                                                               'Markdown.Void',
-                                                                                                            'x-editable':
-                                                                                                              false,
+                                                                                                            'x-editable': false,
                                                                                                             'x-component-props':
                                                                                                               {
                                                                                                                 content:
@@ -3088,15 +3024,13 @@ export const shouldBackAfterClickBackButton = {
                                                                                                               },
                                                                                                             'x-app-version':
                                                                                                               '1.2.11-alpha',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           '6m2whcotbwx',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -3129,8 +3063,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                               '1.2.11-alpha',
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -3140,8 +3073,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                   '1.2.11-alpha',
                                                                                                 properties: {
                                                                                                   ugeyrpa1ub8: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -3150,8 +3082,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                       '1.2.11-alpha',
                                                                                                     properties: {
                                                                                                       '3m1o1ludxia': {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -3162,8 +3093,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                           ftl0a45psk3: {
                                                                                                             'x-uid':
                                                                                                               'ks0w60u7gzv',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -3177,8 +3107,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                               },
                                                                                                             'x-component':
                                                                                                               'Markdown.Void',
-                                                                                                            'x-editable':
-                                                                                                              false,
+                                                                                                            'x-editable': false,
                                                                                                             'x-component-props':
                                                                                                               {
                                                                                                                 content:
@@ -3186,15 +3115,13 @@ export const shouldBackAfterClickBackButton = {
                                                                                                               },
                                                                                                             'x-app-version':
                                                                                                               '1.2.11-alpha',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'xdis626c2g4',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -3617,8 +3544,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -3626,8 +3552,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                   'popup:common:addBlock',
                                                                                                 properties: {
                                                                                                   xpc333w57zk: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -3636,8 +3561,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                       '1.2.11-alpha',
                                                                                                     properties: {
                                                                                                       tj9si7puaph: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -3646,8 +3570,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                           '1.2.11-alpha',
                                                                                                         properties: {
                                                                                                           i3ttwm7rz98: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -3663,8 +3586,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                   'main',
                                                                                                                 association:
                                                                                                                   'users.roles',
-                                                                                                                readPretty:
-                                                                                                                  true,
+                                                                                                                readPretty: true,
                                                                                                                 action:
                                                                                                                   'get',
                                                                                                               },
@@ -3674,23 +3596,20 @@ export const shouldBackAfterClickBackButton = {
                                                                                                               'blockSettings:details',
                                                                                                             'x-component':
                                                                                                               'CardItem',
-                                                                                                            'x-is-current':
-                                                                                                              true,
+                                                                                                            'x-is-current': true,
                                                                                                             'x-app-version':
                                                                                                               '1.2.11-alpha',
                                                                                                             properties:
                                                                                                               {
                                                                                                                 i20wik3jvnr:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
                                                                                                                     'x-component':
                                                                                                                       'Details',
-                                                                                                                    'x-read-pretty':
-                                                                                                                      true,
+                                                                                                                    'x-read-pretty': true,
                                                                                                                     'x-use-component-props':
                                                                                                                       'useDetailsProps',
                                                                                                                     'x-app-version':
@@ -3699,8 +3618,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                       {
                                                                                                                         gf414um0rqy:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -3723,8 +3641,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                   {
                                                                                                                                     'x-uid':
                                                                                                                                       '1ct9qd9jlbm',
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'void',
@@ -3767,8 +3684,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                       {
                                                                                                                                         drawer:
                                                                                                                                           {
-                                                                                                                                            _isJSONSchemaObject:
-                                                                                                                                              true,
+                                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                                             version:
                                                                                                                                               '2.0',
                                                                                                                                             type: 'void',
@@ -3786,8 +3702,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                             properties:
                                                                                                                                               {
                                                                                                                                                 tabs: {
-                                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                                    true,
+                                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                                   version:
                                                                                                                                                     '2.0',
                                                                                                                                                   type: 'void',
@@ -3802,8 +3717,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                                   properties:
                                                                                                                                                     {
                                                                                                                                                       tab1: {
-                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                          true,
+                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                         version:
                                                                                                                                                           '2.0',
                                                                                                                                                         type: 'void',
@@ -3820,8 +3734,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                                         properties:
                                                                                                                                                           {
                                                                                                                                                             grid: {
-                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                true,
+                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                               version:
                                                                                                                                                                 '2.0',
                                                                                                                                                               type: 'void',
@@ -3835,8 +3748,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                                                 {
                                                                                                                                                                   zkslw04ebta:
                                                                                                                                                                     {
-                                                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                                                        true,
+                                                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                                                       version:
                                                                                                                                                                         '2.0',
                                                                                                                                                                       type: 'void',
@@ -3848,8 +3760,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                                                         {
                                                                                                                                                                           opndt1e9gld:
                                                                                                                                                                             {
-                                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                                true,
+                                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                                               version:
                                                                                                                                                                                 '2.0',
                                                                                                                                                                               type: 'void',
@@ -3863,8 +3774,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                                                                     {
                                                                                                                                                                                       'x-uid':
                                                                                                                                                                                         '4pb507f2ogv',
-                                                                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                                                                        true,
+                                                                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                                                                       version:
                                                                                                                                                                                         '2.0',
                                                                                                                                                                                       type: 'void',
@@ -3878,8 +3788,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                                                                         },
                                                                                                                                                                                       'x-component':
                                                                                                                                                                                         'Markdown.Void',
-                                                                                                                                                                                      'x-editable':
-                                                                                                                                                                                        false,
+                                                                                                                                                                                      'x-editable': false,
                                                                                                                                                                                       'x-component-props':
                                                                                                                                                                                         {
                                                                                                                                                                                           content:
@@ -3887,67 +3796,57 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                                                                                         },
                                                                                                                                                                                       'x-app-version':
                                                                                                                                                                                         '1.2.11-alpha',
-                                                                                                                                                                                      'x-async':
-                                                                                                                                                                                        false,
+                                                                                                                                                                                      'x-async': false,
                                                                                                                                                                                       'x-index': 1,
                                                                                                                                                                                     },
                                                                                                                                                                                 },
                                                                                                                                                                               'x-uid':
                                                                                                                                                                                 '9pyvixeo4p8',
-                                                                                                                                                                              'x-async':
-                                                                                                                                                                                false,
+                                                                                                                                                                              'x-async': false,
                                                                                                                                                                               'x-index': 1,
                                                                                                                                                                             },
                                                                                                                                                                         },
                                                                                                                                                                       'x-uid':
                                                                                                                                                                         'y3s06g3mmnn',
-                                                                                                                                                                      'x-async':
-                                                                                                                                                                        false,
+                                                                                                                                                                      'x-async': false,
                                                                                                                                                                       'x-index': 1,
                                                                                                                                                                     },
                                                                                                                                                                 },
                                                                                                                                                               'x-uid':
                                                                                                                                                                 'so5nyswl2tn',
-                                                                                                                                                              'x-async':
-                                                                                                                                                                false,
+                                                                                                                                                              'x-async': false,
                                                                                                                                                               'x-index': 1,
                                                                                                                                                             },
                                                                                                                                                           },
                                                                                                                                                         'x-uid':
                                                                                                                                                           '0a6z4stdtvv',
-                                                                                                                                                        'x-async':
-                                                                                                                                                          false,
+                                                                                                                                                        'x-async': false,
                                                                                                                                                         'x-index': 1,
                                                                                                                                                       },
                                                                                                                                                     },
                                                                                                                                                   'x-uid':
                                                                                                                                                     '7l9zhdzmvrl',
-                                                                                                                                                  'x-async':
-                                                                                                                                                    false,
+                                                                                                                                                  'x-async': false,
                                                                                                                                                   'x-index': 1,
                                                                                                                                                 },
                                                                                                                                               },
                                                                                                                                             'x-uid':
                                                                                                                                               '2x6fwtfvkks',
-                                                                                                                                            'x-async':
-                                                                                                                                              false,
+                                                                                                                                            'x-async': false,
                                                                                                                                             'x-index': 1,
                                                                                                                                           },
                                                                                                                                       },
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               '6olkx9unnri',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                         grid: {
-                                                                                                                          _isJSONSchemaObject:
-                                                                                                                            true,
+                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                           version:
                                                                                                                             '2.0',
                                                                                                                           type: 'void',
@@ -3959,29 +3858,25 @@ export const shouldBackAfterClickBackButton = {
                                                                                                                             '1.2.11-alpha',
                                                                                                                           'x-uid':
                                                                                                                             'gu80n1txnro',
-                                                                                                                          'x-async':
-                                                                                                                            false,
+                                                                                                                          'x-async': false,
                                                                                                                           'x-index': 2,
                                                                                                                         },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       '1by5v8iv34w',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'cztt3y1bgor',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'cwjnmpashsw',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -4407,8 +4302,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -4416,8 +4310,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                   'popup:common:addBlock',
                                                                                                 properties: {
                                                                                                   '75bgz4587a8': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -4426,8 +4319,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                       '1.2.11-alpha',
                                                                                                     properties: {
                                                                                                       z390g7i8lvq: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -4438,8 +4330,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                           ca9pyg76qga: {
                                                                                                             'x-uid':
                                                                                                               'id81yz2cpip',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -4453,8 +4344,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                               },
                                                                                                             'x-component':
                                                                                                               'Markdown.Void',
-                                                                                                            'x-editable':
-                                                                                                              false,
+                                                                                                            'x-editable': false,
                                                                                                             'x-component-props':
                                                                                                               {
                                                                                                                 content:
@@ -4462,15 +4352,13 @@ export const shouldBackAfterClickBackButton = {
                                                                                                               },
                                                                                                             'x-app-version':
                                                                                                               '1.2.11-alpha',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'jjooza0r1bc',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -4503,8 +4391,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                               '1.2.11-alpha',
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -4514,8 +4401,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                   '1.2.11-alpha',
                                                                                                 properties: {
                                                                                                   '9lof63mhvmr': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -4524,8 +4410,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                       '1.2.11-alpha',
                                                                                                     properties: {
                                                                                                       ynn98kqolac: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -4536,8 +4421,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                           ym6o0oia28x: {
                                                                                                             'x-uid':
                                                                                                               '4vz5669r4s7',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -4551,8 +4435,7 @@ export const shouldBackAfterClickBackButton = {
                                                                                                               },
                                                                                                             'x-component':
                                                                                                               'Markdown.Void',
-                                                                                                            'x-editable':
-                                                                                                              false,
+                                                                                                            'x-editable': false,
                                                                                                             'x-component-props':
                                                                                                               {
                                                                                                                 content:
@@ -4560,15 +4443,13 @@ export const shouldBackAfterClickBackButton = {
                                                                                                               },
                                                                                                             'x-app-version':
                                                                                                               '1.2.11-alpha',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'b64fox1t5dq',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },

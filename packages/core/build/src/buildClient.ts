@@ -38,7 +38,13 @@ export async function buildClient(cwd: string, userConfig: UserConfig, sourcemap
 type External = (id: string) => boolean;
 type ClientFormat = 'esm' | 'cjs';
 
-async function buildClientEsm(cwd: string, userConfig: UserConfig, sourcemap: boolean, external: External, log: PkgLog) {
+async function buildClientEsm(
+  cwd: string,
+  userConfig: UserConfig,
+  sourcemap: boolean,
+  external: External,
+  log: PkgLog,
+) {
   log('build client esm');
   const entry = path.join(cwd, 'src/index.ts').replaceAll(/\\/g, '/');
   const outDir = path.resolve(cwd, 'es');

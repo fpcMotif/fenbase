@@ -1,4 +1,3 @@
-
 import { App as AntdApp } from 'antd';
 import { ISchema, useAPIClient } from '@nocobase/client';
 import { SchemaComponent, Plugin, ActionProps } from '@nocobase/client';
@@ -64,7 +63,7 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 
@@ -72,7 +71,7 @@ const app = mockApp({
   plugins: [DemoPlugin],
   apis: {
     test: { data: { result: 'ok' } },
-  }
+  },
 });
 
 export default app.getRootComponent();

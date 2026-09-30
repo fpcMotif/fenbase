@@ -13,15 +13,7 @@
  * 键盘导航、IME 组字处理、滚动逻辑均未改动。
  */
 import { useI18n, usePageData } from '@rspress/core/runtime';
-import {
-  IconClose,
-  IconLoading,
-  IconSearch,
-  SvgWrapper,
-  Tab,
-  Tabs,
-  useLinkNavigate,
-} from '@rspress/core/theme';
+import { IconClose, IconLoading, IconSearch, SvgWrapper, Tab, Tabs, useLinkNavigate } from '@rspress/core/theme';
 import type {
   CustomMatchResult,
   DefaultMatchResult,
@@ -90,9 +82,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
   const [currentSuggestionIndex, setCurrentSuggestionIndex] = useState(0);
   const pageSearcherRef = useRef<PageSearcher | null>(null);
   const pageSearcherConfigRef = useRef<PageSearcherConfig | null>(null);
-  const [initStatus, setInitStatus] = useState<
-    'initial' | 'initing' | 'inited'
-  >('initial');
+  const [initStatus, setInitStatus] = useState<'initial' | 'initing' | 'inited'>('initial');
   const searchResultRef = useRef<HTMLDivElement>(null);
   const searchResultTabRef = useRef<HTMLDivElement>(null);
   const mousePositionRef = useRef<{
@@ -108,19 +98,11 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
   const scrollTo = (offsetTop: number, offsetHeight: number) => {
     const currentOffsetHeight = searchResultRef.current?.offsetHeight;
     const currentScrollTop = searchResultRef.current?.scrollTop;
-    if (
-      canScroll &&
-      currentOffsetHeight !== undefined &&
-      currentScrollTop !== undefined
-    ) {
+    if (canScroll && currentOffsetHeight !== undefined && currentScrollTop !== undefined) {
       // Down
       // 50 = 20(modal margin) + 40(input height) - 10(item margin)
       // -10 = 50(following) - 50(tab title) - 10(item margin)
-      const scrollDown =
-        offsetTop +
-        offsetHeight -
-        currentOffsetHeight -
-        (searchResult.length === 1 ? 50 : -10);
+      const scrollDown = offsetTop + offsetHeight - currentOffsetHeight - (searchResult.length === 1 ? 50 : -10);
       if (scrollDown > currentScrollTop) {
         searchResultRef.current?.scrollTo({
           top: scrollDown,
@@ -130,8 +112,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
       // Up
       // 70 = 20(modal margin) + 40(input height) + 10(item margin)
       // 10 = 70(following) - 50(tab title) - 10(item margin)
-      const scrollUp =
-        searchResult.length === 1 ? offsetTop - 70 : offsetTop - 10;
+      const scrollUp = searchResult.length === 1 ? offsetTop - 70 : offsetTop - 10;
       if (scrollUp < currentScrollTop) {
         searchResultRef.current?.scrollTo({
           top: scrollUp,
@@ -150,15 +131,10 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
   }>();
   const navigate = useLinkNavigate();
   const { search, title: siteTitle } = siteData;
-  const versionedSearch =
-    typeof search !== 'boolean' && (search?.versioned ?? true);
-  const DEFAULT_RESULT: MatchResult = [
-    { group: siteTitle, result: [], renderType: RenderType.Default },
-  ];
-  const currentSuggestions =
-    (searchResult[resultTabIndex]?.result as DefaultMatchResultItem[]) ?? [];
-  const currentRenderType =
-    searchResult[resultTabIndex]?.renderType ?? RenderType.Default;
+  const versionedSearch = typeof search !== 'boolean' && (search?.versioned ?? true);
+  const DEFAULT_RESULT: MatchResult = [{ group: siteTitle, result: [], renderType: RenderType.Default }];
+  const currentSuggestions = (searchResult[resultTabIndex]?.result as DefaultMatchResultItem[]) ?? [];
+  const currentRenderType = searchResult[resultTabIndex]?.renderType ?? RenderType.Default;
 
   if (search === false) {
     return null;
@@ -231,14 +207,9 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
           }
           if (focused) {
             e.preventDefault();
-            if (
-              currentSuggestions &&
-              currentRenderType === RenderType.Default
-            ) {
+            if (currentSuggestions && currentRenderType === RenderType.Default) {
               setCanScroll(true);
-              setCurrentSuggestionIndex(
-                (currentSuggestionIndex + 1) % currentSuggestions.length,
-              );
+              setCurrentSuggestionIndex((currentSuggestionIndex + 1) % currentSuggestions.length);
             }
           }
           break;
@@ -253,8 +224,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
               const currentSuggestionsLength = currentSuggestions.length;
               setCanScroll(true);
               setCurrentSuggestionIndex(
-                (currentSuggestionIndex - 1 + currentSuggestionsLength) %
-                  currentSuggestionsLength,
+                (currentSuggestionIndex - 1 + currentSuggestionsLength) % currentSuggestionsLength,
               );
             }
           }
@@ -267,14 +237,9 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
           if (e.isComposing) {
             return;
           }
-          if (
-            currentSuggestionIndex >= 0 &&
-            currentRenderType === RenderType.Default
-          ) {
+          if (currentSuggestionIndex >= 0 && currentRenderType === RenderType.Default) {
             // the ResultItem has been normalized to display
-            const flatSuggestions = Array.from(
-              normalizeSuggestions(currentSuggestions).values(),
-            ).flat();
+            const flatSuggestions = Array.from(normalizeSuggestions(currentSuggestions).values()).flat();
             const suggestion = flatSuggestions[currentSuggestionIndex];
             navigate(suggestion.link);
             clearSearchState();
@@ -291,14 +256,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
     return () => {
       document.removeEventListener('keydown', onKeyDown);
     };
-  }, [
-    setCurrentSuggestionIndex,
-    setFocused,
-    focused,
-    resultTabIndex,
-    currentSuggestions,
-    currentSuggestionIndex,
-  ]);
+  }, [setCurrentSuggestionIndex, setFocused, focused, resultTabIndex, currentSuggestions, currentSuggestionIndex]);
 
   useEffect(() => {
     if (focused) {
@@ -348,8 +306,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
         }
       }
 
-      const defaultSearchResult =
-        await pageSearcherRef.current?.match(newQuery);
+      const defaultSearchResult = await pageSearcherRef.current?.match(newQuery);
 
       if (defaultSearchResult) {
         searchResult.push(...defaultSearchResult);
@@ -357,14 +314,11 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
 
       if ('onSearch' in userSearchHooks) {
         const key = 'onSearch' as const;
-        const customSearchResult = await userSearchHooks[key](
-          newQuery,
-          searchResult as DefaultMatchResult[],
-        );
+        const customSearchResult = await userSearchHooks[key](newQuery, searchResult as DefaultMatchResult[]);
         if (customSearchResult) {
           searchResult.push(
             ...customSearchResult.map(
-              item =>
+              (item) =>
                 ({
                   renderType: RenderType.Custom,
                   ...item,
@@ -395,9 +349,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
   // 改动 2：按 searchHooks 打好的 section 分组（上游是按 item.title）。
   // 分组 key 用 getSectionKey()，同一个标签下的多个顶层目录（「手册」名下有 /template-print、
   // /data-sources……）会并成一个分组框。searchHooks 已排好序，顺序遍历即可，Map 保持插入顺序。
-  const normalizeSuggestions = (
-    suggestions: DefaultMatchResult['result'],
-  ): Map<string, DefaultMatchResultItem[]> => {
+  const normalizeSuggestions = (suggestions: DefaultMatchResult['result']): Map<string, DefaultMatchResultItem[]> => {
     return suggestions.reduce(
       (groups, item) => {
         const section = getSectionOf(item);
@@ -417,26 +369,19 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
     if (section?.label) {
       return section.label;
     }
-    return section?.id === PLUGIN_SECTION_ID
-      ? t('searchSectionPlugins')
-      : t('searchSectionOthers');
+    return section?.id === PLUGIN_SECTION_ID ? t('searchSectionPlugins') : t('searchSectionOthers');
   };
 
   const renderSearchResult = (result: MatchResult, isSearching: boolean) => {
     if (result.length === 1) {
-      const currentSearchResult = result[0]
-        .result as DefaultMatchResult['result'];
+      const currentSearchResult = result[0].result as DefaultMatchResult['result'];
       if (currentSearchResult.length === 0 && !isSearching) {
         return <NoSearchResult query={query} />;
       }
-      return (
-        <div ref={searchResultTabRef}>
-          {renderSearchResultItem(currentSearchResult, query, isSearching)}
-        </div>
-      );
+      return <div ref={searchResultTabRef}>{renderSearchResultItem(currentSearchResult, query, isSearching)}</div>;
     }
 
-    const tabValues = result.map(item => {
+    const tabValues = result.map((item) => {
       return item.group;
     });
 
@@ -446,19 +391,17 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
       <Tabs
         values={tabValues}
         className="rp-search-panel__tabs"
-        onChange={index => {
+        onChange={(index) => {
           setResultTabIndex(index);
           setCurrentSuggestionIndex(0);
         }}
         keepDOM={false}
         ref={searchResultTabRef}
       >
-        {result.map(item => (
+        {result.map((item) => (
           <Tab key={item.group}>
-            {item.renderType === RenderType.Default &&
-              renderSearchResultItem(item.result, query, isSearching)}
-            {item.renderType === RenderType.Custom &&
-              userSearchHooks[renderKey](item.result)}
+            {item.renderType === RenderType.Default && renderSearchResultItem(item.result, query, isSearching)}
+            {item.renderType === RenderType.Custom && userSearchHooks[renderKey](item.result)}
           </Tab>
         ))}
       </Tabs>
@@ -489,7 +432,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
     let accumulateIndex = -1;
     return (
       <ul>
-        {Array.from(normalizedSuggestions.keys()).map(group => {
+        {Array.from(normalizedSuggestions.keys()).map((group) => {
           const groupSuggestions = normalizedSuggestions.get(group) || [];
           // 改动 3：渲染可见的分组标题，并用 aria-labelledby 关联到该组的列表。
           const section = getSectionOf(groupSuggestions[0]);
@@ -498,16 +441,14 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
             <li
               key={group}
               className={`rp-search-panel__section${
-                section?.id === PLUGIN_SECTION_ID
-                  ? ' rp-search-panel__section--plugins'
-                  : ''
+                section?.id === PLUGIN_SECTION_ID ? ' rp-search-panel__section--plugins' : ''
               }`}
             >
               <h3 className="rp-search-panel__section-title" id={headingId}>
                 {getSectionLabel(section)}
               </h3>
               <ul className="rp-search-panel__group" aria-labelledby={headingId}>
-                {groupSuggestions.map(suggestion => {
+                {groupSuggestions.map((suggestion) => {
                   accumulateIndex++;
                   const suggestionIndex = accumulateIndex;
                   return (
@@ -515,7 +456,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
                       key={`${suggestion.title}-${suggestionIndex}`}
                       suggestion={suggestion}
                       isCurrent={suggestionIndex === currentSuggestionIndex}
-                      setCurrentSuggestionIndex={event => {
+                      setCurrentSuggestionIndex={(event) => {
                         if (
                           mousePositionRef.current.pageX === event.pageX &&
                           mousePositionRef.current.pageY === event.pageY
@@ -526,7 +467,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
                         setCanScroll(false);
                         setCurrentSuggestionIndex(suggestionIndex);
                       }}
-                      onMouseMove={event => {
+                      onMouseMove={(event) => {
                         mousePositionRef.current = {
                           pageX: event.pageX,
                           pageY: event.pageY,
@@ -560,7 +501,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
           >
             <div
               className="rp-search-panel__modal"
-              onClick={e => {
+              onClick={(e) => {
                 setFocused(true);
                 e.stopPropagation();
               }}
@@ -577,13 +518,13 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
                     aria-label="SearchPanelInput"
                     autoComplete="off"
                     autoFocus
-                    onChange={e => handleQueryChange(e.target.value)}
+                    onChange={(e) => handleQueryChange(e.target.value)}
                   />
                   <label>
                     <SvgWrapper
                       icon={IconClose}
                       className="rp-search-panel__close"
-                      onClick={e => {
+                      onClick={(e) => {
                         if (searchInputRef.current) {
                           e.stopPropagation();
                           if (!query) {
@@ -599,7 +540,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
                 </div>
                 <h2
                   className="rp-search-panel__cancel"
-                  onClick={e => {
+                  onClick={(e) => {
                     e.stopPropagation();
                     clearSearchState();
                   }}
@@ -609,10 +550,7 @@ export function SearchPanel({ focused, setFocused }: SearchPanelProps) {
               </div>
 
               {query && initStatus === 'inited' ? (
-                <div
-                  className="rp-search-panel__results rp-scrollbar"
-                  ref={searchResultRef}
-                >
+                <div className="rp-search-panel__results rp-scrollbar" ref={searchResultRef}>
                   {renderSearchResult(searchResult, isSearching)}
                 </div>
               ) : null}

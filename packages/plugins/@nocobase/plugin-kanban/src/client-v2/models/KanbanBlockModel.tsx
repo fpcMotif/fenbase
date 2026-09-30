@@ -1196,7 +1196,7 @@ export class KanbanBlockModel extends CollectionBlockModel<{
       return {};
     }
 
-    const columnValue = column?.isUnknown ? null : column?.value ?? null;
+    const columnValue = column?.isUnknown ? null : (column?.value ?? null);
     if (isAssociationGroupField(groupField)) {
       const targetKey = groupField.targetKey || getKanbanCollectionFilterTargetKey(groupField.targetCollection);
       return {

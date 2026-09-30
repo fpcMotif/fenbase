@@ -90,8 +90,9 @@ export default class PluginList extends Command {
       );
     }
 
-    await this.config.runCommand('api:pm:list', explicitEnvSelection
-      ? ['--mode=summary', '--env', runtime.envName, '--yes']
-      : ['--mode=summary']);
+    await this.config.runCommand(
+      'api:pm:list',
+      explicitEnvSelection ? ['--mode=summary', '--env', runtime.envName, '--yes'] : ['--mode=summary'],
+    );
   }
 }

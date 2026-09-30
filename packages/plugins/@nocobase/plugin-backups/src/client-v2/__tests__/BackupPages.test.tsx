@@ -59,7 +59,7 @@ vi.mock('ahooks', () => ({
     },
   ) => {
     const config =
-      mocks.requestQueue.length > 0 ? mocks.requestQueue[mocks.requestIndex % mocks.requestQueue.length] ?? {} : {};
+      mocks.requestQueue.length > 0 ? (mocks.requestQueue[mocks.requestIndex % mocks.requestQueue.length] ?? {}) : {};
     mocks.requestIndex += 1;
     mocks.requestCalls.push({ service, options });
     React.useEffect(() => {

@@ -20,7 +20,7 @@ export default class ResponseMessageInstruction extends Instruction {
   type = RESPONSE_MESSAGE_INSTRUCTION_TYPE;
   group = RESPONSE_MESSAGE_INSTRUCTION_GROUP;
   description = tExpr('Add response message, will be send to client when process of request ends.');
-  icon = (<InfoCircleOutlined />);
+  icon = <InfoCircleOutlined />;
   FieldsetLoader = () =>
     import('./components/response-message').then((module) => ({ default: module.ResponseMessageFieldset }));
 

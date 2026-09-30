@@ -13,10 +13,7 @@ export function NavScreenVersions() {
 
   return items.length > 1 ? (
     <>
-      <div
-        className="rp-nav-screen-versions"
-        onClick={() => setIsOpen(!isOpen)}
-      >
+      <div className="rp-nav-screen-versions" onClick={() => setIsOpen(!isOpen)}>
         <div className="rp-nav-screen-versions__left">{t('versionsText')}</div>
         <div className="rp-nav-screen-versions__right">
           {activeValue}
@@ -27,13 +24,8 @@ export function NavScreenVersions() {
           />
         </div>
       </div>
-      <div
-        className={clsx(
-          'rp-nav-screen-versions-group',
-          isOpen && 'rp-nav-screen-versions-group--open',
-        )}
-      >
-        {items.map(item => {
+      <div className={clsx('rp-nav-screen-versions-group', isOpen && 'rp-nav-screen-versions-group--open')}>
+        {items.map((item) => {
           const isActive = item.text === activeValue;
           const className = clsx(
             'rp-nav-screen-versions-group__item',
@@ -41,12 +33,7 @@ export function NavScreenVersions() {
           );
 
           return isActive ? (
-            <span
-              key={item.text}
-              className={className}
-              aria-current="page"
-              aria-disabled={true}
-            >
+            <span key={item.text} className={className} aria-current="page" aria-disabled={true}>
               {item.text}
             </span>
           ) : (

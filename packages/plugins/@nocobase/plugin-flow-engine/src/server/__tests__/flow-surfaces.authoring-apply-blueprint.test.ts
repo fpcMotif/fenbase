@@ -3759,8 +3759,9 @@ describe('flowSurfaces backend authoring applyBlueprint compiler', () => {
     const titleWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'title')?.uid;
     const statusWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'status')?.uid;
     const bodyWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'body')?.uid;
-    const summaryWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'summary')
-      ?.uid;
+    const summaryWrapper = items.find(
+      (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'summary',
+    )?.uid;
 
     expect(grid?.props?.rows).toEqual({
       row1: [[titleWrapper], [statusWrapper]],

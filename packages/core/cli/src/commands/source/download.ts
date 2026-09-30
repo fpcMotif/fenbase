@@ -782,7 +782,7 @@ export default class SourceDownload extends Command {
         : false;
 
     const npmRegistryRaw =
-      results.npmRegistry !== undefined ? String(results.npmRegistry) : flags['npm-registry'] ?? '';
+      results.npmRegistry !== undefined ? String(results.npmRegistry) : (flags['npm-registry'] ?? '');
     const npmRegistry = npmRegistryRaw.trim() || undefined;
     const npmDevDependencies = devDependencies ?? false;
     const hookScript = flags['hook-script']?.trim()

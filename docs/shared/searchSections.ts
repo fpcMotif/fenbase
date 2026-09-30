@@ -59,10 +59,7 @@ export function getTopLevelSegment(routePath: string): string {
 
 /** 是否是 `/plugins` 或其下的插件元信息页。 */
 export function isPluginRoute(routePath: string): boolean {
-  return (
-    routePath === PLUGIN_ROUTE_PREFIX.replace(/\/$/, '') ||
-    routePath.startsWith(PLUGIN_ROUTE_PREFIX)
-  );
+  return routePath === PLUGIN_ROUTE_PREFIX.replace(/\/$/, '') || routePath.startsWith(PLUGIN_ROUTE_PREFIX);
 }
 
 /**
@@ -71,10 +68,7 @@ export function isPluginRoute(routePath: string): boolean {
  * 插件页复用分组表里 `/plugins` 那条的标签（它来自 `_nav.json`，已经本地化好了），
  * 但 order 强制改成 `PLUGIN_ORDER`，保证不管 nav 里排第几都沉到最后。
  */
-export function resolveSection(
-  routePath: string,
-  table: SearchSectionTable,
-): SearchSection {
+export function resolveSection(routePath: string, table: SearchSectionTable): SearchSection {
   const topLevel = getTopLevelSegment(routePath);
   if (!topLevel) {
     return OTHERS_SECTION;

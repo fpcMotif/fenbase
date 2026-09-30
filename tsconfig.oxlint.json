@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": false,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true
+  },
+  "include": [
+    "packages/core/test/src/e2e/**/*",
+    "packages/**/__e2e__/**/*",
+    "packages/**/e2e/**/*",
+    "src/demo/**/*",
+    "convex/**/*",
+    "scripts/**/*"
+  ],
+  "exclude": ["node_modules", "packages/**/node_modules", "packages/**/dist", "packages/**/lib"]
+}

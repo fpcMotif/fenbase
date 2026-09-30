@@ -22,10 +22,7 @@ import { detectSessionShell, removeSessionIntegration, type SessionShell } from 
 export default class SessionRemove extends Command {
   static override summary = 'Remove shell session integration for NB_SESSION_ID';
 
-  static override examples = [
-    '<%= config.bin %> <%= command.id %>',
-    '<%= config.bin %> <%= command.id %> --shell zsh',
-  ];
+  static override examples = ['<%= config.bin %> <%= command.id %>', '<%= config.bin %> <%= command.id %> --shell zsh'];
 
   static override flags = {
     shell: Flags.string({

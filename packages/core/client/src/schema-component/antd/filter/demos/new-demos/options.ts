@@ -1,5 +1,3 @@
-
-
 const filterOptions = [
   {
     name: 'name',

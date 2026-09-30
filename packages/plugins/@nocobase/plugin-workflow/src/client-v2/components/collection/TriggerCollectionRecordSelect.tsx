@@ -123,7 +123,7 @@ export function TriggerCollectionRecordSelect({
           mapOptions={(item) => {
             const rawLabel = item?.[labelKey] ?? item?.[filterTargetKey];
             return {
-              label: typeof rawLabel === 'string' ? t(rawLabel) : rawLabel ?? t('Untitled'),
+              label: typeof rawLabel === 'string' ? t(rawLabel) : (rawLabel ?? t('Untitled')),
               value: getPrimaryValue(item as RecordValue, filterTargetKey),
             };
           }}

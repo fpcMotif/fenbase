@@ -119,10 +119,16 @@ export default class LicenseGenerateId extends Command {
     const instanceId = await generateValidatedInstanceIdFromEnvVars(envVars);
 
     if (flags.json) {
-      this.log(JSON.stringify({
-        ok: true,
-        instanceId,
-      }, null, 2));
+      this.log(
+        JSON.stringify(
+          {
+            ok: true,
+            instanceId,
+          },
+          null,
+          2,
+        ),
+      );
       return;
     }
 

@@ -86,7 +86,9 @@ function resolveDisplayAppUrl(
   return formatAppUrl(port, appPublicPath);
 }
 
-async function runDockerAfterAppStartHookIfNeeded(runtime: Extract<ManagedAppRuntime, { kind: 'docker' }>): Promise<void> {
+async function runDockerAfterAppStartHookIfNeeded(
+  runtime: Extract<ManagedAppRuntime, { kind: 'docker' }>,
+): Promise<void> {
   const hookScript = runtime.env.config?.hookScript;
   if (!hookScript) {
     return;

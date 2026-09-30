@@ -42,7 +42,7 @@ export default class JSONQueryInstruction extends Instruction {
   type = 'json-query';
   group = 'calculation';
   description = tExpr('Transforming or calculating values from complex JSON data.');
-  icon = (<NodeExpandOutlined />);
+  icon = <NodeExpandOutlined />;
   testable = true;
   FieldsetLoader = () =>
     import('./components/JSONQueryFieldset').then((module) => ({
@@ -61,12 +61,10 @@ export default class JSONQueryInstruction extends Instruction {
       [fieldNames.value ?? defaultFieldNames.value]: key,
       [fieldNames.label ?? defaultFieldNames.label]: title,
       [fieldNames.children ?? defaultFieldNames.children]: config?.model?.length
-        ? config.model.map(
-            (item): VariableOption => ({
-              [fieldNames.value ?? defaultFieldNames.value]: item.alias || item.path,
-              [fieldNames.label ?? defaultFieldNames.label]: item.label,
-            }),
-          )
+        ? config.model.map((item): VariableOption => ({
+            [fieldNames.value ?? defaultFieldNames.value]: item.alias || item.path,
+            [fieldNames.label ?? defaultFieldNames.label]: item.label,
+          }))
         : null,
     };
   }

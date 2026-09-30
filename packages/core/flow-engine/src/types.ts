@@ -294,8 +294,9 @@ export type StepUIMode =
  * Step definition with unified support for both registered actions and inline handlers
  * Extends ActionDefinition but makes some properties optional and adds step-specific properties
  */
-export interface StepDefinition<TModel extends FlowModel = FlowModel>
-  extends Partial<Omit<ActionDefinition<TModel, FlowRuntimeContext<TModel>>, 'name'>> {
+export interface StepDefinition<TModel extends FlowModel = FlowModel> extends Partial<
+  Omit<ActionDefinition<TModel, FlowRuntimeContext<TModel>>, 'name'>
+> {
   key?: string; // Unique identifier for the step within the flow
   // Step-specific properties
   isAwait?: boolean; // Whether to await the handler, defaults to true

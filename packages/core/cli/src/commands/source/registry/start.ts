@@ -14,7 +14,7 @@ import { getSourceRegistryInfo, startSourceRegistry } from '../../../lib/source-
 function formatStartFailure(message: string): string {
   if (/port is already allocated|address already in use/i.test(message)) {
     return [
-      'Can\'t start the source registry.',
+      "Can't start the source registry.",
       'Port 4873 is already in use on this machine.',
       'Stop the conflicting process, or free the port before trying again.',
       `Details: ${message}`,
@@ -22,7 +22,7 @@ function formatStartFailure(message: string): string {
   }
 
   return [
-    'Couldn\'t start the source registry.',
+    "Couldn't start the source registry.",
     'Check that Docker is installed and running, then try again.',
     `Details: ${message}`,
   ].join('\n');
@@ -32,10 +32,7 @@ export default class SourceRegistryStart extends Command {
   static override description =
     'Start the local Docker-based npm registry used for source snapshot publish and install tests.';
 
-  static override examples = [
-    '<%= config.bin %> <%= command.id %>',
-    '<%= config.bin %> <%= command.id %> --verbose',
-  ];
+  static override examples = ['<%= config.bin %> <%= command.id %>', '<%= config.bin %> <%= command.id %> --verbose'];
 
   static override flags = {
     verbose: Flags.boolean({

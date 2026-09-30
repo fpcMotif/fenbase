@@ -253,7 +253,7 @@ export function buildWrapperFieldChildren(ctx: FlowModelContext, options: BuildF
     }
     const fieldPath = associationPathName ? `${associationPathName}.${f.name}` : f.name;
 
-    const childUse = typeof fieldUseModel === 'function' ? fieldUseModel(f) : fieldUseModel ?? 'FieldModel';
+    const childUse = typeof fieldUseModel === 'function' ? fieldUseModel(f) : (fieldUseModel ?? 'FieldModel');
     if (childUse) {
       const stepPayload = {
         dataSourceKey: collection.dataSourceKey,

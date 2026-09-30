@@ -285,16 +285,14 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                               'TableSelectorInitializers',
                                                                                             properties: {
                                                                                               '0uui41pxdye': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   '476w75depv3': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -303,8 +301,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                       alibfkv2g0v: {
                                                                                                         'x-uid':
                                                                                                           'y8f4lswt52q',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-acl-action':
@@ -337,8 +334,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                           'CardItem',
                                                                                                         properties: {
                                                                                                           rblwp47r7fz: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -355,13 +351,11 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'ubog2cks3ay',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                           value: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'array',
@@ -382,8 +376,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                               {
                                                                                                                 jryz1oqazsj:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -403,8 +396,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                       {
                                                                                                                         pkzvqfi6lr5:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -421,8 +413,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                               {
                                                                                                                                 xffx2jx6u7q:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'void',
@@ -445,15 +436,13 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                                       'ACLActionProvider',
                                                                                                                                     'x-designer-props':
                                                                                                                                       {
-                                                                                                                                        linkageAction:
-                                                                                                                                          true,
+                                                                                                                                        linkageAction: true,
                                                                                                                                       },
                                                                                                                                     properties:
                                                                                                                                       {
                                                                                                                                         drawer:
                                                                                                                                           {
-                                                                                                                                            _isJSONSchemaObject:
-                                                                                                                                              true,
+                                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                                             version:
                                                                                                                                               '2.0',
                                                                                                                                             type: 'void',
@@ -469,8 +458,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                                             properties:
                                                                                                                                               {
                                                                                                                                                 tabs: {
-                                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                                    true,
+                                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                                   version:
                                                                                                                                                     '2.0',
                                                                                                                                                   type: 'void',
@@ -483,8 +471,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                                                   properties:
                                                                                                                                                     {
                                                                                                                                                       tab1: {
-                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                          true,
+                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                         version:
                                                                                                                                                           '2.0',
                                                                                                                                                         type: 'void',
@@ -499,8 +486,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                                                         properties:
                                                                                                                                                           {
                                                                                                                                                             grid: {
-                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                true,
+                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                               version:
                                                                                                                                                                 '2.0',
                                                                                                                                                               type: 'void',
@@ -510,56 +496,48 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                                                                 'RecordBlockInitializers',
                                                                                                                                                               'x-uid':
                                                                                                                                                                 'wkqrpvcqiih',
-                                                                                                                                                              'x-async':
-                                                                                                                                                                false,
+                                                                                                                                                              'x-async': false,
                                                                                                                                                               'x-index': 1,
                                                                                                                                                             },
                                                                                                                                                           },
                                                                                                                                                         'x-uid':
                                                                                                                                                           '2lzui9z88st',
-                                                                                                                                                        'x-async':
-                                                                                                                                                          false,
+                                                                                                                                                        'x-async': false,
                                                                                                                                                         'x-index': 1,
                                                                                                                                                       },
                                                                                                                                                     },
                                                                                                                                                   'x-uid':
                                                                                                                                                     'ee4zj3qx2ip',
-                                                                                                                                                  'x-async':
-                                                                                                                                                    false,
+                                                                                                                                                  'x-async': false,
                                                                                                                                                   'x-index': 1,
                                                                                                                                                 },
                                                                                                                                               },
                                                                                                                                             'x-uid':
                                                                                                                                               'l5ew3g2ka6s',
-                                                                                                                                            'x-async':
-                                                                                                                                              false,
+                                                                                                                                            'x-async': false,
                                                                                                                                             'x-index': 1,
                                                                                                                                           },
                                                                                                                                       },
                                                                                                                                     'x-uid':
                                                                                                                                       '0m2i5xxfw1k',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               'zm42p4adruu',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       '4ybzswir3zr',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 2,
                                                                                                                   },
                                                                                                                 d51klxxphw4:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -575,8 +553,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                       {
                                                                                                                         singleLineText:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             'x-collection-field':
@@ -585,11 +562,9 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                               'CollectionField',
                                                                                                                             'x-component-props':
                                                                                                                               {
-                                                                                                                                ellipsis:
-                                                                                                                                  true,
+                                                                                                                                ellipsis: true,
                                                                                                                               },
-                                                                                                                            'x-read-pretty':
-                                                                                                                              true,
+                                                                                                                            'x-read-pretty': true,
                                                                                                                             'x-decorator':
                                                                                                                               null,
                                                                                                                             'x-decorator-props':
@@ -602,27 +577,23 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               'n069twt8nsc',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       '51p2r7zlo9k',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 3,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'gkbturli19t',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 2,
                                                                                                           },
                                                                                                         },
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -649,8 +620,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               actions: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -658,8 +628,7 @@ export const tableSelectorDataScopeVariable: PageConfig = {
                                                                                                 'x-component-props': {},
                                                                                                 properties: {
                                                                                                   submit: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     title:
                                                                                                       '{{ t("Submit") }}',

@@ -62,7 +62,9 @@ function main() {
   const docsRoot = args.positional[0] || defaultDocsRoot();
   const cnRoot = path.join(docsRoot, 'cn');
   if (!fs.existsSync(cnRoot)) {
-    console.error(`找不到 ${cnRoot}（请在 NocoBase 主仓库根目录或 docs/ 目录下运行，或传 docs 根的绝对路径作为第一个位置参数）`);
+    console.error(
+      `找不到 ${cnRoot}（请在 NocoBase 主仓库根目录或 docs/ 目录下运行，或传 docs 根的绝对路径作为第一个位置参数）`,
+    );
     process.exit(1);
   }
 
@@ -71,13 +73,7 @@ function main() {
     ? [args.lang]
     : fs
         .readdirSync(docsRoot, { withFileTypes: true })
-        .filter(
-          (e) =>
-            e.isDirectory() &&
-            e.name !== 'cn' &&
-            !SKIP_LANGS.has(e.name) &&
-            !e.name.startsWith('.'),
-        )
+        .filter((e) => e.isDirectory() && e.name !== 'cn' && !SKIP_LANGS.has(e.name) && !e.name.startsWith('.'))
         .map((e) => e.name);
 
   let bad = 0;

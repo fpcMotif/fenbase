@@ -277,8 +277,7 @@ export const oneTableBlock: PageConfig = {
                                                                                                 'x-component-props': {},
                                                                                                 'x-collection-field':
                                                                                                   'users.nickname',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 'x-uid': '4vyr92lhz7f',
                                                                                                 'x-async': false,
                                                                                                 'x-index': 1,
@@ -317,8 +316,7 @@ export const oneTableBlock: PageConfig = {
                                                                                                 'x-component-props': {},
                                                                                                 'x-collection-field':
                                                                                                   'users.username',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 'x-uid': 'eotcjdflbgi',
                                                                                                 'x-async': false,
                                                                                                 'x-index': 1,
@@ -357,8 +355,7 @@ export const oneTableBlock: PageConfig = {
                                                                                                 'x-component-props': {},
                                                                                                 'x-collection-field':
                                                                                                   'users.email',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 'x-uid': 'rjfub70uv31',
                                                                                                 'x-async': false,
                                                                                                 'x-index': 1,
@@ -397,8 +394,7 @@ export const oneTableBlock: PageConfig = {
                                                                                                 'x-component-props': {},
                                                                                                 'x-collection-field':
                                                                                                   'users.phone',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 'x-uid': 'kw641beat5d',
                                                                                                 'x-async': false,
                                                                                                 'x-index': 1,
@@ -1362,16 +1358,14 @@ export const oneTableBlock: PageConfig = {
                                                                                                 version: '2.0',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 properties: {
                                                                                                   '16hy9o43lw3': {
                                                                                                     type: 'void',
                                                                                                     version: '2.0',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     properties: {
                                                                                                       nickname: {
                                                                                                         type: 'string',
@@ -1386,12 +1380,10 @@ export const oneTableBlock: PageConfig = {
                                                                                                           {},
                                                                                                         'x-collection-field':
                                                                                                           'users.nickname',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         'x-uid':
                                                                                                           'bmgy7q59phb',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1410,16 +1402,14 @@ export const oneTableBlock: PageConfig = {
                                                                                                 version: '2.0',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 properties: {
                                                                                                   '2ihsfcbje69': {
                                                                                                     type: 'void',
                                                                                                     version: '2.0',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     properties: {
                                                                                                       username: {
                                                                                                         type: 'string',
@@ -1434,12 +1424,10 @@ export const oneTableBlock: PageConfig = {
                                                                                                           {},
                                                                                                         'x-collection-field':
                                                                                                           'users.username',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         'x-uid':
                                                                                                           'egwd6ablbba',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1458,16 +1446,14 @@ export const oneTableBlock: PageConfig = {
                                                                                                 version: '2.0',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 properties: {
                                                                                                   wef811qqesy: {
                                                                                                     type: 'void',
                                                                                                     version: '2.0',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     properties: {
                                                                                                       email: {
                                                                                                         type: 'string',
@@ -1482,12 +1468,10 @@ export const oneTableBlock: PageConfig = {
                                                                                                           {},
                                                                                                         'x-collection-field':
                                                                                                           'users.email',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         'x-uid':
                                                                                                           'tf2u14d0bnm',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1506,16 +1490,14 @@ export const oneTableBlock: PageConfig = {
                                                                                                 version: '2.0',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 properties: {
                                                                                                   '5mzmg368cgc': {
                                                                                                     type: 'void',
                                                                                                     version: '2.0',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     properties: {
                                                                                                       phone: {
                                                                                                         type: 'string',
@@ -1530,12 +1512,10 @@ export const oneTableBlock: PageConfig = {
                                                                                                           {},
                                                                                                         'x-collection-field':
                                                                                                           'users.phone',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         'x-uid':
                                                                                                           '7svpr9sjqq7',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1554,16 +1534,14 @@ export const oneTableBlock: PageConfig = {
                                                                                                 version: '2.0',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 properties: {
                                                                                                   '51r85dms6u5': {
                                                                                                     type: 'void',
                                                                                                     version: '2.0',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     properties: {
                                                                                                       password: {
                                                                                                         type: 'string',
@@ -1578,12 +1556,10 @@ export const oneTableBlock: PageConfig = {
                                                                                                           {},
                                                                                                         'x-collection-field':
                                                                                                           'users.password',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         'x-uid':
                                                                                                           'oadthvx1ers',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1602,16 +1578,14 @@ export const oneTableBlock: PageConfig = {
                                                                                                 version: '2.0',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 properties: {
                                                                                                   helm5fnfsjx: {
                                                                                                     type: 'void',
                                                                                                     version: '2.0',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     properties: {
                                                                                                       roles: {
                                                                                                         type: 'string',
@@ -1626,12 +1600,10 @@ export const oneTableBlock: PageConfig = {
                                                                                                           {},
                                                                                                         'x-collection-field':
                                                                                                           'users.roles',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         'x-uid':
                                                                                                           'o35fyaetimm',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -3566,8 +3538,7 @@ export const T3950: PageConfig = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -3645,8 +3616,7 @@ export const T3950: PageConfig = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -3792,8 +3762,7 @@ export const T3950: PageConfig = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',

@@ -1,15 +1,22 @@
-import _ from "lodash";
-import React, { useCallback } from "react";
-import { DataBlock } from "../../../filter-provider/FilterProvider";
+/**
+ * This file is part of the NocoBase (R) project.
+ * Copyright (c) 2020-2024 NocoBase Co., Ltd.
+ * Authors: NocoBase Team.
+ *
+ * This project is dual-licensed under AGPL-3.0 and NocoBase Commercial License.
+ * For more information, please refer to: https://www.nocobase.com/agreement.
+ */
+
+import _ from 'lodash';
+import React, { useCallback } from 'react';
+import { DataBlock } from '../../../filter-provider/FilterProvider';
 
 export const AllDataBlocksContext = React.createContext<{
   getAllDataBlocks: () => DataBlock[];
-  setAllDataBlocks: (
-    value: DataBlock[] | ((prev: DataBlock[]) => DataBlock[])
-  ) => void;
+  setAllDataBlocks: (value: DataBlock[] | ((prev: DataBlock[]) => DataBlock[])) => void;
 }>({
   getAllDataBlocks: () => [],
-  setAllDataBlocks: () => { },
+  setAllDataBlocks: () => {},
 });
 
 /**
@@ -20,22 +27,16 @@ export const AllDataBlocksContext = React.createContext<{
 export const AllDataBlocksProvider: React.FC = (props) => {
   const dataBlocksRef = React.useRef<DataBlock[]>([]);
   const setAllDataBlocks = React.useCallback((value) => {
-    if (typeof value === "function") {
+    if (typeof value === 'function') {
       dataBlocksRef.current = value(dataBlocksRef.current);
     } else {
       dataBlocksRef.current = value;
     }
   }, []);
-  const getAllDataBlocks = React.useCallback(
-    () => dataBlocksRef.current,
-    []
-  );
-  const value = React.useMemo(
-    () => ({ getAllDataBlocks, setAllDataBlocks }),
-    [getAllDataBlocks, setAllDataBlocks]
-  );
+  const getAllDataBlocks = React.useCallback(() => dataBlocksRef.current, []);
+  const value = React.useMemo(() => ({ getAllDataBlocks, setAllDataBlocks }), [getAllDataBlocks, setAllDataBlocks]);
   return <AllDataBlocksContext.Provider value={value}>{props.children}</AllDataBlocksContext.Provider>;
-}
+};
 
 export const useAllDataBlocks = () => {
   const ctx = React.useContext(AllDataBlocksContext);

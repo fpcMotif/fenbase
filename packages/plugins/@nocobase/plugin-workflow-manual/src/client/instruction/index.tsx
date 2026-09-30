@@ -132,7 +132,7 @@ export default class extends Instruction {
   type = 'manual';
   group = 'manual';
   description = `{{t("Could be used for manually submitting data, and determine whether to continue or exit. Workflow will generate a todo item for assigned user when it reaches a manual node, and continue processing after user submits the form.", { ns: "${NAMESPACE}" })}}`;
-  icon = (<SolutionOutlined />);
+  icon = <SolutionOutlined />;
   fieldset = {
     assignees: {
       type: 'array',

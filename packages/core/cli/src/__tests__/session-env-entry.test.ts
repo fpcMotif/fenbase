@@ -94,23 +94,29 @@ describe('normalizeSessionEnv', () => {
 
 describe('resolveNormalizedSessionId', () => {
   test('prefers higher-priority sources in order', () => {
-    expect(resolveNormalizedSessionId({
-      CODEX_THREAD_ID: 'thread-123',
-      OPENCODE_RUN_ID: 'run-456',
-      COPILOT_AGENT_SESSION_ID: 'copilot-789',
-      CLAUDE_CODE_SESSION_ID: 'claude-999',
-    })).toBe('thread-123');
+    expect(
+      resolveNormalizedSessionId({
+        CODEX_THREAD_ID: 'thread-123',
+        OPENCODE_RUN_ID: 'run-456',
+        COPILOT_AGENT_SESSION_ID: 'copilot-789',
+        CLAUDE_CODE_SESSION_ID: 'claude-999',
+      }),
+    ).toBe('thread-123');
 
-    expect(resolveNormalizedSessionId({
-      OPENCODE_RUN_ID: 'run-456',
-      COPILOT_AGENT_SESSION_ID: 'copilot-789',
-      CLAUDE_CODE_SESSION_ID: 'claude-999',
-    })).toBe('run-456');
+    expect(
+      resolveNormalizedSessionId({
+        OPENCODE_RUN_ID: 'run-456',
+        COPILOT_AGENT_SESSION_ID: 'copilot-789',
+        CLAUDE_CODE_SESSION_ID: 'claude-999',
+      }),
+    ).toBe('run-456');
 
-    expect(resolveNormalizedSessionId({
-      COPILOT_AGENT_SESSION_ID: 'copilot-789',
-      CLAUDE_CODE_SESSION_ID: 'claude-999',
-    })).toBe('copilot-789');
+    expect(
+      resolveNormalizedSessionId({
+        COPILOT_AGENT_SESSION_ID: 'copilot-789',
+        CLAUDE_CODE_SESSION_ID: 'claude-999',
+      }),
+    ).toBe('copilot-789');
   });
 });
 

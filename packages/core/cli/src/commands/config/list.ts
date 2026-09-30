@@ -13,16 +13,12 @@ import { renderTable } from '../../lib/ui.js';
 
 export default class ConfigList extends Command {
   static override summary = 'List explicitly configured CLI settings';
-  static override examples = [
-    '<%= config.bin %> <%= command.id %>',
-  ];
+  static override examples = ['<%= config.bin %> <%= command.id %>'];
 
   async run(): Promise<void> {
     await this.parse(ConfigList);
     const values = await listExplicitCliConfigValues();
-    const rows = SUPPORTED_CLI_CONFIG_KEYS
-      .filter((key) => Boolean(values[key]))
-      .map((key) => [key, values[key] ?? '']);
+    const rows = SUPPORTED_CLI_CONFIG_KEYS.filter((key) => Boolean(values[key])).map((key) => [key, values[key] ?? '']);
 
     if (!rows.length) {
       this.log('No CLI config values are set.');

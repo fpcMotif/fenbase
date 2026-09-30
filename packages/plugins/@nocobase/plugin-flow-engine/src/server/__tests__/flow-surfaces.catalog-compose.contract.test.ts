@@ -5864,16 +5864,20 @@ describe('flowSurfaces catalog + compose contract', () => {
       uid: getComposeBlock(composed, 'wideEditForm').uid,
     });
     const formItems = _.castArray(formReadback.tree.subModels?.grid?.subModels?.items || []);
-    const titleWrapper = formItems.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'title')
-      ?.uid;
-    const statusWrapper = formItems.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'status')
-      ?.uid;
+    const titleWrapper = formItems.find(
+      (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'title',
+    )?.uid;
+    const statusWrapper = formItems.find(
+      (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'status',
+    )?.uid;
     const bodyWrapper = formItems.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'body')?.uid;
-    const summaryWrapper = formItems.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'summary')
-      ?.uid;
+    const summaryWrapper = formItems.find(
+      (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'summary',
+    )?.uid;
     const codeWrapper = formItems.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'code')?.uid;
-    const notesWrapper = formItems.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'notes')
-      ?.uid;
+    const notesWrapper = formItems.find(
+      (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'notes',
+    )?.uid;
 
     expect(formReadback.tree.subModels?.grid?.props?.rows).toEqual({
       row1: [[titleWrapper], [statusWrapper]],
@@ -5989,8 +5993,9 @@ describe('flowSurfaces catalog + compose contract', () => {
     const nicknameWrapper = formItems.find(
       (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'nickname',
     )?.uid;
-    const emailWrapper = formItems.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'email')
-      ?.uid;
+    const emailWrapper = formItems.find(
+      (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'email',
+    )?.uid;
 
     expect(basicDividerNode?.props?.orientation).toBe('left');
     expect(basicDividerNode?.stepParams?.markdownItemSetting?.title).toMatchObject({

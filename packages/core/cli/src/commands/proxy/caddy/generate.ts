@@ -175,7 +175,8 @@ export default class ProxyCaddyGenerate extends Command {
       const savedAppEntryOptions = resolveEnvProxyEntry(runtime.env.config, 'caddy');
       const appEntryOptions = {
         host: flags.host?.trim() || savedAppEntryOptions?.host,
-        port: normalizedPort ?? (savedAppEntryOptions?.port !== undefined ? String(savedAppEntryOptions.port) : undefined),
+        port:
+          normalizedPort ?? (savedAppEntryOptions?.port !== undefined ? String(savedAppEntryOptions.port) : undefined),
       };
       const { bundle, status } = await writeCaddyProxyBundle(
         runtime as WritableProxyRuntime,

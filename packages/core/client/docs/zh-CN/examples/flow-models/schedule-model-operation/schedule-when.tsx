@@ -52,9 +52,13 @@ class WhenDemoModel extends FlowModel {
         (m) => (m as WhenDemoModel).appendLog('when=event:go:flow:staticBase:step:step2:start'),
         { when: 'event:go:flow:staticBase:step:step2:start' },
       ),
-      this.scheduleModelOperation(this.uid, (m) => (m as WhenDemoModel).appendLog('when=event:go:flow:staticBase:end'), {
-        when: 'event:go:flow:staticBase:end',
-      }),
+      this.scheduleModelOperation(
+        this.uid,
+        (m) => (m as WhenDemoModel).appendLog('when=event:go:flow:staticBase:end'),
+        {
+          when: 'event:go:flow:staticBase:end',
+        },
+      ),
       this.scheduleModelOperation(this.uid, (m) => (m as WhenDemoModel).appendLog('when=event:go:end'), {
         when: 'event:go:end',
       }),
@@ -73,8 +77,8 @@ class WhenDemoModel extends FlowModel {
       <div style={{ padding: 16 }}>
         <Typography.Title level={4}>直接用 scheduleModelOperation 指定锚点</Typography.Title>
         <Typography.Paragraph>
-          <code>scheduleModelOperation(toUid, fn, {'{ when }'})</code> 的 <code>when</code> 支持事件开始/结束、以及静态流与步骤的
-          start/end/error 锚点。本示例展示了与事件流编辑器选项对应的几种常用锚点。
+          <code>scheduleModelOperation(toUid, fn, {'{ when }'})</code> 的 <code>when</code>{' '}
+          支持事件开始/结束、以及静态流与步骤的 start/end/error 锚点。本示例展示了与事件流编辑器选项对应的几种常用锚点。
         </Typography.Paragraph>
 
         <Space>

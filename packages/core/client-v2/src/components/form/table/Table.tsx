@@ -286,7 +286,7 @@ export function Table<RecordType extends object = any>(props: TableProps<RecordT
         const result: RowSelectionRenderCellResult<RecordType> = originalRenderCell
           ? originalRenderCell(checked, record, index, originalNode)
           : originalNode;
-        const node: React.ReactNode = isRenderedCell<RecordType>(result) ? result.children ?? null : result;
+        const node: React.ReactNode = isRenderedCell<RecordType>(result) ? (result.children ?? null) : result;
         return (
           <SelectionCell
             checked={checked}

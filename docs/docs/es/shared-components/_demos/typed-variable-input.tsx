@@ -4,16 +4,9 @@ import { Form } from 'antd';
 
 function DemoPage() {
   return (
-    <Form
-      layout="vertical"
-      style={{ maxWidth: 420 }}
-      initialValues={{ port: 465, secure: true }}
-    >
+    <Form layout="vertical" style={{ maxWidth: 420 }} initialValues={{ port: 465, secure: true }}>
       <Form.Item name="port" label="Port">
-        <TypedVariableInput
-          types={[['number', { min: 1, max: 65535, step: 1 }]]}
-          namespaces={['$env']}
-        />
+        <TypedVariableInput types={[['number', { min: 1, max: 65535, step: 1 }]]} namespaces={['$env']} />
       </Form.Item>
       <Form.Item name="secure" label="Secure">
         <TypedVariableInput types={['boolean']} namespaces={['$env']} />

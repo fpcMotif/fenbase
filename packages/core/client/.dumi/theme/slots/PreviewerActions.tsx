@@ -1,6 +1,6 @@
 import DumiPreviewerActions from 'dumi/theme-default/slots/PreviewerActions';
 import React, { useRef, useEffect, useState } from 'react';
-import { Spin } from 'antd'
+import { Spin } from 'antd';
 
 import { IPreviewerProps } from 'dumi';
 
@@ -8,7 +8,7 @@ const indexHtml = `<body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
-`
+`;
 
 const mainTsx = `
 import React from 'react'
@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
   </React.StrictMode>,
 )
-`
+`;
 
 const packageJson = `
 {
@@ -45,7 +45,7 @@ const packageJson = `
     "vite": "^4.4.5"
   }
 }
-`
+`;
 
 const tsConfigJson = `
 {
@@ -77,7 +77,7 @@ const tsConfigJson = `
     "vite.config.ts"
   ]
 }
-`
+`;
 
 const viteConfigTs = `
 import { defineConfig } from 'vite'
@@ -86,7 +86,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 })
-`
+`;
 
 const sandboxTask = `
 {
@@ -117,10 +117,9 @@ const sandboxTask = `
     }
   }
 }
-`
+`;
 
 function getCSBData(opts: IPreviewerProps, ext: string) {
-
   const files: Record<
     string,
     {
@@ -145,15 +144,15 @@ function getCSBData(opts: IPreviewerProps, ext: string) {
   });
 
   // append package.json
-  let pkg = JSON.parse(packageJson)
+  let pkg = JSON.parse(packageJson);
   try {
     for (let key in deps) {
       if (!pkg['devDependencies'][key]) {
-        pkg.dependencies[key] = deps[key]
+        pkg.dependencies[key] = deps[key];
       }
     }
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
   files['package.json'] = {
     content: JSON.stringify(
@@ -177,24 +176,22 @@ function getCSBData(opts: IPreviewerProps, ext: string) {
   return { files };
 }
 
-
 export function openCodeSandbox(opts: IPreviewerProps) {
   const isTSX = Boolean(opts.asset.dependencies?.['index.tsx']);
   const ext = isTSX ? '.tsx' : '.jsx';
-  return fetch("https://codesandbox.io/api/v1/sandboxes/define?json=1", {
-    method: "POST",
+  return fetch('https://codesandbox.io/api/v1/sandboxes/define?json=1', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json"
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
     },
-    body: JSON.stringify(getCSBData(opts, ext))
+    body: JSON.stringify(getCSBData(opts, ext)),
   })
-    .then(x => x.json())
-    .then(data => {
+    .then((x) => x.json())
+    .then((data) => {
       window.open(`https://codesandbox.io/p/sandbox/${data.sandbox_id}?file=/src/App${ext}`);
     });
 }
-
 
 const PreviewerActions: typeof DumiPreviewerActions = (props) => {
   const div = useRef<HTMLDivElement>(null);
@@ -209,11 +206,17 @@ const PreviewerActions: typeof DumiPreviewerActions = (props) => {
         openCodeSandbox(props).finally(() => {
           setLoading(false);
         });
-      })
+      });
     }
-  }, [div])
+  }, [div]);
 
-  return <Spin spinning={loading}><div ref={div}><DumiPreviewerActions {...props} disabledActions={['STACKBLITZ']} /></div></Spin>
+  return (
+    <Spin spinning={loading}>
+      <div ref={div}>
+        <DumiPreviewerActions {...props} disabledActions={['STACKBLITZ']} />
+      </div>
+    </Spin>
+  );
 };
 
 export default PreviewerActions;

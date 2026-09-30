@@ -16,8 +16,10 @@ export interface RemoteSelectFieldNames {
   value?: string;
 }
 
-export interface RemoteSelectProps<RawItem = any, Resp = RawItem[], V = any>
-  extends Omit<SelectProps<V>, 'options' | 'loading'> {
+export interface RemoteSelectProps<RawItem = any, Resp = RawItem[], V = any> extends Omit<
+  SelectProps<V>,
+  'options' | 'loading'
+> {
   /**
    * Fetch the option source. Receives no arguments; caller closes over the
    * `ctx.api.resource(...)` (or any other source) it needs. May resolve

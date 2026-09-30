@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { mockApp } from '@nocobase/client/demo-utils';
 import { SchemaComponent, Plugin, SchemaSettings, ISchema } from '@nocobase/client';
@@ -83,8 +82,8 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.schemaSettingsManager.add(simpleSettings)
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.schemaSettingsManager.add(simpleSettings);
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 

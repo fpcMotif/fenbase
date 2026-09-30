@@ -23,14 +23,12 @@ export default defineConfig({
   outputPath: `./dist/${lang}`,
   resolve: {
     docDirs: [`./docs/${lang}`],
-    atomDirs: [
-      { type: 'component', dir: 'src/schema-component/antd' },
-    ],
+    atomDirs: [{ type: 'component', dir: 'src/schema-component/antd' }],
   },
   jsMinifierOptions: {
     target: ['chrome80', 'es2020'],
   },
-  locales: lang === 'zh-CN' ? [{ id: 'zh-CN', name: '中文' },] : [{ id: 'en-US', name: 'English' }],
+  locales: lang === 'zh-CN' ? [{ id: 'zh-CN', name: '中文' }] : [{ id: 'en-US', name: 'English' }],
   themeConfig: defineThemeConfig({
     title: 'NocoBase',
     logo: 'https://www.nocobase.com/images/logo.png',
@@ -61,7 +59,7 @@ export default defineConfig({
       {
         title: 'Home site',
         link: lang === 'zh-CN' ? 'https://docs-cn.nocobase.com' : 'https://docs.nocobase.com',
-      }
+      },
       // {
       //   title: 'UI Schema',
       //   link: '/ui-schema',
@@ -246,7 +244,7 @@ export default defineConfig({
               title: 'Event Registry',
               link: '/examples/flow-definition/event-registry',
             },
-          ]
+          ],
         },
         {
           title: 'FlowAction',
@@ -477,7 +475,7 @@ export default defineConfig({
               link: '/examples/tests/flow-test',
             },
           ],
-        }
+        },
       ],
       '/learn': [
         {
@@ -514,7 +512,7 @@ export default defineConfig({
               title: '区块的使用场景',
               link: '/learn/block-scenes',
             },
-          ]
+          ],
         },
         {
           title: 'Basic',
@@ -562,9 +560,9 @@ export default defineConfig({
             {
               title: '1.0 vs 2.0',
               link: '/learn/1-0-vs-2-0',
-            }
-          ]
-        }
+            },
+          ],
+        },
       ],
       '/models': [
         {
@@ -739,7 +737,7 @@ export default defineConfig({
                   title: 'ForkModel',
                   link: '/api/flow-engine/flow-model/fork-model',
                 },
-              ]
+              ],
             },
             {
               title: 'FlowModelRenderer',
@@ -802,8 +800,8 @@ export default defineConfig({
               title: 'FlowSQLRepository',
               link: '/api/flow-engine/flow-sql-repository',
             },
-          ]
-        }
+          ],
+        },
       ],
       // '/core': [
       //   // {
@@ -1472,7 +1470,7 @@ export default defineConfig({
     },
     localesEnhance: [
       { id: 'zh-CN', switchPrefix: '中', hostname: 'client.docs-cn.nocobase.com' },
-      { id: 'en-US', switchPrefix: 'en', hostname: 'client.docs.nocobase.com' }
+      { id: 'en-US', switchPrefix: 'en', hostname: 'client.docs.nocobase.com' },
     ],
   }),
 });

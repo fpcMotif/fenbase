@@ -92,8 +92,8 @@ export const validation = defineAction({
       const uiRules = params.validation.rules?.length
         ? buildValidationRules(ctx as unknown as ValidationContext, params.validation)
         : [];
-      const hasRequiredInValidation = [collectionValidation, params.validation].some(
-        (validation) => validation?.rules?.some((rule) => rule.name === 'required'),
+      const hasRequiredInValidation = [collectionValidation, params.validation].some((validation) =>
+        validation?.rules?.some((rule) => rule.name === 'required'),
       );
       if (hasRequiredInValidation) {
         ctx.model.setProps({

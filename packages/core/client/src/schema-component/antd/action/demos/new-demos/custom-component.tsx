@@ -1,4 +1,3 @@
-
 import { SchemaComponent, Plugin, ISchema } from '@nocobase/client';
 import { mockApp } from '@nocobase/client/demo-utils';
 import { Button } from 'antd';
@@ -28,7 +27,7 @@ const schema: ISchema = {
       },
     },
   },
-}
+};
 
 const Demo = () => {
   return <SchemaComponent schema={schema} components={{ ComponentButton }} />;
@@ -36,7 +35,7 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 

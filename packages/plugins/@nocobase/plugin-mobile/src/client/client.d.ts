@@ -11,12 +11,12 @@
 type CSSModuleClasses = { readonly [key: string]: string };
 
 declare module 'demos' {
-  import type { FC } from 'react'
+  import type { FC } from 'react';
   export const DemoBlock: FC<{
-    title: string
-    padding?: string
-    background?: string
-    children?: ReactNode
+    title: string;
+    padding?: string;
+    background?: string;
+    children?: ReactNode;
   }>;
 }
 
@@ -54,14 +54,14 @@ declare module '*.module.sss' {
 }
 
 // CSS
-declare module '*.css' { }
-declare module '*.scss' { }
-declare module '*.sass' { }
-declare module '*.less' { }
-declare module '*.styl' { }
-declare module '*.stylus' { }
-declare module '*.pcss' { }
-declare module '*.sss' { }
+declare module '*.css' {}
+declare module '*.scss' {}
+declare module '*.sass' {}
+declare module '*.less' {}
+declare module '*.styl' {}
+declare module '*.stylus' {}
+declare module '*.pcss' {}
+declare module '*.sss' {}
 
 // Built-in asset types
 // see `src/node/constants.ts`
@@ -207,14 +207,14 @@ declare module '*.wasm?init' {
 // web worker
 declare module '*?worker' {
   const workerConstructor: {
-    new(options?: { name?: string }): Worker;
+    new (options?: { name?: string }): Worker;
   };
   export default workerConstructor;
 }
 
 declare module '*?worker&inline' {
   const workerConstructor: {
-    new(options?: { name?: string }): Worker;
+    new (options?: { name?: string }): Worker;
   };
   export default workerConstructor;
 }
@@ -226,14 +226,14 @@ declare module '*?worker&url' {
 
 declare module '*?sharedworker' {
   const sharedWorkerConstructor: {
-    new(options?: { name?: string }): SharedWorker;
+    new (options?: { name?: string }): SharedWorker;
   };
   export default sharedWorkerConstructor;
 }
 
 declare module '*?sharedworker&inline' {
   const sharedWorkerConstructor: {
-    new(options?: { name?: string }): SharedWorker;
+    new (options?: { name?: string }): SharedWorker;
   };
   export default sharedWorkerConstructor;
 }

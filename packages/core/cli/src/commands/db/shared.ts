@@ -86,13 +86,10 @@ export async function builtinDbStatus(containerName: string): Promise<Exclude<Db
     return 'missing';
   }
 
-  return await dockerContainerIsRunning(containerName) ? 'running' : 'stopped';
+  return (await dockerContainerIsRunning(containerName)) ? 'running' : 'stopped';
 }
 
-export function formatUnmanagedDbMessage(
-  action: 'start' | 'stop',
-  runtime: ResolvedDbRuntime,
-): string {
+export function formatUnmanagedDbMessage(action: 'start' | 'stop', runtime: ResolvedDbRuntime): string {
   const verb = action === 'start' ? 'start' : 'stop';
 
   if (runtime.appRuntime.kind === 'http') {

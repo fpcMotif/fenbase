@@ -127,9 +127,8 @@ module.exports = (cli) => {
       nodeCheck();
       await postCheck(opts);
 
-      const { useModernOnlyEntryMode, shouldRunClientV2, shouldRunClient, shouldRunServer } = resolveDevRuntimeMode(
-        opts,
-      );
+      const { useModernOnlyEntryMode, shouldRunClientV2, shouldRunClient, shouldRunServer } =
+        resolveDevRuntimeMode(opts);
       const shouldRunClientWithRsbuild = shouldRunClient && !!rsbuild;
 
       if (shouldRunServer && server) {

@@ -801,8 +801,7 @@ export const formFieldDependsOnSubtableFieldsWithLinkageRules = {
                                                                                               '1.5.0-beta.6',
                                                                                             properties: {
                                                                                               count: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'A.count',
@@ -843,8 +842,7 @@ export const formFieldDependsOnSubtableFieldsWithLinkageRules = {
                                                                                               '1.5.0-beta.6',
                                                                                             properties: {
                                                                                               price: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'A.price',
@@ -885,8 +883,7 @@ export const formFieldDependsOnSubtableFieldsWithLinkageRules = {
                                                                                               '1.5.0-beta.6',
                                                                                             properties: {
                                                                                               totalPrice: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'A.totalPrice',

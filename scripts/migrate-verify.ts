@@ -166,8 +166,7 @@ export async function verifyMigration(options: { isDryRun: boolean }): Promise<V
         }
         const content = JSON.parse(readFileSync(path, 'utf-8'));
         const hasCompat =
-          Array.isArray(content.compatibility_flags) &&
-          content.compatibility_flags.includes('nodejs_compat');
+          Array.isArray(content.compatibility_flags) && content.compatibility_flags.includes('nodejs_compat');
         const hasOutputDir = Boolean(content.pages_build_output_dir);
         if (!hasCompat || !hasOutputDir) {
           return {
@@ -210,13 +209,12 @@ export async function verifyMigration(options: { isDryRun: boolean }): Promise<V
       'convex',
       'Verify Convex queries and mutations',
       async () => {
-        const hasFunctions =
-          typeof convexUsers.listUsers === 'function' && typeof convexUsers.getViewer === 'function';
+        const hasFunctions = typeof convexUsers.getViewer === 'function';
         return {
           ok: hasFunctions,
           message: hasFunctions
-            ? 'Convex user queries implemented'
-            : 'Expected listUsers and getViewer queries',
+            ? 'Authenticated Convex current-user query implemented'
+            : 'Expected authenticated getViewer query',
         };
       },
       options.isDryRun,
@@ -234,9 +232,7 @@ export async function verifyMigration(options: { isDryRun: boolean }): Promise<V
         const isTagCorrect = result._tag === 'Success' && result.value === 'ok';
         return {
           ok: isTagCorrect,
-          message: isTagCorrect
-            ? 'Effect-TS computation and error channels functional'
-            : 'Invalid Effect result tag',
+          message: isTagCorrect ? 'Effect-TS computation and error channels functional' : 'Invalid Effect result tag',
         };
       },
       options.isDryRun,
@@ -344,5 +340,8 @@ Options:
 }
 
 if (import.meta.main) {
-  void main();
+  main().catch((err: unknown) => {
+    console.error(err);
+    process.exit(1);
+  });
 }

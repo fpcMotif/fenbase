@@ -1,5 +1,3 @@
-
-
 import { Application, NocoBaseBuildInPlugin } from '@nocobase/client';
 
 export const app = new Application({

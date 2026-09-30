@@ -1,21 +1,20 @@
-/**
- * Sample Convex queries and mutations for User domain.
- */
+import { query } from './_generated/server';
+import { v } from 'convex/values';
+import { authComponent } from './auth';
 
-export interface User {
-  id: string;
-  email: string;
-  name?: string;
-  role: string;
-}
-
-export async function getViewer(ctx: { user?: User }): Promise<User | null> {
-  return ctx.user ?? null;
-}
-
-export async function listUsers(): Promise<User[]> {
-  return [
-    { id: 'usr_1', email: 'admin@example.com', name: 'Admin', role: 'admin' },
-    { id: 'usr_2', email: 'member@example.com', name: 'Member', role: 'member' },
-  ];
-}
+export const getViewer = query({
+  args: {},
+  returns: v.object({
+    id: v.string(),
+    email: v.string(),
+    name: v.string(),
+  }),
+  handler: async (ctx) => {
+    const user = await authComponent.getAuthUser(ctx);
+    return {
+      id: user._id,
+      email: user.email,
+      name: user.name,
+    };
+  },
+});

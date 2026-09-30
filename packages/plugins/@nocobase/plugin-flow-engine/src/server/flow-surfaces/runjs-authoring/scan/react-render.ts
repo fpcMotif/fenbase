@@ -392,7 +392,7 @@ export function resolveAstFunctionBinding(
         }
         const initializedIndex = isAstFunctionBindingScopedInsideNode(entry, options.currentFunctionNode)
           ? index
-          : options.initializedIndex ?? index;
+          : (options.initializedIndex ?? index);
         return entry.hoisted || entry.declarationStart <= initializedIndex;
       })
       .sort((left, right) => right.scopeStart - left.scopeStart || right.declarationStart - left.declarationStart);

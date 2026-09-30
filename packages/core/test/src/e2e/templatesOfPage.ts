@@ -6677,8 +6677,7 @@ export const oneTableBlockWithAddNewAndViewAndEditAndBasicFieldsAndSubTable: Pag
                                                                                             properties: {
                                                                                               singleLineText: {
                                                                                                 'x-uid': 'tlprzxnyyqb',
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'general.singleLineText',
@@ -7111,8 +7110,7 @@ export const oneTableBlockWithEditAndSubForm: PageConfig = {
                                                                                               '0.21.0-alpha.15',
                                                                                             properties: {
                                                                                               '52v5gjhuhil': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -7121,8 +7119,7 @@ export const oneTableBlockWithEditAndSubForm: PageConfig = {
                                                                                                   '0.21.0-alpha.15',
                                                                                                 properties: {
                                                                                                   '4j9cytzhwjt': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -7131,8 +7128,7 @@ export const oneTableBlockWithEditAndSubForm: PageConfig = {
                                                                                                       '0.21.0-alpha.15',
                                                                                                     properties: {
                                                                                                       singleLineText: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-toolbar':
@@ -7151,8 +7147,7 @@ export const oneTableBlockWithEditAndSubForm: PageConfig = {
                                                                                                           '0.21.0-alpha.15',
                                                                                                         'x-uid':
                                                                                                           'heu3ssj95k4',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -14921,8 +14916,7 @@ export const oneTableBlockWithAddNewAndViewAndEditAndSystemInfoFields: PageConfi
                                                                                               'TabPaneInitializers',
                                                                                             properties: {
                                                                                               tab1: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 title:
@@ -14934,8 +14928,7 @@ export const oneTableBlockWithAddNewAndViewAndEditAndSystemInfoFields: PageConfi
                                                                                                 'x-component-props': {},
                                                                                                 properties: {
                                                                                                   grid: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -15022,8 +15015,7 @@ export const oneTableBlockWithAddNewAndViewAndEditAndSystemInfoFields: PageConfi
                                                                                               'TabPaneInitializers',
                                                                                             properties: {
                                                                                               tab1: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 title:
@@ -15035,8 +15027,7 @@ export const oneTableBlockWithAddNewAndViewAndEditAndSystemInfoFields: PageConfi
                                                                                                 'x-component-props': {},
                                                                                                 properties: {
                                                                                                   grid: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -15419,8 +15410,7 @@ export const oneTableBlockWithAddNewAndViewAndEditAndSystemInfoFields: PageConfi
                                                                                               'TabPaneInitializers',
                                                                                             properties: {
                                                                                               tab1: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 title:
@@ -15432,8 +15422,7 @@ export const oneTableBlockWithAddNewAndViewAndEditAndSystemInfoFields: PageConfi
                                                                                                 'x-component-props': {},
                                                                                                 properties: {
                                                                                                   grid: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -15520,8 +15509,7 @@ export const oneTableBlockWithAddNewAndViewAndEditAndSystemInfoFields: PageConfi
                                                                                               'TabPaneInitializers',
                                                                                             properties: {
                                                                                               tab1: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 title:
@@ -15533,8 +15521,7 @@ export const oneTableBlockWithAddNewAndViewAndEditAndSystemInfoFields: PageConfi
                                                                                                 'x-component-props': {},
                                                                                                 properties: {
                                                                                                   grid: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -17152,24 +17139,21 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                               'form:configureFields',
                                                                                             properties: {
                                                                                               '7gni7kgrxc6': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   ol9n4vgrj4a: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
                                                                                                     properties: {
                                                                                                       id: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -17182,12 +17166,10 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                           'm2oField1.id',
                                                                                                         'x-component-props':
                                                                                                           {},
-                                                                                                        'x-read-pretty':
-                                                                                                          true,
+                                                                                                        'x-read-pretty': true,
                                                                                                         'x-uid':
                                                                                                           'pcudj4r7tag',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -17202,16 +17184,14 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                 'x-index': 1,
                                                                                               },
                                                                                               '6i64qc2t8yl': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   ua78t3hazyg: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -17220,8 +17200,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                       m2oField1: {
                                                                                                         'x-uid':
                                                                                                           '6i5hvki95fm',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -17238,8 +17217,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                           },
                                                                                                         properties: {
                                                                                                           l64n7q06u69: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -17249,8 +17227,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                             properties:
                                                                                                               {
                                                                                                                 grid: {
-                                                                                                                  _isJSONSchemaObject:
-                                                                                                                    true,
+                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                   version:
                                                                                                                     '2.0',
                                                                                                                   type: 'void',
@@ -17262,8 +17239,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                     {
                                                                                                                       wfis8uozy45:
                                                                                                                         {
-                                                                                                                          _isJSONSchemaObject:
-                                                                                                                            true,
+                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                           version:
                                                                                                                             '2.0',
                                                                                                                           type: 'void',
@@ -17273,8 +17249,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                             {
                                                                                                                               widjeb1iua5:
                                                                                                                                 {
-                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                    true,
+                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                   version:
                                                                                                                                     '2.0',
                                                                                                                                   type: 'void',
@@ -17283,8 +17258,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                   properties:
                                                                                                                                     {
                                                                                                                                       id: {
-                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                          true,
+                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                         version:
                                                                                                                                           '2.0',
                                                                                                                                         type: 'string',
@@ -17298,32 +17272,27 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                           'm2oField2.id',
                                                                                                                                         'x-component-props':
                                                                                                                                           {},
-                                                                                                                                        'x-read-pretty':
-                                                                                                                                          true,
+                                                                                                                                        'x-read-pretty': true,
                                                                                                                                         'x-uid':
                                                                                                                                           'm8wz20ffkim',
-                                                                                                                                        'x-async':
-                                                                                                                                          false,
+                                                                                                                                        'x-async': false,
                                                                                                                                         'x-index': 1,
                                                                                                                                       },
                                                                                                                                     },
                                                                                                                                   'x-uid':
                                                                                                                                     '8zrvt9woaxx',
-                                                                                                                                  'x-async':
-                                                                                                                                    false,
+                                                                                                                                  'x-async': false,
                                                                                                                                   'x-index': 1,
                                                                                                                                 },
                                                                                                                             },
                                                                                                                           'x-uid':
                                                                                                                             'qg62l58hu4n',
-                                                                                                                          'x-async':
-                                                                                                                            false,
+                                                                                                                          'x-async': false,
                                                                                                                           'x-index': 1,
                                                                                                                         },
                                                                                                                       gos46xkhf6j:
                                                                                                                         {
-                                                                                                                          _isJSONSchemaObject:
-                                                                                                                            true,
+                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                           version:
                                                                                                                             '2.0',
                                                                                                                           type: 'void',
@@ -17333,8 +17302,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                             {
                                                                                                                               dvgf1pge350:
                                                                                                                                 {
-                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                    true,
+                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                   version:
                                                                                                                                     '2.0',
                                                                                                                                   type: 'void',
@@ -17346,8 +17314,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                         {
                                                                                                                                           'x-uid':
                                                                                                                                             'gweez55achj',
-                                                                                                                                          _isJSONSchemaObject:
-                                                                                                                                            true,
+                                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                                           version:
                                                                                                                                             '2.0',
                                                                                                                                           type: 'string',
@@ -17367,8 +17334,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                             {
                                                                                                                                               ipwo3aeoxd1:
                                                                                                                                                 {
-                                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                                    true,
+                                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                                   version:
                                                                                                                                                     '2.0',
                                                                                                                                                   type: 'void',
@@ -17378,8 +17344,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                   properties:
                                                                                                                                                     {
                                                                                                                                                       grid: {
-                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                          true,
+                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                         version:
                                                                                                                                                           '2.0',
                                                                                                                                                         type: 'void',
@@ -17391,8 +17356,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                           {
                                                                                                                                                             '8ga4k036hkh':
                                                                                                                                                               {
-                                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                                  true,
+                                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                                 version:
                                                                                                                                                                   '2.0',
                                                                                                                                                                 type: 'void',
@@ -17402,8 +17366,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                   {
                                                                                                                                                                     msnws5m7e3n:
                                                                                                                                                                       {
-                                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                                          true,
+                                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                                         version:
                                                                                                                                                                           '2.0',
                                                                                                                                                                         type: 'void',
@@ -17412,8 +17375,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                         properties:
                                                                                                                                                                           {
                                                                                                                                                                             id: {
-                                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                                true,
+                                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                                               version:
                                                                                                                                                                                 '2.0',
                                                                                                                                                                               type: 'string',
@@ -17427,32 +17389,27 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                                 'm2oField3.id',
                                                                                                                                                                               'x-component-props':
                                                                                                                                                                                 {},
-                                                                                                                                                                              'x-read-pretty':
-                                                                                                                                                                                true,
+                                                                                                                                                                              'x-read-pretty': true,
                                                                                                                                                                               'x-uid':
                                                                                                                                                                                 '9rpoyelp388',
-                                                                                                                                                                              'x-async':
-                                                                                                                                                                                false,
+                                                                                                                                                                              'x-async': false,
                                                                                                                                                                               'x-index': 1,
                                                                                                                                                                             },
                                                                                                                                                                           },
                                                                                                                                                                         'x-uid':
                                                                                                                                                                           '3l348ecw0f4',
-                                                                                                                                                                        'x-async':
-                                                                                                                                                                          false,
+                                                                                                                                                                        'x-async': false,
                                                                                                                                                                         'x-index': 1,
                                                                                                                                                                       },
                                                                                                                                                                   },
                                                                                                                                                                 'x-uid':
                                                                                                                                                                   'ii5542jvwe9',
-                                                                                                                                                                'x-async':
-                                                                                                                                                                  false,
+                                                                                                                                                                'x-async': false,
                                                                                                                                                                 'x-index': 1,
                                                                                                                                                               },
                                                                                                                                                             '08qsmq3fwps':
                                                                                                                                                               {
-                                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                                  true,
+                                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                                 version:
                                                                                                                                                                   '2.0',
                                                                                                                                                                 type: 'void',
@@ -17462,8 +17419,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                   {
                                                                                                                                                                     f8be5hgqwzq:
                                                                                                                                                                       {
-                                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                                          true,
+                                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                                         version:
                                                                                                                                                                           '2.0',
                                                                                                                                                                         type: 'void',
@@ -17473,8 +17429,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                           {
                                                                                                                                                                             m2oField3:
                                                                                                                                                                               {
-                                                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                                                  true,
+                                                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                                                 version:
                                                                                                                                                                                   '2.0',
                                                                                                                                                                                 type: 'string',
@@ -17490,72 +17445,61 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                                   {},
                                                                                                                                                                                 'x-uid':
                                                                                                                                                                                   'ves5a1w4pmu',
-                                                                                                                                                                                'x-async':
-                                                                                                                                                                                  false,
+                                                                                                                                                                                'x-async': false,
                                                                                                                                                                                 'x-index': 1,
                                                                                                                                                                               },
                                                                                                                                                                           },
                                                                                                                                                                         'x-uid':
                                                                                                                                                                           'u6qilftivur',
-                                                                                                                                                                        'x-async':
-                                                                                                                                                                          false,
+                                                                                                                                                                        'x-async': false,
                                                                                                                                                                         'x-index': 1,
                                                                                                                                                                       },
                                                                                                                                                                   },
                                                                                                                                                                 'x-uid':
                                                                                                                                                                   'nbrjmpq5y84',
-                                                                                                                                                                'x-async':
-                                                                                                                                                                  false,
+                                                                                                                                                                'x-async': false,
                                                                                                                                                                 'x-index': 2,
                                                                                                                                                               },
                                                                                                                                                           },
                                                                                                                                                         'x-uid':
                                                                                                                                                           '3klghjyhn2e',
-                                                                                                                                                        'x-async':
-                                                                                                                                                          false,
+                                                                                                                                                        'x-async': false,
                                                                                                                                                         'x-index': 1,
                                                                                                                                                       },
                                                                                                                                                     },
                                                                                                                                                   'x-uid':
                                                                                                                                                     'k9ck22tm51h',
-                                                                                                                                                  'x-async':
-                                                                                                                                                    false,
+                                                                                                                                                  'x-async': false,
                                                                                                                                                 },
                                                                                                                                             },
-                                                                                                                                          'x-async':
-                                                                                                                                            false,
+                                                                                                                                          'x-async': false,
                                                                                                                                           'x-index': 1,
                                                                                                                                         },
                                                                                                                                     },
                                                                                                                                   'x-uid':
                                                                                                                                     'm4wi2pzpr87',
-                                                                                                                                  'x-async':
-                                                                                                                                    false,
+                                                                                                                                  'x-async': false,
                                                                                                                                   'x-index': 1,
                                                                                                                                 },
                                                                                                                             },
                                                                                                                           'x-uid':
                                                                                                                             'sp5w23qy3i1',
-                                                                                                                          'x-async':
-                                                                                                                            false,
+                                                                                                                          'x-async': false,
                                                                                                                           'x-index': 2,
                                                                                                                         },
                                                                                                                     },
                                                                                                                   'x-uid':
                                                                                                                     'oqz60xa1yfi',
-                                                                                                                  'x-async':
-                                                                                                                    false,
+                                                                                                                  'x-async': false,
                                                                                                                   'x-index': 1,
                                                                                                                 },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'n1rdyer1njy',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                           },
                                                                                                         },
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -17820,24 +17764,21 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                               'form:configureFields',
                                                                                             properties: {
                                                                                               '0o134mwdmzm': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   '7dxzwgyax59': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
                                                                                                     properties: {
                                                                                                       id: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -17850,12 +17791,10 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                           'm2oField1.id',
                                                                                                         'x-component-props':
                                                                                                           {},
-                                                                                                        'x-read-pretty':
-                                                                                                          true,
+                                                                                                        'x-read-pretty': true,
                                                                                                         'x-uid':
                                                                                                           'b7wd6150b6h',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -17870,16 +17809,14 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                 'x-index': 1,
                                                                                               },
                                                                                               '3m1ohstn0b8': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   sqtguwxadwu: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -17888,8 +17825,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                       m2oField1: {
                                                                                                         'x-uid':
                                                                                                           'v2nrgm7uu51',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -17906,8 +17842,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                           },
                                                                                                         properties: {
                                                                                                           f963gxcp0uz: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -17917,8 +17852,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                             properties:
                                                                                                               {
                                                                                                                 grid: {
-                                                                                                                  _isJSONSchemaObject:
-                                                                                                                    true,
+                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                   version:
                                                                                                                     '2.0',
                                                                                                                   type: 'void',
@@ -17930,8 +17864,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                     {
                                                                                                                       '2eg7xlliyk0':
                                                                                                                         {
-                                                                                                                          _isJSONSchemaObject:
-                                                                                                                            true,
+                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                           version:
                                                                                                                             '2.0',
                                                                                                                           type: 'void',
@@ -17941,8 +17874,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                             {
                                                                                                                               '4d008vpig0f':
                                                                                                                                 {
-                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                    true,
+                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                   version:
                                                                                                                                     '2.0',
                                                                                                                                   type: 'void',
@@ -17951,8 +17883,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                   properties:
                                                                                                                                     {
                                                                                                                                       id: {
-                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                          true,
+                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                         version:
                                                                                                                                           '2.0',
                                                                                                                                         type: 'string',
@@ -17966,32 +17897,27 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                           'm2oField2.id',
                                                                                                                                         'x-component-props':
                                                                                                                                           {},
-                                                                                                                                        'x-read-pretty':
-                                                                                                                                          true,
+                                                                                                                                        'x-read-pretty': true,
                                                                                                                                         'x-uid':
                                                                                                                                           'eqh4uwwrdb2',
-                                                                                                                                        'x-async':
-                                                                                                                                          false,
+                                                                                                                                        'x-async': false,
                                                                                                                                         'x-index': 1,
                                                                                                                                       },
                                                                                                                                     },
                                                                                                                                   'x-uid':
                                                                                                                                     'gc19ujdgy5h',
-                                                                                                                                  'x-async':
-                                                                                                                                    false,
+                                                                                                                                  'x-async': false,
                                                                                                                                   'x-index': 1,
                                                                                                                                 },
                                                                                                                             },
                                                                                                                           'x-uid':
                                                                                                                             'yykls3t9pug',
-                                                                                                                          'x-async':
-                                                                                                                            false,
+                                                                                                                          'x-async': false,
                                                                                                                           'x-index': 1,
                                                                                                                         },
                                                                                                                       kzbf5h1vbqw:
                                                                                                                         {
-                                                                                                                          _isJSONSchemaObject:
-                                                                                                                            true,
+                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                           version:
                                                                                                                             '2.0',
                                                                                                                           type: 'void',
@@ -18001,8 +17927,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                             {
                                                                                                                               f2v2e9t8juk:
                                                                                                                                 {
-                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                    true,
+                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                   version:
                                                                                                                                     '2.0',
                                                                                                                                   type: 'void',
@@ -18014,8 +17939,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                         {
                                                                                                                                           'x-uid':
                                                                                                                                             '17ecpej7sb9',
-                                                                                                                                          _isJSONSchemaObject:
-                                                                                                                                            true,
+                                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                                           version:
                                                                                                                                             '2.0',
                                                                                                                                           type: 'string',
@@ -18035,8 +17959,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                             {
                                                                                                                                               yp3xjukzbmo:
                                                                                                                                                 {
-                                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                                    true,
+                                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                                   version:
                                                                                                                                                     '2.0',
                                                                                                                                                   type: 'void',
@@ -18046,8 +17969,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                   properties:
                                                                                                                                                     {
                                                                                                                                                       grid: {
-                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                          true,
+                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                         version:
                                                                                                                                                           '2.0',
                                                                                                                                                         type: 'void',
@@ -18059,8 +17981,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                           {
                                                                                                                                                             wca260ji2ih:
                                                                                                                                                               {
-                                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                                  true,
+                                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                                 version:
                                                                                                                                                                   '2.0',
                                                                                                                                                                 type: 'void',
@@ -18070,8 +17991,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                   {
                                                                                                                                                                     j19p1r016pj:
                                                                                                                                                                       {
-                                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                                          true,
+                                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                                         version:
                                                                                                                                                                           '2.0',
                                                                                                                                                                         type: 'void',
@@ -18080,8 +18000,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                         properties:
                                                                                                                                                                           {
                                                                                                                                                                             id: {
-                                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                                true,
+                                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                                               version:
                                                                                                                                                                                 '2.0',
                                                                                                                                                                               type: 'string',
@@ -18095,32 +18014,27 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                                 'm2oField3.id',
                                                                                                                                                                               'x-component-props':
                                                                                                                                                                                 {},
-                                                                                                                                                                              'x-read-pretty':
-                                                                                                                                                                                true,
+                                                                                                                                                                              'x-read-pretty': true,
                                                                                                                                                                               'x-uid':
                                                                                                                                                                                 'yjbtit5eri9',
-                                                                                                                                                                              'x-async':
-                                                                                                                                                                                false,
+                                                                                                                                                                              'x-async': false,
                                                                                                                                                                               'x-index': 1,
                                                                                                                                                                             },
                                                                                                                                                                           },
                                                                                                                                                                         'x-uid':
                                                                                                                                                                           '2wj9t16qv49',
-                                                                                                                                                                        'x-async':
-                                                                                                                                                                          false,
+                                                                                                                                                                        'x-async': false,
                                                                                                                                                                         'x-index': 1,
                                                                                                                                                                       },
                                                                                                                                                                   },
                                                                                                                                                                 'x-uid':
                                                                                                                                                                   'wv2eouh5o38',
-                                                                                                                                                                'x-async':
-                                                                                                                                                                  false,
+                                                                                                                                                                'x-async': false,
                                                                                                                                                                 'x-index': 1,
                                                                                                                                                               },
                                                                                                                                                             ihzeejjyski:
                                                                                                                                                               {
-                                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                                  true,
+                                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                                 version:
                                                                                                                                                                   '2.0',
                                                                                                                                                                 type: 'void',
@@ -18130,8 +18044,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                   {
                                                                                                                                                                     nuwqnjguqtc:
                                                                                                                                                                       {
-                                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                                          true,
+                                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                                         version:
                                                                                                                                                                           '2.0',
                                                                                                                                                                         type: 'void',
@@ -18143,8 +18056,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                               {
                                                                                                                                                                                 'x-uid':
                                                                                                                                                                                   '2bkbiayqed2',
-                                                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                                                  true,
+                                                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                                                 version:
                                                                                                                                                                                   '2.0',
                                                                                                                                                                                 type: 'string',
@@ -18164,8 +18076,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                                   {
                                                                                                                                                                                     j1l0upv47vn:
                                                                                                                                                                                       {
-                                                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                                                          true,
+                                                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                                                         version:
                                                                                                                                                                                           '2.0',
                                                                                                                                                                                         type: 'void',
@@ -18175,8 +18086,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                                         properties:
                                                                                                                                                                                           {
                                                                                                                                                                                             grid: {
-                                                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                                                true,
+                                                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                                                               version:
                                                                                                                                                                                                 '2.0',
                                                                                                                                                                                               type: 'void',
@@ -18188,8 +18098,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                                                 {
                                                                                                                                                                                                   '9xq8mnnzyrw':
                                                                                                                                                                                                     {
-                                                                                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                                                                                        true,
+                                                                                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                                                                                       version:
                                                                                                                                                                                                         '2.0',
                                                                                                                                                                                                       type: 'void',
@@ -18199,8 +18108,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                                                         {
                                                                                                                                                                                                           nbqmql24khd:
                                                                                                                                                                                                             {
-                                                                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                                                                true,
+                                                                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                                                                               version:
                                                                                                                                                                                                                 '2.0',
                                                                                                                                                                                                               type: 'void',
@@ -18209,8 +18117,7 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                                                               properties:
                                                                                                                                                                                                                 {
                                                                                                                                                                                                                   id: {
-                                                                                                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                                                                                                      true,
+                                                                                                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                                                                                                     version:
                                                                                                                                                                                                                       '2.0',
                                                                                                                                                                                                                     type: 'string',
@@ -18224,108 +18131,91 @@ export const oneTableSubformWithMultiLevelAssociationFields: PageConfig = {
                                                                                                                                                                                                                       'users.id',
                                                                                                                                                                                                                     'x-component-props':
                                                                                                                                                                                                                       {},
-                                                                                                                                                                                                                    'x-read-pretty':
-                                                                                                                                                                                                                      true,
+                                                                                                                                                                                                                    'x-read-pretty': true,
                                                                                                                                                                                                                     'x-uid':
                                                                                                                                                                                                                       'rnkwrneb7dy',
-                                                                                                                                                                                                                    'x-async':
-                                                                                                                                                                                                                      false,
+                                                                                                                                                                                                                    'x-async': false,
                                                                                                                                                                                                                     'x-index': 1,
                                                                                                                                                                                                                   },
                                                                                                                                                                                                                 },
                                                                                                                                                                                                               'x-uid':
                                                                                                                                                                                                                 'c5v4i42w1i1',
-                                                                                                                                                                                                              'x-async':
-                                                                                                                                                                                                                false,
+                                                                                                                                                                                                              'x-async': false,
                                                                                                                                                                                                               'x-index': 1,
                                                                                                                                                                                                             },
                                                                                                                                                                                                         },
                                                                                                                                                                                                       'x-uid':
                                                                                                                                                                                                         'lgxcefydtp0',
-                                                                                                                                                                                                      'x-async':
-                                                                                                                                                                                                        false,
+                                                                                                                                                                                                      'x-async': false,
                                                                                                                                                                                                       'x-index': 1,
                                                                                                                                                                                                     },
                                                                                                                                                                                                 },
                                                                                                                                                                                               'x-uid':
                                                                                                                                                                                                 'w0idtr6dwa4',
-                                                                                                                                                                                              'x-async':
-                                                                                                                                                                                                false,
+                                                                                                                                                                                              'x-async': false,
                                                                                                                                                                                               'x-index': 1,
                                                                                                                                                                                             },
                                                                                                                                                                                           },
                                                                                                                                                                                         'x-uid':
                                                                                                                                                                                           'a09ma68c41f',
-                                                                                                                                                                                        'x-async':
-                                                                                                                                                                                          false,
+                                                                                                                                                                                        'x-async': false,
                                                                                                                                                                                       },
                                                                                                                                                                                   },
-                                                                                                                                                                                'x-async':
-                                                                                                                                                                                  false,
+                                                                                                                                                                                'x-async': false,
                                                                                                                                                                                 'x-index': 1,
                                                                                                                                                                               },
                                                                                                                                                                           },
                                                                                                                                                                         'x-uid':
                                                                                                                                                                           'qe3hnw9xe6e',
-                                                                                                                                                                        'x-async':
-                                                                                                                                                                          false,
+                                                                                                                                                                        'x-async': false,
                                                                                                                                                                         'x-index': 1,
                                                                                                                                                                       },
                                                                                                                                                                   },
                                                                                                                                                                 'x-uid':
                                                                                                                                                                   'o5zh8m5qx6a',
-                                                                                                                                                                'x-async':
-                                                                                                                                                                  false,
+                                                                                                                                                                'x-async': false,
                                                                                                                                                                 'x-index': 2,
                                                                                                                                                               },
                                                                                                                                                           },
                                                                                                                                                         'x-uid':
                                                                                                                                                           'nigeia3gqlm',
-                                                                                                                                                        'x-async':
-                                                                                                                                                          false,
+                                                                                                                                                        'x-async': false,
                                                                                                                                                         'x-index': 1,
                                                                                                                                                       },
                                                                                                                                                     },
                                                                                                                                                   'x-uid':
                                                                                                                                                     'rz5kiy9vh12',
-                                                                                                                                                  'x-async':
-                                                                                                                                                    false,
+                                                                                                                                                  'x-async': false,
                                                                                                                                                 },
                                                                                                                                             },
-                                                                                                                                          'x-async':
-                                                                                                                                            false,
+                                                                                                                                          'x-async': false,
                                                                                                                                           'x-index': 1,
                                                                                                                                         },
                                                                                                                                     },
                                                                                                                                   'x-uid':
                                                                                                                                     'hkjnncj6dhj',
-                                                                                                                                  'x-async':
-                                                                                                                                    false,
+                                                                                                                                  'x-async': false,
                                                                                                                                   'x-index': 1,
                                                                                                                                 },
                                                                                                                             },
                                                                                                                           'x-uid':
                                                                                                                             'l4zkvdlmobo',
-                                                                                                                          'x-async':
-                                                                                                                            false,
+                                                                                                                          'x-async': false,
                                                                                                                           'x-index': 2,
                                                                                                                         },
                                                                                                                     },
                                                                                                                   'x-uid':
                                                                                                                     'xw4i68d64mt',
-                                                                                                                  'x-async':
-                                                                                                                    false,
+                                                                                                                  'x-async': false,
                                                                                                                   'x-index': 1,
                                                                                                                 },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'z3bm22to5yl',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                           },
                                                                                                         },
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -18950,8 +18840,7 @@ export const oneTableSubtableWithMultiLevelAssociationFields: PageConfig = {
                                                                                               'TableV2.Column',
                                                                                             properties: {
                                                                                               id: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'm2mField1.id',
@@ -18987,8 +18876,7 @@ export const oneTableSubtableWithMultiLevelAssociationFields: PageConfig = {
                                                                                               'TableV2.Column',
                                                                                             properties: {
                                                                                               m2mField1: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'm2mField1.m2mField1',
@@ -19292,8 +19180,7 @@ export const oneTableSubtableWithMultiLevelAssociationFields: PageConfig = {
                                                                                               'TableV2.Column',
                                                                                             properties: {
                                                                                               id: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'm2mField1.id',
@@ -19329,8 +19216,7 @@ export const oneTableSubtableWithMultiLevelAssociationFields: PageConfig = {
                                                                                               'TableV2.Column',
                                                                                             properties: {
                                                                                               m2mField1: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'm2mField1.m2mField1',

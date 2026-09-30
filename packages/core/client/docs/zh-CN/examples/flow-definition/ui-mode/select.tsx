@@ -26,13 +26,12 @@ const buttonSettings = defineFlow({
             { label: tExpr('选项二'), value: 'two' },
             { label: tExpr('选项三'), value: 'three' },
           ],
-        }
+        },
       },
       defaultParams: {
         icon: 'two',
       },
-      handler(ctx, params) {
-      },
+      handler(ctx, params) {},
     },
   },
 });

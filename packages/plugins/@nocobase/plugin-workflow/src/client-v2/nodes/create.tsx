@@ -27,7 +27,7 @@ export default class extends Instruction {
   description = t(
     'Add new record to a collection. You can use variables from upstream nodes to assign values to fields.',
   );
-  icon = (<FileAddOutlined />);
+  icon = <FileAddOutlined />;
 
   FieldsetLoader = () => import('./components/create').then((m) => ({ default: m.CreateFieldset }));
   PresetFieldsetLoader = () => import('./components/create').then((m) => ({ default: m.CreatePresetFieldset }));

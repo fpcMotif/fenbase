@@ -30,20 +30,15 @@ export function getRltExternalsFromDeps(
   depExternals: Record<string, string>,
   current: { name: string; outputDir: string },
 ) {
-  return Object.entries(depExternals).reduce<Record<string, string>>(
-    (r, [dep, target]) => {
-      // skip self
-      if (dep !== current.name) {
-        // transform dep externals path to relative path
-        r[dep] = winPath(
-          path.relative(current.outputDir, path.dirname(target)),
-        );
-      }
+  return Object.entries(depExternals).reduce<Record<string, string>>((r, [dep, target]) => {
+    // skip self
+    if (dep !== current.name) {
+      // transform dep externals path to relative path
+      r[dep] = winPath(path.relative(current.outputDir, path.dirname(target)));
+    }
 
-      return r;
-    },
-    {},
-  );
+    return r;
+  }, {});
 }
 
 /**
@@ -94,10 +89,10 @@ export function getDepsConfig(cwd: string, outDir: string, depsName: string[], e
       pkg: depPkg,
       outputDir,
       mainFile,
-    }
+    };
 
     return acc;
-  }, {})
+  }, {});
 
   // process externals for deps
   Object.values(deps).forEach((depConfig) => {

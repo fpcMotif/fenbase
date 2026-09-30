@@ -19,7 +19,7 @@ export default class LLMInstruction extends Instruction {
   type = LLM_INSTRUCTION_TYPE;
   group = AI_WORKFLOW_GROUP;
   async = true;
-  icon = (<RobotOutlined />);
+  icon = <RobotOutlined />;
   FieldsetLoader = () => import('./components/LLMFieldset').then((m) => ({ default: m.LLMFieldset }));
 
   createDefaultConfig() {

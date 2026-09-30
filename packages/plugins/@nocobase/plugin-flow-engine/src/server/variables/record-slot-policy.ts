@@ -32,14 +32,12 @@ function resolved(slot: readonly (string | number)[]) {
 
 export function createBuiltInRecordSlotResolvers(): readonly RecordSlotResolverRegistration[] {
   return [
-    ...['record', 'responseRecord', 'clickedRowRecord'].map(
-      (varName): RecordSlotResolverRegistration => ({
-        owner: '@nocobase/plugin-flow-engine',
-        id: `direct:${varName}`,
-        match: (path) => path.varName === varName,
-        resolve: () => resolved([]),
-      }),
-    ),
+    ...['record', 'responseRecord', 'clickedRowRecord'].map((varName): RecordSlotResolverRegistration => ({
+      owner: '@nocobase/plugin-flow-engine',
+      id: `direct:${varName}`,
+      match: (path) => path.varName === varName,
+      resolve: () => resolved([]),
+    })),
     {
       owner: '@nocobase/plugin-flow-engine',
       id: 'view:record',

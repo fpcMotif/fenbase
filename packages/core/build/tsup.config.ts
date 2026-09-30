@@ -14,7 +14,7 @@ export default defineConfig({
   clean: true,
   bundle: false,
   loader: {
-    '.d.ts': 'copy'
+    '.d.ts': 'copy',
   },
   skipNodeModulesBundle: true,
 });

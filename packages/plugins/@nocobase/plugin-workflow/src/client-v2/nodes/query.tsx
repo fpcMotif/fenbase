@@ -25,7 +25,7 @@ export default class extends Instruction {
   title = t('Query record');
   group = 'collection';
   description = t('Query records from a collection. You can use variables from upstream nodes as query conditions.');
-  icon = (<FileSearchOutlined />);
+  icon = <FileSearchOutlined />;
 
   FieldsetLoader = () => import('./components/query').then((m) => ({ default: m.QueryFieldset }));
   PresetFieldsetLoader = () => import('./components/query').then((m) => ({ default: m.QueryPresetFieldset }));

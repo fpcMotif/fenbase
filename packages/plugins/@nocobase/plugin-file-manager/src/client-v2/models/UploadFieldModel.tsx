@@ -170,8 +170,9 @@ export const CardUpload = (props) => {
           .ant-upload-select {
             margin: ${showFileName ? '8px 0px' : '0px'};
           }
-          ${!multiple
-            ? `
+          ${
+            !multiple
+              ? `
               .ant-upload-list-item-container.ant-upload-animate-inline-appear,
               .ant-upload-list-item-container.ant-upload-animate-inline-appear-active,
               .ant-upload-list-item-container.ant-upload-animate-inline-enter,
@@ -188,7 +189,8 @@ export const CardUpload = (props) => {
                 transition: none !important;
               }
             `
-            : ''}
+              : ''
+          }
         `}
       >
         <Upload
@@ -550,8 +552,10 @@ UploadFieldModel.registerFlow({
     openView: {
       title: tExpr('Edit popup'),
       hideInSettings(ctx) {
-        const allowSelectExistingRecord = ctx.model.getStepParams?.('uploadSettings', 'allowSelectExistingRecord')
-          ?.allowSelectExistingRecord;
+        const allowSelectExistingRecord = ctx.model.getStepParams?.(
+          'uploadSettings',
+          'allowSelectExistingRecord',
+        )?.allowSelectExistingRecord;
         return allowSelectExistingRecord === false;
       },
       uiSchema(ctx) {

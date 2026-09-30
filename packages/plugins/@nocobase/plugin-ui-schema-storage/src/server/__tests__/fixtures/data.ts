@@ -3338,8 +3338,7 @@ export default {
                                                                                                 'TabPaneInitializers',
                                                                                               properties: {
                                                                                                 tab1: {
-                                                                                                  _isJSONSchemaObject:
-                                                                                                    true,
+                                                                                                  _isJSONSchemaObject: true,
                                                                                                   version: '2.0',
                                                                                                   type: 'void',
                                                                                                   title: '详情',
@@ -3351,8 +3350,7 @@ export default {
                                                                                                     {},
                                                                                                   properties: {
                                                                                                     grid: {
-                                                                                                      _isJSONSchemaObject:
-                                                                                                        true,
+                                                                                                      _isJSONSchemaObject: true,
                                                                                                       version: '2.0',
                                                                                                       type: 'void',
                                                                                                       'x-component':
@@ -5208,8 +5206,7 @@ export default {
                                                                                               'x-component-props': {},
                                                                                               properties: {
                                                                                                 grid: {
-                                                                                                  _isJSONSchemaObject:
-                                                                                                    true,
+                                                                                                  _isJSONSchemaObject: true,
                                                                                                   version: '2.0',
                                                                                                   type: 'void',
                                                                                                   'x-component': 'Grid',
@@ -5419,8 +5416,7 @@ export default {
                                                                                               'x-component-props': {},
                                                                                               properties: {
                                                                                                 grid: {
-                                                                                                  _isJSONSchemaObject:
-                                                                                                    true,
+                                                                                                  _isJSONSchemaObject: true,
                                                                                                   version: '2.0',
                                                                                                   type: 'void',
                                                                                                   'x-component': 'Grid',

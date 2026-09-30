@@ -135,9 +135,9 @@ export function getFileAccessPathSegment(id: string | number, extname: unknown) 
 export function hasStandardFileId(collection: Collection) {
   return Boolean(
     collection.getField?.('id') ||
-      collection.model?.primaryKeyAttribute === 'id' ||
-      collection.model?.rawAttributes?.id ||
-      collection.model?.getAttributes?.().id,
+    collection.model?.primaryKeyAttribute === 'id' ||
+    collection.model?.rawAttributes?.id ||
+    collection.model?.getAttributes?.().id,
   );
 }
 

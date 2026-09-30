@@ -198,7 +198,7 @@ export const Conversations: React.FC<ConversationsProps> = observer(({ onOpen })
 
       const conversation = conversations.find((item) => item.sessionId === sessionId);
       chatConversationModel.setCurrentConversation(sessionId);
-      const aiEmployee = username ? aiEmployeesMap[username] ?? fallbackAIEmployee : conversation?.aiEmployee;
+      const aiEmployee = username ? (aiEmployeesMap[username] ?? fallbackAIEmployee) : conversation?.aiEmployee;
       if (username) {
         chatBoxModel.setCurrentEmployee(aiEmployee);
       } else {

@@ -12,13 +12,9 @@ import { renderTable } from '../../../lib/ui.js';
 import { resolveSourceRegistryInfo } from '../../../lib/source-registry.js';
 
 export default class SourceRegistryStatus extends Command {
-  static override description =
-    'Show the status of the local Docker-based npm registry used for source tests.';
+  static override description = 'Show the status of the local Docker-based npm registry used for source tests.';
 
-  static override examples = [
-    '<%= config.bin %> <%= command.id %>',
-    '<%= config.bin %> <%= command.id %> --json',
-  ];
+  static override examples = ['<%= config.bin %> <%= command.id %>', '<%= config.bin %> <%= command.id %> --json'];
 
   static override flags = {
     json: Flags.boolean({
@@ -36,9 +32,11 @@ export default class SourceRegistryStatus extends Command {
       return;
     }
 
-    this.log(renderTable(
-      ['Container', 'Status', 'URL', 'Storage'],
-      [[info.containerName, info.status, info.url, info.storageDir]],
-    ));
+    this.log(
+      renderTable(
+        ['Container', 'Status', 'URL', 'Storage'],
+        [[info.containerName, info.status, info.url, info.storageDir]],
+      ),
+    );
   }
 }

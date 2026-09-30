@@ -109,10 +109,9 @@ export default class BackupRestore extends Command {
 
     startTask(`Restoring backup for "${envName}" from ${filePath}...`);
     try {
-      await runBackupCliCommand(
-        ['api', 'backup', 'restore-upload', '--file', filePath, '--force', ...envArgv],
-        { errorName: 'nb api backup restore-upload' },
-      );
+      await runBackupCliCommand(['api', 'backup', 'restore-upload', '--file', filePath, '--force', ...envArgv], {
+        errorName: 'nb api backup restore-upload',
+      });
       stopTask();
 
       await waitForAppReady({

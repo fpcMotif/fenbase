@@ -243,8 +243,7 @@ export class BelongsToManyField extends RelationField {
 }
 
 export interface BelongsToManyFieldOptions
-  extends MultipleRelationFieldOptions,
-    Omit<SequelizeBelongsToManyOptions, 'through'> {
+  extends MultipleRelationFieldOptions, Omit<SequelizeBelongsToManyOptions, 'through'> {
   type: 'belongsToMany';
   target?: string;
   through?: string;

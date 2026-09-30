@@ -7,7 +7,6 @@
 import { Application, Plugin } from '@nocobase/client-v2';
 import { FlowModelRenderer } from '@nocobase/flow-engine';
 
-
 /**
  * PluginHelloModel 是一个插件类，用于注册 HelloModel 并将其添加到路由中。
  * - load 方法会在插件加载时执行。
@@ -17,12 +16,12 @@ import { FlowModelRenderer } from '@nocobase/flow-engine';
 class PluginHelloModel extends Plugin {
   async load() {
     // 注册 HelloModel 到 flowEngine
-    this.flowEngine.registerModelLoaders({ 
+    this.flowEngine.registerModelLoaders({
       HelloModel: {
         // 动态导入，首次真正用到这个 model 时才会加载对应模块
         loader: () => import('@docs/cn/flow-engine/_demos/HelloModel'),
       },
-     });
+    });
 
     // 创建 HelloModel 的实例（仅用于示例）
     const model = await this.flowEngine.createModelAsync({

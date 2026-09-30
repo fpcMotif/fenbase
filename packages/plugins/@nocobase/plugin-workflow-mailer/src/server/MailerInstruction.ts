@@ -74,11 +74,11 @@ function toPlainRecord(value: unknown): Record<string, unknown> | null {
 function isPlainFileRecord(record: unknown): record is FileRecord {
   return Boolean(
     isRecord(record) &&
-      typeof record.title === 'string' &&
-      typeof record.storageId === 'number' &&
-      typeof record.path === 'string' &&
-      typeof record.filename === 'string' &&
-      record.filename.length > 0,
+    typeof record.title === 'string' &&
+    typeof record.storageId === 'number' &&
+    typeof record.path === 'string' &&
+    typeof record.filename === 'string' &&
+    record.filename.length > 0,
   );
 }
 

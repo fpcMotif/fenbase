@@ -62,8 +62,7 @@ export interface BaseFieldOptions<T extends BasicType = BasicType> {
 }
 
 export interface BaseColumnFieldOptions<T extends BasicType = BasicType>
-  extends BaseFieldOptions<T>,
-    Omit<ModelAttributeColumnOptions, 'type'> {
+  extends BaseFieldOptions<T>, Omit<ModelAttributeColumnOptions, 'type'> {
   dataType?: DataType;
   index?: boolean | ModelIndexesOptions;
 }

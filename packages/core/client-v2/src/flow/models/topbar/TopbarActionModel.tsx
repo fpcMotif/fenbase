@@ -535,7 +535,7 @@ export class UIEditorTopbarActionModel extends TopbarActionModel {
   actionId = 'ui-editor';
   testId = 'ui-editor-button';
   aclSnippet = 'ui.*';
-  icon = (<HighlightOutlined />);
+  icon = <HighlightOutlined />;
   tooltip = tExpr('UI Editor');
 
   /**
@@ -564,7 +564,7 @@ export class PluginSettingsTopbarActionModel extends TopbarActionModel {
   sort = 100;
   actionId = 'plugin-settings';
   testId = 'plugin-settings-button';
-  icon = (<SettingOutlined />);
+  icon = <SettingOutlined />;
 
   render() {
     return <PluginSettingsTopbarAction model={this} />;

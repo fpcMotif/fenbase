@@ -4249,11 +4249,11 @@ export const generalWithNoRelationalFieldsData = [
     establishdate: '2023-01-11T04:04:18.000Z',
   },
 ];
-export default module.exports = {
+export default (module.exports = {
   appendJsonCollectionName,
   builtinGeneral,
   builtinFile,
   builtinExpression,
   generalWithNoRelationalFields,
   generalWithNoRelationalFieldsData,
-};
+});

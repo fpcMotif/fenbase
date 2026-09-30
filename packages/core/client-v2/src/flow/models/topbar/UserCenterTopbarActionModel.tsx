@@ -476,7 +476,7 @@ export class UserCenterTopbarActionModel extends TopbarActionModel {
   sort = 1000;
   actionId = USER_CENTER_ACTION_ID;
   testId = 'user-center-button';
-  icon = (<UserOutlined />);
+  icon = <UserOutlined />;
 
   private async discoverItems() {
     const subclasses = await this.flowEngine.getSubclassesOfAsync('UserCenterItemModel', (ModelClass) => {

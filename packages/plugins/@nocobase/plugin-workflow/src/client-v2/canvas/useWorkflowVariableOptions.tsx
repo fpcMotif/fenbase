@@ -440,8 +440,8 @@ export function useWorkflowVariableOptions(options: UseWorkflowVariableOptions =
     const roots: Array<MetaTreeNode | null> = [
       options.includeScopes === false
         ? null
-        : scopeVars ??
-          createDisabledWorkflowRoot(SCOPES_ROOT, flowEngine.context.t('Scope variables', { ns: NAMESPACE })),
+        : (scopeVars ??
+          createDisabledWorkflowRoot(SCOPES_ROOT, flowEngine.context.t('Scope variables', { ns: NAMESPACE }))),
       nodeResult ??
         createDisabledWorkflowRoot(NODE_RESULT_ROOT, flowEngine.context.t('Node result', { ns: 'workflow' })),
       trigger,

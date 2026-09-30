@@ -98,7 +98,7 @@ async function updateJobByManualTasks(
   await job.update(
     {
       status: status ?? JOB_STATUS.PENDING,
-      result: mode ? getSubmittedRatio(tasks) : latestTask.result ?? job.result,
+      result: mode ? getSubmittedRatio(tasks) : (latestTask.result ?? job.result),
     },
     { transaction },
   );

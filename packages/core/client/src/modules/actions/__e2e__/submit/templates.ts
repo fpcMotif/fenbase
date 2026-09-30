@@ -326,8 +326,7 @@ export const submitInReferenceTemplateBlock: PageConfig = {
                                                                                               '1.3.0-alpha',
                                                                                             properties: {
                                                                                               '2p5rl8z8ihx': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -336,8 +335,7 @@ export const submitInReferenceTemplateBlock: PageConfig = {
                                                                                                   '1.3.0-alpha',
                                                                                                 properties: {
                                                                                                   kuugc1kkyjh: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -346,14 +344,12 @@ export const submitInReferenceTemplateBlock: PageConfig = {
                                                                                                       '1.3.0-alpha',
                                                                                                     properties: {
                                                                                                       '93i7uyy8un8': {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-acl-action-props':
                                                                                                           {
-                                                                                                            skipScopeCheck:
-                                                                                                              false,
+                                                                                                            skipScopeCheck: false,
                                                                                                           },
                                                                                                         'x-acl-action':
                                                                                                           'collection:update',
@@ -382,8 +378,7 @@ export const submitInReferenceTemplateBlock: PageConfig = {
                                                                                                           '1.3.0-alpha',
                                                                                                         properties: {
                                                                                                           mmkepcbm11t: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -396,8 +391,7 @@ export const submitInReferenceTemplateBlock: PageConfig = {
                                                                                                             properties:
                                                                                                               {
                                                                                                                 grid: {
-                                                                                                                  _isJSONSchemaObject:
-                                                                                                                    true,
+                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                   version:
                                                                                                                     '2.0',
                                                                                                                   type: 'void',
@@ -412,14 +406,12 @@ export const submitInReferenceTemplateBlock: PageConfig = {
                                                                                                                     '1.3.0-alpha',
                                                                                                                   'x-uid':
                                                                                                                     'y5h2vl04tia',
-                                                                                                                  'x-async':
-                                                                                                                    false,
+                                                                                                                  'x-async': false,
                                                                                                                   'x-index': 1,
                                                                                                                 },
                                                                                                                 to0ss5zkqy7:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -438,8 +430,7 @@ export const submitInReferenceTemplateBlock: PageConfig = {
                                                                                                                       {
                                                                                                                         '1vd53jrlonf':
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             title:
@@ -470,29 +461,25 @@ export const submitInReferenceTemplateBlock: PageConfig = {
                                                                                                                               '1.3.0-alpha',
                                                                                                                             'x-uid':
                                                                                                                               '5joxsrvq453',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       '7ja6in5xnn3',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 2,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'uhgm3tm7iwm',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'tyarx8cudp0',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1189,8 +1176,7 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -1198,8 +1184,7 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                   'popup:common:addBlock',
                                                                                                 properties: {
                                                                                                   c8inwkebx1a: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -1208,8 +1193,7 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                       '1.3.25-beta',
                                                                                                     properties: {
                                                                                                       a5gbhpfx4ay: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -1218,15 +1202,13 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                           '1.3.25-beta',
                                                                                                         properties: {
                                                                                                           hekz785yebu: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
                                                                                                             'x-acl-action-props':
                                                                                                               {
-                                                                                                                skipScopeCheck:
-                                                                                                                  false,
+                                                                                                                skipScopeCheck: false,
                                                                                                               },
                                                                                                             'x-acl-action':
                                                                                                               'testRefresh:update',
@@ -1255,8 +1237,7 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                               {
                                                                                                                 '1r799t325wo':
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -1269,8 +1250,7 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                                     properties:
                                                                                                                       {
                                                                                                                         grid: {
-                                                                                                                          _isJSONSchemaObject:
-                                                                                                                            true,
+                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                           version:
                                                                                                                             '2.0',
                                                                                                                           type: 'void',
@@ -1284,8 +1264,7 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                                             {
                                                                                                                               w7mpjt5r510:
                                                                                                                                 {
-                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                    true,
+                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                   version:
                                                                                                                                     '2.0',
                                                                                                                                   type: 'void',
@@ -1297,8 +1276,7 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                                                     {
                                                                                                                                       '1tncur8pho6':
                                                                                                                                         {
-                                                                                                                                          _isJSONSchemaObject:
-                                                                                                                                            true,
+                                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                                           version:
                                                                                                                                             '2.0',
                                                                                                                                           type: 'void',
@@ -1309,8 +1287,7 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                                                           properties:
                                                                                                                                             {
                                                                                                                                               name: {
-                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                  true,
+                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                 version:
                                                                                                                                                   '2.0',
                                                                                                                                                 type: 'string',
@@ -1330,35 +1307,30 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                                                                   '1.3.25-beta',
                                                                                                                                                 'x-uid':
                                                                                                                                                   'w2b29tftqa5',
-                                                                                                                                                'x-async':
-                                                                                                                                                  false,
+                                                                                                                                                'x-async': false,
                                                                                                                                                 'x-index': 1,
                                                                                                                                               },
                                                                                                                                             },
                                                                                                                                           'x-uid':
                                                                                                                                             'vmqxwcj1sah',
-                                                                                                                                          'x-async':
-                                                                                                                                            false,
+                                                                                                                                          'x-async': false,
                                                                                                                                           'x-index': 1,
                                                                                                                                         },
                                                                                                                                     },
                                                                                                                                   'x-uid':
                                                                                                                                     'jx174p4aj50',
-                                                                                                                                  'x-async':
-                                                                                                                                    false,
+                                                                                                                                  'x-async': false,
                                                                                                                                   'x-index': 1,
                                                                                                                                 },
                                                                                                                             },
                                                                                                                           'x-uid':
                                                                                                                             'nnf7799bh1o',
-                                                                                                                          'x-async':
-                                                                                                                            false,
+                                                                                                                          'x-async': false,
                                                                                                                           'x-index': 1,
                                                                                                                         },
                                                                                                                         w12hok3wqww:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -1377,8 +1349,7 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                                               {
                                                                                                                                 tpy6isposk0:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     title:
@@ -1409,36 +1380,31 @@ export const shouldRefreshDataWhenSubpageIsClosedByPageMenu = {
                                                                                                                                       '1.3.25-beta',
                                                                                                                                     'x-uid':
                                                                                                                                       'witfr2ignds',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               '95h3woyegid',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 2,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'jz4pvx7vdyn',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'w9r4yyxzwo2',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'n94upy7yd47',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },

@@ -273,14 +273,12 @@ describe('dirtyAwareApiClient', () => {
     const transport = vi.spyOn(api.axios, 'request').mockResolvedValue({ data: { ok: true } });
     const wrappedApi = getDirtyAwareApiClient(api, engine.context) as APIClient;
     const delegatedResource = wrappedApi.resource.bind(wrappedApi);
-    const resourceOverride = vi.fn(
-      (...args: Parameters<APIClient['resource']>): IResource => ({
-        update: async (...actionArgs: Parameters<IResource['update']>) => {
-          await Promise.resolve();
-          return delegatedResource(...args).update(...actionArgs);
-        },
-      }),
-    );
+    const resourceOverride = vi.fn((...args: Parameters<APIClient['resource']>): IResource => ({
+      update: async (...actionArgs: Parameters<IResource['update']>) => {
+        await Promise.resolve();
+        return delegatedResource(...args).update(...actionArgs);
+      },
+    }));
 
     wrappedApi.resource = resourceOverride;
 

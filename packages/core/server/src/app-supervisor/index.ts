@@ -628,7 +628,7 @@ export class AppSupervisor extends EventEmitter implements AsyncEmitter {
       ...options,
       environmentName: options.allEnvironments
         ? options.environmentName
-        : options.environmentName ?? this.environmentName,
+        : (options.environmentName ?? this.environmentName),
     });
   }
 

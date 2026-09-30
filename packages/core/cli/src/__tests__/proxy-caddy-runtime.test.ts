@@ -151,12 +151,8 @@ test('startCaddyProxy recreates the docker container when published ports change
     errorName: 'docker rm',
     stdio: 'ignore',
   });
-  expect(mocks.run).toHaveBeenCalledWith(
-    'docker',
-    expect.arrayContaining(['run', '-d', '--name', 'nb-caddy-proxy']),
-    {
-      errorName: 'docker run',
-      stdio: 'ignore',
-    },
-  );
+  expect(mocks.run).toHaveBeenCalledWith('docker', expect.arrayContaining(['run', '-d', '--name', 'nb-caddy-proxy']), {
+    errorName: 'docker run',
+    stdio: 'ignore',
+  });
 });

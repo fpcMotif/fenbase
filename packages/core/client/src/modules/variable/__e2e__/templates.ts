@@ -668,8 +668,7 @@ export const T4874 = {
                                                                                               '1.2.21-alpha',
                                                                                             properties: {
                                                                                               title: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'roles.title',
@@ -712,8 +711,7 @@ export const T4874 = {
                                                                                               '1.2.21-alpha',
                                                                                             properties: {
                                                                                               name: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 'x-collection-field':
                                                                                                   'roles.name',

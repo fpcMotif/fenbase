@@ -330,11 +330,9 @@ function ContentDetail(props) {
             label: t('Status', { ns: 'workflow' }),
             children: (
               <SchemaComponent
-                components={
-                  {
-                    // TaskStatusColumn,
-                  }
-                }
+                components={{
+                  // TaskStatusColumn,
+                }}
                 schema={{
                   name: 'status',
                   type: 'number',

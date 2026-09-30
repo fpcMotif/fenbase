@@ -147,7 +147,7 @@ const LargeFieldEdit = observer(({ model, params: { fieldPath, index }, defaultV
       const inputValue =
         collectionField.interface === 'json' && defaultValue
           ? JSON.stringify(defaultValue, null, 2)
-          : defaultValue ?? '';
+          : (defaultValue ?? '');
 
       return <Input value={inputValue} disabled={disabled} style={{ width: '100%' }} />;
     } else {

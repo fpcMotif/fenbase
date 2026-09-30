@@ -7,10 +7,7 @@ import { pluginOgDescription } from './plugins/pluginOgDescription';
 import { pluginRemoveGenerator } from './plugins/pluginRemoveGenerator';
 import { pluginPreview } from '@rspress/plugin-preview';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
-import {
-  pluginCrossRefSidebar,
-  crossRefCanonicalMap,
-} from './plugins/pluginCrossRef';
+import { pluginCrossRefSidebar, crossRefCanonicalMap } from './plugins/pluginCrossRef';
 import { pluginSearchSections } from './plugins/pluginSearchSections';
 import { pluginSearchIndex } from './plugins/pluginSearchIndex';
 import * as path from 'node:path';
@@ -36,18 +33,7 @@ const locales = {
 
 const currentLocale = locales[lang as keyof typeof locales] || locales.en;
 
-const indexLanguages = [
-  'en',
-  'cn',
-  'ja',
-  'es',
-  'pt',
-  'de',
-  'fr',
-  'ru',
-  'id',
-  'vi',
-];
+const indexLanguages = ['en', 'cn', 'ja', 'es', 'pt', 'de', 'fr', 'ru', 'id', 'vi'];
 
 const langMap = {
   en: 'en-US',
@@ -95,23 +81,19 @@ const searchI18nSource: Record<string, Record<string, string>> = {
   },
 };
 
-function withRspressI18nAliases(
-  source: Record<string, Record<string, string>>,
-) {
+function withRspressI18nAliases(source: Record<string, Record<string, string>>) {
   return Object.fromEntries(
-    Object.entries({ ...source, ...searchI18nSource }).map(
-      ([key, translations]) => {
-        const nextTranslations = { ...translations };
+    Object.entries({ ...source, ...searchI18nSource }).map(([key, translations]) => {
+      const nextTranslations = { ...translations };
 
-        for (const [alias, original] of Object.entries(rspressI18nAliases)) {
-          if (!nextTranslations[alias] && nextTranslations[original]) {
-            nextTranslations[alias] = nextTranslations[original];
-          }
+      for (const [alias, original] of Object.entries(rspressI18nAliases)) {
+        if (!nextTranslations[alias] && nextTranslations[original]) {
+          nextTranslations[alias] = nextTranslations[original];
         }
+      }
 
-        return [key, nextTranslations];
-      },
-    ),
+      return [key, nextTranslations];
+    }),
   );
 }
 
@@ -157,9 +139,7 @@ function sitemap(): RspressPlugin {
           // Alternate links for each language (same logic as head canonical/alternate)
           for (const language of indexLanguages) {
             if (language === 'en') {
-              links.push(
-                `    <xhtml:link rel="alternate" hreflang="en-US" href="${baseDomain}${routePath}" />`,
-              );
+              links.push(`    <xhtml:link rel="alternate" hreflang="en-US" href="${baseDomain}${routePath}" />`);
             } else {
               const hreflang = langMap[language as keyof typeof langMap];
               links.push(
@@ -169,16 +149,9 @@ function sitemap(): RspressPlugin {
           }
 
           // x-default points to the English URL
-          links.push(
-            `    <xhtml:link rel="alternate" hreflang="x-default" href="${baseDomain}${routePath}" />`,
-          );
+          links.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${baseDomain}${routePath}" />`);
 
-          return [
-            '  <url>',
-            `    <loc>${loc}</loc>`,
-            ...links,
-            '  </url>',
-          ].join('\n');
+          return ['  <url>', `    <loc>${loc}</loc>`, ...links, '  </url>'].join('\n');
         })
         .join('\n');
 
@@ -205,15 +178,12 @@ export default defineConfig({
       'meta',
       {
         name: 'robots',
-        content: indexLanguages.includes(lang)
-          ? 'index,follow'
-          : 'noindex,nofollow',
+        content: indexLanguages.includes(lang) ? 'index,follow' : 'noindex,nofollow',
       },
     ],
     (route) => {
       // 跨模块虚拟路由通过 frontmatter canonicalPath 指向原始页面
-      const canonicalRoute =
-        crossRefCanonicalMap?.[route.routePath] || route.routePath;
+      const canonicalRoute = crossRefCanonicalMap?.[route.routePath] || route.routePath;
       if (lang !== 'en') {
         return `<link rel="canonical" href="https://docs.nocobase.com/${lang}${canonicalRoute}" />`;
       }
@@ -230,9 +200,7 @@ export default defineConfig({
           return `<link rel="alternate" hreflang="${hreflang}" href="https://docs.nocobase.com/${language}${route.routePath}" />`;
         }),
       );
-      links.push(
-        `<link rel="alternate" hreflang="x-default" href="https://docs.nocobase.com${route.routePath}" />`,
-      );
+      links.push(`<link rel="alternate" hreflang="x-default" href="https://docs.nocobase.com${route.routePath}" />`);
       return links.join('\n');
     },
   ],

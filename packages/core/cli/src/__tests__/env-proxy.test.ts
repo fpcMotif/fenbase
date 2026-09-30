@@ -118,7 +118,7 @@ async function createLocalRuntime(
     ].join(''),
   );
 
-  return ({
+  return {
     kind: 'local',
     envName: 'demo',
     source: 'npm',
@@ -135,7 +135,7 @@ async function createLocalRuntime(
         version,
       },
     },
-  } as unknown) as Extract<ManagedAppRuntime, { kind: 'local' }>;
+  } as unknown as Extract<ManagedAppRuntime, { kind: 'local' }>;
 }
 
 test('buildEnvProxyNginxBundle renders app.conf and index HTML with CDN-prefixed assets', async () => {

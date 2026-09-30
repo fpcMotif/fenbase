@@ -1,4 +1,3 @@
-
 import { App as AntdApp } from 'antd';
 import { ActionProps, ISchema, SchemaComponent, Plugin } from '@nocobase/client';
 import { mockApp } from '@nocobase/client/demo-utils';
@@ -25,7 +24,7 @@ const schema: ISchema = {
   'x-component': 'Action',
   title: 'Delete',
   'x-use-component-props': 'useActionProps',
-}
+};
 
 const Demo = () => {
   return <SchemaComponent schema={schema} scope={{ useActionProps }} />;
@@ -33,7 +32,7 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 

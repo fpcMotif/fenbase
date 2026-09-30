@@ -9,7 +9,13 @@
 
 import { Command, Flags } from '@oclif/core';
 import { ensureCrossEnvConfirmed, hasExplicitEnvSelection } from '../../lib/env-guard.js';
-import { createLicenseEnvFlag, ensureInstanceId, licenseJsonFlag, licenseYesFlag, requireLicenseRuntime } from './shared.js';
+import {
+  createLicenseEnvFlag,
+  ensureInstanceId,
+  licenseJsonFlag,
+  licenseYesFlag,
+  requireLicenseRuntime,
+} from './shared.js';
 
 export default class LicenseStatus extends Command {
   static override summary = 'Show commercial license status for the selected env';

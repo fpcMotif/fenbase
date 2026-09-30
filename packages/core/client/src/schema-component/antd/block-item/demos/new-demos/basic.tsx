@@ -53,7 +53,7 @@ const schema: ISchema = {
       'x-settings': 'simpleSettings',
     },
   },
-}
+};
 
 const Demo = () => {
   return <SchemaComponent schema={schema} components={{ MyBlock }} />;
@@ -61,8 +61,8 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.schemaSettingsManager.add(simpleSettings)
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.schemaSettingsManager.add(simpleSettings);
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 

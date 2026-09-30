@@ -114,7 +114,9 @@ test('parseBody should still enforce required body fields when flag mode is used
     bodyRequired: true,
   };
 
-  await expect((() => parseBody({ 'primary-value': 'ok' }, operation))()).rejects.toThrow(/Missing required body field --items/);
+  await expect((() => parseBody({ 'primary-value': 'ok' }, operation))()).rejects.toThrow(
+    /Missing required body field --items/,
+  );
 });
 
 test('parseBody should accept raw body JSON without checking sibling flags', async () => {
@@ -159,7 +161,9 @@ test('parseBody should reject invalid JSON for json-encoded body fields', async 
     bodyRequired: true,
   };
 
-  await expect((() => parseBody({ 'primary-value': 'ok', items: '[{name:item}]' }, operation))()).rejects.toThrow(/Invalid JSON for --items/);
+  await expect((() => parseBody({ 'primary-value': 'ok', items: '[{name:item}]' }, operation))()).rejects.toThrow(
+    /Invalid JSON for --items/,
+  );
 });
 
 test('parseBody should describe conflicting raw body and body flags clearly', async () => {
@@ -171,7 +175,11 @@ test('parseBody should describe conflicting raw body and body flags clearly', as
     bodyRequired: true,
   };
 
-  await expect((() => parseBody({ body: '{"primaryValue":"ok","items":[]}', 'primary-value': 'ok' }, operation))()).rejects.toThrow(/Conflicting request body inputs: received --body together with body field flags \(--primary-value\)/);
+  await expect(
+    (() => parseBody({ body: '{"primaryValue":"ok","items":[]}', 'primary-value': 'ok' }, operation))(),
+  ).rejects.toThrow(
+    /Conflicting request body inputs: received --body together with body field flags \(--primary-value\)/,
+  );
 });
 
 test('buildExamples should not mix required body flags with --body examples', () => {

@@ -794,8 +794,7 @@ export const clickingAndClosingNestedPopups = {
                                                                                             'x-app-version': '1.4.2',
                                                                                             properties: {
                                                                                               '0lh42pfh3ph': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -806,8 +805,7 @@ export const clickingAndClosingNestedPopups = {
                                                                                                   '2kq6pr243vl': {
                                                                                                     'x-uid':
                                                                                                       '21wdilxulem',
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-settings':

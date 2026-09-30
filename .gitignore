@@ -83,3 +83,5 @@ openspec/
 /skills
 /skills-lock.json
 paseo.json
+
+.env.local

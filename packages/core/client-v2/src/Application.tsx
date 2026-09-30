@@ -41,7 +41,7 @@ export class Application extends BaseApplication<
   APIClient,
   PluginSettingsManager
 > {
-  public declare dataSourceManager: any;
+  declare public dataSourceManager: any;
   public hasLoadError = false;
 
   protected createApiClient(options: ApplicationOptions) {

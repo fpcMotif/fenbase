@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from 'react';
 import {
   APIClient,
@@ -62,5 +60,11 @@ export default compose(...providers)(() => {
       })
       .catch(console.error);
   }, []);
-  return <div>{items?.map((item, key) => <div key={key}>{item.name}</div>)}</div>;
+  return (
+    <div>
+      {items?.map((item, key) => (
+        <div key={key}>{item.name}</div>
+      ))}
+    </div>
+  );
 });

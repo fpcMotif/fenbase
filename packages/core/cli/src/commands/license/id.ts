@@ -61,21 +61,25 @@ export default class LicenseId extends Command {
     }
     const savedBefore = await readSavedInstanceId(runtime);
     const shouldGenerate = Boolean(flags.force) || !savedBefore;
-    const instanceId = shouldGenerate
-      ? await generateAndSaveInstanceId(runtime)
-      : savedBefore!;
+    const instanceId = shouldGenerate ? await generateAndSaveInstanceId(runtime) : savedBefore!;
     const filePath = resolveInstanceIdFile(runtime);
     const generated = shouldGenerate;
 
     if (flags.json) {
-      this.log(JSON.stringify({
-        ok: true,
-        env: runtime.envName,
-        kind: runtime.kind,
-        instanceId,
-        filePath,
-        generated,
-      }, null, 2));
+      this.log(
+        JSON.stringify(
+          {
+            ok: true,
+            env: runtime.envName,
+            kind: runtime.kind,
+            instanceId,
+            filePath,
+            generated,
+          },
+          null,
+          2,
+        ),
+      );
       return;
     }
 

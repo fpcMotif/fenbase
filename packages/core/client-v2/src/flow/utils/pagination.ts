@@ -36,13 +36,15 @@ export const getSimpleModePaginationClassName = (withLineHeight = false) => {
     .ant-pagination-simple-pager {
       display: none !important;
     }
-    ${withLineHeight
-      ? `
+    ${
+      withLineHeight
+        ? `
       li {
         line-height: 32px !important;
       }
     `
-      : ''}
+        : ''
+    }
   `;
 };
 

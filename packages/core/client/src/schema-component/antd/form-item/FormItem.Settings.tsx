@@ -1038,7 +1038,7 @@ export function useTitleFieldOptions() {
   const collectionField = useFormItemCollectionField();
   const targetFields = collectionField?.target
     ? getCollectionFields(collectionField?.target)
-    : getCollectionFields(collectionField?.targetCollection) ?? [];
+    : (getCollectionFields(collectionField?.targetCollection) ?? []);
   const options = targetFields
     .filter((field) => {
       return isTitleField(field);

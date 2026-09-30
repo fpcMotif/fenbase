@@ -126,9 +126,11 @@ export const FormItem: any = withDynamicSchemaProps(
             className={cx(
               'nb-form-item',
               css`
-                ${showTitle === false || schema['x-component'] !== 'CollectionField'
-                  ? '.ant-formily-item-layout-horizontal .ant-formily-item-control'
-                  : '.nb-grid-col & .ant-formily-item-layout-horizontal .ant-formily-item-control'} {
+                ${
+                  showTitle === false || schema['x-component'] !== 'CollectionField'
+                    ? '.ant-formily-item-layout-horizontal .ant-formily-item-control'
+                    : '.nb-grid-col & .ant-formily-item-layout-horizontal .ant-formily-item-control'
+                } {
                   max-width: 100% !important;
                 }
               `,

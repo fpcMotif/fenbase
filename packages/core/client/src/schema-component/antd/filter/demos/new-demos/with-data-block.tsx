@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { useField, observer } from '@formily/react';
 import { FilterActionProps, ISchema, useDataBlockRequest } from '@nocobase/client';
@@ -57,21 +55,23 @@ const schema: ISchema = {
       'x-use-component-props': 'useFilterActionProps',
     },
   },
-}
+};
 
 const Demo = () => {
-  return <SchemaComponent
-    schema={schema}
-    components={{ ShowFilterData }}
-    scope={{
-      useFilterActionProps
-    }}
-  />;
+  return (
+    <SchemaComponent
+      schema={schema}
+      components={{ ShowFilterData }}
+      scope={{
+        useFilterActionProps,
+      }}
+    />
+  );
 };
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 

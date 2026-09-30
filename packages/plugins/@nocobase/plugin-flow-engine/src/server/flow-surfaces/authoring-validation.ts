@@ -1754,11 +1754,8 @@ function collectBuilderChartAssetFieldErrors(
     const associationField = associationPath ? resolveFieldFromCollection(collection, associationPath) : null;
     const associationTargetCollection =
       associationField && isAssociationField(associationField)
-        ? resolveFieldTargetCollection(
-            associationField,
-            dataSourceKey,
-            (resolvedDataSourceKey, targetCollection) =>
-              context.getCollection?.(resolvedDataSourceKey, targetCollection),
+        ? resolveFieldTargetCollection(associationField, dataSourceKey, (resolvedDataSourceKey, targetCollection) =>
+            context.getCollection?.(resolvedDataSourceKey, targetCollection),
           )
         : null;
     const leafModelAttributes = getCollectionModelAttributes(associationTargetCollection || collection);
@@ -3871,8 +3868,8 @@ function getGeneratedPopupRequirementTriggerPathsForActionType(
   requirement: GeneratedPopupDefaultFieldGroupRequirement,
   actionType: GeneratedPopupDefaultActionType,
 ) {
-  const paths = requirement.triggerPaths.filter(
-    (triggerPath) => requirement.triggerPathActionTypes?.[triggerPath]?.includes(actionType),
+  const paths = requirement.triggerPaths.filter((triggerPath) =>
+    requirement.triggerPathActionTypes?.[triggerPath]?.includes(actionType),
   );
   if (paths.length) {
     return paths;
@@ -4592,10 +4589,8 @@ function getGeneratedPopupRuntimeFieldCandidates(input: {
         });
         const safeTitleField = hasDefaultTitleFieldOverride
           ? { fieldName: fieldName }
-          : tryResolveAssociationSafeTitleField(
-              field,
-              input.dataSourceKey,
-              (dataSourceKey, collectionName) => input.context.getCollection?.(dataSourceKey, collectionName),
+          : tryResolveAssociationSafeTitleField(field, input.dataSourceKey, (dataSourceKey, collectionName) =>
+              input.context.getCollection?.(dataSourceKey, collectionName),
             );
         if (!safeTitleField?.fieldName) {
           return [];
@@ -9250,10 +9245,8 @@ function resolveDefaultFilterFieldPath(
     if (!isAssociationField(field)) {
       return { collection: currentCollection, field: null };
     }
-    const targetCollection = resolveFieldTargetCollection(
-      field,
-      dataSourceKey,
-      (nextDataSourceKey, collectionName) => context.getCollection?.(nextDataSourceKey, collectionName),
+    const targetCollection = resolveFieldTargetCollection(field, dataSourceKey, (nextDataSourceKey, collectionName) =>
+      context.getCollection?.(nextDataSourceKey, collectionName),
     );
     if (!targetCollection) {
       return { collection: currentCollection, field: null };

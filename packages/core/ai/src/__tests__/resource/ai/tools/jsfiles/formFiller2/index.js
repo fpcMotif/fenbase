@@ -46,11 +46,14 @@ var formFiller_default = (0, import_ai.defineTools)({
     description: 'Fill the form with the given content',
     schema: import_zod.z.object({
       form: import_zod.z.string().describe('The UI Schema ID of the target form to be filled.'),
-      data: import_zod.z.object({}).catchall(import_zod.z.any()).describe(
-        `Structured key-value pairs matching the form's JSON Schema,
+      data: import_zod.z
+        .object({})
+        .catchall(import_zod.z.any())
+        .describe(
+          `Structured key-value pairs matching the form's JSON Schema,
        to be assigned to form.values.
        Example: { "username": "alice", "email": "alice@example.com", "age": 30 }`,
-      ),
+        ),
     }),
   },
   invoke: async () => {

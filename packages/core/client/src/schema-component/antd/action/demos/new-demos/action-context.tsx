@@ -1,10 +1,4 @@
-import {
-  ActionContextProvider,
-  ISchema,
-  SchemaComponent,
-  Plugin,
-  useActionContext,
-} from '@nocobase/client';
+import { ActionContextProvider, ISchema, SchemaComponent, Plugin, useActionContext } from '@nocobase/client';
 import { mockApp } from '@nocobase/client/demo-utils';
 import React, { useState } from 'react';
 
@@ -33,28 +27,29 @@ const schema: ISchema = {
         close1: {
           title: 'Close',
           'x-component': 'Action',
-          'x-use-component-props': 'useActionProps'
+          'x-use-component-props': 'useActionProps',
         },
       },
     },
   },
-}
+};
 
 const Demo = () => {
   const [visible, setVisible] = useState(false);
-  return <ActionContextProvider value={{ visible, setVisible }}>
-    <a onClick={() => setVisible(true)}>Open</a>
-    <SchemaComponent schema={schema} scope={{ useActionProps }} />
-  </ActionContextProvider>;
+  return (
+    <ActionContextProvider value={{ visible, setVisible }}>
+      <a onClick={() => setVisible(true)}>Open</a>
+      <SchemaComponent schema={schema} scope={{ useActionProps }} />
+    </ActionContextProvider>
+  );
 };
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 
 const app = mockApp({ plugins: [DemoPlugin] });
 
 export default app.getRootComponent();
-

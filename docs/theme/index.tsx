@@ -1,11 +1,4 @@
-import {
-  NoSSR,
-  useFrontmatter,
-  useLang,
-  useNavigate,
-  usePage,
-  usePages,
-} from '@rspress/core/runtime';
+import { NoSSR, useFrontmatter, useLang, useNavigate, usePage, usePages } from '@rspress/core/runtime';
 import type { Feature } from '@rspress/core';
 import {
   Badge,
@@ -19,11 +12,7 @@ import {
   Tab,
   Tabs,
 } from '@rspress/core/theme-original';
-import {
-  LlmsContainer,
-  LlmsCopyButton,
-  LlmsViewOptions,
-} from '@rspress/plugin-llms/runtime';
+import { LlmsContainer, LlmsCopyButton, LlmsViewOptions } from '@rspress/plugin-llms/runtime';
 import React, { type ComponentProps, type JSX, type ReactNode } from 'react';
 import { PluginCard } from './components/PluginCard';
 import { PluginInfo } from './components/PluginInfo';
@@ -73,14 +62,7 @@ export function Link(props: ComponentProps<typeof OriginalLink>) {
     return <OriginalLink {...props} />;
   }
 
-  return (
-    <OriginalLink
-      {...restProps}
-      href={nextHref}
-      target={target ?? '_blank'}
-      rel={rel ?? 'noopener noreferrer'}
-    />
-  );
+  return <OriginalLink {...restProps} href={nextHref} target={target ?? '_blank'} rel={rel ?? 'noopener noreferrer'} />;
 }
 
 export interface HomeLayoutProps {
@@ -115,21 +97,12 @@ type ThemePage = {
   frontmatter?: ThemeFrontmatter & Record<string, unknown>;
 };
 
-function getFeatureGroups(
-  page?: ThemePage | { frontmatter?: ThemeFrontmatter },
-): HomeFeatureGroup[] {
+function getFeatureGroups(page?: ThemePage | { frontmatter?: ThemeFrontmatter }): HomeFeatureGroup[] {
   return page?.frontmatter?.features ?? [];
 }
 
-function isPluginDetailPage(
-  frontmatter?: ThemeFrontmatter,
-  routePath?: string,
-): boolean {
-  return Boolean(
-    frontmatter?.displayName &&
-      frontmatter?.packageName &&
-      routePath?.includes('/plugins/@nocobase/'),
-  );
+function isPluginDetailPage(frontmatter?: ThemeFrontmatter, routePath?: string): boolean {
+  return Boolean(frontmatter?.displayName && frontmatter?.packageName && routePath?.includes('/plugins/@nocobase/'));
 }
 
 function isSidebarCenteredLayout(routePath?: string): boolean {
@@ -137,14 +110,7 @@ function isSidebarCenteredLayout(routePath?: string): boolean {
 }
 
 export function HomeLayout(props: HomeLayoutProps) {
-  const {
-    beforeHero,
-    afterHero,
-    beforeFeatures,
-    afterFeatures,
-    beforeHeroActions,
-    afterHeroActions,
-  } = props;
+  const { beforeHero, afterHero, beforeFeatures, afterFeatures, beforeHeroActions, afterHeroActions } = props;
   const {
     page: { frontmatter, routePath },
   } = usePage();
@@ -207,9 +173,7 @@ export const Layout = () => {
     };
   };
   const isPluginDetailPage = Boolean(
-    frontmatter?.displayName &&
-      frontmatter?.packageName &&
-      routePath?.startsWith('/plugins/@'),
+    frontmatter?.displayName && frontmatter?.packageName && routePath?.startsWith('/plugins/@'),
   );
   const pageClassName = [
     isPluginDetailPage ? 'plugin-detail-page' : '',
@@ -272,16 +236,11 @@ function HomeFeatureItem({ feature }: { feature: Feature }): JSX.Element {
   const langPrefix = useLangPrefix();
 
   return (
-    <div
-      key={title}
-      className={`rp-home-feature__item ${getGridClass(feature)}`}
-    >
+    <div key={title} className={`rp-home-feature__item ${getGridClass(feature)}`}>
       <div className="rp-home-feature__item-wrapper">
         <article
           key={title}
-          className={`rp-home-feature__card ${
-            link ? 'rp-home-feature__card--clickable' : ''
-          }`}
+          className={`rp-home-feature__card ${link ? 'rp-home-feature__card--clickable' : ''}`}
           onClick={() => {
             if (link) {
               navigate(transformHref(link, langPrefix));
@@ -294,17 +253,10 @@ function HomeFeatureItem({ feature }: { feature: Feature }): JSX.Element {
         >
           <div className="rp-home-feature__title-wrapper">
             <h2 className="rp-home-feature__title">
-              {link ? (
-                <Link href={transformHref(link, langPrefix)}>{title}</Link>
-              ) : (
-                title
-              )}
+              {link ? <Link href={transformHref(link, langPrefix)}>{title}</Link> : title}
             </h2>
           </div>
-          <p
-            className="rp-home-feature__detail"
-            {...renderHtmlOrText(details)}
-          ></p>
+          <p className="rp-home-feature__detail" {...renderHtmlOrText(details)}></p>
         </article>
       </div>
     </div>
@@ -327,31 +279,20 @@ export function HomeFeature() {
 
           if (index === 2) {
             const page = pages.find(
-              (currentPage) =>
-                currentPage.lang === lang &&
-                currentPage.frontmatter?.pageName === 'guide',
+              (currentPage) => currentPage.lang === lang && currentPage.frontmatter?.pageName === 'guide',
             );
             if (page) {
-              const allItems = getFeatureGroups(page).flatMap(
-                (group) => group.items ?? [],
-              );
+              const allItems = getFeatureGroups(page).flatMap((group) => group.items ?? []);
               items = [...allItems.filter((item) => item.showOnHome), ...items];
             }
           } else if (index === 3) {
             const page = pages.find(
-              (currentPage) =>
-                currentPage.lang === lang &&
-                currentPage.frontmatter?.pageName === 'development',
+              (currentPage) => currentPage.lang === lang && currentPage.frontmatter?.pageName === 'development',
             );
             if (page) {
               // 把 page.frontmatter?.features 里的 items 都拍平合并，取前 8 个
-              const allItems = getFeatureGroups(page).flatMap(
-                (group) => group.items ?? [],
-              );
-              items = [
-                ...allItems.filter((item) => item.showOnHome),
-                ...(feature.items ?? []),
-              ];
+              const allItems = getFeatureGroups(page).flatMap((group) => group.items ?? []);
+              items = [...allItems.filter((item) => item.showOnHome), ...(feature.items ?? [])];
             }
           }
 

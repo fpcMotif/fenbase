@@ -1,4 +1,3 @@
-
 import { ISchema, useActionContext } from '@nocobase/client';
 import { SchemaComponent, Plugin } from '@nocobase/client';
 import { mockApp } from '@nocobase/client/demo-utils';
@@ -67,7 +66,7 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 
@@ -75,7 +74,7 @@ const app = mockApp({
   plugins: [DemoPlugin],
   apis: {
     test: { data: 'ok' },
-  }
+  },
 });
 
 export default app.getRootComponent();

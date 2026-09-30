@@ -1,5 +1,3 @@
-
-
 import { uid } from '@formily/shared';
 import { APIClient, APIClientProvider, useAPIClient, useRequest } from '@nocobase/client';
 import { Button, Input, Space, Table } from 'antd';

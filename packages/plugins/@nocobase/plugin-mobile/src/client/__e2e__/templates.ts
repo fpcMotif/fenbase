@@ -305,8 +305,7 @@ export const shouldDisplayImageNormally = {
                                                                                               '1.3.42-beta',
                                                                                             properties: {
                                                                                               b02yo5jzqu1: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -315,8 +314,7 @@ export const shouldDisplayImageNormally = {
                                                                                                   '1.3.42-beta',
                                                                                                 properties: {
                                                                                                   '6bsqjxlo2l0': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-acl-action':
@@ -331,8 +329,7 @@ export const shouldDisplayImageNormally = {
                                                                                                           'main',
                                                                                                         collection:
                                                                                                           'image',
-                                                                                                        readPretty:
-                                                                                                          true,
+                                                                                                        readPretty: true,
                                                                                                         action: 'get',
                                                                                                       },
                                                                                                     'x-toolbar':
@@ -345,14 +342,12 @@ export const shouldDisplayImageNormally = {
                                                                                                       '1.3.42-beta',
                                                                                                     properties: {
                                                                                                       juho6f9cld0: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
                                                                                                           'Details',
-                                                                                                        'x-read-pretty':
-                                                                                                          true,
+                                                                                                        'x-read-pretty': true,
                                                                                                         'x-use-component-props':
                                                                                                           'useDetailsProps',
                                                                                                         'x-app-version':
@@ -360,8 +355,7 @@ export const shouldDisplayImageNormally = {
                                                                                                         properties: {
                                                                                                           '6xrgjg0w2j0':
                                                                                                             {
-                                                                                                              _isJSONSchemaObject:
-                                                                                                                true,
+                                                                                                              _isJSONSchemaObject: true,
                                                                                                               version:
                                                                                                                 '2.0',
                                                                                                               type: 'void',
@@ -382,8 +376,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                 {
                                                                                                                   tqtunfb7c5a:
                                                                                                                     {
-                                                                                                                      _isJSONSchemaObject:
-                                                                                                                        true,
+                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                       version:
                                                                                                                         '2.0',
                                                                                                                       type: 'void',
@@ -419,8 +412,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                         {
                                                                                                                           drawer:
                                                                                                                             {
-                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                true,
+                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                               version:
                                                                                                                                 '2.0',
                                                                                                                               type: 'void',
@@ -438,8 +430,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                               properties:
                                                                                                                                 {
                                                                                                                                   tabs: {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'void',
@@ -454,8 +445,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                     properties:
                                                                                                                                       {
                                                                                                                                         tab1: {
-                                                                                                                                          _isJSONSchemaObject:
-                                                                                                                                            true,
+                                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                                           version:
                                                                                                                                             '2.0',
                                                                                                                                           type: 'void',
@@ -472,8 +462,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                           properties:
                                                                                                                                             {
                                                                                                                                               grid: {
-                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                  true,
+                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                 version:
                                                                                                                                                   '2.0',
                                                                                                                                                 type: 'void',
@@ -487,8 +476,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                   {
                                                                                                                                                     xswkkgymq30:
                                                                                                                                                       {
-                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                          true,
+                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                         version:
                                                                                                                                                           '2.0',
                                                                                                                                                         type: 'void',
@@ -500,8 +488,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                           {
                                                                                                                                                             pq2gdv03h0f:
                                                                                                                                                               {
-                                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                                  true,
+                                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                                 version:
                                                                                                                                                                   '2.0',
                                                                                                                                                                 type: 'void',
@@ -513,8 +500,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                                   {
                                                                                                                                                                     pmoy87u1q83:
                                                                                                                                                                       {
-                                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                                          true,
+                                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                                         version:
                                                                                                                                                                           '2.0',
                                                                                                                                                                         type: 'void',
@@ -530,8 +516,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                                               'main',
                                                                                                                                                                             collection:
                                                                                                                                                                               'image',
-                                                                                                                                                                            readPretty:
-                                                                                                                                                                              true,
+                                                                                                                                                                            readPretty: true,
                                                                                                                                                                             action:
                                                                                                                                                                               'get',
                                                                                                                                                                           },
@@ -547,15 +532,13 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                                           {
                                                                                                                                                                             krrpne6bx2e:
                                                                                                                                                                               {
-                                                                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                                                                  true,
+                                                                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                                                                 version:
                                                                                                                                                                                   '2.0',
                                                                                                                                                                                 type: 'void',
                                                                                                                                                                                 'x-component':
                                                                                                                                                                                   'Details',
-                                                                                                                                                                                'x-read-pretty':
-                                                                                                                                                                                  true,
+                                                                                                                                                                                'x-read-pretty': true,
                                                                                                                                                                                 'x-use-component-props':
                                                                                                                                                                                   'useDetailsProps',
                                                                                                                                                                                 'x-app-version':
@@ -564,8 +547,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                                                   {
                                                                                                                                                                                     '4eixb6olg5s':
                                                                                                                                                                                       {
-                                                                                                                                                                                        _isJSONSchemaObject:
-                                                                                                                                                                                          true,
+                                                                                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                                                                                         version:
                                                                                                                                                                                           '2.0',
                                                                                                                                                                                         type: 'void',
@@ -584,13 +566,11 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                                                           '1.3.42-beta',
                                                                                                                                                                                         'x-uid':
                                                                                                                                                                                           'mtk4qib0pmb',
-                                                                                                                                                                                        'x-async':
-                                                                                                                                                                                          false,
+                                                                                                                                                                                        'x-async': false,
                                                                                                                                                                                         'x-index': 1,
                                                                                                                                                                                       },
                                                                                                                                                                                     grid: {
-                                                                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                                                                        true,
+                                                                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                                                                       version:
                                                                                                                                                                                         '2.0',
                                                                                                                                                                                       type: 'void',
@@ -604,8 +584,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                                                         {
                                                                                                                                                                                           '5qv0bbqybgm':
                                                                                                                                                                                             {
-                                                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                                                true,
+                                                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                                                               version:
                                                                                                                                                                                                 '2.0',
                                                                                                                                                                                               type: 'void',
@@ -617,8 +596,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                                                                 {
                                                                                                                                                                                                   x1e4gnfeupv:
                                                                                                                                                                                                     {
-                                                                                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                                                                                        true,
+                                                                                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                                                                                       version:
                                                                                                                                                                                                         '2.0',
                                                                                                                                                                                                       type: 'void',
@@ -630,8 +608,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                                                                         {
                                                                                                                                                                                                           attachment:
                                                                                                                                                                                                             {
-                                                                                                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                                                                                                true,
+                                                                                                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                                                                                                               version:
                                                                                                                                                                                                                 '2.0',
                                                                                                                                                                                                               type: 'string',
@@ -653,104 +630,89 @@ export const shouldDisplayImageNormally = {
                                                                                                                                                                                                                 '1.3.42-beta',
                                                                                                                                                                                                               'x-uid':
                                                                                                                                                                                                                 'dhcu2vf5fxm',
-                                                                                                                                                                                                              'x-async':
-                                                                                                                                                                                                                false,
+                                                                                                                                                                                                              'x-async': false,
                                                                                                                                                                                                               'x-index': 1,
                                                                                                                                                                                                             },
                                                                                                                                                                                                         },
                                                                                                                                                                                                       'x-uid':
                                                                                                                                                                                                         'yl57to4ttjy',
-                                                                                                                                                                                                      'x-async':
-                                                                                                                                                                                                        false,
+                                                                                                                                                                                                      'x-async': false,
                                                                                                                                                                                                       'x-index': 1,
                                                                                                                                                                                                     },
                                                                                                                                                                                                 },
                                                                                                                                                                                               'x-uid':
                                                                                                                                                                                                 'eyqz6iaciv5',
-                                                                                                                                                                                              'x-async':
-                                                                                                                                                                                                false,
+                                                                                                                                                                                              'x-async': false,
                                                                                                                                                                                               'x-index': 1,
                                                                                                                                                                                             },
                                                                                                                                                                                         },
                                                                                                                                                                                       'x-uid':
                                                                                                                                                                                         '0sx8rthcy15',
-                                                                                                                                                                                      'x-async':
-                                                                                                                                                                                        false,
+                                                                                                                                                                                      'x-async': false,
                                                                                                                                                                                       'x-index': 2,
                                                                                                                                                                                     },
                                                                                                                                                                                   },
                                                                                                                                                                                 'x-uid':
                                                                                                                                                                                   'uh0vhvhnltl',
-                                                                                                                                                                                'x-async':
-                                                                                                                                                                                  false,
+                                                                                                                                                                                'x-async': false,
                                                                                                                                                                                 'x-index': 1,
                                                                                                                                                                               },
                                                                                                                                                                           },
                                                                                                                                                                         'x-uid':
                                                                                                                                                                           'ogkh4von4yu',
-                                                                                                                                                                        'x-async':
-                                                                                                                                                                          false,
+                                                                                                                                                                        'x-async': false,
                                                                                                                                                                         'x-index': 1,
                                                                                                                                                                       },
                                                                                                                                                                   },
                                                                                                                                                                 'x-uid':
                                                                                                                                                                   'lhgnxv5urvf',
-                                                                                                                                                                'x-async':
-                                                                                                                                                                  false,
+                                                                                                                                                                'x-async': false,
                                                                                                                                                                 'x-index': 1,
                                                                                                                                                               },
                                                                                                                                                           },
                                                                                                                                                         'x-uid':
                                                                                                                                                           '3rdklcguzy1',
-                                                                                                                                                        'x-async':
-                                                                                                                                                          false,
+                                                                                                                                                        'x-async': false,
                                                                                                                                                         'x-index': 1,
                                                                                                                                                       },
                                                                                                                                                   },
                                                                                                                                                 'x-uid':
                                                                                                                                                   'kbzczrd39z3',
-                                                                                                                                                'x-async':
-                                                                                                                                                  false,
+                                                                                                                                                'x-async': false,
                                                                                                                                                 'x-index': 1,
                                                                                                                                               },
                                                                                                                                             },
                                                                                                                                           'x-uid':
                                                                                                                                             'saexcyuo5ao',
-                                                                                                                                          'x-async':
-                                                                                                                                            false,
+                                                                                                                                          'x-async': false,
                                                                                                                                           'x-index': 1,
                                                                                                                                         },
                                                                                                                                       },
                                                                                                                                     'x-uid':
                                                                                                                                       'l6gxsphiv7p',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                                 },
                                                                                                                               'x-uid':
                                                                                                                                 '5j05xhjnvhu',
-                                                                                                                              'x-async':
-                                                                                                                                false,
+                                                                                                                              'x-async': false,
                                                                                                                               'x-index': 1,
                                                                                                                             },
                                                                                                                         },
                                                                                                                       'x-uid':
                                                                                                                         '9qid8vlu438',
-                                                                                                                      'x-async':
-                                                                                                                        false,
+                                                                                                                      'x-async': false,
                                                                                                                       'x-index': 1,
                                                                                                                     },
                                                                                                                 },
                                                                                                               'x-uid':
                                                                                                                 'hnt0v2iaf1q',
-                                                                                                              'x-async':
-                                                                                                                false,
+                                                                                                              'x-async': false,
                                                                                                               'x-index': 1,
                                                                                                             },
                                                                                                           grid: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -764,8 +726,7 @@ export const shouldDisplayImageNormally = {
                                                                                                               {
                                                                                                                 '4ljipl6fcex':
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -777,8 +738,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                       {
                                                                                                                         o28cy7so1co:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -790,8 +750,7 @@ export const shouldDisplayImageNormally = {
                                                                                                                               {
                                                                                                                                 attachment:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'string',
@@ -813,36 +772,31 @@ export const shouldDisplayImageNormally = {
                                                                                                                                       '1.3.42-beta',
                                                                                                                                     'x-uid':
                                                                                                                                       'u19h5djk1af',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               't1m1yr1sddj',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'h3ok06z8mnt',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'gfw19ntb1ig',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 2,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           '5lreqos5pcm',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1333,8 +1287,7 @@ export const modalOfAssignFieldValuesAndModalOfBindWorkflows = {
                                                                                               '1.4.0-beta.1',
                                                                                             properties: {
                                                                                               '9gwa4odr0ld': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'FormV2',
@@ -1344,8 +1297,7 @@ export const modalOfAssignFieldValuesAndModalOfBindWorkflows = {
                                                                                                   '1.4.0-beta.1',
                                                                                                 properties: {
                                                                                                   grid: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -1360,8 +1312,7 @@ export const modalOfAssignFieldValuesAndModalOfBindWorkflows = {
                                                                                                     'x-index': 1,
                                                                                                   },
                                                                                                   i0qyrh2a0i0: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-initializer':
@@ -1379,8 +1330,7 @@ export const modalOfAssignFieldValuesAndModalOfBindWorkflows = {
                                                                                                       y28j0b1us5r: {
                                                                                                         'x-uid':
                                                                                                           '5aeqt19kheh',
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         title:
                                                                                                           '{{ t("Submit") }}',
@@ -1410,8 +1360,7 @@ export const modalOfAssignFieldValuesAndModalOfBindWorkflows = {
                                                                                                         type: 'void',
                                                                                                         'x-app-version':
                                                                                                           '1.4.0-beta.1',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },

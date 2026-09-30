@@ -1,0 +1,114 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc", "promise", "jsx-a11y"],
+  "options": {
+    "respectEslintDisableDirectives": true
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "sleep": "readonly",
+    "prettyFormat": "readonly"
+  },
+  "settings": {
+    "react": {
+      "version": "18.2.0"
+    }
+  },
+  "rules": {
+    "typescript/no-this-alias": "off",
+    "typescript/no-restricted-types": "off",
+    "no-unused-vars": "off",
+    "no-useless-catch": "off",
+    "typescript/no-unused-vars": "off",
+    "no-empty-function": "off",
+    "typescript/no-empty-function": "off",
+    "react/display-name": "off",
+    "typescript/ban-ts-comment": "off",
+    "typescript/no-require-imports": "off",
+    "typescript/no-var-requires": "off",
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "typescript/no-explicit-any": "off",
+    "typescript/no-base-to-string": "off",
+    "typescript/no-useless-default-assignment": "off",
+    "typescript/unbound-method": "off",
+    "typescript/require-array-sort-compare": "off",
+    "typescript/no-redundant-type-constituents": "off",
+    "typescript/no-duplicate-type-constituents": "off",
+    "typescript/no-unsafe-declaration-merging": "off",
+    "typescript/no-unnecessary-parameter-property-assignment": "off",
+    "typescript/no-unsafe-unary-minus": "off",
+    "typescript/no-array-delete": "off",
+    "typescript/no-floating-promises": [
+      "error",
+      {
+        "ignoreVoid": false
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/e2e/**/*.{ts,js,tsx,jsx}", "**/__e2e__/**/*.{ts,js,tsx,jsx}"],
+      "rules": {
+        "react/rules-of-hooks": "off"
+      }
+    },
+    {
+      "files": [
+        "**/e2e/**/*.{ts,js,tsx,jsx}",
+        "**/__e2e__/**/*.{ts,js,tsx,jsx}",
+        "src/demo/**/*.{ts,js,tsx,jsx}",
+        "convex/**/*.{ts,js,tsx,jsx}",
+        "scripts/**/*.{ts,js,tsx,jsx}"
+      ],
+      "rules": {
+        "typescript/no-floating-promises": [
+          "error",
+          {
+            "ignoreVoid": false
+          }
+        ]
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "node_modules",
+    "lib",
+    "dist",
+    "build",
+    "coverage",
+    "expected",
+    "website",
+    "gh-pages",
+    "weex",
+    "build.ts",
+    "packages/vue",
+    "packages/element",
+    "esm",
+    "doc-site",
+    "public",
+    "packages/*/*/client.d.ts",
+    "packages/*/*/server.d.ts",
+    "packages/*/*/client.js",
+    "packages/*/*/server.js",
+    "packages/core/build",
+    "packages/core/devtools",
+    "packages/core/database/src/sql-parser/index.js",
+    "**/.dumi/tmp",
+    "**/.dumi/tmp-test",
+    "**/.dumi/tmp-production",
+    "packages/core/cli/templates/plugin/src/client/*.tpl",
+    "packages/app/client/src/.plugins",
+    "docker",
+    "storage",
+    "benchmark",
+    "packages/core/cli/src",
+    "t.js",
+    "packages/**/client.d.ts",
+    "docs",
+    "test/fixtures/**"
+  ]
+}

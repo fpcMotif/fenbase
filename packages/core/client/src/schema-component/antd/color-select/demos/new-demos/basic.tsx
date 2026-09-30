@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { mockApp } from '@nocobase/client/demo-utils';
 import { SchemaComponent, Plugin, ISchema } from '@nocobase/client';
@@ -16,7 +15,7 @@ const schema: ISchema = {
       'x-component': 'ColorSelect',
     },
   },
-}
+};
 
 const Demo = () => {
   return <SchemaComponent schema={schema} />;
@@ -24,7 +23,7 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 

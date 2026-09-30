@@ -559,9 +559,7 @@ test('install prompts expose the expected defaults and validators', () => {
   expect(rootEmailPrompt.required).toBe(true);
 
   expect(rootPasswordPrompt.type).toBe('password');
-  expect(resolveLocalizedText(rootPasswordPrompt.message, { locale: 'en-US' })).toBe(
-    'Initial admin password',
-  );
+  expect(resolveLocalizedText(rootPasswordPrompt.message, { locale: 'en-US' })).toBe('Initial admin password');
   expect(rootPasswordPrompt.initialValue).toBe(undefined);
   expect(rootPasswordPrompt.yesInitialValue).toBe('admin123');
   expect(rootPasswordPrompt.required).toBe(true);

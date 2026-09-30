@@ -24,7 +24,7 @@ export default class AIEmployeeInstruction extends Instruction {
   type = AI_EMPLOYEE_INSTRUCTION_TYPE;
   group = AI_WORKFLOW_GROUP;
   async = true;
-  icon = (<UserOutlined />);
+  icon = <UserOutlined />;
   FieldsetLoader = () => import('./components/AIEmployeeFieldset').then((m) => ({ default: m.AIEmployeeFieldset }));
 
   createDefaultConfig(): AIEmployeeInstructionConfig {

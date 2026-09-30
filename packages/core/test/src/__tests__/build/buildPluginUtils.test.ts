@@ -27,11 +27,9 @@ describe('buildPluginUtils package extraction', () => {
 
   it('should extract dotted package names from import and require statements', () => {
     const packages = getPackagesFromFiles([
-      [
-        "import Big from 'big.js';",
-        "import foo from '@scope/pkg.name';",
-        "const bar = require('json-pointer');",
-      ].join('\n'),
+      ["import Big from 'big.js';", "import foo from '@scope/pkg.name';", "const bar = require('json-pointer');"].join(
+        '\n',
+      ),
     ]);
 
     expect(packages).toEqual(expect.arrayContaining(['big.js', '@scope/pkg.name', 'json-pointer']));

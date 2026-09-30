@@ -21,7 +21,7 @@ export default class extends Instruction {
   description = t(
     'Update records of a collection. You can use variables from upstream nodes as query conditions and field values.',
   );
-  icon = (<EditOutlined />);
+  icon = <EditOutlined />;
 
   FieldsetLoader = () => import('./components/update').then((m) => ({ default: m.UpdateFieldset }));
   PresetFieldsetLoader = () => import('./components/update').then((m) => ({ default: m.UpdatePresetFieldset }));

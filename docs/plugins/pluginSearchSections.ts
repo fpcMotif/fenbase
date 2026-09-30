@@ -16,11 +16,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import type { RspressPlugin } from '@rspress/core';
-import {
-  getTopLevelSegment,
-  type SearchSection,
-  type SearchSectionTable,
-} from '../shared/searchSections';
+import { getTopLevelSegment, type SearchSection, type SearchSectionTable } from '../shared/searchSections';
 
 export const SEARCH_SECTIONS_MODULE_ID = 'virtual-search-sections';
 
@@ -127,10 +123,7 @@ export function buildSearchSections(docsRoot: string): SearchSectionTable {
   //    但运行时 resolveSection() 会把它的 order 覆盖成 PLUGIN_ORDER 沉到最后。
   const nav = readJson<NavEntry[]>(path.join(docsRoot, '_nav.json')) ?? [];
   const navSections = nav
-    .filter(
-      (item): item is Required<NavEntry> =>
-        Boolean(item.text) && Boolean(item.link?.startsWith('/')),
-    )
+    .filter((item): item is Required<NavEntry> => Boolean(item.text) && Boolean(item.link?.startsWith('/')))
     .map((item, index) => ({
       label: item.text,
       prefix: getTopLevelSegment(item.link),
@@ -143,9 +136,7 @@ export function buildSearchSections(docsRoot: string): SearchSectionTable {
 
   // 2. 各导航区首页 features 指向的目录，归到该导航区名下。
   for (const section of navSections) {
-    const content = readFile(
-      path.join(docsRoot, section.prefix.slice(1), 'index.md'),
-    );
+    const content = readFile(path.join(docsRoot, section.prefix.slice(1), 'index.md'));
     if (!content || !isHomePage(content)) {
       continue;
     }

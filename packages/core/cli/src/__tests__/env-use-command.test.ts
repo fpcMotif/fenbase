@@ -55,7 +55,9 @@ test('env use prints the session setup tip when no session id is available', asy
     'Without session mode, switching the current env here can affect other sessions running in parallel.',
     '',
   ]);
-  expect(mocks.printInfo).toHaveBeenCalledWith('Run `nb session setup` to enable session mode for this shell or runtime.');
+  expect(mocks.printInfo).toHaveBeenCalledWith(
+    'Run `nb session setup` to enable session mode for this shell or runtime.',
+  );
 });
 
 test('env use skips the session setup tip when a session id is already present', async () => {

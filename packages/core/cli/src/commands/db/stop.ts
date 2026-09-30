@@ -8,10 +8,7 @@
  */
 
 import { Command, Flags } from '@oclif/core';
-import {
-  formatMissingManagedAppEnvMessage,
-  stopDockerContainer,
-} from '../../lib/app-runtime.js';
+import { formatMissingManagedAppEnvMessage, stopDockerContainer } from '../../lib/app-runtime.js';
 import { announceTargetEnv, failTask, startTask, succeedTask } from '../../lib/ui.js';
 import { formatUnmanagedDbMessage, resolveDbRuntime } from './shared.js';
 
@@ -33,8 +30,7 @@ function formatDbStopFailure(envName: string, message: string): string {
 }
 
 export default class DbStop extends Command {
-  static override description =
-    'Stop the built-in database container for the selected env.';
+  static override description = 'Stop the built-in database container for the selected env.';
 
   static override examples = [
     '<%= config.bin %> <%= command.id %>',

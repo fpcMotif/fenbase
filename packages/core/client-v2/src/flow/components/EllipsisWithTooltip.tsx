@@ -55,15 +55,11 @@ export const EllipsisWithTooltip = forwardRef((props: Partial<IEllipsisWithToolt
   const [ellipsis, setEllipsis] = useState(false);
   const [visible, setVisible] = useState(false);
   const elRef: any = useRef();
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        setPopoverVisible: setVisible,
-      };
-    },
-    [],
-  );
+  useImperativeHandle(ref, () => {
+    return {
+      setPopoverVisible: setVisible,
+    };
+  }, []);
 
   const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
     const el = e.target as any;

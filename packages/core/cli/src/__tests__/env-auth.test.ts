@@ -369,7 +369,8 @@ test('authenticateEnvWithOauth uses device flow when the server supports it', as
 
         if (url === 'http://localhost:13000/base/api/__app/analytics/idpOAuth/device/auth') {
           expect(init?.method).toBe('POST');
-          const body = init?.body instanceof URLSearchParams ? init.body : new URLSearchParams(String(init?.body ?? ''));
+          const body =
+            init?.body instanceof URLSearchParams ? init.body : new URLSearchParams(String(init?.body ?? ''));
           expect(body.get('client_id')).toBe('device-client-1');
           expect(body.get('scope')).toBe('openid api offline_access');
           expect(body.get('resource')).toBe('http://localhost:13000/base/api/__app/analytics/');

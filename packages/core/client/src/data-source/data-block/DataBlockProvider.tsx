@@ -51,16 +51,17 @@ export interface AllDataBlockProps {
 
 type CollectionCreateProps = Pick<AllDataBlockProps, 'collection' | 'dataSource'>;
 
-interface CollectionGetProps
-  extends Pick<
-    AllDataBlockProps,
-    'collection' | 'dataSource' | 'filterByTk' | 'params' | 'requestService' | 'requestOptions'
-  > {
+interface CollectionGetProps extends Pick<
+  AllDataBlockProps,
+  'collection' | 'dataSource' | 'filterByTk' | 'params' | 'requestService' | 'requestOptions'
+> {
   action: 'get';
 }
 
-interface CollectionListProps
-  extends Pick<AllDataBlockProps, 'collection' | 'dataSource' | 'params' | 'requestService' | 'requestOptions'> {
+interface CollectionListProps extends Pick<
+  AllDataBlockProps,
+  'collection' | 'dataSource' | 'params' | 'requestService' | 'requestOptions'
+> {
   action: 'list';
 }
 
@@ -71,26 +72,24 @@ type CollectionRecordProps = Pick<
 
 type AssociationCreateProps = Pick<AllDataBlockProps, 'association' | 'dataSource' | 'sourceId' | 'parentRecord'>;
 
-interface AssociationGetProps
-  extends Pick<
-    AllDataBlockProps,
-    | 'association'
-    | 'dataSource'
-    | 'sourceId'
-    | 'parentRecord'
-    | 'filterByTk'
-    | 'params'
-    | 'requestService'
-    | 'requestOptions'
-  > {
+interface AssociationGetProps extends Pick<
+  AllDataBlockProps,
+  | 'association'
+  | 'dataSource'
+  | 'sourceId'
+  | 'parentRecord'
+  | 'filterByTk'
+  | 'params'
+  | 'requestService'
+  | 'requestOptions'
+> {
   action: 'get';
 }
 
-interface AssociationListProps
-  extends Pick<
-    AllDataBlockProps,
-    'association' | 'dataSource' | 'sourceId' | 'parentRecord' | 'params' | 'requestService' | 'requestOptions'
-  > {
+interface AssociationListProps extends Pick<
+  AllDataBlockProps,
+  'association' | 'dataSource' | 'sourceId' | 'parentRecord' | 'params' | 'requestService' | 'requestOptions'
+> {
   action: 'list';
 }
 

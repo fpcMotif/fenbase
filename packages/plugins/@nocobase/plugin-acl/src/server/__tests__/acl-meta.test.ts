@@ -175,7 +175,9 @@ describe('list action with acl', () => {
     // );
 
     // @ts-ignore
-    const response = await (await app.agent().login(users[0].id, 'user'))
+    const response = await (
+      await app.agent().login(users[0].id, 'user')
+    )
       .set('X-With-ACL-Meta', true)
       .resource('posts')
       .list();
@@ -235,7 +237,9 @@ describe('list action with acl', () => {
     });
 
     // @ts-ignore
-    const response = await (await app.agent().login(users[0].id, 'user'))
+    const response = await (
+      await app.agent().login(users[0].id, 'user')
+    )
       .set('X-With-ACL-Meta', true)
       .resource('posts')
       .list();
@@ -483,7 +487,9 @@ describe('external data source acl meta', () => {
     });
 
     // @ts-ignore
-    const listRes = await (await app.agent().login(testUser, 'testRole'))
+    const listRes = await (
+      await app.agent().login(testUser, 'testRole')
+    )
       .set('X-data-source', 'another')
       .set('X-With-ACL-Meta', true)
       .resource('api/posts')

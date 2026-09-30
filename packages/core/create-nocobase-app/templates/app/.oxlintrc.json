@@ -1,0 +1,12 @@
+{
+  "plugins": ["react", "typescript", "oxc"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "sleep": "readonly",
+    "prettyFormat": "readonly"
+  },
+  "ignorePatterns": ["node_modules", "lib", "dist", "build", "coverage"]
+}

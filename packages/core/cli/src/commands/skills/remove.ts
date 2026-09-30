@@ -91,9 +91,7 @@ export default class SkillsRemove extends Command {
     }
 
     this.log(
-      flags.verbose
-        ? 'Removed the global NocoBase AI coding skills.'
-        : 'Removed NocoBase AI coding skills globally.',
+      flags.verbose ? 'Removed the global NocoBase AI coding skills.' : 'Removed NocoBase AI coding skills globally.',
     );
   }
 }

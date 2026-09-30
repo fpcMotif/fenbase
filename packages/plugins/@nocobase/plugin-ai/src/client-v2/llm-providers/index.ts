@@ -120,4 +120,4 @@ const builtinLLMProviderModelOptionFields = new Map<string, OptionField[]>([
 ]);
 
 export const getBuiltinLLMProviderModelOptionFields = (provider?: string): OptionField[] =>
-  provider ? builtinLLMProviderModelOptionFields.get(provider) ?? [] : [];
+  provider ? (builtinLLMProviderModelOptionFields.get(provider) ?? []) : [];

@@ -730,7 +730,7 @@ export class ParallelBranchNode {
   }
 }
 
-export default module.exports = {
+export default (module.exports = {
   CreateWorkFlow,
   EditWorkFlow,
   WorkflowManagement,
@@ -753,4 +753,4 @@ export default module.exports = {
   ParallelBranchNode,
   ApprovalBranchModeNode,
   CustomActionEventTriggerNode,
-};
+});

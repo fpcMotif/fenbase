@@ -96,8 +96,8 @@ describe('plugin-ui-layout migrations', () => {
         }),
       ),
     );
-    const layoutUids = routes.map(
-      (route) => route?.get('uiLayouts').map((layout: { get: (field: string) => unknown }) => layout.get('uid')),
+    const layoutUids = routes.map((route) =>
+      route?.get('uiLayouts').map((layout: { get: (field: string) => unknown }) => layout.get('uid')),
     );
     const restoredAdminLayout = await app.db.getRepository('uiLayouts').findOne({
       filterByTk: DEFAULT_ADMIN_UI_LAYOUT.uid,

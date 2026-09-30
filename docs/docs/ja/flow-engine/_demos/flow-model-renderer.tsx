@@ -7,7 +7,6 @@
 import { Application, Plugin } from '@nocobase/client-v2';
 import { FlowModelRenderer } from '@nocobase/flow-engine';
 
-
 /**
  * PluginHelloModel はプラグインクラスで、HelloModel を登録してルートに追加します。
  * - load メソッドはプラグインのロード時に実行されます。
@@ -22,7 +21,7 @@ class PluginHelloModel extends Plugin {
         // 動的インポート、この model を初めて使用する際に対応するモジュールをロード
         loader: () => import('@docs/ja/flow-engine/_demos/HelloModel'),
       },
-     });
+    });
 
     // HelloModel のインスタンスを作成（デモ用）
     const model = await this.flowEngine.createModelAsync({

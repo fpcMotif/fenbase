@@ -24,7 +24,16 @@
       "module": "commonjs"
     }
   },
-  "include": [".dumi/**/*", ".dumirc.ts", "packages/**/*", "playwright.config.ts", "vitest.config.mts"],
+  "include": [
+    ".dumi/**/*",
+    ".dumirc.ts",
+    "packages/**/*",
+    "playwright.config.ts",
+    "vitest.config.mts",
+    "src/**/*",
+    "convex/**/*",
+    "scripts/**/*"
+  ],
   "exclude": [
     "packages/**/node_modules",
     "packages/**/dist",

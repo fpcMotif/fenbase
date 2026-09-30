@@ -22,9 +22,7 @@ export default function RemoteSelectDemo() {
         />
       </Form.Item>
       <Space direction="vertical" size={4}>
-        <Typography.Text type="secondary">
-          The options are loaded by the request function.
-        </Typography.Text>
+        <Typography.Text type="secondary">The options are loaded by the request function.</Typography.Text>
       </Space>
     </Form>
   );

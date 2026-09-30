@@ -156,7 +156,7 @@ export function RemoveNodeContextProvider(props: {
         ? instruction.branching(deletingNode.config ?? {})
         : instruction?.branching;
     return deletingBranches.map((item: any, index: number) => {
-      const option = Array.isArray(branching) ? branching.find((b: any) => b.value === item.branchIndex) ?? {} : {};
+      const option = Array.isArray(branching) ? (branching.find((b: any) => b.value === item.branchIndex) ?? {}) : {};
       return {
         label: option.label ? t(option.label) : t('Branch {{index}}', { index: index + 1 }),
         value: item.branchIndex,
@@ -200,7 +200,7 @@ export function RemoveNodeContextProvider(props: {
       >
         <Radio.Group
           value={keepBranch != null ? 1 : 0}
-          onChange={(e) => setKeepBranch(e.target.value === 0 ? null : deletingBranches[0]?.branchIndex ?? null)}
+          onChange={(e) => setKeepBranch(e.target.value === 0 ? null : (deletingBranches[0]?.branchIndex ?? null))}
         >
           <Space direction="vertical">
             <Radio value={0}>{t('Delete all')}</Radio>

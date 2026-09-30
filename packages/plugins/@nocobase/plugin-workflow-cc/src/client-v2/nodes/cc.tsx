@@ -22,7 +22,7 @@ export default class CCInstruction extends Instruction {
   description = t(
     'Provide a CC (carbon copy) feature in workflows to send approvals, or any other type of information to specified users.',
   );
-  icon = (<EyeOutlined />);
+  icon = <EyeOutlined />;
 
   FieldsetLoader = () => import('./components/cc').then((module) => ({ default: module.CCFieldset }));
 

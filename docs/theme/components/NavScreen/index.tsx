@@ -34,9 +34,7 @@ export function NavScreen(props: NavScreenProps) {
     }
     return () => {
       clearAllBodyScrollLocks();
-      const styleElement = document.getElementById(
-        'rp-nav-screen-body-lock-style',
-      );
+      const styleElement = document.getElementById('rp-nav-screen-body-lock-style');
       if (styleElement) {
         document.head.removeChild(styleElement);
       }
@@ -44,15 +42,8 @@ export function NavScreen(props: NavScreenProps) {
   }, [isScreenOpen]);
 
   return (
-    <div
-      className={clsx('rp-nav-screen', { 'rp-nav-screen--open': isScreenOpen })}
-      ref={screen}
-      onClick={toggleScreen}
-    >
-      <div
-        className="rp-nav-screen__container"
-        onClick={e => e.stopPropagation()}
-      >
+    <div className={clsx('rp-nav-screen', { 'rp-nav-screen--open': isScreenOpen })} ref={screen} onClick={toggleScreen}>
+      <div className="rp-nav-screen__container" onClick={(e) => e.stopPropagation()}>
         <NavScreenMenu menuItems={menuItems} />
         <NavScreenDivider />
         <NavScreenAppearance />

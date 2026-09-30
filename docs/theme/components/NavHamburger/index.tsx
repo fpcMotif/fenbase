@@ -1,9 +1,4 @@
-import {
-  IconSmallMenu,
-  SocialLinks,
-  SvgWrapper,
-  useHoverGroup,
-} from '@rspress/core/theme';
+import { IconSmallMenu, SocialLinks, SvgWrapper, useHoverGroup } from '@rspress/core/theme';
 import clsx from 'clsx';
 import { createPortal } from 'react-dom';
 import { NavVersions } from '../Nav/NavMenu';
@@ -27,9 +22,7 @@ export function NavHamburger() {
 
   const { handleMouseEnter, handleMouseLeave, hoverGroup } = useHoverGroup({
     position: 'right',
-    customChildren: (
-      <div className="rp-nav-menu__others-mobile__container">{items}</div>
-    ),
+    customChildren: <div className="rp-nav-menu__others-mobile__container">{items}</div>,
   });
 
   return (

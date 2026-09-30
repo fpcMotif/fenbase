@@ -37,8 +37,8 @@ class PhaseDemoModel extends FlowModel {
       <div style={{ padding: 16 }}>
         <Typography.Title level={4}>静态流也支持 on.phase 顺序指定</Typography.Title>
         <Typography.Paragraph>
-          该示例全部使用 <code>Model.registerFlow</code> 注册内置静态流，并通过 <code>on.phase</code> 展示事件流编辑器里的
-          「执行时机」选项（before/after flow、before/after step、after all flows）。
+          该示例全部使用 <code>Model.registerFlow</code> 注册内置静态流，并通过 <code>on.phase</code>{' '}
+          展示事件流编辑器里的 「执行时机」选项（before/after flow、before/after step、after all flows）。
         </Typography.Paragraph>
 
         <Space>

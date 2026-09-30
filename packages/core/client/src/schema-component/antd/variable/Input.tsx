@@ -256,7 +256,7 @@ export function Input(props: VariableInputProps) {
 
   const ConstantComponent = constantOption?.component ?? NullComponent;
   const constantComponentProps = Array.isArray(useTypedConstant)
-    ? (useTypedConstant.find((item) => Array.isArray(item) && item[0] === type)?.[1] as Record<string, any>) ?? {}
+    ? ((useTypedConstant.find((item) => Array.isArray(item) && item[0] === type)?.[1] as Record<string, any>) ?? {})
     : {};
   let cValue;
   if (value == null) {

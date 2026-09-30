@@ -345,9 +345,9 @@ export class FilterFormBlockModel extends FilterBlockModel<{
         const collectionField = itemModel?.subModels?.field?.context?.collectionField || itemModel?.collectionField;
         return Boolean(
           fieldName &&
-            isFilterFormFieldDeepSubPath(fieldName, subPath) &&
-            collectionField?.isAssociationField?.() &&
-            collectionField?.targetCollection,
+          isFilterFormFieldDeepSubPath(fieldName, subPath) &&
+          collectionField?.isAssociationField?.() &&
+          collectionField?.targetCollection,
         );
       },
       serverOnlyWhenContextParams: true,

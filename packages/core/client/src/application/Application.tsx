@@ -114,10 +114,10 @@ export class Application extends BaseApplication<
   APIClient,
   PluginSettingsManager
 > {
-  public declare devDynamicImport?: DevDynamicImport;
-  public declare schemaInitializerManager: SchemaInitializerManager;
-  public declare schemaSettingsManager: SchemaSettingsManager;
-  public declare dataSourceManager: DataSourceManager;
+  declare public devDynamicImport?: DevDynamicImport;
+  declare public schemaInitializerManager: SchemaInitializerManager;
+  declare public schemaSettingsManager: SchemaSettingsManager;
+  declare public dataSourceManager: DataSourceManager;
   public globalVars: Record<string, any> = {};
   public globalVarCtxs: Record<string, any> = {};
   loading = true;

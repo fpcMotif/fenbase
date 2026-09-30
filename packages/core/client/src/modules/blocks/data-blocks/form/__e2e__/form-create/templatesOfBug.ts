@@ -1140,24 +1140,21 @@ export const T2614: PageConfig = {
                                                                                               'form:configureFields',
                                                                                             properties: {
                                                                                               e5kqdzyj562: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   '36nwk5wtcze': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
                                                                                                     properties: {
                                                                                                       m2oOfTarget1: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -1172,8 +1169,7 @@ export const T2614: PageConfig = {
                                                                                                           {},
                                                                                                         'x-uid':
                                                                                                           '9x1i9kks2io',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1188,16 +1184,14 @@ export const T2614: PageConfig = {
                                                                                                 'x-index': 1,
                                                                                               },
                                                                                               bnd1dnje70d: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   ygyvra5m18v: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -1205,8 +1199,7 @@ export const T2614: PageConfig = {
                                                                                                     properties: {
                                                                                                       'm2oOfTarget1.id':
                                                                                                         {
-                                                                                                          _isJSONSchemaObject:
-                                                                                                            true,
+                                                                                                          _isJSONSchemaObject: true,
                                                                                                           version:
                                                                                                             '2.0',
                                                                                                           type: 'string',
@@ -1214,12 +1207,10 @@ export const T2614: PageConfig = {
                                                                                                             'FormItem.Designer',
                                                                                                           'x-component':
                                                                                                             'CollectionField',
-                                                                                                          'x-read-pretty':
-                                                                                                            true,
+                                                                                                          'x-read-pretty': true,
                                                                                                           'x-component-props':
                                                                                                             {
-                                                                                                              'pattern-disable':
-                                                                                                                true,
+                                                                                                              'pattern-disable': true,
                                                                                                             },
                                                                                                           'x-decorator':
                                                                                                             'FormItem',
@@ -1227,8 +1218,7 @@ export const T2614: PageConfig = {
                                                                                                             'T2614Target1.m2oOfTarget1.id',
                                                                                                           'x-uid':
                                                                                                             '0trg79yim60',
-                                                                                                          'x-async':
-                                                                                                            false,
+                                                                                                          'x-async': false,
                                                                                                           'x-index': 1,
                                                                                                         },
                                                                                                     },
@@ -1456,24 +1446,21 @@ export const T2614: PageConfig = {
                                                                                               'form:configureFields',
                                                                                             properties: {
                                                                                               esgv9d2n3jl: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   fvjf1i0u5tj: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
                                                                                                     properties: {
                                                                                                       m2oOfTarget1: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -1488,8 +1475,7 @@ export const T2614: PageConfig = {
                                                                                                           {},
                                                                                                         'x-uid':
                                                                                                           'tbl4cxpqqhr',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1504,16 +1490,14 @@ export const T2614: PageConfig = {
                                                                                                 'x-index': 1,
                                                                                               },
                                                                                               '8jo9e13m9pu': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   dbwz7xfmcsf: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -1521,8 +1505,7 @@ export const T2614: PageConfig = {
                                                                                                     properties: {
                                                                                                       'm2oOfTarget1.id':
                                                                                                         {
-                                                                                                          _isJSONSchemaObject:
-                                                                                                            true,
+                                                                                                          _isJSONSchemaObject: true,
                                                                                                           version:
                                                                                                             '2.0',
                                                                                                           type: 'string',
@@ -1530,12 +1513,10 @@ export const T2614: PageConfig = {
                                                                                                             'FormItem.Designer',
                                                                                                           'x-component':
                                                                                                             'CollectionField',
-                                                                                                          'x-read-pretty':
-                                                                                                            true,
+                                                                                                          'x-read-pretty': true,
                                                                                                           'x-component-props':
                                                                                                             {
-                                                                                                              'pattern-disable':
-                                                                                                                true,
+                                                                                                              'pattern-disable': true,
                                                                                                             },
                                                                                                           'x-decorator':
                                                                                                             'FormItem',
@@ -1543,8 +1524,7 @@ export const T2614: PageConfig = {
                                                                                                             'T2614Target1.m2oOfTarget1.id',
                                                                                                           'x-uid':
                                                                                                             'no1h1z3kbqn',
-                                                                                                          'x-async':
-                                                                                                            false,
+                                                                                                          'x-async': false,
                                                                                                           'x-index': 1,
                                                                                                         },
                                                                                                     },
@@ -1941,8 +1921,7 @@ export const T2993: PageConfig = {
                                                                                             'x-component': 'Grid.Col',
                                                                                             properties: {
                                                                                               m2oOfTarget1: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'string',
                                                                                                 'x-designer':
@@ -1984,8 +1963,7 @@ export const T2993: PageConfig = {
                                                                                                 {
                                                                                                   'x-uid':
                                                                                                     'tt1wq5dvs3v',
-                                                                                                  _isJSONSchemaObject:
-                                                                                                    true,
+                                                                                                  _isJSONSchemaObject: true,
                                                                                                   version: '2.0',
                                                                                                   type: 'string',
                                                                                                   'x-designer':
@@ -1994,8 +1972,7 @@ export const T2993: PageConfig = {
                                                                                                     'CollectionField',
                                                                                                   'x-read-pretty': true,
                                                                                                   'x-component-props': {
-                                                                                                    'pattern-disable':
-                                                                                                      true,
+                                                                                                    'pattern-disable': true,
                                                                                                     fieldNames: {
                                                                                                       label: 'id',
                                                                                                       value: 'id',
@@ -2009,8 +1986,7 @@ export const T2993: PageConfig = {
                                                                                                   default: null,
                                                                                                   properties: {
                                                                                                     ygskw048e1z: {
-                                                                                                      _isJSONSchemaObject:
-                                                                                                        true,
+                                                                                                      _isJSONSchemaObject: true,
                                                                                                       version: '2.0',
                                                                                                       type: 'void',
                                                                                                       'x-component':
@@ -2018,8 +1994,7 @@ export const T2993: PageConfig = {
                                                                                                       'x-index': 1,
                                                                                                       properties: {
                                                                                                         grid: {
-                                                                                                          _isJSONSchemaObject:
-                                                                                                            true,
+                                                                                                          _isJSONSchemaObject: true,
                                                                                                           version:
                                                                                                             '2.0',
                                                                                                           type: 'void',
@@ -2030,8 +2005,7 @@ export const T2993: PageConfig = {
                                                                                                           properties: {
                                                                                                             uscd5l8tu2t:
                                                                                                               {
-                                                                                                                _isJSONSchemaObject:
-                                                                                                                  true,
+                                                                                                                _isJSONSchemaObject: true,
                                                                                                                 version:
                                                                                                                   '2.0',
                                                                                                                 type: 'void',
@@ -2041,8 +2015,7 @@ export const T2993: PageConfig = {
                                                                                                                   {
                                                                                                                     jna3kowl6n0:
                                                                                                                       {
-                                                                                                                        _isJSONSchemaObject:
-                                                                                                                          true,
+                                                                                                                        _isJSONSchemaObject: true,
                                                                                                                         version:
                                                                                                                           '2.0',
                                                                                                                         type: 'void',
@@ -2052,8 +2025,7 @@ export const T2993: PageConfig = {
                                                                                                                           {
                                                                                                                             nickname:
                                                                                                                               {
-                                                                                                                                _isJSONSchemaObject:
-                                                                                                                                  true,
+                                                                                                                                _isJSONSchemaObject: true,
                                                                                                                                 version:
                                                                                                                                   '2.0',
                                                                                                                                 type: 'string',
@@ -2069,29 +2041,25 @@ export const T2993: PageConfig = {
                                                                                                                                   {},
                                                                                                                                 'x-uid':
                                                                                                                                   'kaks1ezjj98',
-                                                                                                                                'x-async':
-                                                                                                                                  false,
+                                                                                                                                'x-async': false,
                                                                                                                                 'x-index': 1,
                                                                                                                               },
                                                                                                                           },
                                                                                                                         'x-uid':
                                                                                                                           '9u2d1166uh0',
-                                                                                                                        'x-async':
-                                                                                                                          false,
+                                                                                                                        'x-async': false,
                                                                                                                         'x-index': 1,
                                                                                                                       },
                                                                                                                   },
                                                                                                                 'x-uid':
                                                                                                                   'lp13gnw7f9d',
-                                                                                                                'x-async':
-                                                                                                                  false,
+                                                                                                                'x-async': false,
                                                                                                                 'x-index': 1,
                                                                                                               },
                                                                                                           },
                                                                                                           'x-uid':
                                                                                                             'fea7tmd6sbh',
-                                                                                                          'x-async':
-                                                                                                            false,
+                                                                                                          'x-async': false,
                                                                                                           'x-index': 1,
                                                                                                         },
                                                                                                       },
@@ -3485,8 +3453,7 @@ export const T2845: PageConfig = {
                                                                                             'x-component': 'Grid.Col',
                                                                                             properties: {
                                                                                               id: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'string',
                                                                                                 'x-designer':
@@ -3504,8 +3471,7 @@ export const T2845: PageConfig = {
                                                                                                 'x-index': 1,
                                                                                               },
                                                                                               m2oOfTarget2: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'string',
                                                                                                 'x-designer':
@@ -3519,8 +3485,7 @@ export const T2845: PageConfig = {
                                                                                                 'x-component-props': {},
                                                                                                 properties: {
                                                                                                   gvf4lwpwqvr: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     title:
@@ -3535,8 +3500,7 @@ export const T2845: PageConfig = {
                                                                                                     'x-index': 1,
                                                                                                     properties: {
                                                                                                       tabs: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -3547,8 +3511,7 @@ export const T2845: PageConfig = {
                                                                                                           'TabPaneInitializers',
                                                                                                         properties: {
                                                                                                           tab1: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -3563,8 +3526,7 @@ export const T2845: PageConfig = {
                                                                                                             properties:
                                                                                                               {
                                                                                                                 grid: {
-                                                                                                                  _isJSONSchemaObject:
-                                                                                                                    true,
+                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                   version:
                                                                                                                     '2.0',
                                                                                                                   type: 'void',
@@ -3574,22 +3536,19 @@ export const T2845: PageConfig = {
                                                                                                                     'popup:common:addBlock',
                                                                                                                   'x-uid':
                                                                                                                     'fen65isdi05',
-                                                                                                                  'x-async':
-                                                                                                                    false,
+                                                                                                                  'x-async': false,
                                                                                                                   'x-index': 1,
                                                                                                                 },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'ict6mk9c9dg',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'nld7ff0tdbv',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -3660,30 +3619,26 @@ export const T2845: PageConfig = {
                                                                                               'popup:common:addBlock',
                                                                                             properties: {
                                                                                               dksoesw9cnq: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   n82qzgbe8vp: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
                                                                                                     properties: {
                                                                                                       stqrc22o99g: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-acl-action-props':
                                                                                                           {
-                                                                                                            skipScopeCheck:
-                                                                                                              false,
+                                                                                                            skipScopeCheck: false,
                                                                                                           },
                                                                                                         'x-acl-action':
                                                                                                           'T2615Target1.m2oOfTarget1:update',
@@ -3712,8 +3667,7 @@ export const T2845: PageConfig = {
                                                                                                           {},
                                                                                                         properties: {
                                                                                                           j1wlc1fsg8h: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -3727,8 +3681,7 @@ export const T2845: PageConfig = {
                                                                                                             properties:
                                                                                                               {
                                                                                                                 grid: {
-                                                                                                                  _isJSONSchemaObject:
-                                                                                                                    true,
+                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                   version:
                                                                                                                     '2.0',
                                                                                                                   type: 'void',
@@ -3738,14 +3691,12 @@ export const T2845: PageConfig = {
                                                                                                                     'form:configureFields',
                                                                                                                   'x-uid':
                                                                                                                     'slesgjv4uxx',
-                                                                                                                  'x-async':
-                                                                                                                    false,
+                                                                                                                  'x-async': false,
                                                                                                                   'x-index': 1,
                                                                                                                 },
                                                                                                                 actions:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -3764,22 +3715,19 @@ export const T2845: PageConfig = {
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       '530aei12n31',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 2,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'lj3m9mv944b',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'evpd62m3q7k',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -4117,24 +4065,21 @@ export const T2845: PageConfig = {
                                                                                               'form:configureFields',
                                                                                             properties: {
                                                                                               ddo3fvkz6hw: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   '3vttqmamk12': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
                                                                                                     properties: {
                                                                                                       id: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -4147,12 +4092,10 @@ export const T2845: PageConfig = {
                                                                                                           'T2615Target2.id',
                                                                                                         'x-component-props':
                                                                                                           {},
-                                                                                                        'x-read-pretty':
-                                                                                                          true,
+                                                                                                        'x-read-pretty': true,
                                                                                                         'x-uid':
                                                                                                           'k7r752iwwd5',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -4167,24 +4110,21 @@ export const T2845: PageConfig = {
                                                                                                 'x-index': 1,
                                                                                               },
                                                                                               sckuusv6msv: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   '15osna9mddn': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
                                                                                                     properties: {
                                                                                                       m2oOfTarget2: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -4199,8 +4139,7 @@ export const T2845: PageConfig = {
                                                                                                           {},
                                                                                                         'x-uid':
                                                                                                           '74cv1njsuun',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -4499,24 +4438,21 @@ export const T2845: PageConfig = {
                                                                                               'form:configureFields',
                                                                                             properties: {
                                                                                               c5mcb8foh05: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   cdxgpdl0ygx: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
                                                                                                     properties: {
                                                                                                       id: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -4529,12 +4465,10 @@ export const T2845: PageConfig = {
                                                                                                           'T2615Target2.id',
                                                                                                         'x-component-props':
                                                                                                           {},
-                                                                                                        'x-read-pretty':
-                                                                                                          true,
+                                                                                                        'x-read-pretty': true,
                                                                                                         'x-uid':
                                                                                                           '52n1wmp7uc9',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -4549,24 +4483,21 @@ export const T2845: PageConfig = {
                                                                                                 'x-index': 1,
                                                                                               },
                                                                                               '7mn5oytntt3': {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
                                                                                                   'Grid.Row',
                                                                                                 properties: {
                                                                                                   dh2la7dad9l: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
                                                                                                       'Grid.Col',
                                                                                                     properties: {
                                                                                                       m2oOfTarget2: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'string',
                                                                                                         'x-designer':
@@ -4581,8 +4512,7 @@ export const T2845: PageConfig = {
                                                                                                           {},
                                                                                                         'x-uid':
                                                                                                           'jbhrkr56jzm',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -10447,8 +10377,7 @@ export const oneTableWithNestPopups = {
                                                                                               '1.2.7-alpha',
                                                                                             properties: {
                                                                                               g1ye1zczjy0: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -10457,14 +10386,12 @@ export const oneTableWithNestPopups = {
                                                                                                   '1.2.7-alpha',
                                                                                                 properties: {
                                                                                                   '9boifjys3jn': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-acl-action-props':
                                                                                                       {
-                                                                                                        skipScopeCheck:
-                                                                                                          true,
+                                                                                                        skipScopeCheck: true,
                                                                                                       },
                                                                                                     'x-acl-action':
                                                                                                       'users:create',
@@ -10489,8 +10416,7 @@ export const oneTableWithNestPopups = {
                                                                                                       '1.2.7-alpha',
                                                                                                     properties: {
                                                                                                       rmsurarncfw: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -10501,8 +10427,7 @@ export const oneTableWithNestPopups = {
                                                                                                           '1.2.7-alpha',
                                                                                                         properties: {
                                                                                                           grid: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -10516,8 +10441,7 @@ export const oneTableWithNestPopups = {
                                                                                                               {
                                                                                                                 akmulvncf99:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -10529,8 +10453,7 @@ export const oneTableWithNestPopups = {
                                                                                                                       {
                                                                                                                         nmmv2oujq4y:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -10542,8 +10465,7 @@ export const oneTableWithNestPopups = {
                                                                                                                               {
                                                                                                                                 nickname:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'string',
@@ -10563,35 +10485,30 @@ export const oneTableWithNestPopups = {
                                                                                                                                       '1.2.7-alpha',
                                                                                                                                     'x-uid':
                                                                                                                                       'owh5563gdur',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               'bneikj8s65s',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       '6dq0qny7x7y',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'c6fz7t7skty',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                           '6b7iqambrl7':
                                                                                                             {
-                                                                                                              _isJSONSchemaObject:
-                                                                                                                true,
+                                                                                                              _isJSONSchemaObject: true,
                                                                                                               version:
                                                                                                                 '2.0',
                                                                                                               type: 'void',
@@ -10613,15 +10530,13 @@ export const oneTableWithNestPopups = {
                                                                                                                 '1.2.7-alpha',
                                                                                                               'x-uid':
                                                                                                                 'iz5qh7pzfdl',
-                                                                                                              'x-async':
-                                                                                                                false,
+                                                                                                              'x-async': false,
                                                                                                               'x-index': 2,
                                                                                                             },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           '6e80ocej2vr',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -10762,8 +10677,7 @@ export const oneTableWithNestPopups = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -11494,8 +11408,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                             'x-index': 1,
                                                                                             properties: {
                                                                                               g1ye1zczjy0: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -11505,14 +11418,12 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                 'x-index': 1,
                                                                                                 properties: {
                                                                                                   '9boifjys3jn': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-acl-action-props':
                                                                                                       {
-                                                                                                        skipScopeCheck:
-                                                                                                          true,
+                                                                                                        skipScopeCheck: true,
                                                                                                       },
                                                                                                     'x-acl-action':
                                                                                                       'users:create',
@@ -11538,8 +11449,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                     'x-index': 1,
                                                                                                     properties: {
                                                                                                       rmsurarncfw: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -11551,8 +11461,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                         'x-index': 1,
                                                                                                         properties: {
                                                                                                           grid: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -11567,8 +11476,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                               {
                                                                                                                 akmulvncf99:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -11581,8 +11489,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                                       {
                                                                                                                         nmmv2oujq4y:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -11595,8 +11502,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                                               {
                                                                                                                                 nickname:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'string',
@@ -11617,31 +11523,26 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                                                     'x-index': 1,
                                                                                                                                     'x-uid':
                                                                                                                                       '3wdw5ur6zbj',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               '0etm4dgenpw',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'rgi68bc4uvr',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'ns36964nznx',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                           },
                                                                                                           '6b7iqambrl7':
                                                                                                             {
-                                                                                                              _isJSONSchemaObject:
-                                                                                                                true,
+                                                                                                              _isJSONSchemaObject: true,
                                                                                                               version:
                                                                                                                 '2.0',
                                                                                                               type: 'void',
@@ -11664,14 +11565,12 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                               'x-index': 2,
                                                                                                               'x-uid':
                                                                                                                 'r2uf2sjeus1',
-                                                                                                              'x-async':
-                                                                                                                false,
+                                                                                                              'x-async': false,
                                                                                                             },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'tjed9hp0w6t',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                       },
                                                                                                     },
                                                                                                     'x-uid':
@@ -11813,8 +11712,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                             'x-index': 1,
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -12228,8 +12126,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                             'x-index': 1,
                                                                                             properties: {
                                                                                               g1ye1zczjy0: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -12239,14 +12136,12 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                 'x-index': 1,
                                                                                                 properties: {
                                                                                                   '9boifjys3jn': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-acl-action-props':
                                                                                                       {
-                                                                                                        skipScopeCheck:
-                                                                                                          true,
+                                                                                                        skipScopeCheck: true,
                                                                                                       },
                                                                                                     'x-acl-action':
                                                                                                       'users:create',
@@ -12272,8 +12167,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                     'x-index': 1,
                                                                                                     properties: {
                                                                                                       rmsurarncfw: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -12285,8 +12179,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                         'x-index': 1,
                                                                                                         properties: {
                                                                                                           grid: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -12301,8 +12194,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                               {
                                                                                                                 akmulvncf99:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -12315,8 +12207,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                                       {
                                                                                                                         nmmv2oujq4y:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -12329,8 +12220,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                                               {
                                                                                                                                 nickname:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'string',
@@ -12351,31 +12241,26 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                                                     'x-index': 1,
                                                                                                                                     'x-uid':
                                                                                                                                       'qwihrljz4ig',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               'cw7ujbu7kvb',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'craxy98y2zx',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'zgchm9fihtk',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                           },
                                                                                                           '6b7iqambrl7':
                                                                                                             {
-                                                                                                              _isJSONSchemaObject:
-                                                                                                                true,
+                                                                                                              _isJSONSchemaObject: true,
                                                                                                               version:
                                                                                                                 '2.0',
                                                                                                               type: 'void',
@@ -12398,14 +12283,12 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                                               'x-index': 2,
                                                                                                               'x-uid':
                                                                                                                 'fvzf6110ke8',
-                                                                                                              'x-async':
-                                                                                                                false,
+                                                                                                              'x-async': false,
                                                                                                             },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           '83w04j8tqut',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                       },
                                                                                                     },
                                                                                                     'x-uid':
@@ -12542,8 +12425,7 @@ export const parentPopupRecordInSubPageTheFirstLevelIsASubpageAndTheSecondLevelI
                                                                                             'x-index': 1,
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -12965,8 +12847,7 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                               '1.2.11-alpha',
                                                                                             properties: {
                                                                                               dw0bbrtfwam: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -12975,14 +12856,12 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                   '1.2.11-alpha',
                                                                                                 properties: {
                                                                                                   '93be63wygk1': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-acl-action-props':
                                                                                                       {
-                                                                                                        skipScopeCheck:
-                                                                                                          true,
+                                                                                                        skipScopeCheck: true,
                                                                                                       },
                                                                                                     'x-acl-action':
                                                                                                       'users:create',
@@ -12996,8 +12875,7 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                           'main',
                                                                                                         collection:
                                                                                                           'users',
-                                                                                                        isCusomeizeCreate:
-                                                                                                          true,
+                                                                                                        isCusomeizeCreate: true,
                                                                                                       },
                                                                                                     'x-toolbar':
                                                                                                       'BlockSchemaToolbar',
@@ -13009,8 +12887,7 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                       '1.2.11-alpha',
                                                                                                     properties: {
                                                                                                       rgnp5z1guas: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -13021,8 +12898,7 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                           '1.2.11-alpha',
                                                                                                         properties: {
                                                                                                           grid: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -13036,8 +12912,7 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                               {
                                                                                                                 edldb7vjp9h:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -13049,8 +12924,7 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                                       {
                                                                                                                         '8b29nba6lwu':
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -13064,8 +12938,7 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                                                   {
                                                                                                                                     'x-uid':
                                                                                                                                       '3efbg7ev85y',
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'string',
@@ -13087,28 +12960,24 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                                                       '{{$nPopupRecord.title}}',
                                                                                                                                     title:
                                                                                                                                       'Current popup record',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               'vt5glvexxmy',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       '2nu8acu05bq',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                                 elank4j6ejl:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -13120,8 +12989,7 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                                       {
                                                                                                                         '0vd4xfrz4ym':
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -13135,8 +13003,7 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                                                   {
                                                                                                                                     'x-uid':
                                                                                                                                       '5wca4h5qm30',
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'string',
@@ -13158,34 +13025,29 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                                                       '{{$nParentPopupRecord.title}}',
                                                                                                                                     title:
                                                                                                                                       'Parent popup record',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               't014ef85vps',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'ey8m2ww2i22',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 2,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'fbkdzitehma',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                           hzwm7i7osp5: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -13202,15 +13064,13 @@ export const currentPopupRecordInPopupThatOpenedByAssociationField = {
                                                                                                               '1.2.11-alpha',
                                                                                                             'x-uid':
                                                                                                               'txhv0ztp8df',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 2,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'y0n8wniikrm',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },

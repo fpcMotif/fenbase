@@ -708,7 +708,7 @@ function parseYear(dateStr) {
 }
 
 function parseDate(targetDateStr) {
-  let dateStr = Array.isArray(targetDateStr) ? targetDateStr[1] ?? targetDateStr[0] : targetDateStr;
+  let dateStr = Array.isArray(targetDateStr) ? (targetDateStr[1] ?? targetDateStr[0]) : targetDateStr;
   if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(dateStr)) {
     return new Date(dateStr);
   } else if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(dateStr)) {

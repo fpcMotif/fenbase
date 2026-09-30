@@ -7,12 +7,7 @@
  * 声明成可选反而会让那些 `in` 收窄之后的调用点报「可能为 undefined」。
  */
 declare module 'virtual-search-hooks' {
-  import type {
-    AfterSearch,
-    BeforeSearch,
-    OnSearch,
-    RenderSearchFunction,
-  } from '@rspress/core/theme';
+  import type { AfterSearch, BeforeSearch, OnSearch, RenderSearchFunction } from '@rspress/core/theme';
 
   export const beforeSearch: BeforeSearch;
   export const onSearch: OnSearch;

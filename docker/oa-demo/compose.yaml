@@ -1,0 +1,43 @@
+name: fenbase-oa
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nocobase
+      POSTGRES_DB: nocobase
+      POSTGRES_PASSWORD: ${OA_DB_PASSWORD:?Run the OA runtime setup first}
+    volumes:
+      - oa-database:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U nocobase]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+  app:
+    image: nocobase/nocobase:2.2.18
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_KEY: ${OA_APP_KEY:?Run the OA runtime setup first}
+      DB_DIALECT: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: nocobase
+      DB_USER: nocobase
+      DB_PASSWORD: ${OA_DB_PASSWORD}
+      INIT_ROOT_EMAIL: admin@fenbase.demo
+      INIT_ROOT_USERNAME: admin
+      INIT_ROOT_NICKNAME: OA Demo Administrator
+      INIT_ROOT_PASSWORD: ${OA_ADMIN_PASSWORD:?Run the OA runtime setup first}
+      INIT_LANG: en-US
+      TZ: Australia/Perth
+    ports:
+      - 127.0.0.1:13000:80
+    volumes:
+      - oa-storage:/app/nocobase/storage
+volumes:
+  oa-database:
+  oa-storage:

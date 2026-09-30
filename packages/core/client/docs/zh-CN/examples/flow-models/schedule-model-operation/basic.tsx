@@ -62,15 +62,13 @@ class ScheduleModelOperationDemoModel extends FlowModel {
         <Typography.Title level={4}>scheduleModelOperation：插入回调 + 触发 Flow</Typography.Title>
         <Typography.Paragraph>
           点击不同按钮，会把一个回调插入到事件 <code>{EVENT_NAME}</code> 的不同锚点（对应事件流编辑器里的{' '}
-          <code>phase</code> 选项）；然后触发一次 <code>dispatchEvent('{EVENT_NAME}')</code>，你会看到回调在不同位置命中。
+          <code>phase</code> 选项）；然后触发一次 <code>dispatchEvent('{EVENT_NAME}')</code>
+          ，你会看到回调在不同位置命中。
         </Typography.Paragraph>
 
         <Space wrap>
           {whenOptions.map(({ label, when }, index) => (
-            <Button
-              key={when}
-              onClick={() => void this.insertAndTrigger(label, when)}
-            >
+            <Button key={when} onClick={() => void this.insertAndTrigger(label, when)}>
               {label}
             </Button>
           ))}

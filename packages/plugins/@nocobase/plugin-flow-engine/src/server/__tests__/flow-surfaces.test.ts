@@ -3707,8 +3707,9 @@ describe('flowSurfaces resource', () => {
       },
     });
     expect(composeRes.status, readErrorMessage(composeRes)).toBe(200);
-    const composeTableUid = getData(composeRes).blocks.find((item: any) => item.key === 'treeExplicitInterfaceCompose')
-      ?.uid;
+    const composeTableUid = getData(composeRes).blocks.find(
+      (item: any) => item.key === 'treeExplicitInterfaceCompose',
+    )?.uid;
     const composeReadback = await getSurface(rootAgent, {
       uid: composeTableUid,
     });

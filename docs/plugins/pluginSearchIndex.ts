@@ -181,9 +181,7 @@ export function pluginSearchIndex(): RspressPlugin {
 
       const dropped = dropDuplicatePages(pages);
       if (dropped > 0) {
-        console.log(
-          `[plugin-search-index] Removed ${dropped} duplicate page(s) from search index`,
-        );
+        console.log(`[plugin-search-index] Removed ${dropped} duplicate page(s) from search index`);
       }
     },
   };

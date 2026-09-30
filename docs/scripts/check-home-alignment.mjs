@@ -43,8 +43,8 @@ function defaultDocsRoot() {
 // 兼容两种 cwd：repo root（找 docs/node_modules）和 docs/（找 ./node_modules）。
 function loadJsYaml() {
   const candidates = [
-    path.join(process.cwd(), '__pkg__'),                  // <cwd>/node_modules
-    path.join(process.cwd(), 'docs', '__pkg__'),          // <cwd>/docs/node_modules
+    path.join(process.cwd(), '__pkg__'), // <cwd>/node_modules
+    path.join(process.cwd(), 'docs', '__pkg__'), // <cwd>/docs/node_modules
   ];
   let lastErr;
   for (const c of candidates) {
@@ -145,7 +145,9 @@ function main() {
   const docsRoot = args.positional[0] || defaultDocsRoot();
   const cnFile = path.join(docsRoot, 'cn', 'index.md');
   if (!fs.existsSync(cnFile)) {
-    console.error(`找不到 ${cnFile}（请在 NocoBase 主仓库根目录或 docs/ 目录下运行，或传 docs 根的绝对路径作为第一个位置参数）`);
+    console.error(
+      `找不到 ${cnFile}（请在 NocoBase 主仓库根目录或 docs/ 目录下运行，或传 docs 根的绝对路径作为第一个位置参数）`,
+    );
     process.exit(1);
   }
 
@@ -153,13 +155,7 @@ function main() {
     ? [args.lang]
     : fs
         .readdirSync(docsRoot, { withFileTypes: true })
-        .filter(
-          (e) =>
-            e.isDirectory() &&
-            e.name !== 'cn' &&
-            !SKIP_LANGS.has(e.name) &&
-            !e.name.startsWith('.'),
-        )
+        .filter((e) => e.isDirectory() && e.name !== 'cn' && !SKIP_LANGS.has(e.name) && !e.name.startsWith('.'))
         .map((e) => e.name);
 
   let cnFm;
@@ -190,7 +186,9 @@ function main() {
       const langSummary = summarize(langFm);
       const issues = diff(cnSummary, langSummary);
       if (issues.length === 0) {
-        console.log(`[${lang}] OK (${cnSummary.features.length} features, ${cnSummary.heroActions.length} hero actions)`);
+        console.log(
+          `[${lang}] OK (${cnSummary.features.length} features, ${cnSummary.heroActions.length} hero actions)`,
+        );
         continue;
       }
       bad++;

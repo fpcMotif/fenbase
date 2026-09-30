@@ -1,0 +1,8 @@
+{
+  "name": "fenbase-web",
+  "compatibility_date": "2026-09-29",
+  "assets": {
+    "directory": "dist/demo",
+    "not_found_handling": "single-page-application"
+  }
+}

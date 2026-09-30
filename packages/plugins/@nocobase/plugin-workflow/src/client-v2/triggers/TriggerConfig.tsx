@@ -250,7 +250,7 @@ export function TriggerConfig() {
   const executed = Boolean(useWorkflowCanvasExecuted());
   const plugin = flowEngine.app.pm.get(PluginWorkflowClientV2) as PluginWorkflowClientV2;
   const trigger = workflow?.type ? plugin.getTriggerOptions(workflow.type) : undefined;
-  const triggerTitle = trigger ? t(trigger.title) : workflow?.type ?? t('Unknown trigger');
+  const triggerTitle = trigger ? t(trigger.title) : (workflow?.type ?? t('Unknown trigger'));
   const notices = executed ? [] : plugin.getWorkflowNotices({ surface: 'trigger-node-card', workflow });
   const [editingTitle, setEditingTitle] = useState<string>('');
 

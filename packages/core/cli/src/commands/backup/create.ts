@@ -138,11 +138,7 @@ export default class BackupCreate extends Command {
     await ensureBackupRuntimeCommands({
       envName,
       env,
-      commandIds: [
-        BACKUP_RUNTIME_COMMANDS.create,
-        BACKUP_RUNTIME_COMMANDS.status,
-        BACKUP_RUNTIME_COMMANDS.download,
-      ],
+      commandIds: [BACKUP_RUNTIME_COMMANDS.create, BACKUP_RUNTIME_COMMANDS.status, BACKUP_RUNTIME_COMMANDS.download],
       quiet: jsonOutput,
     });
 

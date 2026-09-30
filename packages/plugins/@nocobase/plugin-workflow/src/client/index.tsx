@@ -77,6 +77,7 @@ export default class PluginWorkflowClient extends Plugin {
   taskTypes = new Registry<TaskTypeOptions>();
 
   useTriggersOptions = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const compile = useCompile();
     return Array.from(this.triggers.getEntities())
       .map(([value, { title, ...options }]) => ({
@@ -89,6 +90,7 @@ export default class PluginWorkflowClient extends Plugin {
   };
 
   useInstructionGroupOptions = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const compile = useCompile();
     return Array.from(this.instructionGroups.getEntities()).map(([key, { label }]) => ({
       key,

@@ -22,7 +22,7 @@ export default class extends Instruction {
   description = t(
     'Set output data of this workflow. When this one is executed as a subflow, the output could be used as variables in downstream nodes of super workflow. You can also use this node in an AI employee workflow, to define what to output. If this node is added multiple times, the value of the last executed node prevails.',
   );
-  icon = (<ProfileOutlined />);
+  icon = <ProfileOutlined />;
   FieldsetLoader = () => import('./components/output').then((m) => ({ default: m.OutputFieldset }));
 
   useVariables({ key, title }, { types }) {

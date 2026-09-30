@@ -94,12 +94,12 @@ export default class LicensePluginsClean extends Command {
       dryRun: Boolean(flags['dry-run']),
       onProgress: shouldStreamLogs
         ? async (detail) => {
-          this.log(`${formatActionLabel(detail.action)} ${pc.bold(detail.packageName)}`);
-          this.log(pc.dim(`  output: ${detail.outputDir}`));
-          if (detail.action === 'removed') {
-            this.log(pc.dim(`  symlink: ${detail.removedSymlink ? 'removed' : 'not found'}`));
+            this.log(`${formatActionLabel(detail.action)} ${pc.bold(detail.packageName)}`);
+            this.log(pc.dim(`  output: ${detail.outputDir}`));
+            if (detail.action === 'removed') {
+              this.log(pc.dim(`  symlink: ${detail.removedSymlink ? 'removed' : 'not found'}`));
+            }
           }
-        }
         : undefined,
     });
 

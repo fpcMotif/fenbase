@@ -515,8 +515,7 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -524,8 +523,7 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                   'popup:common:addBlock',
                                                                                                 properties: {
                                                                                                   k6k23ljfmwv: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -534,8 +532,7 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                       '1.2.11-alpha',
                                                                                                     properties: {
                                                                                                       ddkwboqqe19: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -545,15 +542,13 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                         properties: {
                                                                                                           '33h5pkdwmt5':
                                                                                                             {
-                                                                                                              _isJSONSchemaObject:
-                                                                                                                true,
+                                                                                                              _isJSONSchemaObject: true,
                                                                                                               version:
                                                                                                                 '2.0',
                                                                                                               type: 'void',
                                                                                                               'x-acl-action-props':
                                                                                                                 {
-                                                                                                                  skipScopeCheck:
-                                                                                                                    false,
+                                                                                                                  skipScopeCheck: false,
                                                                                                                 },
                                                                                                               'x-acl-action':
                                                                                                                 'users.roles:update',
@@ -576,16 +571,14 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                                 'blockSettings:editForm',
                                                                                                               'x-component':
                                                                                                                 'CardItem',
-                                                                                                              'x-is-current':
-                                                                                                                true,
+                                                                                                              'x-is-current': true,
                                                                                                               'x-app-version':
                                                                                                                 '1.2.11-alpha',
                                                                                                               properties:
                                                                                                                 {
                                                                                                                   '7t3234fb1yu':
                                                                                                                     {
-                                                                                                                      _isJSONSchemaObject:
-                                                                                                                        true,
+                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                       version:
                                                                                                                         '2.0',
                                                                                                                       type: 'void',
@@ -598,8 +591,7 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                                       properties:
                                                                                                                         {
                                                                                                                           grid: {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -613,8 +605,7 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                                               {
                                                                                                                                 xizv324ooej:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'void',
@@ -626,8 +617,7 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                                                       {
                                                                                                                                         gjzwqen45hw:
                                                                                                                                           {
-                                                                                                                                            _isJSONSchemaObject:
-                                                                                                                                              true,
+                                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                                             version:
                                                                                                                                               '2.0',
                                                                                                                                             type: 'void',
@@ -639,8 +629,7 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                                                               {
                                                                                                                                                 title:
                                                                                                                                                   {
-                                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                                      true,
+                                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                                     version:
                                                                                                                                                       '2.0',
                                                                                                                                                     type: 'string',
@@ -660,35 +649,30 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                                                                       '1.2.11-alpha',
                                                                                                                                                     'x-uid':
                                                                                                                                                       'i1q5apprfo3',
-                                                                                                                                                    'x-async':
-                                                                                                                                                      false,
+                                                                                                                                                    'x-async': false,
                                                                                                                                                     'x-index': 1,
                                                                                                                                                   },
                                                                                                                                               },
                                                                                                                                             'x-uid':
                                                                                                                                               'cyrc9goozvc',
-                                                                                                                                            'x-async':
-                                                                                                                                              false,
+                                                                                                                                            'x-async': false,
                                                                                                                                             'x-index': 1,
                                                                                                                                           },
                                                                                                                                       },
                                                                                                                                     'x-uid':
                                                                                                                                       '1yonjmmam2w',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               'yzom6z8f3t2',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                           u0l41h24oqc:
                                                                                                                             {
-                                                                                                                              _isJSONSchemaObject:
-                                                                                                                                true,
+                                                                                                                              _isJSONSchemaObject: true,
                                                                                                                               version:
                                                                                                                                 '2.0',
                                                                                                                               type: 'void',
@@ -707,8 +691,7 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                                                 {
                                                                                                                                   se7ggsy8wv0:
                                                                                                                                     {
-                                                                                                                                      _isJSONSchemaObject:
-                                                                                                                                        true,
+                                                                                                                                      _isJSONSchemaObject: true,
                                                                                                                                       version:
                                                                                                                                         '2.0',
                                                                                                                                       title:
@@ -739,36 +722,31 @@ export const shouldRefreshBlockDataAfterMultiplePopupsClosed = {
                                                                                                                                         '1.2.11-alpha',
                                                                                                                                       'x-uid':
                                                                                                                                         '38c98jagvqk',
-                                                                                                                                      'x-async':
-                                                                                                                                        false,
+                                                                                                                                      'x-async': false,
                                                                                                                                       'x-index': 1,
                                                                                                                                     },
                                                                                                                                 },
                                                                                                                               'x-uid':
                                                                                                                                 '4s6eki715ub',
-                                                                                                                              'x-async':
-                                                                                                                                false,
+                                                                                                                              'x-async': false,
                                                                                                                               'x-index': 2,
                                                                                                                             },
                                                                                                                         },
                                                                                                                       'x-uid':
                                                                                                                         'xnnwdz56xzc',
-                                                                                                                      'x-async':
-                                                                                                                        false,
+                                                                                                                      'x-async': false,
                                                                                                                       'x-index': 1,
                                                                                                                     },
                                                                                                                 },
                                                                                                               'x-uid':
                                                                                                                 'zvr9ezaqhn8',
-                                                                                                              'x-async':
-                                                                                                                false,
+                                                                                                              'x-async': false,
                                                                                                               'x-index': 1,
                                                                                                             },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'l3xw7vpnnmi',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },

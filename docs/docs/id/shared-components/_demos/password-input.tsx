@@ -13,9 +13,7 @@ export default function PasswordInputDemo() {
         placeholder="Input password"
         onChange={(event) => setValue(event.target.value)}
       />
-      <Typography.Text type="secondary">
-        The strength bar is only a visual hint.
-      </Typography.Text>
+      <Typography.Text type="secondary">The strength bar is only a visual hint.</Typography.Text>
     </Space>
   );
 }

@@ -18,9 +18,7 @@ export default function ScanInputDemo() {
           }
         }}
       />
-      <Typography.Text type="secondary">
-        Current value: {value || '-'}
-      </Typography.Text>
+      <Typography.Text type="secondary">Current value: {value || '-'}</Typography.Text>
     </Space>
   );
 }

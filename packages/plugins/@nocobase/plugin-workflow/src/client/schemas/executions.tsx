@@ -210,7 +210,7 @@ export const executionSchema = {
               properties: {
                 workflowId: {
                   type: 'number',
-                  ['x-component']({ value }) {
+                  ['x-component']: function WorkflowIdLink({ value }) {
                     const { setVisible } = useActionContext();
                     return (
                       <Link to={getWorkflowDetailPath(value)} onClick={() => setVisible(false)}>{`#${value}`}</Link>

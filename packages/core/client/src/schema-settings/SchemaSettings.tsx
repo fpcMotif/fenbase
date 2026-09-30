@@ -582,8 +582,7 @@ export const SchemaSettingsRemove: FC<SchemaSettingsRemoveProps> = (props) => {
 };
 
 export interface SchemaSettingsSelectItemProps
-  extends Omit<SchemaSettingsItemProps, 'onChange' | 'onClick'>,
-    Omit<SelectWithTitleProps, 'title' | 'defaultValue'> {
+  extends Omit<SchemaSettingsItemProps, 'onChange' | 'onClick'>, Omit<SelectWithTitleProps, 'title' | 'defaultValue'> {
   value?: SelectWithTitleProps['defaultValue'];
   optionRender?: (option: any, info: { index: number }) => React.ReactNode;
 }

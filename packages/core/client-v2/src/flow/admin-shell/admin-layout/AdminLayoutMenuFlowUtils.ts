@@ -243,7 +243,7 @@ export const toTreeSelectItems = async (
       .map(async (route) => ({
         label:
           typeof route.title === 'string' && isVariable(route.title)
-            ? (await ctx.resolveJsonTemplate?.(route.title)) ?? route.title
+            ? ((await ctx.resolveJsonTemplate?.(route.title)) ?? route.title)
             : ctx.t(route.title),
         value: `${route.id}||${route.type}`,
         children: route.children?.length ? await toTreeSelectItems(route.children, ctx) : undefined,

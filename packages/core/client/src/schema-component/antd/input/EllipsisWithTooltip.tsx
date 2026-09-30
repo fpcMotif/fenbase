@@ -53,15 +53,11 @@ export const EllipsisWithTooltip = forwardRef((props: Partial<IEllipsisWithToolt
   const [ellipsis, setEllipsis] = useState(false);
   const [visible, setVisible] = useState(false);
   const elRef: any = useRef();
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        setPopoverVisible: setVisible,
-      };
-    },
-    [],
-  );
+  useImperativeHandle(ref, () => {
+    return {
+      setPopoverVisible: setVisible,
+    };
+  }, []);
 
   const fieldSchema = useFieldSchema();
   if (fieldSchema?.parent?.['x-component'] === 'TableV2.Column' && fieldSchema?.parent?.['x-component-props']?.width) {

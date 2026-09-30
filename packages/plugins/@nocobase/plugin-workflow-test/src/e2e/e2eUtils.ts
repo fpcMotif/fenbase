@@ -1061,7 +1061,7 @@ export const userLogin = async (browser: Browser, approvalUserEmail: string, app
   return context;
 };
 
-export default module.exports = {
+export default (module.exports = {
   apiCreateWorkflow,
   apiUpdateWorkflow,
   apiDeleteWorkflow,
@@ -1084,4 +1084,4 @@ export default module.exports = {
   apiCreateField,
   apiTriggerCustomActionEvent,
   approvalUserPassword,
-};
+});

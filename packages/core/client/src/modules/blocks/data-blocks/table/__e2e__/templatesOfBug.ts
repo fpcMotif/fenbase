@@ -5952,8 +5952,7 @@ export const testingWithPageMode = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -5961,8 +5960,7 @@ export const testingWithPageMode = {
                                                                                                   'popup:common:addBlock',
                                                                                                 properties: {
                                                                                                   heliwtqu3eq: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -5971,8 +5969,7 @@ export const testingWithPageMode = {
                                                                                                       '1.2.8-alpha',
                                                                                                     properties: {
                                                                                                       jbt07chbalw: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -5983,8 +5980,7 @@ export const testingWithPageMode = {
                                                                                                           i437g06welg: {
                                                                                                             'x-uid':
                                                                                                               'edf63ztrbxq',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -6000,8 +5996,7 @@ export const testingWithPageMode = {
                                                                                                                   'main',
                                                                                                                 association:
                                                                                                                   'users.roles',
-                                                                                                                readPretty:
-                                                                                                                  true,
+                                                                                                                readPretty: true,
                                                                                                                 action:
                                                                                                                   'get',
                                                                                                               },
@@ -6011,8 +6006,7 @@ export const testingWithPageMode = {
                                                                                                               'blockSettings:details',
                                                                                                             'x-component':
                                                                                                               'CardItem',
-                                                                                                            'x-is-current':
-                                                                                                              true,
+                                                                                                            'x-is-current': true,
                                                                                                             'x-app-version':
                                                                                                               '1.2.8-alpha',
                                                                                                             'x-component-props':
@@ -6024,15 +6018,13 @@ export const testingWithPageMode = {
                                                                                                               {
                                                                                                                 u0gd3xb9lu3:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
                                                                                                                     'x-component':
                                                                                                                       'Details',
-                                                                                                                    'x-read-pretty':
-                                                                                                                      true,
+                                                                                                                    'x-read-pretty': true,
                                                                                                                     'x-use-component-props':
                                                                                                                       'useDetailsProps',
                                                                                                                     'x-app-version':
@@ -6041,8 +6033,7 @@ export const testingWithPageMode = {
                                                                                                                       {
                                                                                                                         b8zdned1saz:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -6061,13 +6052,11 @@ export const testingWithPageMode = {
                                                                                                                               '1.2.8-alpha',
                                                                                                                             'x-uid':
                                                                                                                               'plxpukolwn4',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                         grid: {
-                                                                                                                          _isJSONSchemaObject:
-                                                                                                                            true,
+                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                           version:
                                                                                                                             '2.0',
                                                                                                                           type: 'void',
@@ -6081,8 +6070,7 @@ export const testingWithPageMode = {
                                                                                                                             {
                                                                                                                               mz536stgwkv:
                                                                                                                                 {
-                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                    true,
+                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                   version:
                                                                                                                                     '2.0',
                                                                                                                                   type: 'void',
@@ -6094,8 +6082,7 @@ export const testingWithPageMode = {
                                                                                                                                     {
                                                                                                                                       '8yutqqodl7q':
                                                                                                                                         {
-                                                                                                                                          _isJSONSchemaObject:
-                                                                                                                                            true,
+                                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                                           version:
                                                                                                                                             '2.0',
                                                                                                                                           type: 'void',
@@ -6107,8 +6094,7 @@ export const testingWithPageMode = {
                                                                                                                                             {
                                                                                                                                               title:
                                                                                                                                                 {
-                                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                                    true,
+                                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                                   version:
                                                                                                                                                     '2.0',
                                                                                                                                                   type: 'string',
@@ -6128,48 +6114,41 @@ export const testingWithPageMode = {
                                                                                                                                                     '1.2.8-alpha',
                                                                                                                                                   'x-uid':
                                                                                                                                                     'oll0umtp7tn',
-                                                                                                                                                  'x-async':
-                                                                                                                                                    false,
+                                                                                                                                                  'x-async': false,
                                                                                                                                                   'x-index': 1,
                                                                                                                                                 },
                                                                                                                                             },
                                                                                                                                           'x-uid':
                                                                                                                                             '75ns4lofnq7',
-                                                                                                                                          'x-async':
-                                                                                                                                            false,
+                                                                                                                                          'x-async': false,
                                                                                                                                           'x-index': 1,
                                                                                                                                         },
                                                                                                                                     },
                                                                                                                                   'x-uid':
                                                                                                                                     'tytsnjz1iji',
-                                                                                                                                  'x-async':
-                                                                                                                                    false,
+                                                                                                                                  'x-async': false,
                                                                                                                                   'x-index': 1,
                                                                                                                                 },
                                                                                                                             },
                                                                                                                           'x-uid':
                                                                                                                             'q9wcv2kt2n2',
-                                                                                                                          'x-async':
-                                                                                                                            false,
+                                                                                                                          'x-async': false,
                                                                                                                           'x-index': 2,
                                                                                                                         },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'qyzoxdhemtt',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                               },
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           '1v4p33jtwx0',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -6179,8 +6158,7 @@ export const testingWithPageMode = {
                                                                                                     'x-index': 1,
                                                                                                   },
                                                                                                   f0ugu63rh9c: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -6189,8 +6167,7 @@ export const testingWithPageMode = {
                                                                                                       '1.2.8-alpha',
                                                                                                     properties: {
                                                                                                       skrtxdw11vg: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -6201,8 +6178,7 @@ export const testingWithPageMode = {
                                                                                                           b6wpu86agsn: {
                                                                                                             'x-uid':
                                                                                                               'fkcab93zwgk',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -6237,10 +6213,8 @@ export const testingWithPageMode = {
                                                                                                                   },
                                                                                                                 rowKey:
                                                                                                                   'name',
-                                                                                                                showIndex:
-                                                                                                                  true,
-                                                                                                                dragSort:
-                                                                                                                  false,
+                                                                                                                showIndex: true,
+                                                                                                                dragSort: false,
                                                                                                               },
                                                                                                             'x-toolbar':
                                                                                                               'BlockSchemaToolbar',
@@ -6261,8 +6235,7 @@ export const testingWithPageMode = {
                                                                                                               {
                                                                                                                 actions:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -6282,14 +6255,12 @@ export const testingWithPageMode = {
                                                                                                                       '1.2.8-alpha',
                                                                                                                     'x-uid':
                                                                                                                       'n45qyt4l7p8',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                                 pld27iksvjt:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'array',
@@ -6314,8 +6285,7 @@ export const testingWithPageMode = {
                                                                                                                       {
                                                                                                                         actions:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -6344,8 +6314,7 @@ export const testingWithPageMode = {
                                                                                                                               {
                                                                                                                                 pgr25kbm5zw:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'void',
@@ -6362,21 +6331,18 @@ export const testingWithPageMode = {
                                                                                                                                       '1.2.8-alpha',
                                                                                                                                     'x-uid':
                                                                                                                                       'f0cusyi0qg3',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               'vg540gtmup2',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                         '9kuhit9axbf':
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -6394,8 +6360,7 @@ export const testingWithPageMode = {
                                                                                                                               {
                                                                                                                                 title:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     'x-collection-field':
@@ -6404,11 +6369,9 @@ export const testingWithPageMode = {
                                                                                                                                       'CollectionField',
                                                                                                                                     'x-component-props':
                                                                                                                                       {
-                                                                                                                                        ellipsis:
-                                                                                                                                          true,
+                                                                                                                                        ellipsis: true,
                                                                                                                                       },
-                                                                                                                                    'x-read-pretty':
-                                                                                                                                      true,
+                                                                                                                                    'x-read-pretty': true,
                                                                                                                                     'x-decorator':
                                                                                                                                       null,
                                                                                                                                     'x-decorator-props':
@@ -6423,34 +6386,29 @@ export const testingWithPageMode = {
                                                                                                                                       '1.2.8-alpha',
                                                                                                                                     'x-uid':
                                                                                                                                       'w8tgvckzkgc',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               'bj9txs37q50',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 2,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'cfpfvp6acu3',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 2,
                                                                                                                   },
                                                                                                               },
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'zxcdynph3qu',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -6460,8 +6418,7 @@ export const testingWithPageMode = {
                                                                                                     'x-index': 2,
                                                                                                   },
                                                                                                   '9zm7fz6qs11': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -6470,8 +6427,7 @@ export const testingWithPageMode = {
                                                                                                       '1.2.8-alpha',
                                                                                                     properties: {
                                                                                                       xn7xjfcea4f: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -6482,15 +6438,13 @@ export const testingWithPageMode = {
                                                                                                           h8iybxqo68a: {
                                                                                                             'x-uid':
                                                                                                               'ybylt4pirzc',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
                                                                                                             'x-acl-action-props':
                                                                                                               {
-                                                                                                                skipScopeCheck:
-                                                                                                                  true,
+                                                                                                                skipScopeCheck: true,
                                                                                                               },
                                                                                                             'x-acl-action':
                                                                                                               'users:create',
@@ -6504,8 +6458,7 @@ export const testingWithPageMode = {
                                                                                                                   'main',
                                                                                                                 collection:
                                                                                                                   'users',
-                                                                                                                isCusomeizeCreate:
-                                                                                                                  true,
+                                                                                                                isCusomeizeCreate: true,
                                                                                                               },
                                                                                                             'x-toolbar':
                                                                                                               'BlockSchemaToolbar',
@@ -6524,8 +6477,7 @@ export const testingWithPageMode = {
                                                                                                               {
                                                                                                                 v515rcx3gq9:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -6540,8 +6492,7 @@ export const testingWithPageMode = {
                                                                                                                         grid: {
                                                                                                                           'x-uid':
                                                                                                                             'rcl4n8ekgkc',
-                                                                                                                          _isJSONSchemaObject:
-                                                                                                                            true,
+                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                           version:
                                                                                                                             '2.0',
                                                                                                                           type: 'void',
@@ -6599,8 +6550,7 @@ export const testingWithPageMode = {
                                                                                                                             {
                                                                                                                               mwpb4y1xvwc:
                                                                                                                                 {
-                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                    true,
+                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                   version:
                                                                                                                                     '2.0',
                                                                                                                                   type: 'void',
@@ -6612,8 +6562,7 @@ export const testingWithPageMode = {
                                                                                                                                     {
                                                                                                                                       lznos2z04u7:
                                                                                                                                         {
-                                                                                                                                          _isJSONSchemaObject:
-                                                                                                                                            true,
+                                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                                           version:
                                                                                                                                             '2.0',
                                                                                                                                           type: 'void',
@@ -6625,8 +6574,7 @@ export const testingWithPageMode = {
                                                                                                                                             {
                                                                                                                                               nickname:
                                                                                                                                                 {
-                                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                                    true,
+                                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                                   version:
                                                                                                                                                     '2.0',
                                                                                                                                                   type: 'string',
@@ -6646,28 +6594,24 @@ export const testingWithPageMode = {
                                                                                                                                                     '1.2.8-alpha',
                                                                                                                                                   'x-uid':
                                                                                                                                                     'i6av2tkto6l',
-                                                                                                                                                  'x-async':
-                                                                                                                                                    false,
+                                                                                                                                                  'x-async': false,
                                                                                                                                                   'x-index': 1,
                                                                                                                                                 },
                                                                                                                                             },
                                                                                                                                           'x-uid':
                                                                                                                                             '6cu6oi5rwle',
-                                                                                                                                          'x-async':
-                                                                                                                                            false,
+                                                                                                                                          'x-async': false,
                                                                                                                                           'x-index': 1,
                                                                                                                                         },
                                                                                                                                     },
                                                                                                                                   'x-uid':
                                                                                                                                     'jzdbzph6mk7',
-                                                                                                                                  'x-async':
-                                                                                                                                    false,
+                                                                                                                                  'x-async': false,
                                                                                                                                   'x-index': 1,
                                                                                                                                 },
                                                                                                                               avpc9774lpj:
                                                                                                                                 {
-                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                    true,
+                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                   version:
                                                                                                                                     '2.0',
                                                                                                                                   type: 'void',
@@ -6679,8 +6623,7 @@ export const testingWithPageMode = {
                                                                                                                                     {
                                                                                                                                       '48k53nm8op9':
                                                                                                                                         {
-                                                                                                                                          _isJSONSchemaObject:
-                                                                                                                                            true,
+                                                                                                                                          _isJSONSchemaObject: true,
                                                                                                                                           version:
                                                                                                                                             '2.0',
                                                                                                                                           type: 'void',
@@ -6692,8 +6635,7 @@ export const testingWithPageMode = {
                                                                                                                                             {
                                                                                                                                               username:
                                                                                                                                                 {
-                                                                                                                                                  _isJSONSchemaObject:
-                                                                                                                                                    true,
+                                                                                                                                                  _isJSONSchemaObject: true,
                                                                                                                                                   version:
                                                                                                                                                     '2.0',
                                                                                                                                                   type: 'string',
@@ -6713,33 +6655,28 @@ export const testingWithPageMode = {
                                                                                                                                                     '1.2.8-alpha',
                                                                                                                                                   'x-uid':
                                                                                                                                                     'gaunuwoypii',
-                                                                                                                                                  'x-async':
-                                                                                                                                                    false,
+                                                                                                                                                  'x-async': false,
                                                                                                                                                   'x-index': 1,
                                                                                                                                                 },
                                                                                                                                             },
                                                                                                                                           'x-uid':
                                                                                                                                             'kq6lpqn7sl4',
-                                                                                                                                          'x-async':
-                                                                                                                                            false,
+                                                                                                                                          'x-async': false,
                                                                                                                                           'x-index': 1,
                                                                                                                                         },
                                                                                                                                     },
                                                                                                                                   'x-uid':
                                                                                                                                     'j8a0hpc8q38',
-                                                                                                                                  'x-async':
-                                                                                                                                    false,
+                                                                                                                                  'x-async': false,
                                                                                                                                   'x-index': 2,
                                                                                                                                 },
                                                                                                                             },
-                                                                                                                          'x-async':
-                                                                                                                            false,
+                                                                                                                          'x-async': false,
                                                                                                                           'x-index': 1,
                                                                                                                         },
                                                                                                                         ck43uehl6sb:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -6761,27 +6698,23 @@ export const testingWithPageMode = {
                                                                                                                               '1.2.8-alpha',
                                                                                                                             'x-uid':
                                                                                                                               '8ypx0en4tuh',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 2,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'euep38x5ww3',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                               },
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           '5tm9p7yp7yw',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },

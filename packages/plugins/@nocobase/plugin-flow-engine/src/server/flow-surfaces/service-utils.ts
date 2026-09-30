@@ -217,7 +217,7 @@ export function buildChartCardSettingsFromSemanticChanges(currentCardSettings: a
       ? !_.isUndefined(nextHeight)
         ? 'specifyValue'
         : undefined
-      : currentHeightMode ?? (!_.isUndefined(nextHeight) ? 'specifyValue' : undefined);
+      : (currentHeightMode ?? (!_.isUndefined(nextHeight) ? 'specifyValue' : undefined));
 
   if (nextHeightMode) {
     _.set(nextCardSettings, ['blockHeight', 'heightMode'], nextHeightMode);

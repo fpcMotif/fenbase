@@ -553,8 +553,8 @@ function WorkflowCcTaskDetail() {
 
 function useWorkflowCcTasksCollection() {
   const flowEngine = useFlowEngine() as FlowEngine;
-  const getCollection = useMemoizedFn(
-    () => flowEngine.dataSourceManager?.getDataSource?.('main')?.getCollection?.('workflowCcTasks'),
+  const getCollection = useMemoizedFn(() =>
+    flowEngine.dataSourceManager?.getDataSource?.('main')?.getCollection?.('workflowCcTasks'),
   );
   const [collection, setCollection] = useState(() => getCollection());
 

@@ -301,9 +301,8 @@ describe('plugin-ui-layout server', () => {
       tk: [portal.get('uid')],
     });
 
-    const { default: BackfillAdminLayoutDesktopRoutesMigration } = await import(
-      '../migrations/20260615090000-backfill-admin-layout-desktop-routes'
-    );
+    const { default: BackfillAdminLayoutDesktopRoutesMigration } =
+      await import('../migrations/20260615090000-backfill-admin-layout-desktop-routes');
     const migration = new BackfillAdminLayoutDesktopRoutesMigration({ db: app.db, app } as never);
     await migration.up();
 
@@ -339,9 +338,8 @@ describe('plugin-ui-layout server', () => {
       },
     });
 
-    const { default: BackfillAdminLayoutDesktopRoutesMigration } = await import(
-      '../migrations/20260615090000-backfill-admin-layout-desktop-routes'
-    );
+    const { default: BackfillAdminLayoutDesktopRoutesMigration } =
+      await import('../migrations/20260615090000-backfill-admin-layout-desktop-routes');
     const migration = new BackfillAdminLayoutDesktopRoutesMigration({ db: app.db, app } as never);
     await migration.up();
 

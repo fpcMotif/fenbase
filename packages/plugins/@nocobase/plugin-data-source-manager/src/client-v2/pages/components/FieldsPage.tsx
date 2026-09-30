@@ -348,9 +348,9 @@ function isReadOnlyFieldInterface(
   }
   return Boolean(
     record.source ||
-      options.currentFieldInterface?.isAssociation ||
-      options.currentFieldInterface?.group === 'systemInfo' ||
-      options.presetFieldInterfaces.has(record.interface),
+    options.currentFieldInterface?.isAssociation ||
+    options.currentFieldInterface?.group === 'systemInfo' ||
+    options.presetFieldInterfaces.has(record.interface),
   );
 }
 

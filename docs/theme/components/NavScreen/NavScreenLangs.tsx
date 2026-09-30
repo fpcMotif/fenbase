@@ -16,9 +16,7 @@ export function NavScreenLangs() {
         <div className="rp-nav-screen-langs__left">{t('languagesText')}</div>
         <div className="rp-nav-screen-langs__right">
           {activeValue}
-          <SvgDown
-            className={`rp-nav-screen-langs__icon ${isOpen ? 'rp-nav-screen-langs__icon--open' : ''}`}
-          />
+          <SvgDown className={`rp-nav-screen-langs__icon ${isOpen ? 'rp-nav-screen-langs__icon--open' : ''}`} />
         </div>
       </div>
       <div
@@ -30,7 +28,7 @@ export function NavScreenLangs() {
         }}
       >
         <div className="rp-nav-screen-langs-group__inner">
-          {items.map(item => {
+          {items.map((item) => {
             const isActive = item.text === activeValue;
             const className = clsx(
               'rp-nav-screen-langs-group__item',
@@ -38,12 +36,7 @@ export function NavScreenLangs() {
             );
 
             return isActive ? (
-              <span
-                key={item.text}
-                className={className}
-                aria-current="page"
-                aria-disabled={true}
-              >
+              <span key={item.text} className={className} aria-current="page" aria-disabled={true}>
                 {item.text}
               </span>
             ) : (

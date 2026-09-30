@@ -80,8 +80,7 @@ class PluginCustomParseFomatExample extends Plugin {
 
               <div style={{ fontSize: '12px', color: '#666', marginTop: 16 }}>
                 <strong>说明：</strong>
-                <br />
-                • parseValueToPath: 将输入值解析为路径数组（如 &quot;CUSTOM_user.name&quot; → [&quot;user&quot;,
+                <br />• parseValueToPath: 将输入值解析为路径数组（如 &quot;CUSTOM_user.name&quot; → [&quot;user&quot;,
                 &quot;name&quot;]）
                 <br />• formatPathToValue: 将选中的节点格式化为输出值（如 paths=[&quot;user&quot;,&quot;name&quot;] →
                 &quot;CUSTOM_user.name&quot;）

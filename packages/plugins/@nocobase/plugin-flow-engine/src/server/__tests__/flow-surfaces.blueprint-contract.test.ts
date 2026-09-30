@@ -8480,8 +8480,9 @@ describe('flowSurfaces applyBlueprint contract', () => {
     const nicknameWrapper = formItems.find(
       (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'nickname',
     )?.uid;
-    const statusWrapper = formItems.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'status')
-      ?.uid;
+    const statusWrapper = formItems.find(
+      (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'status',
+    )?.uid;
     const departmentWrapper = formItems.find(
       (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'department',
     )?.uid;
@@ -8757,11 +8758,13 @@ describe('flowSurfaces applyBlueprint contract', () => {
       const grid = block?.subModels?.grid;
       const items = _.castArray(grid?.subModels?.items || []);
       const titleWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'title')?.uid;
-      const statusWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'status')
-        ?.uid;
+      const statusWrapper = items.find(
+        (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'status',
+      )?.uid;
       const bodyWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'body')?.uid;
-      const summaryWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'summary')
-        ?.uid;
+      const summaryWrapper = items.find(
+        (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'summary',
+      )?.uid;
       const codeWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'code')?.uid;
       const notesWrapper = items.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'notes')?.uid;
 
@@ -8836,8 +8839,9 @@ describe('flowSurfaces applyBlueprint contract', () => {
     const nicknameWrapper = formItems.find(
       (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'nickname',
     )?.uid;
-    const statusWrapper = formItems.find((item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'status')
-      ?.uid;
+    const statusWrapper = formItems.find(
+      (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'status',
+    )?.uid;
     const departmentWrapper = formItems.find(
       (item: any) => item?.stepParams?.fieldSettings?.init?.fieldPath === 'department',
     )?.uid;

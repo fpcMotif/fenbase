@@ -801,7 +801,7 @@ FilterFormItemModel.registerFlow({
         const fieldSettingsInitParams = filterModel.getFieldSettingsInitParams?.() || {};
         const hasCollectionContext = !!(
           // @ts-ignore
-          (fieldSettingsInitParams?.dataSourceKey && fieldSettingsInitParams?.collectionName)
+          fieldSettingsInitParams?.dataSourceKey && fieldSettingsInitParams?.collectionName
         );
         const shouldUseVirtualFilterField = !!normalizedFilterField?.__filterFormVirtual;
         if ((shouldUseVirtualFilterField || (!hasCollectionContext && !collectionField)) && normalizedFilterField) {

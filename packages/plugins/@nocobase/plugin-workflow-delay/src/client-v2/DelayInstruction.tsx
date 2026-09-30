@@ -20,6 +20,6 @@ export default class DelayInstruction extends Instruction {
   description = tExpr(
     'Delay a period of time and then continue or exit the process. Can be used to set wait or timeout times in parallel branches.',
   );
-  icon = (<HourglassOutlined />);
+  icon = <HourglassOutlined />;
   FieldsetLoader = () => import('./components/DelayFieldset').then((module) => ({ default: module.DelayFieldset }));
 }

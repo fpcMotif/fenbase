@@ -60,8 +60,7 @@ const schema: ISchema = {
       'x-action': 'a2',
     },
   },
-}
-
+};
 
 const Demo = () => {
   return <SchemaComponent schema={schema} />;
@@ -69,14 +68,14 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.schemaInitializerManager.add(addActionButton)
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.schemaInitializerManager.add(addActionButton);
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 
 const app = mockApp({
   designable: true,
-  plugins: [DemoPlugin]
+  plugins: [DemoPlugin],
 });
 
 export default app.getRootComponent();

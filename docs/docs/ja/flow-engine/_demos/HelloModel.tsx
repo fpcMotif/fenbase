@@ -1,4 +1,3 @@
-
 import { FlowModel } from '@nocobase/flow-engine';
 
 export class HelloModel extends FlowModel {

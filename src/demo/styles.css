@@ -1,0 +1,135 @@
+:root {
+  color: #17233b;
+  background: #f4f7fb;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: #f4f7fb;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.demo-page {
+  min-height: 100vh;
+  padding: 28px clamp(16px, 4vw, 56px);
+}
+
+.demo-centered {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+}
+
+.demo-auth-card,
+.demo-config-card {
+  width: min(100%, 440px);
+  border: 1px solid #e5eaf2;
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgb(23 35 59 / 8%);
+}
+
+.demo-auth-card .ant-card-body,
+.demo-config-card .ant-card-body {
+  padding: 28px;
+}
+
+.demo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 auto 24px;
+  max-width: 1120px;
+}
+
+.demo-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.demo-brand-mark {
+  flex-shrink: 0;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: white;
+  font-weight: 700;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #365cf5, #7d8eff);
+}
+
+.demo-content {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.demo-section-card {
+  border: 1px solid #e5eaf2;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgb(23 35 59 / 4%);
+}
+
+.demo-collection-list {
+  display: grid;
+  gap: 8px;
+}
+
+.demo-collection-option {
+  width: 100%;
+  text-align: left;
+  border-radius: 10px;
+}
+
+.demo-workspace-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.demo-muted {
+  color: #748099;
+}
+
+@media (max-width: 700px) {
+  .demo-page {
+    padding: 18px 12px;
+  }
+
+  .demo-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .demo-auth-card .ant-card-body,
+  .demo-config-card .ant-card-body {
+    padding: 20px;
+  }
+
+  .demo-workspace-title {
+    flex-direction: column;
+  }
+}

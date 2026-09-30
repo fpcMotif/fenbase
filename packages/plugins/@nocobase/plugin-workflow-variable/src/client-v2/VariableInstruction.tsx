@@ -130,7 +130,7 @@ export default class VariableInstruction extends Instruction {
   type = 'variable';
   group = 'control';
   description = tExpr('Assign value to a variable, for later use.');
-  icon = (<FunctionOutlined />);
+  icon = <FunctionOutlined />;
 
   FieldsetLoader = async () => ({ default: VariableFieldset });
 

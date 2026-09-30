@@ -6,10 +6,11 @@
   "scripts": {
     "build": "node rspress.mjs build",
     "build-all": "./build-all.sh",
-    "check": "biome check --write",
+    "check": "bun run lint && bun run format:check",
     "dev": "node rspress.mjs dev",
-    "format": "prettier --write .",
-    "lint": "eslint .",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "lint": "oxlint",
     "preview": "node rspress.mjs preview",
     "eject": "rspress eject"
   },
@@ -17,8 +18,6 @@
     "@rspress/core": "2.0.7"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.3",
-    "@eslint/js": "^9.35.0",
     "@fontsource/nunito": "^5.2.7",
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@iconscout/unicons": "^4.2.0",
@@ -32,10 +31,8 @@
     "@types/node": "^22.8.1",
     "chokidar": "^3.6.0",
     "cross-env": "^10.1.0",
-    "eslint": "^9.35.0",
-    "globals": "^16.3.0",
-    "prettier": "^3.6.2",
-    "typescript-eslint": "^8.43.0",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
     "yargs": "^18.0.0"
   },
   "resolutions": {
@@ -43,9 +40,9 @@
     "@formily/antd-v5": "1.2.3",
     "@types/react": "18.3.18",
     "@types/react-dom": "^18.0.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
     "antd": "5.24.2",
-    "dayjs": "1.11.13"
+    "dayjs": "1.11.13",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }

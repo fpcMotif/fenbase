@@ -1751,9 +1751,8 @@ test('license plugins sync can skip cleanly when no saved license key exists', a
 });
 
 test('loadSavedLicenseKeyData throws a dedicated error when no saved license key exists', async () => {
-  const { MissingSavedLicenseKeyError, loadSavedLicenseKeyData } = await import(
-    '../commands/license/plugins/shared.js'
-  );
+  const { MissingSavedLicenseKeyError, loadSavedLicenseKeyData } =
+    await import('../commands/license/plugins/shared.js');
   const storagePath = await mkdtemp(path.join(os.tmpdir(), 'nocobase-cli-license-'));
 
   try {

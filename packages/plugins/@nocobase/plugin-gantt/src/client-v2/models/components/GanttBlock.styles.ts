@@ -81,15 +81,17 @@ export const createGanttBlockClassNames = ({
         opacity: 1;
         pointer-events: auto;
       }
-      ${hasVerticalScroll
-        ? `
+      ${
+        hasVerticalScroll
+          ? `
           .ant-table-body,
           .ant-table-content {
             overflow-y: scroll !important;
             scrollbar-gutter: stable;
           }
         `
-        : ''}
+          : ''
+      }
     `),
     chartClass: cx(css`
       flex: 1 1 auto;

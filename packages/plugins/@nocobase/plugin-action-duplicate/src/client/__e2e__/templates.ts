@@ -900,8 +900,7 @@ export const T4546 = {
                                                                                             'x-index': 1,
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -1363,8 +1362,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -1372,8 +1370,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                   'popup:addNew:addBlock',
                                                                                                 properties: {
                                                                                                   '8688wl2mr4i': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -1382,8 +1379,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                       '1.3.32-beta',
                                                                                                     properties: {
                                                                                                       f91h0y067hv: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -1394,8 +1390,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                           pdsymaj9tip: {
                                                                                                             'x-uid':
                                                                                                               'sdya5bkm9c8',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -1411,8 +1406,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                               },
                                                                                                             'x-component':
                                                                                                               'Markdown.Void',
-                                                                                                            'x-editable':
-                                                                                                              false,
+                                                                                                            'x-editable': false,
                                                                                                             'x-component-props':
                                                                                                               {
                                                                                                                 content:
@@ -1420,15 +1414,13 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                               },
                                                                                                             'x-app-version':
                                                                                                               '1.3.32-beta',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           '5r3hc64n1ej',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1461,8 +1453,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                               '1.3.32-beta',
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -1472,8 +1463,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                   '1.3.32-beta',
                                                                                                 properties: {
                                                                                                   y5zjil8oaa3: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -1482,8 +1472,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                       '1.3.32-beta',
                                                                                                     properties: {
                                                                                                       v0gws5adwan: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -1494,8 +1483,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                           igm7sdsm3ur: {
                                                                                                             'x-uid':
                                                                                                               'estddzpckrg',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -1511,8 +1499,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                               },
                                                                                                             'x-component':
                                                                                                               'Markdown.Void',
-                                                                                                            'x-editable':
-                                                                                                              false,
+                                                                                                            'x-editable': false,
                                                                                                             'x-component-props':
                                                                                                               {
                                                                                                                 content:
@@ -1520,15 +1507,13 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                               },
                                                                                                             'x-app-version':
                                                                                                               '1.3.32-beta',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'r0ujr6t1rc1',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1773,8 +1758,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                             'x-component-props': {},
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -1782,8 +1766,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                   'popup:addNew:addBlock',
                                                                                                 properties: {
                                                                                                   dx47nd4vr1y: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -1792,8 +1775,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                       '1.3.32-beta',
                                                                                                     properties: {
                                                                                                       k0xrnil5pew: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -1804,8 +1786,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                           l0bj7opq4ts: {
                                                                                                             'x-uid':
                                                                                                               'irw5rilaksj',
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -1821,8 +1802,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                               },
                                                                                                             'x-component':
                                                                                                               'Markdown.Void',
-                                                                                                            'x-editable':
-                                                                                                              false,
+                                                                                                            'x-editable': false,
                                                                                                             'x-component-props':
                                                                                                               {
                                                                                                                 content:
@@ -1830,15 +1810,13 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                               },
                                                                                                             'x-app-version':
                                                                                                               '1.3.32-beta',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           '989e6tagpg7',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },
@@ -1872,8 +1850,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                               '1.3.32-beta',
                                                                                             properties: {
                                                                                               grid: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component': 'Grid',
@@ -1883,8 +1860,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                   '1.3.32-beta',
                                                                                                 properties: {
                                                                                                   '84pz8mhlfi8': {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -1893,8 +1869,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                       '1.3.32-beta',
                                                                                                     properties: {
                                                                                                       dbm9wbvxfj5: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -1906,8 +1881,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                             {
                                                                                                               'x-uid':
                                                                                                                 'aa23f01rm3r',
-                                                                                                              _isJSONSchemaObject:
-                                                                                                                true,
+                                                                                                              _isJSONSchemaObject: true,
                                                                                                               version:
                                                                                                                 '2.0',
                                                                                                               type: 'void',
@@ -1923,8 +1897,7 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                                 },
                                                                                                               'x-component':
                                                                                                                 'Markdown.Void',
-                                                                                                              'x-editable':
-                                                                                                                false,
+                                                                                                              'x-editable': false,
                                                                                                               'x-component-props':
                                                                                                                 {
                                                                                                                   content:
@@ -1932,15 +1905,13 @@ export const theAddBlockButtonInDrawerShouldBeVisible = {
                                                                                                                 },
                                                                                                               'x-app-version':
                                                                                                                 '1.3.32-beta',
-                                                                                                              'x-async':
-                                                                                                                false,
+                                                                                                              'x-async': false,
                                                                                                               'x-index': 1,
                                                                                                             },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'x2a3ivqab91',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },

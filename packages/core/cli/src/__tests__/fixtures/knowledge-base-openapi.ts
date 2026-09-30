@@ -47,7 +47,12 @@ const collectionPaths = (
     get: { operationId: `${resource}:list`, tags: [resource], parameters: listParameters, responses: { 200: {} } },
   },
   [`/${resource}:get`]: {
-    get: { operationId: `${resource}:get`, tags: [resource], parameters: [filterByTkParameter], responses: { 200: {} } },
+    get: {
+      operationId: `${resource}:get`,
+      tags: [resource],
+      parameters: [filterByTkParameter],
+      responses: { 200: {} },
+    },
   },
   [`/${resource}:create`]: {
     post: {
@@ -67,7 +72,12 @@ const collectionPaths = (
     },
   },
   [`/${resource}:destroy`]: {
-    post: { operationId: `${resource}:destroy`, tags: [resource], parameters: [destroyParameter], responses: { 200: {} } },
+    post: {
+      operationId: `${resource}:destroy`,
+      tags: [resource],
+      parameters: [destroyParameter],
+      responses: { 200: {} },
+    },
   },
 });
 
@@ -119,11 +129,7 @@ const knowledgeBaseSwaggerDocument = {
     title: 'Knowledge base runtime fixture',
     version: '1.0.0',
   },
-  tags: [
-    { name: 'aiVectorDatabases' },
-    { name: 'aiKnowledgeBase' },
-    { name: 'aiKnowledgeBaseDocs' },
-  ],
+  tags: [{ name: 'aiVectorDatabases' }, { name: 'aiKnowledgeBase' }, { name: 'aiKnowledgeBaseDocs' }],
   paths: {
     ...collectionPaths(
       'aiVectorDatabases',

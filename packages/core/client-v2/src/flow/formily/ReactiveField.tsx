@@ -47,7 +47,7 @@ const ReactiveInternal: React.FC<IReactiveFieldProps> = (props) => {
   if (field.display !== 'visible') return null;
 
   const getComponent = (target: any) => {
-    return isValidComponent(target) ? target : FormPath.getIn(components, target) ?? target;
+    return isValidComponent(target) ? target : (FormPath.getIn(components, target) ?? target);
   };
 
   const renderDecorator = (children: React.ReactNode) => {

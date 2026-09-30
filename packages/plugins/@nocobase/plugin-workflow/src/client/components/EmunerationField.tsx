@@ -14,7 +14,7 @@ import { defaultFieldNames, useCompile } from '@nocobase/client';
 export function EnumerationField(props) {
   const { value, multiple, fieldNames = defaultFieldNames } = props;
   const compile = useCompile();
-  const items = multiple ? value ?? [] : value ? [value] : [];
+  const items = multiple ? (value ?? []) : value ? [value] : [];
   return items.map((item) => {
     return (
       <Tag key={item[fieldNames.value]} color={item[fieldNames.color]}>

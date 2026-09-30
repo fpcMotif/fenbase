@@ -8,11 +8,7 @@
  */
 
 import { Command, Flags } from '@oclif/core';
-import {
-  getRecommendedSelfUpdateCommand,
-  inspectSelfStatus,
-  type SelfChannel,
-} from '../../lib/self-manager.js';
+import { getRecommendedSelfUpdateCommand, inspectSelfStatus, type SelfChannel } from '../../lib/self-manager.js';
 import { printInfo, renderTable } from '../../lib/ui.js';
 
 export default class SelfCheck extends Command {

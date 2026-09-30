@@ -679,7 +679,7 @@ export const VariableFilterItem: React.FC<VariableFilterItemProps> = observer(
     const mergedRightMetaTree = useMemo(() => {
       return async () => {
         const raw =
-          typeof rightMetaTree === 'function' ? await rightMetaTree() : rightMetaTree ?? ctx.getPropertyMetaTree();
+          typeof rightMetaTree === 'function' ? await rightMetaTree() : (rightMetaTree ?? ctx.getPropertyMetaTree());
         const nodes: MetaTreeNode[] = Array.isArray(raw)
           ? (raw as MetaTreeNode[])
           : await (raw as () => Promise<MetaTreeNode[]>)();

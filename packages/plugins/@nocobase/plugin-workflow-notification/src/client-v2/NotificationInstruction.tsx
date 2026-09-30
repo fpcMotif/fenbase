@@ -19,7 +19,7 @@ export default class NotificationInstruction extends Instruction {
   description = tExpr(
     'Send notification. You can use the variables in the upstream nodes as content and ohter config.',
   );
-  icon = (<NotificationOutlined />);
+  icon = <NotificationOutlined />;
   testable = true;
   FieldsetLoader = () =>
     import('./components/NotificationFieldset').then((module) => ({ default: module.NotificationFieldset }));

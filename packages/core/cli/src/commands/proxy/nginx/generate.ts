@@ -179,7 +179,8 @@ export default class ProxyNginxGenerate extends Command {
       const savedAppEntryOptions = resolveEnvProxyEntry(runtime.env.config, 'nginx');
       const appEntryOptions = {
         host: flags.host?.trim() || savedAppEntryOptions?.host,
-        port: normalizedPort ?? (savedAppEntryOptions?.port !== undefined ? String(savedAppEntryOptions.port) : undefined),
+        port:
+          normalizedPort ?? (savedAppEntryOptions?.port !== undefined ? String(savedAppEntryOptions.port) : undefined),
       };
       const { bundle, status } = await writeNginxProxyBundle(
         runtime as WritableProxyRuntime,

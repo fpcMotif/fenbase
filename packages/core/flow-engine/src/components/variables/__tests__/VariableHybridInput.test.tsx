@@ -67,11 +67,9 @@ describe('VariableHybridInput — saved reference labels', () => {
   it('shows the label after reload: a deep reference present at mount preloads its lazy level', async () => {
     const flowContext = createTestFlowContext();
     // The node's output fields are behind a lazy `children` thunk — exactly the `$jobsMapByNodeKey.<nodeKey>` shape produced by the workflow adapter.
-    const loadChildren = vi.fn(
-      async (): Promise<MetaTreeNode[]> => [
-        { name: 'name', title: 'Name', type: 'string', paths: ['$jobsMapByNodeKey', 'node1', 'name'] },
-      ],
-    );
+    const loadChildren = vi.fn(async (): Promise<MetaTreeNode[]> => [
+      { name: 'name', title: 'Name', type: 'string', paths: ['$jobsMapByNodeKey', 'node1', 'name'] },
+    ]);
     const metaTree: MetaTreeNode[] = [
       {
         name: '$jobsMapByNodeKey',

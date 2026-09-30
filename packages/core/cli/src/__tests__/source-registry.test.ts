@@ -94,20 +94,22 @@ test('stopSourceRegistry returns already-stopped when the container is absent', 
 
 test('ensureSourceRegistryFiles writes a template-based config with local publish overrides', async () => {
   const { ensureSourceRegistryFiles } = await import('../lib/source-registry.js');
-  mocks.readFile.mockResolvedValue([
-    'storage: ./storage',
-    'auth:',
-    '  htpasswd:',
-    '    file: ./htpasswd',
-    'packages:',
-    "  '@*/*':",
-    '    publish: $authenticated',
-    '    unpublish: $authenticated',
-    "  '**':",
-    '    publish: $authenticated',
-    '    unpublish: $authenticated',
-    '',
-  ].join('\n'));
+  mocks.readFile.mockResolvedValue(
+    [
+      'storage: ./storage',
+      'auth:',
+      '  htpasswd:',
+      '    file: ./htpasswd',
+      'packages:',
+      "  '@*/*':",
+      '    publish: $authenticated',
+      '    unpublish: $authenticated',
+      "  '**':",
+      '    publish: $authenticated',
+      '    unpublish: $authenticated',
+      '',
+    ].join('\n'),
+  );
 
   await ensureSourceRegistryFiles('/repo');
 

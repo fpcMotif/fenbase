@@ -1,6 +1,6 @@
-import React from "react";
-import { ISchema, SchemaComponent, Plugin } from "@nocobase/client";
-import { mockApp } from "@nocobase/client/demo-utils";
+import React from 'react';
+import { ISchema, SchemaComponent, Plugin } from '@nocobase/client';
+import { mockApp } from '@nocobase/client/demo-utils';
 
 const schema: ISchema = {
   name: 'test',
@@ -23,8 +23,7 @@ const schema: ISchema = {
       },
     },
   },
-}
-
+};
 
 const Demo = () => {
   return <SchemaComponent schema={schema} />;
@@ -32,7 +31,7 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 

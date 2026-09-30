@@ -1,3 +1,12 @@
+/**
+ * This file is part of the NocoBase (R) project.
+ * Copyright (c) 2020-2024 NocoBase Co., Ltd.
+ * Authors: NocoBase Team.
+ *
+ * This project is dual-licensed under AGPL-3.0 and NocoBase Commercial License.
+ * For more information, please refer to: https://www.nocobase.com/agreement.
+ */
+
 let container: HTMLElement | null = null;
 
 export const highlightBlock = (clonedBlockDom: HTMLElement, boxRect: DOMRect) => {
@@ -16,16 +25,19 @@ export const highlightBlock = (clonedBlockDom: HTMLElement, boxRect: DOMRect) =>
   container.style.top = `${boxRect.top}px`;
   container.style.left = `${boxRect.left}px`;
   container.style.zIndex = '2000';
-}
+};
 
 export const unhighlightBlock = () => {
   if (container) {
     container.style.opacity = '0';
     container.innerHTML = '';
   }
-}
+};
 
-export const startScrollEndTracking = (dom: HTMLElement & { _prevRect?: DOMRect; _timer?: any }, callback: () => void) => {
+export const startScrollEndTracking = (
+  dom: HTMLElement & { _prevRect?: DOMRect; _timer?: any },
+  callback: () => void,
+) => {
   dom._timer = setInterval(() => {
     const prevRect = dom._prevRect;
     const currentRect = dom.getBoundingClientRect();
@@ -36,12 +48,12 @@ export const startScrollEndTracking = (dom: HTMLElement & { _prevRect?: DOMRect;
       clearInterval(dom._timer);
       callback();
     }
-  }, 100)
-}
+  }, 100);
+};
 
 export const stopScrollEndTracking = (dom: HTMLElement & { _timer?: any }) => {
   if (dom._timer) {
     clearInterval(dom._timer);
     dom._timer = null;
   }
-}
+};

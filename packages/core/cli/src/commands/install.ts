@@ -2509,8 +2509,8 @@ export default class Install extends Command {
       argv,
       '--output-dir',
       source === 'npm' || source === 'git'
-        ? resolveConfiguredEnvPath(results.outputDir) ??
-            resolveConfiguredEnvPath(String(results.outputDir ?? '').trim() || defaultInstallAppRootPath(results.env))
+        ? (resolveConfiguredEnvPath(results.outputDir) ??
+            resolveConfiguredEnvPath(String(results.outputDir ?? '').trim() || defaultInstallAppRootPath(results.env)))
         : results.outputDir,
     );
     Install.pushDownloadArgIfValue(argv, '--git-url', results.gitUrl);

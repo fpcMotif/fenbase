@@ -54,12 +54,7 @@ function main() {
     ? [args.lang]
     : fs
         .readdirSync(docsRoot, { withFileTypes: true })
-        .filter(
-          (e) =>
-            e.isDirectory() &&
-            !SKIP_LANGS.has(e.name) &&
-            !e.name.startsWith('.'),
-        )
+        .filter((e) => e.isDirectory() && !SKIP_LANGS.has(e.name) && !e.name.startsWith('.'))
         .map((e) => e.name);
 
   let bad = 0;

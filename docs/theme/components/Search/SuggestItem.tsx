@@ -8,18 +8,8 @@
  * 2. 标题类结果补一行路径面包屑——「模板打印」在 `/template-print/` 和
  *    `/plugins/@nocobase/plugin-action-template-print/` 各有一页，光看标题分不出哪个是正文文档。
  */
-import {
-  IconFile,
-  IconHeader,
-  IconJump,
-  IconTitle,
-  Link,
-  SvgWrapper,
-} from '@rspress/core/theme';
-import type {
-  DefaultMatchResultItem,
-  HighlightInfo,
-} from '@rspress/core/theme';
+import { IconFile, IconHeader, IconJump, IconTitle, Link, SvgWrapper } from '@rspress/core/theme';
+import type { DefaultMatchResultItem, HighlightInfo } from '@rspress/core/theme';
 import { getSlicedStrByByteLength } from '@rspress/core/dist/theme/components/Search/logic/util.js';
 import { useRef } from 'react';
 import './SuggestItem.scss';
@@ -35,9 +25,7 @@ export function SuggestItem({
   suggestion: DefaultMatchResultItem;
   closeSearch: () => void;
   isCurrent: boolean;
-  setCurrentSuggestionIndex: (
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>,
-  ) => void;
+  setCurrentSuggestionIndex: (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
   onMouseMove: (event: React.MouseEvent<HTMLLIElement, MouseEvent>) => void;
   inCurrentDocIndex: boolean;
   scrollTo: (top: number, height: number) => void;
@@ -54,10 +42,7 @@ export function SuggestItem({
     scrollTo(selfRef.current?.offsetTop, selfRef.current?.offsetHeight);
   }
 
-  const getHighlightedFragments = (
-    rawText: string,
-    highlights: HighlightInfo[],
-  ) => {
+  const getHighlightedFragments = (rawText: string, highlights: HighlightInfo[]) => {
     // Split raw text into several parts, and add styles.mark className to the parts that need to be highlighted.
     // highlightInfoList is an array of objects, each object contains the start index and the length of the part that needs to be highlighted.
     // For example, if the statement is "This is a statement", and the query is "is", then highlightInfoList is [{start: 2, length: 2}, {start: 5, length: 2}].
@@ -86,11 +71,7 @@ export function SuggestItem({
   const renderHeaderMatch = () => {
     if (suggestion.type === 'header' || suggestion.type === 'title') {
       const { header, highlightInfoList } = suggestion;
-      return (
-        <div className="rp-suggest-item__header">
-          {getHighlightedFragments(header, highlightInfoList)}
-        </div>
-      );
+      return <div className="rp-suggest-item__header">{getHighlightedFragments(header, highlightInfoList)}</div>;
     }
 
     return <div className="rp-suggest-item__header">{suggestion.header}</div>;
@@ -101,11 +82,7 @@ export function SuggestItem({
       return <div></div>;
     }
     const { statement, highlightInfoList } = suggestion;
-    return (
-      <div className="rp-suggest-item__statement">
-        {getHighlightedFragments(statement, highlightInfoList)}
-      </div>
-    );
+    return <div className="rp-suggest-item__statement">{getHighlightedFragments(statement, highlightInfoList)}</div>;
   };
 
   // 改动 2：标题类结果补一行路径，区分同名页面。header/content 类型本身已带上下文，不需要。
@@ -155,7 +132,7 @@ export function SuggestItem({
       <Link
         href={suggestion.link}
         className="rp-suggest-item__link"
-        onClick={e => {
+        onClick={(e) => {
           closeSearch();
           e.stopPropagation();
         }}

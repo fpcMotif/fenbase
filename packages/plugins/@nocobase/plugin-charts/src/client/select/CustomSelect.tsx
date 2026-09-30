@@ -49,7 +49,9 @@ const InternalSelect = connect(
                   <span>
                     {lang(option?.description)
                       ?.split(',')
-                      .map((item) => <div key={item}>{item}</div>)}
+                      .map((item) => (
+                        <div key={item}>{item}</div>
+                      ))}
                   </span>
                 )}
                 trigger="hover"
@@ -80,7 +82,9 @@ const InternalSelect = connect(
                   <span>
                     {lang(option?.description)
                       ?.split(',')
-                      .map((item) => <div key={item}>{item}</div>)}
+                      .map((item) => (
+                        <div key={item}>{item}</div>
+                      ))}
                   </span>
                 )}
                 trigger="hover"

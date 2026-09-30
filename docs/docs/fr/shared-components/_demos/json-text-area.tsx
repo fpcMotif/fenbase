@@ -8,9 +8,7 @@ export default function JsonTextAreaDemo() {
   return (
     <Space direction="vertical" style={{ width: 420 }}>
       <JsonTextArea value={value} onChange={setValue} rows={6} json5 />
-      <Typography.Text type="secondary">
-        Parsed value: {JSON.stringify(value)}
-      </Typography.Text>
+      <Typography.Text type="secondary">Parsed value: {JSON.stringify(value)}</Typography.Text>
     </Space>
   );
 }

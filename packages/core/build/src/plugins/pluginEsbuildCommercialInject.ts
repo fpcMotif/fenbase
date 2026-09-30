@@ -7,7 +7,7 @@
  * For more information, please refer to: https://www.nocobase.com/agreement.
  */
 
-import fs from 'node:fs'
+import fs from 'node:fs';
 
 const pluginEsbuildCommercialInject = {
   name: 'plugin-esbuild-commercial-inject',
@@ -21,8 +21,7 @@ const pluginEsbuildCommercialInject = {
       if (match) {
         source = source.replace(regex, ``);
         const moduleName = match[1] || match[2];
-        source =
-          `
+        source = `
 import { withCommercial } from '@nocobase/plugin-commercial/server';
 import _plugin from '${moduleName}';
 export default withCommercial(_plugin);
@@ -32,8 +31,7 @@ ${source}
       } else if (match2) {
         source = source.replace(regex2, ``);
         const moduleName = match2[1] || match2[2];
-        source =
-          `
+        source = `
 import { withCommercial } from '@nocobase/plugin-commercial/server';
 ${source}
 export default withCommercial(${moduleName});
@@ -46,9 +44,9 @@ export default withCommercial(${moduleName});
       return {
         contents: source,
         loader: 'ts',
-      }
-    })
+      };
+    });
   },
 };
 
-export default pluginEsbuildCommercialInject
+export default pluginEsbuildCommercialInject;

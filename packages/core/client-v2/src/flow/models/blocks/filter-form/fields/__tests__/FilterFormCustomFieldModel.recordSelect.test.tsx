@@ -310,8 +310,8 @@ describe('FilterForm custom field record select', () => {
     fireEvent.mouseDown(valueFieldSelector);
 
     await waitFor(() => {
-      const optionTexts = Array.from(document.querySelectorAll('.ant-select-item-option-content')).map(
-        (node) => node.textContent?.trim(),
+      const optionTexts = Array.from(document.querySelectorAll('.ant-select-item-option-content')).map((node) =>
+        node.textContent?.trim(),
       );
       expect(optionTexts).toContain('nickname');
       expect(optionTexts).not.toContain('Hidden text');

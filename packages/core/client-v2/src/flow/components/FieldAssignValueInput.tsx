@@ -401,8 +401,8 @@ export function resolveAssignValueFieldModelConfig(options: {
         preferFormItemFieldModel,
       })
     : preferFormItemFieldModel
-      ? currentFieldModelUse ?? defaultBindingUse
-      : defaultBindingUse ?? currentFieldModelUse;
+      ? (currentFieldModelUse ?? defaultBindingUse)
+      : (defaultBindingUse ?? currentFieldModelUse);
 
   // 赋值编辑器直接创建最终字段模型，避免 FieldModel.resolveUse 再次根据继承的 fieldBinding.use
   // 跳回 SubForm/SubTable/PopupSubTable 等原表单组件。
@@ -750,7 +750,7 @@ export const FieldAssignValueInput: React.FC<Props> = ({
     const fm = created?.subModels?.fields?.[0];
     const allowMultiple =
       effectiveCollectionField?.isAssociationField?.() && isToManyAssociationField(effectiveCollectionField)
-        ? currentAllowMultiple ?? true
+        ? (currentAllowMultiple ?? true)
         : undefined;
     const multiple =
       allowMultiple ??

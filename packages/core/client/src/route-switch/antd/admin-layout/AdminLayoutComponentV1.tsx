@@ -708,9 +708,9 @@ export const AdminLayoutComponent = observer((props: any) => {
 
       .ant-pro-layout-apps-icon:hover,
       .ant-pro-layout-apps-icon-active {
-        color: ${customToken.colorTextHeaderMenuHover ||
-        customToken.colorTextHeaderMenu ||
-        'rgba(255, 255, 255, 0.85)'};
+        color: ${
+          customToken.colorTextHeaderMenuHover || customToken.colorTextHeaderMenu || 'rgba(255, 255, 255, 0.85)'
+        };
         background: ${customToken.colorBgHeaderMenuHover || 'rgba(255, 255, 255, 0.12)'};
       }
     `,

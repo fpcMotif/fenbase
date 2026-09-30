@@ -21,7 +21,7 @@ import { syncUserMainDepartment } from '../sync-user-main-department';
 
 const normalizeIds = (values: any[] = []) =>
   values
-    .map((value) => (typeof value === 'object' && value ? value.id ?? value : value))
+    .map((value) => (typeof value === 'object' && value ? (value.id ?? value) : value))
     .filter((value) => value !== null && value !== undefined);
 
 const syncUsersMainDepartment = async (ctx: Context, userIds: any[]) => {

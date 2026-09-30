@@ -39,7 +39,8 @@ class ExecutionTimingDemoModel extends FlowModel {
       <div style={{ padding: 16 }}>
         <Typography.Title level={4}>事件流执行时机：on.phase / flowKey / stepKey</Typography.Title>
         <Typography.Paragraph>
-          <code>flow.on</code> 除了声明 <code>eventName</code> 外，还支持用 <code>phase</code> 把某个 flow 插入到 其它 flow 的指定阶段执行。
+          <code>flow.on</code> 除了声明 <code>eventName</code> 外，还支持用 <code>phase</code> 把某个 flow 插入到 其它
+          flow 的指定阶段执行。
         </Typography.Paragraph>
 
         <Space>

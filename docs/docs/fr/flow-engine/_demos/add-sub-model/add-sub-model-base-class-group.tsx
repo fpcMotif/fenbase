@@ -9,11 +9,7 @@ class HelloBlockModel extends FlowModel {
         {this.mapSubModels('items', (item) => {
           return <FlowModelRenderer key={item.uid} model={item} showFlowSettings={{ showBorder: true }} />;
         })}
-        <AddSubModelButton
-          model={this}
-          subModelKey="items"
-          subModelBaseClasses={['BaseBlockModel', 'BlockModel']}
-        >
+        <AddSubModelButton model={this} subModelKey="items" subModelBaseClasses={['BaseBlockModel', 'BlockModel']}>
           <Button>Add block</Button>
         </AddSubModelButton>
       </Space>

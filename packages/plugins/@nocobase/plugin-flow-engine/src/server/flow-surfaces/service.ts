@@ -17436,16 +17436,14 @@ export class FlowSurfacesService {
 
       if (previewAliases.length) {
         return {
-          queryOutputs: previewAliases.map(
-            (alias): FlowSurfaceSqlChartQueryOutput => ({
-              alias,
-              source: 'sql',
-              type:
-                firstRow && Object.prototype.hasOwnProperty.call(firstRow, alias)
-                  ? this.inferSqlChartOutputType(firstRow[alias])
-                  : undefined,
-            }),
-          ),
+          queryOutputs: previewAliases.map((alias): FlowSurfaceSqlChartQueryOutput => ({
+            alias,
+            source: 'sql',
+            type:
+              firstRow && Object.prototype.hasOwnProperty.call(firstRow, alias)
+                ? this.inferSqlChartOutputType(firstRow[alias])
+                : undefined,
+          })),
           riskyHints,
         };
       }
@@ -21708,7 +21706,9 @@ export class FlowSurfacesService {
                     layout: buildDefinedPayload({
                       layout: nextCardLayout,
                       labelAlign: changes.cardLabelAlign,
-                      labelWidth: hasOwnDefined(changes, 'cardLabelWidth') ? changes.cardLabelWidth ?? null : undefined,
+                      labelWidth: hasOwnDefined(changes, 'cardLabelWidth')
+                        ? (changes.cardLabelWidth ?? null)
+                        : undefined,
                       labelWrap: hasOwnDefined(changes, 'cardLabelWrap') ? changes.cardLabelWrap === true : undefined,
                       colon: hasOwnDefined(changes, 'cardColon') ? changes.cardColon === true : undefined,
                     }),
@@ -26970,7 +26970,7 @@ export class FlowSurfacesService {
     const sourceRecordCollectionName = this.resolvePopupSourceRecordCollectionName(popupAssociationName, hostContext);
     const sourceRecordDataSourceKey = hostContext?.resourceContext?.resourceInit?.dataSourceKey || popupDataSourceKey;
     const recordIdentifier = options.allowSourceIdAsRecordId
-      ? popupConfig?.filterByTk ?? popupConfig?.sourceId
+      ? (popupConfig?.filterByTk ?? popupConfig?.sourceId)
       : popupConfig?.filterByTk;
 
     return {

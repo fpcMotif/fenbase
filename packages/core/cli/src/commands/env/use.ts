@@ -16,9 +16,7 @@ import { isInteractiveTerminal, printInfo } from '../../lib/ui.js';
 export default class EnvUse extends Command {
   static override summary = 'Switch the current environment';
 
-  static override examples = [
-    '<%= config.bin %> <%= command.id %> local',
-  ];
+  static override examples = ['<%= config.bin %> <%= command.id %> local'];
 
   static override args = {
     name: Args.string({

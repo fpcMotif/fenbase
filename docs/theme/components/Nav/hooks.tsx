@@ -23,7 +23,7 @@ export function useLangsMenu() {
 
   const translationMenuData = hasMultiLanguage
     ? {
-        items: localeLanguages.map(item => {
+        items: localeLanguages.map((item) => {
           const targetBase = item.code === 'en' ? '' : `/${item.code}`;
           return {
             text: item?.label,
@@ -32,8 +32,7 @@ export function useLangsMenu() {
             rel: 'alternate',
           };
         }),
-        activeValue: localeLanguages.find(item => currentLang === item.code)
-          ?.label,
+        activeValue: localeLanguages.find((item) => currentLang === item.code)?.label,
       }
     : { items: [] };
   return translationMenuData;
@@ -85,7 +84,7 @@ export function useVersionsMenu() {
   const defaultVersion = site.multiVersion.default || '';
   const versions = site.multiVersion.versions || [];
   const versionsMenuData = {
-    items: versions.map(version => ({
+    items: versions.map((version) => ({
       text: version,
       link: replaceVersion(
         pathname,

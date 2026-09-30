@@ -178,7 +178,7 @@ export function NodeClipboardContextProvider(props: {
         return;
       }
       const upstream = target?.upstream ?? null;
-      const branchIndex = upstream ? target?.branchIndex ?? null : null;
+      const branchIndex = upstream ? (target?.branchIndex ?? null) : null;
       const baseConfig = cloneDeep(clipboard.config ?? {});
       const baseValues = { upstreamId: upstream?.id ?? null, branchIndex };
 

@@ -91,9 +91,10 @@ const MAX_CACHE_TTL_MS = 2_147_483_647;
 const DEFAULT_ACCESS_TOKEN_TTL_SECONDS = Math.floor(ms(String(defaultTokenPolicyConfig.tokenExpirationTime)) / 1000);
 const DEFAULT_SESSION_TTL_SECONDS = Math.floor(ms(String(defaultTokenPolicyConfig.sessionExpirationTime)) / 1000);
 const DEVICE_CODE_TTL_SECONDS = 10 * 60;
-type JsonWebKeySet = Awaited<ReturnType<JoseModule['exportJWK']>> extends infer T
-  ? { keys: Array<T & { kid?: string; use?: string; alg?: string }> }
-  : { keys: Array<Record<string, any>> };
+type JsonWebKeySet =
+  Awaited<ReturnType<JoseModule['exportJWK']>> extends infer T
+    ? { keys: Array<T & { kid?: string; use?: string; alg?: string }> }
+    : { keys: Array<Record<string, any>> };
 type DeviceFlowRenderContext = KoaContextWithOIDC;
 
 function policyMillisecondsToSeconds(value: unknown, fallback: number) {

@@ -31,8 +31,7 @@ function formatDbLogsFailure(envName: string, message: string): string {
 }
 
 export default class DbLogs extends Command {
-  static override description =
-    'Show logs for the built-in database container of the selected env.';
+  static override description = 'Show logs for the built-in database container of the selected env.';
 
   static override examples = [
     '<%= config.bin %> <%= command.id %>',

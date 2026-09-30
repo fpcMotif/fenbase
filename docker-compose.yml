@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 networks:
   nocobase:
     driver: bridge
@@ -11,7 +11,7 @@ services:
       VERDACCIO_PORT: ${VERDACCIO_PORT}
     restart: always
     ports:
-      - "${VERDACCIO_PORT}:${VERDACCIO_PORT}"
+      - '${VERDACCIO_PORT}:${VERDACCIO_PORT}'
   mysql:
     image: mysql:8
     environment:
@@ -21,7 +21,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     restart: always
     ports:
-      - "${DB_MYSQL_PORT}:3306"
+      - '${DB_MYSQL_PORT}:3306'
     networks:
       - nocobase
   kingbase:
@@ -32,14 +32,14 @@ services:
     networks:
       - nocobase
     ports:
-      - "${DB_KINGBASE_PORT}:54321"
+      - '${DB_KINGBASE_PORT}:54321'
     environment:
       ENABLE_CI: no
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_MODE: pg
       NEED_START: yes
-    command: ["/usr/sbin/init"]
+    command: ['/usr/sbin/init']
     volumes:
       - ./storage/db/kingbase:/home/kingbase/userdata
   postgres:
@@ -49,7 +49,7 @@ services:
       - nocobase
     command: postgres -c wal_level=logical
     ports:
-      - "${DB_POSTGRES_PORT}:5432"
+      - '${DB_POSTGRES_PORT}:5432'
     volumes:
       - ./storage/db/postgres/backups:/backups
     environment:
@@ -69,7 +69,7 @@ services:
     image: node:16-stretch-slim
     networks:
       - nocobase
-    command: [ "yarn", "start" ]
+    command: ['yarn', 'start']
     working_dir: /app
     env_file: ./.env
     volumes:
@@ -77,4 +77,4 @@ services:
     expose:
       - ${APP_PORT}
     ports:
-      - "${APP_PORT}:${APP_PORT}"
+      - '${APP_PORT}:${APP_PORT}'

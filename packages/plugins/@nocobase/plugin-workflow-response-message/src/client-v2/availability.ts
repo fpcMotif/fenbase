@@ -15,6 +15,6 @@ type WorkflowLike = {
 export function isResponseMessageInstructionAvailable(workflow?: WorkflowLike) {
   return Boolean(
     workflow?.type === 'request-interception' ||
-      (['action', 'custom-action'].includes(String(workflow?.type)) && workflow?.sync),
+    (['action', 'custom-action'].includes(String(workflow?.type)) && workflow?.sync),
   );
 }

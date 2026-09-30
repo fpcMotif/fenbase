@@ -52,8 +52,8 @@ function loadEntries(docsRoot: string, lang: string): SchemaEntry[] {
     if (fs.existsSync(metaPath)) {
       const meta: MetaItem[] = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
       chapters = meta
-        .filter(m => m.type === 'file' && m.name !== 'index')
-        .map(m => ({ slug: m.name, title: m.label }));
+        .filter((m) => m.type === 'file' && m.name !== 'index')
+        .map((m) => ({ slug: m.name, title: m.label }));
     }
 
     entries.push({ routePrefix, config, chapters, lang });
@@ -74,9 +74,7 @@ function buildScripts(route: string, entry: SchemaEntry): string {
   const { config, chapters, lang, routePrefix } = entry;
   const langMap: Record<string, string> = { cn: 'zh-CN', en: 'en-US', ja: 'ja-JP' };
   const inLanguage = langMap[lang] || 'en-US';
-  const baseUrl = lang === 'en'
-    ? 'https://docs.nocobase.com'
-    : `https://docs.nocobase.com/${lang}`;
+  const baseUrl = lang === 'en' ? 'https://docs.nocobase.com' : `https://docs.nocobase.com/${lang}`;
 
   const tag = (obj: object) => `<script type="application/ld+json">${JSON.stringify(obj)}</script>`;
 
@@ -84,44 +82,48 @@ function buildScripts(route: string, entry: SchemaEntry): string {
 
   if (isIndex) {
     const scripts: string[] = [];
-    scripts.push(tag({
-      '@context': 'https://schema.org',
-      '@type': 'TechArticle',
-      headline: config.headline,
-      description: config.description,
-      author: { '@type': 'Organization', name: 'NocoBase', url: 'https://www.nocobase.com' },
-      publisher: { '@type': 'Organization', name: 'NocoBase', url: 'https://www.nocobase.com' },
-      datePublished: config.datePublished,
-      dateModified: config.dateModified,
-      proficiencyLevel: 'Beginner',
-      inLanguage,
-      keywords: config.keywords,
-      ...(chapters.length > 0 && {
-        hasPart: chapters.map((ch, i) => ({
-          '@type': 'TechArticle',
-          headline: ch.title,
-          url: `${baseUrl}${routePrefix}${ch.slug}`,
-          position: i + 1,
-        })),
+    scripts.push(
+      tag({
+        '@context': 'https://schema.org',
+        '@type': 'TechArticle',
+        headline: config.headline,
+        description: config.description,
+        author: { '@type': 'Organization', name: 'NocoBase', url: 'https://www.nocobase.com' },
+        publisher: { '@type': 'Organization', name: 'NocoBase', url: 'https://www.nocobase.com' },
+        datePublished: config.datePublished,
+        dateModified: config.dateModified,
+        proficiencyLevel: 'Beginner',
+        inLanguage,
+        keywords: config.keywords,
+        ...(chapters.length > 0 && {
+          hasPart: chapters.map((ch, i) => ({
+            '@type': 'TechArticle',
+            headline: ch.title,
+            url: `${baseUrl}${routePrefix}${ch.slug}`,
+            position: i + 1,
+          })),
+        }),
       }),
-    }));
+    );
 
     if (config.faq?.length) {
-      scripts.push(tag({
-        '@context': 'https://schema.org',
-        '@type': 'FAQPage',
-        mainEntity: config.faq.map(({ q, a }) => ({
-          '@type': 'Question',
-          name: q,
-          acceptedAnswer: { '@type': 'Answer', text: a },
-        })),
-      }));
+      scripts.push(
+        tag({
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: config.faq.map(({ q, a }) => ({
+            '@type': 'Question',
+            name: q,
+            acceptedAnswer: { '@type': 'Answer', text: a },
+          })),
+        }),
+      );
     }
     return scripts.join('\n');
   }
 
   // Chapter pages
-  const chapter = chapters.find(ch => route.includes(ch.slug));
+  const chapter = chapters.find((ch) => route.includes(ch.slug));
   if (chapter) {
     return tag({
       '@context': 'https://schema.org',

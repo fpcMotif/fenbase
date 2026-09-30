@@ -11,8 +11,10 @@ import React from 'react';
 import { CascaderProps } from 'antd';
 import type { MetaTreeNode } from '../../flowContext';
 
-export interface FlowContextSelectorProps
-  extends Omit<CascaderProps<ContextSelectorItem>, 'value' | 'onChange' | 'options' | 'children' | 'multiple'> {
+export interface FlowContextSelectorProps extends Omit<
+  CascaderProps<ContextSelectorItem>,
+  'value' | 'onChange' | 'options' | 'children' | 'multiple'
+> {
   value?: string;
   onChange?: (value: string, metaTreeNode?: MetaTreeNode) => void;
   children?: CascaderProps<ContextSelectorItem>['children'];

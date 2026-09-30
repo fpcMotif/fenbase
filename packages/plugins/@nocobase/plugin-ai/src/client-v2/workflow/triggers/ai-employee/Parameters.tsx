@@ -69,7 +69,7 @@ function toParameter(values: ParameterFormValues): AIEmployeeTriggerParameter {
     name: values.name ?? '',
     type: values.type ?? 'string',
     description: values.description,
-    enumOptions: values.type === 'enum' ? values.enumOptions ?? [] : undefined,
+    enumOptions: values.type === 'enum' ? (values.enumOptions ?? []) : undefined,
     required: values.required,
   };
 }

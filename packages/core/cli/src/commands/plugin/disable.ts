@@ -28,7 +28,8 @@ export default class PluginDisable extends Command {
     }),
   };
 
-  static override description = 'Disable one or more plugins in the selected env (npm/git runs locally, Docker runs inside the saved app container)';
+  static override description =
+    'Disable one or more plugins in the selected env (npm/git runs locally, Docker runs inside the saved app container)';
 
   static override examples = [
     '<%= config.bin %> <%= command.id %> @nocobase/plugin-sample',
@@ -95,8 +96,11 @@ export default class PluginDisable extends Command {
       return;
     }
 
-    await this.config.runCommand('api:pm:disable', explicitEnvSelection
-      ? ['--await-response', '--filter-by-tk', packages.join(','), '--env', runtime.envName, '--yes']
-      : ['--await-response', '--filter-by-tk', packages.join(',')]);
+    await this.config.runCommand(
+      'api:pm:disable',
+      explicitEnvSelection
+        ? ['--await-response', '--filter-by-tk', packages.join(','), '--env', runtime.envName, '--yes']
+        : ['--await-response', '--filter-by-tk', packages.join(',')],
+    );
   }
 }

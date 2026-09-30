@@ -102,10 +102,16 @@ export default class LicenseEnv extends Command {
 
     const env = await withLicenseEnvVars(envVars as Record<string, string>, async () => await getEnvAsync());
     if (flags.json) {
-      this.log(JSON.stringify({
-        ok: true,
-        env,
-      }, null, 2));
+      this.log(
+        JSON.stringify(
+          {
+            ok: true,
+            env,
+          },
+          null,
+          2,
+        ),
+      );
       return;
     }
 

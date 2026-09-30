@@ -577,7 +577,7 @@ jobs:
         shell: bash
         env:
           WEBHOOK_URL: ${{ secrets.RELEASE_RESULT_FEISHU_WEBHOOK_URL }}
-          TITLE: "NocoBase 版本 ${{ needs.prepare-release.outputs.target_ref }} Release 结果通知"
+          TITLE: 'NocoBase 版本 ${{ needs.prepare-release.outputs.target_ref }} Release 结果通知'
           STATUS: ${{ steps.result.outputs.status }}
           CONTENT: "**版本：**${{ needs.prepare-release.outputs.target_ref }}\n**时间：**${{ env.CURRENT_DATE }}\n**状态：**${{ steps.result.outputs.status == 'success' && '✅ 构建成功' || '❌ 构建失败' }}"
           WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

@@ -13,7 +13,7 @@ const schema: ISchema = {
     title: 'Open', // title
   },
   // title: 'Open', // It's also possible here
-}
+};
 
 const Demo = () => {
   return <SchemaComponent schema={schema} />;
@@ -21,7 +21,7 @@ const Demo = () => {
 
 class DemoPlugin extends Plugin {
   async load() {
-    this.app.router.add('root', { path: '/', Component: Demo })
+    this.app.router.add('root', { path: '/', Component: Demo });
   }
 }
 

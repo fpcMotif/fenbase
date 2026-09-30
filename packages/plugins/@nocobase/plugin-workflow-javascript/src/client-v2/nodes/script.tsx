@@ -36,7 +36,7 @@ export default class ScriptInstruction extends Instruction {
   title = tExpr('JavaScript');
   group = 'extended';
   description = tExpr('Execute a piece of JavaScript in an isolated Node.js environment.');
-  icon = (<CodeOutlined />);
+  icon = <CodeOutlined />;
   testable = true;
   FieldsetLoader = () => import('./components/script').then((m) => ({ default: m.ScriptFieldset }));
 

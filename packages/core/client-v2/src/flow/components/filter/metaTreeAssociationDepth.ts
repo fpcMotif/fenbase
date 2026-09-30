@@ -15,10 +15,10 @@ function isAssociationMetaNode(node: MetaTreeNode) {
   const options = (node as any)?.options || {};
   return Boolean(
     options.target ||
-      options.targetCollection ||
-      options.foreignKey ||
-      options.through ||
-      ASSOCIATION_FIELD_INTERFACES.has(String(node?.interface || '')),
+    options.targetCollection ||
+    options.foreignKey ||
+    options.through ||
+    ASSOCIATION_FIELD_INTERFACES.has(String(node?.interface || '')),
   );
 }
 

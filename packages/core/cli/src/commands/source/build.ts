@@ -21,7 +21,8 @@ export default class SourceBuild extends Command {
       required: false,
     }),
   };
-  static override description = 'Run the legacy NocoBase build for the local source project (forwards to `npm run build` in the repo root)';
+  static override description =
+    'Run the legacy NocoBase build for the local source project (forwards to `npm run build` in the repo root)';
   static override examples = [
     '<%= config.bin %> <%= command.id %>',
     '<%= config.bin %> <%= command.id %> --no-dts',
@@ -30,7 +31,7 @@ export default class SourceBuild extends Command {
     '<%= config.bin %> <%= command.id %> @nocobase/acl @nocobase/actions',
   ];
   static override flags = {
-    'cwd': Flags.string({ description: 'Current working directory', char: 'c', required: false }),
+    cwd: Flags.string({ description: 'Current working directory', char: 'c', required: false }),
     'no-dts': Flags.boolean({ description: 'not generate dts' }),
     sourcemap: Flags.boolean({ description: 'generate sourcemap' }),
     verbose: Flags.boolean({ description: 'Show detailed command output', default: false }),

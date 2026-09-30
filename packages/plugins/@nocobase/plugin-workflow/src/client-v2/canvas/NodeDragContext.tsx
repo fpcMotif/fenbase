@@ -362,7 +362,7 @@ export function NodeDragContextProvider(props: {
 
   const getDropKey = useCallback((target: DropTarget) => {
     const upstreamId = target?.upstream?.id ?? 'root';
-    const branchIndex = target?.upstream ? target?.branchIndex ?? 'null' : 'root';
+    const branchIndex = target?.upstream ? (target?.branchIndex ?? 'null') : 'root';
     return `${upstreamId}:${branchIndex}`;
   }, []);
 
@@ -444,7 +444,7 @@ export function NodeDragContextProvider(props: {
         return { status: 'disabled', impactedSelf: [], impactedDependents: [] };
       }
       const upstream = target.upstream ?? null;
-      const branchIndex = upstream ? target.branchIndex ?? null : null;
+      const branchIndex = upstream ? (target.branchIndex ?? null) : null;
 
       const sameUpstream = (node.upstreamId ?? null) === (upstream?.id ?? null);
       const sameBranchIndex = (node.branchIndex ?? null) === (branchIndex ?? null);
@@ -503,7 +503,7 @@ export function NodeDragContextProvider(props: {
         return false;
       }
       const upstream = target?.upstream ?? null;
-      const branchIndex = upstream ? target?.branchIndex ?? null : null;
+      const branchIndex = upstream ? (target?.branchIndex ?? null) : null;
       try {
         await api.resource('flow_nodes').move({
           filterByTk: nodeId,
@@ -685,7 +685,7 @@ export function NodeDragContextProvider(props: {
     }
 
     const instruction = dragNode.type ? getInstruction(dragNode.type) : undefined;
-    const typeTitle = instruction ? compile(instruction.title) : dragNode.type ?? '';
+    const typeTitle = instruction ? compile(instruction.title) : (dragNode.type ?? '');
 
     const preview = document.createElement('div');
     preview.className = styles.dragPreviewClass;

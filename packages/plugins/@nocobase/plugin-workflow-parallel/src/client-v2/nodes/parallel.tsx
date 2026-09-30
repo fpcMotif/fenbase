@@ -19,7 +19,7 @@ export default class ParallelInstruction extends Instruction {
   title = tExpr('Parallel branch');
   group = 'control';
   description = tExpr('Run multiple branch processes in parallel.');
-  icon = (<ApartmentOutlined />);
+  icon = <ApartmentOutlined />;
   branching = true;
 
   createDefaultConfig() {

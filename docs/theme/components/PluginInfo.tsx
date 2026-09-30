@@ -18,18 +18,18 @@ export type PluginInfoFrontmatter = {
 
 const trStyle: React.CSSProperties = {
   backgroundColor: 'transparent',
-}
+};
 
 const tdStyle: React.CSSProperties = {
   borderColor: 'var(--rp-c-divider-light)',
-  padding: "4px 8px",
+  padding: '4px 8px',
   // fontWeight: 500,
 };
 
 const firstTdStyle: React.CSSProperties = {
   ...tdStyle,
   backgroundColor: 'var(--rp-c-bg-soft)',
-  width: "200px",
+  width: '200px',
 };
 
 export function PluginInfo() {
@@ -42,17 +42,23 @@ export function PluginInfo() {
   return (
     <>
       <p>{frontmatter.description}</p>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <tbody>
           <tr style={trStyle}>
             <td style={firstTdStyle}>Package name</td>
-            <td style={tdStyle}><code>{frontmatter.packageName}</code></td>
+            <td style={tdStyle}>
+              <code>{frontmatter.packageName}</code>
+            </td>
           </tr>
           {frontmatter.supportedVersions && (
             <tr style={trStyle}>
               <td style={firstTdStyle}>Supported versions</td>
               <td style={tdStyle}>
-                {frontmatter.supportedVersions.map(v => <code style={{ marginRight: 4 }} key={v}>{v}</code>)}
+                {frontmatter.supportedVersions.map((v) => (
+                  <code style={{ marginRight: 4 }} key={v}>
+                    {v}
+                  </code>
+                ))}
               </td>
             </tr>
           )}
@@ -61,7 +67,12 @@ export function PluginInfo() {
             <td style={tdStyle}>
               {frontmatter.builtIn ? <code>Yes</code> : <code>No</code>}
               {!frontmatter.builtIn && (
-                <Link target="_blank" style={{ marginLeft: 4, fontSize: "14px" }} className="rp-link" href={transformHref(`/get-started/install-upgrade-plugins`, lang)}>
+                <Link
+                  target="_blank"
+                  style={{ marginLeft: 4, fontSize: '14px' }}
+                  className="rp-link"
+                  href={transformHref(`/get-started/install-upgrade-plugins`, lang)}
+                >
                   How to install plugins?
                 </Link>
               )}
@@ -69,9 +80,7 @@ export function PluginInfo() {
           </tr>
           <tr style={trStyle}>
             <td style={firstTdStyle}>Default enabled</td>
-            <td style={tdStyle}>
-              {frontmatter.defaultEnabled ? <code>Yes</code> : <code>No</code>}
-            </td>
+            <td style={tdStyle}>{frontmatter.defaultEnabled ? <code>Yes</code> : <code>No</code>}</td>
           </tr>
           {/* {frontmatter.isFree && (
             <tr style={trStyle}>
@@ -89,9 +98,12 @@ export function PluginInfo() {
             <tr style={trStyle}>
               <td style={firstTdStyle}>Edition</td>
               <td style={tdStyle}>
-                <div style={{ display: "inline-flex", gap: "2px" }}>
+                <div style={{ display: 'inline-flex', gap: '2px' }}>
                   <Badge type={EditionLevelsTypes[frontmatter.editionLevel as number] as 'tip'}>
-                    {lang === 'cn' ? EditionLevels[frontmatter.editionLevel] : EditionLevelsEN[frontmatter.editionLevel]}+
+                    {lang === 'cn'
+                      ? EditionLevels[frontmatter.editionLevel]
+                      : EditionLevelsEN[frontmatter.editionLevel]}
+                    +
                   </Badge>
                 </div>
               </td>

@@ -379,8 +379,7 @@ export const kanbanURL = {
                                                                                               '1.3.0-alpha',
                                                                                             properties: {
                                                                                               cruqx5ulnow: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-acl-action-props': {
@@ -407,8 +406,7 @@ export const kanbanURL = {
                                                                                                   '1.3.0-alpha',
                                                                                                 properties: {
                                                                                                   y0q5ei7mma2: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-component':
@@ -419,8 +417,7 @@ export const kanbanURL = {
                                                                                                       '1.3.0-alpha',
                                                                                                     properties: {
                                                                                                       grid: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
@@ -431,8 +428,7 @@ export const kanbanURL = {
                                                                                                           '1.3.0-alpha',
                                                                                                         properties: {
                                                                                                           rjbvqpp7xmu: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -444,8 +440,7 @@ export const kanbanURL = {
                                                                                                               {
                                                                                                                 cxiykvzwfv1:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -457,8 +452,7 @@ export const kanbanURL = {
                                                                                                                       {
                                                                                                                         select:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'string',
@@ -484,34 +478,29 @@ export const kanbanURL = {
                                                                                                                               '1.3.0-alpha',
                                                                                                                             'x-uid':
                                                                                                                               'eo2xh4adfaz',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'walnc8ivgzp',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               '3san45vkk32',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'opiixrhoo0z',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                       '5j12oi9pvf3': {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-initializer':
@@ -527,8 +516,7 @@ export const kanbanURL = {
                                                                                                           '1.3.0-alpha',
                                                                                                         properties: {
                                                                                                           m9e7qxjys7o: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             title:
@@ -559,15 +547,13 @@ export const kanbanURL = {
                                                                                                               '1.3.0-alpha',
                                                                                                             'x-uid':
                                                                                                               '5sc8g3215j4',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           '2v1zlgnh0lp',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 2,
                                                                                                       },
                                                                                                     },

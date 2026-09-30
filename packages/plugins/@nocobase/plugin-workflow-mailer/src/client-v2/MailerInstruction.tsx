@@ -20,6 +20,6 @@ export default class MailerInstruction extends Instruction {
   description = tExpr(
     'Send email. You can use the variables in the upstream nodes as receivers, subject and content of the email.',
   );
-  icon = (<MailOutlined />);
+  icon = <MailOutlined />;
   FieldsetLoader = () => import('./components/MailerFieldset').then((module) => ({ default: module.MailerFieldset }));
 }

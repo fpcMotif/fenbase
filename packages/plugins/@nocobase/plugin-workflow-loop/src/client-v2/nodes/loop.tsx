@@ -190,7 +190,7 @@ export default class LoopInstruction extends Instruction {
   description = tExpr(
     'By using a loop node, you can perform the same operation on multiple sets of data. The source of these sets can be either multiple records from a query node or multiple associated records of a single record. Loop node can also be used for iterating a certain number of times or for looping through each character in a string. However, excessive looping may cause performance issues, so use with caution.',
   );
-  icon = (<RollbackOutlined />);
+  icon = <RollbackOutlined />;
   branching = true;
 
   FieldsetLoader = () => import('./components/loop').then((module) => ({ default: module.LoopFieldset }));

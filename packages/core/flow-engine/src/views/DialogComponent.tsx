@@ -48,7 +48,7 @@ const DialogComponent = forwardRef<unknown, DialogComponentProps>(
       ...config,
       title: header?.title || config.title,
       extra: header?.extra,
-      footer: footer !== undefined ? footer : config.footer ?? null,
+      footer: footer !== undefined ? footer : (config.footer ?? null),
     };
 
     const container = React.useMemo(() => {

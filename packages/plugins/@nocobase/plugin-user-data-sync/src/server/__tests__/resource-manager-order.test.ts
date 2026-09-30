@@ -135,9 +135,9 @@ describe('user-data-resource-manager record order', () => {
             .filter((record): record is StoredOriginRecord => {
               return Boolean(
                 record &&
-                  record.sourceName === filter.sourceName &&
-                  record.dataType === filter.dataType &&
-                  filter.sourceUk.$in.includes(record.sourceUk),
+                record.sourceName === filter.sourceName &&
+                record.dataType === filter.dataType &&
+                filter.sourceUk.$in.includes(record.sourceUk),
               );
             });
         },

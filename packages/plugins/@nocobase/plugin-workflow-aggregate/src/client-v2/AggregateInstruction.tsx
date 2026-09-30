@@ -37,7 +37,7 @@ export default class AggregateInstruction extends Instruction {
   description = t(
     'Counting, summing, finding maximum, minimum, and average values for multiple records of a collection or associated data of a record.',
   );
-  icon = (<BarChartOutlined />);
+  icon = <BarChartOutlined />;
 
   FieldsetLoader = () =>
     import('./components/AggregateFieldset').then((module) => ({ default: module.AggregateFieldset }));

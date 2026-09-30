@@ -313,7 +313,7 @@ const VariableInputComponent: React.FC<VariableInputProps> = ({
 
   const inputProps = useMemo(() => {
     const baseProps = {
-      value: ValueComponent === Input ? innerValue ?? '' : innerValue,
+      value: ValueComponent === Input ? (innerValue ?? '') : innerValue,
       onChange: handleInputChange,
       disabled,
     };

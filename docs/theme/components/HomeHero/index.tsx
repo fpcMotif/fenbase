@@ -20,11 +20,7 @@ interface HomeHeroProps {
   image?: React.ReactNode;
 }
 
-function HomeHero({
-  beforeHeroActions,
-  afterHeroActions,
-  image,
-}: HomeHeroProps) {
+function HomeHero({ beforeHeroActions, afterHeroActions, image }: HomeHeroProps) {
   const { frontmatter } = useFrontmatter();
   const hero = frontmatter?.hero || DEFAULT_HERO;
   const hasImage = hero.image !== undefined || image !== undefined;
@@ -32,7 +28,7 @@ function HomeHero({
     ? hero.text
         .toString()
         .split(/\n/g)
-        .filter(text => text !== '')
+        .filter((text) => text !== '')
     : [];
   const imageSrc =
     typeof hero.image?.src === 'string'
@@ -40,9 +36,7 @@ function HomeHero({
       : hero.image?.src || { light: '', dark: '' };
 
   return (
-    <div
-      className={clsx('rp-home-hero', { 'rp-home-hero--no-image': !hasImage })}
-    >
+    <div className={clsx('rp-home-hero', { 'rp-home-hero--no-image': !hasImage })}>
       <div className="rp-home-hero__container">
         {hero.badge &&
           (typeof hero.badge === 'string' ? (
@@ -56,30 +50,20 @@ function HomeHero({
           ))}
         <div className="rp-home-hero__content">
           <div className="rp-home-hero__title">
-            <span
-              className="rp-home-hero__title-brand"
-              {...renderHtmlOrText(hero.name)}
-            ></span>
+            <span className="rp-home-hero__title-brand" {...renderHtmlOrText(hero.name)}></span>
           </div>
 
           {multiHeroText.length !== 0 &&
-            multiHeroText.map(heroText => (
-              <div
-                key={heroText}
-                className="rp-home-hero__subtitle"
-                {...renderHtmlOrText(heroText)}
-              ></div>
+            multiHeroText.map((heroText) => (
+              <div key={heroText} className="rp-home-hero__subtitle" {...renderHtmlOrText(heroText)}></div>
             ))}
         </div>
-        <p
-          className="rp-home-hero__tagline"
-          {...renderHtmlOrText(hero.tagline)}
-        ></p>
+        <p className="rp-home-hero__tagline" {...renderHtmlOrText(hero.tagline)}></p>
 
         <>
           {beforeHeroActions}
           <div className="rp-home-hero__actions">
-            {hero.actions?.map(action => {
+            {hero.actions?.map((action) => {
               return (
                 <Button
                   type="a"
@@ -123,9 +107,7 @@ function HomeHero({
   );
 }
 
-function normalizeSrcsetAndSizes(
-  field: undefined | string | string[],
-): string | undefined {
+function normalizeSrcsetAndSizes(field: undefined | string | string[]): string | undefined {
   const r = (Array.isArray(field) ? field : [field]).filter(Boolean).join(', ');
   return r || undefined;
 }

@@ -31,13 +31,12 @@ vi.mock('antd', async (importOriginal) => {
     }) => (
       <div>
         {children}
-        {menu?.items?.map(
-          (group) =>
-            group.children?.map((item) => (
-              <button key={String(item.key)} type="button" onClick={() => menu.onClick?.({ key: item.key ?? '' })}>
-                {item.label}
-              </button>
-            )),
+        {menu?.items?.map((group) =>
+          group.children?.map((item) => (
+            <button key={String(item.key)} type="button" onClick={() => menu.onClick?.({ key: item.key ?? '' })}>
+              {item.label}
+            </button>
+          )),
         )}
       </div>
     ),

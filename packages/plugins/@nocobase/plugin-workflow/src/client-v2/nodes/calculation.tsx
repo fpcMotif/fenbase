@@ -35,7 +35,7 @@ export default class extends Instruction {
   description = t(
     'Calculate an expression based on a calculation engine and obtain a value as the result. Variables in the upstream nodes can be used in the expression.',
   );
-  icon = (<CalculatorOutlined />);
+  icon = <CalculatorOutlined />;
   testable = true;
 
   FieldsetLoader = () => import('./components/calculation').then((m) => ({ default: m.CalculationFieldset }));

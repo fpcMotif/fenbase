@@ -1,41 +1,70 @@
-/**
- * Convex Schema definition for migrated NocoBase collections.
- */
-
-export interface FieldDefinition {
-  name: string;
-  type: 'string' | 'number' | 'boolean' | 'json';
-  required?: boolean;
-}
-
-export interface CollectionDefinition {
-  name: string;
-  fields: Record<string, FieldDefinition>;
-}
-
-export function defineTable(definition: CollectionDefinition): CollectionDefinition {
-  return definition;
-}
-
-export function defineSchema<T extends Record<string, CollectionDefinition>>(tables: T): { tables: T } {
-  return { tables };
-}
+import { defineSchema, defineTable } from 'convex/server';
+import { v } from 'convex/values';
 
 export default defineSchema({
+  demoCollections: defineTable({
+    ownerId: v.string(),
+    name: v.string(),
+    title: v.string(),
+    fields: v.array(
+      v.object({
+        name: v.string(),
+        type: v.union(v.literal('text'), v.literal('number'), v.literal('boolean')),
+        required: v.optional(v.boolean()),
+      }),
+    ),
+  })
+    .index('by_owner', ['ownerId'])
+    .index('by_owner_name', ['ownerId', 'name']),
+
+  demoRecords: defineTable({
+    ownerId: v.string(),
+    collectionId: v.id('demoCollections'),
+    values: v.record(v.string(), v.union(v.string(), v.number(), v.boolean())),
+    updatedAt: v.number(),
+  })
+    .index('by_owner', ['ownerId'])
+    .index('by_collection', ['collectionId'])
+    .index('by_owner_and_collection', ['ownerId', 'collectionId']),
+
+  demoWorkflows: defineTable({
+    ownerId: v.string(),
+    collectionId: v.id('demoCollections'),
+    name: v.string(),
+    field: v.string(),
+    value: v.union(v.string(), v.number(), v.boolean()),
+  })
+    .index('by_owner', ['ownerId'])
+    .index('by_collection', ['collectionId'])
+    .index('by_owner_and_collection', ['ownerId', 'collectionId']),
+
+  demoWorkflowRuns: defineTable({
+    ownerId: v.string(),
+    workflowId: v.id('demoWorkflows'),
+    status: v.literal('completed'),
+    updatedCount: v.number(),
+    completedAt: v.number(),
+  })
+    .index('by_owner', ['ownerId'])
+    .index('by_workflow', ['workflowId']),
+
   users: defineTable({
-    name: 'users',
-    fields: {
-      email: { name: 'email', type: 'string', required: true },
-      name: { name: 'name', type: 'string' },
-      role: { name: 'role', type: 'string' },
-    },
-  }),
+    email: v.string(),
+    name: v.optional(v.string()),
+    role: v.optional(v.string()),
+  }).index('by_email', ['email']),
+
+  sessions: defineTable({
+    userId: v.string(),
+    token: v.string(),
+    expiresAt: v.number(),
+    ipAddress: v.optional(v.string()),
+    userAgent: v.optional(v.string()),
+  }).index('by_token', ['token']),
+
   collections: defineTable({
-    name: 'collections',
-    fields: {
-      name: { name: 'name', type: 'string', required: true },
-      title: { name: 'title', type: 'string' },
-      options: { name: 'options', type: 'json' },
-    },
-  }),
+    name: v.string(),
+    title: v.optional(v.string()),
+    options: v.optional(v.any()),
+  }).index('by_name', ['name']),
 });

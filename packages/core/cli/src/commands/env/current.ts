@@ -14,9 +14,7 @@ import { resolveDefaultConfigScope } from '../../lib/cli-home.js';
 export default class EnvCurrent extends Command {
   static override summary = 'Show the current environment name';
 
-  static override examples = [
-    '<%= config.bin %> <%= command.id %>',
-  ];
+  static override examples = ['<%= config.bin %> <%= command.id %>'];
 
   async run(): Promise<void> {
     await this.parse(EnvCurrent);

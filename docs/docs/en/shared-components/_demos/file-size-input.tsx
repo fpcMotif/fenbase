@@ -7,15 +7,8 @@ export default function FileSizeInputDemo() {
 
   return (
     <Space direction="vertical">
-      <FileSizeInput
-        value={value}
-        onChange={setValue}
-        min={1}
-        max={1024 * 1024 * 1024}
-      />
-      <Typography.Text type="secondary">
-        Saved value: {value ?? 'undefined'} bytes
-      </Typography.Text>
+      <FileSizeInput value={value} onChange={setValue} min={1} max={1024 * 1024 * 1024} />
+      <Typography.Text type="secondary">Saved value: {value ?? 'undefined'} bytes</Typography.Text>
     </Space>
   );
 }

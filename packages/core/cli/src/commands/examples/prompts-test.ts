@@ -8,21 +8,10 @@
  */
 
 import { Args, Command, Flags } from '@oclif/core';
-import {
-  type PromptInitialValues,
-  type PromptsCatalog,
-  runPromptCatalog,
-} from '../../lib/prompt-catalog.ts';
-import {
-  applyCliLocale,
-  CLI_LOCALE_FLAG_DESCRIPTION,
-  CLI_LOCALE_FLAG_OPTIONS,
-} from '../../lib/cli-locale.ts';
+import { type PromptInitialValues, type PromptsCatalog, runPromptCatalog } from '../../lib/prompt-catalog.ts';
+import { applyCliLocale, CLI_LOCALE_FLAG_DESCRIPTION, CLI_LOCALE_FLAG_OPTIONS } from '../../lib/cli-locale.ts';
 import { printInfo } from '../../lib/ui.ts';
-import {
-  type RunPromptCatalogWebUIOptionsWithoutSource,
-  runPromptCatalogWebUI,
-} from '../../lib/prompt-web-ui.ts';
+import { type RunPromptCatalogWebUIOptionsWithoutSource, runPromptCatalogWebUI } from '../../lib/prompt-web-ui.ts';
 
 export default class PromptsTest extends Command {
   static override hidden = true;

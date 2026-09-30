@@ -716,8 +716,7 @@ export const afterClosingThePopupItShouldRemainAtThePositionInTheSubpage = {
                                                                                               '1.3.27-beta',
                                                                                             properties: {
                                                                                               jrqsoakbtfr: {
-                                                                                                _isJSONSchemaObject:
-                                                                                                  true,
+                                                                                                _isJSONSchemaObject: true,
                                                                                                 version: '2.0',
                                                                                                 type: 'void',
                                                                                                 'x-component':
@@ -726,8 +725,7 @@ export const afterClosingThePopupItShouldRemainAtThePositionInTheSubpage = {
                                                                                                   '1.3.27-beta',
                                                                                                 properties: {
                                                                                                   a74ravc3mv3: {
-                                                                                                    _isJSONSchemaObject:
-                                                                                                      true,
+                                                                                                    _isJSONSchemaObject: true,
                                                                                                     version: '2.0',
                                                                                                     type: 'void',
                                                                                                     'x-acl-action':
@@ -742,8 +740,7 @@ export const afterClosingThePopupItShouldRemainAtThePositionInTheSubpage = {
                                                                                                           'main',
                                                                                                         collection:
                                                                                                           'users',
-                                                                                                        readPretty:
-                                                                                                          true,
+                                                                                                        readPretty: true,
                                                                                                         action: 'get',
                                                                                                       },
                                                                                                     'x-toolbar':
@@ -756,22 +753,19 @@ export const afterClosingThePopupItShouldRemainAtThePositionInTheSubpage = {
                                                                                                       '1.3.27-beta',
                                                                                                     properties: {
                                                                                                       lw2k5erjj1c: {
-                                                                                                        _isJSONSchemaObject:
-                                                                                                          true,
+                                                                                                        _isJSONSchemaObject: true,
                                                                                                         version: '2.0',
                                                                                                         type: 'void',
                                                                                                         'x-component':
                                                                                                           'Details',
-                                                                                                        'x-read-pretty':
-                                                                                                          true,
+                                                                                                        'x-read-pretty': true,
                                                                                                         'x-use-component-props':
                                                                                                           'useDetailsProps',
                                                                                                         'x-app-version':
                                                                                                           '1.3.27-beta',
                                                                                                         properties: {
                                                                                                           gnr2t0yazam: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -789,13 +783,11 @@ export const afterClosingThePopupItShouldRemainAtThePositionInTheSubpage = {
                                                                                                               '1.3.27-beta',
                                                                                                             'x-uid':
                                                                                                               '4qcklj4ky5u',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 1,
                                                                                                           },
                                                                                                           grid: {
-                                                                                                            _isJSONSchemaObject:
-                                                                                                              true,
+                                                                                                            _isJSONSchemaObject: true,
                                                                                                             version:
                                                                                                               '2.0',
                                                                                                             type: 'void',
@@ -809,8 +801,7 @@ export const afterClosingThePopupItShouldRemainAtThePositionInTheSubpage = {
                                                                                                               {
                                                                                                                 yt2cmc7l3lw:
                                                                                                                   {
-                                                                                                                    _isJSONSchemaObject:
-                                                                                                                      true,
+                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                     version:
                                                                                                                       '2.0',
                                                                                                                     type: 'void',
@@ -822,8 +813,7 @@ export const afterClosingThePopupItShouldRemainAtThePositionInTheSubpage = {
                                                                                                                       {
                                                                                                                         i8tl6rdr45u:
                                                                                                                           {
-                                                                                                                            _isJSONSchemaObject:
-                                                                                                                              true,
+                                                                                                                            _isJSONSchemaObject: true,
                                                                                                                             version:
                                                                                                                               '2.0',
                                                                                                                             type: 'void',
@@ -835,8 +825,7 @@ export const afterClosingThePopupItShouldRemainAtThePositionInTheSubpage = {
                                                                                                                               {
                                                                                                                                 nickname:
                                                                                                                                   {
-                                                                                                                                    _isJSONSchemaObject:
-                                                                                                                                      true,
+                                                                                                                                    _isJSONSchemaObject: true,
                                                                                                                                     version:
                                                                                                                                       '2.0',
                                                                                                                                     type: 'string',
@@ -856,36 +845,31 @@ export const afterClosingThePopupItShouldRemainAtThePositionInTheSubpage = {
                                                                                                                                       '1.3.27-beta',
                                                                                                                                     'x-uid':
                                                                                                                                       'f6cu17st3jk',
-                                                                                                                                    'x-async':
-                                                                                                                                      false,
+                                                                                                                                    'x-async': false,
                                                                                                                                     'x-index': 1,
                                                                                                                                   },
                                                                                                                               },
                                                                                                                             'x-uid':
                                                                                                                               'x8mzhjyuuq2',
-                                                                                                                            'x-async':
-                                                                                                                              false,
+                                                                                                                            'x-async': false,
                                                                                                                             'x-index': 1,
                                                                                                                           },
                                                                                                                       },
                                                                                                                     'x-uid':
                                                                                                                       'r1hprxhv53l',
-                                                                                                                    'x-async':
-                                                                                                                      false,
+                                                                                                                    'x-async': false,
                                                                                                                     'x-index': 1,
                                                                                                                   },
                                                                                                               },
                                                                                                             'x-uid':
                                                                                                               'xao1ij9g15r',
-                                                                                                            'x-async':
-                                                                                                              false,
+                                                                                                            'x-async': false,
                                                                                                             'x-index': 2,
                                                                                                           },
                                                                                                         },
                                                                                                         'x-uid':
                                                                                                           'y6wlx938m5w',
-                                                                                                        'x-async':
-                                                                                                          false,
+                                                                                                        'x-async': false,
                                                                                                         'x-index': 1,
                                                                                                       },
                                                                                                     },

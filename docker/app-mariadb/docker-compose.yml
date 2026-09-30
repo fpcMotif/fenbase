@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 networks:
   nocobase:
     driver: bridge
@@ -22,7 +22,7 @@ services:
     volumes:
       - ./storage:/app/nocobase/storage
     ports:
-      - "13000:80"
+      - '13000:80'
     init: true
   mariadb:
     image: mariadb:latest

@@ -1,9 +1,4 @@
-import type {
-  NavItem,
-  NavItemWithChildren,
-  NavItemWithLink,
-  NavItemWithLinkAndChildren,
-} from '@rspress/core';
+import type { NavItem, NavItemWithChildren, NavItemWithLink, NavItemWithLinkAndChildren } from '@rspress/core';
 import { matchNavbar, useLocation } from '@rspress/core/runtime';
 import { IconArrowDown, Link, SvgWrapper, Tag } from '@rspress/core/theme';
 import clsx from 'clsx';
@@ -69,9 +64,7 @@ export function NavScreenMenuItemRaw({
   );
 }
 
-export function NavScreenMenuItemWithLink({
-  menuItem,
-}: NavScreenMenuItemWithLinkProps) {
+export function NavScreenMenuItemWithLink({ menuItem }: NavScreenMenuItemWithLinkProps) {
   const { pathname } = useLocation();
   const isActive = useMemo(() => {
     return matchNavbar(menuItem, pathname);
@@ -97,9 +90,7 @@ interface NavScreenMenuItemWithChildrenProps {
   menuItem: NavItemWithChildren | NavItemWithLinkAndChildren;
 }
 
-export function NavScreenMenuItemWithChildren({
-  menuItem,
-}: NavScreenMenuItemWithChildrenProps) {
+export function NavScreenMenuItemWithChildren({ menuItem }: NavScreenMenuItemWithChildrenProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -127,7 +118,7 @@ export function NavScreenMenuItemWithChildren({
         }}
       >
         <div className="rp-nav-screen-menu-item__group-inner">
-          {menuItem.items.map(item => (
+          {menuItem.items.map((item) => (
             <NavScreenMenuItem key={item.text} menuItem={item} />
           ))}
         </div>
@@ -141,11 +132,7 @@ interface NavScreenMenuItemProps {
 }
 
 export function NavScreenMenuItem({ menuItem }: NavScreenMenuItemProps) {
-  if (
-    'items' in menuItem &&
-    Array.isArray(menuItem.items) &&
-    menuItem.items.length > 0
-  ) {
+  if ('items' in menuItem && Array.isArray(menuItem.items) && menuItem.items.length > 0) {
     return <NavScreenMenuItemWithChildren menuItem={menuItem} />;
   }
 

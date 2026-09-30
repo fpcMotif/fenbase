@@ -25,15 +25,9 @@ test('build script copies locale JSON files into dist/locale', async () => {
     encoding: 'utf8',
   });
 
-  expect(
-    build.status,
-    build.stderr || build.stdout || 'expected build script to exit successfully',
-  ).toBe(0);
+  expect(build.status, build.stderr || build.stdout || 'expected build script to exit successfully').toBe(0);
 
-  const [sourceEntries, distEntries] = await Promise.all([
-    fsp.readdir(sourceLocaleDir),
-    fsp.readdir(distLocaleDir),
-  ]);
+  const [sourceEntries, distEntries] = await Promise.all([fsp.readdir(sourceLocaleDir), fsp.readdir(distLocaleDir)]);
 
   const sourceJsonFiles = sourceEntries.filter((name) => name.endsWith('.json')).sort();
   const distJsonFiles = distEntries.filter((name) => name.endsWith('.json')).sort();
