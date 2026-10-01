@@ -1,0 +1,3612 @@
+{
+  "docs/theme/components/NavHamburger/useNavScreen.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "docs/theme/components/PluginList.tsx": {
+    "eslint(no-unused-vars)": 6
+  },
+  "packages/core/acl/src/acl.ts": {
+    "eslint(no-unused-expressions)": 4
+  },
+  "packages/core/cache/src/cache-manager.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/cli-v1/src/commands/start.js": {
+    "eslint(no-useless-escape)": 1
+  },
+  "packages/core/cli-v1/src/util.js": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client-v2/src/RouterManager.tsx": {
+    "react(no-this-in-sfc)": 3
+  },
+  "packages/core/client-v2/src/acl/ACLProvider.tsx": {
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/ai/tools-manager/hooks/provider.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client-v2/src/components/Icon.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/core/client-v2/src/components/KeepAlive.tsx": {
+    "react(refs)": 22
+  },
+  "packages/core/client-v2/src/components/MainComponent.tsx": {
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client-v2/src/components/RouterBridge.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client-v2/src/components/form/EnvVariableInput.tsx": {
+    "jsx-a11y(no-autofocus)": 1
+  },
+  "packages/core/client-v2/src/components/form/JsonTextArea.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/components/form/ScanInput/__tests__/useCodeScanner.test.tsx": {
+    "react(no-this-in-sfc)": 7
+  },
+  "packages/core/client-v2/src/components/form/ScanInput/useCodeScanner.ts": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/components/form/TypedVariableInput.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(preserve-manual-memoization)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/components/form/VariableJsonTextArea.tsx": {
+    "react(preserve-manual-memoization)": 4
+  },
+  "packages/core/client-v2/src/components/form/filter/DateFilterDynamicComponent.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(interactive-supports-focus)": 2,
+    "jsx-a11y(prefer-tag-over-role)": 2
+  },
+  "packages/core/client-v2/src/components/form/filter/FilterValueInput.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/core/client-v2/src/components/form/filter/useFilterActionProps.ts": {
+    "react(refs)": 3
+  },
+  "packages/core/client-v2/src/components/form/table/Table.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/core/client-v2/src/data-source/__tests__/ExtendCollectionsProvider.test.tsx": {
+    "react(globals)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow-compat/ColorPicker.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 2
+  },
+  "packages/core/client-v2/src/flow-compat/FieldValidation.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow-compat/IconPicker.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(static-components)": 1
+  },
+  "packages/core/client-v2/src/flow-compat/Popover.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/__tests__/FlowRoute.test.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/actions/__tests__/formAssignRules.legacyMigration.test.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client-v2/src/flow/actions/filterFormDefaultValues.tsx": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client-v2/src/flow/actions/formAssignRules.tsx": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client-v2/src/flow/actions/showMessage.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client-v2/src/flow/admin-shell/admin-layout/AdminLayoutCompat.tsx": {
+    "react(refs)": 1
+  },
+  "packages/core/client-v2/src/flow/admin-shell/admin-layout/AdminLayoutComponent.tsx": {
+    "jsx-a11y(alt-text)": 1,
+    "react(preserve-manual-memoization)": 2,
+    "react(refs)": 3,
+    "react(set-state-in-effect)": 1,
+    "react(static-components)": 1
+  },
+  "packages/core/client-v2/src/flow/admin-shell/admin-layout/AdminLayoutEntryGuard.test.tsx": {
+    "react(globals)": 2
+  },
+  "packages/core/client-v2/src/flow/admin-shell/admin-layout/AdminLayoutMenuUtils.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "jsx-a11y(role-supports-aria-props)": 1
+  },
+  "packages/core/client-v2/src/flow/admin-shell/admin-layout/AdminLayoutModel.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client-v2/src/flow/admin-shell/admin-layout/AppListRender.tsx": {
+    "jsx-a11y(control-has-associated-label)": 1
+  },
+  "packages/core/client-v2/src/flow/admin-shell/admin-layout/PinnedPluginListLite.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/admin-shell/admin-layout/TopbarActionsBar.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/admin-shell/admin-layout/useApplications.tsx": {
+    "react(set-state-in-effect)": 2
+  },
+  "packages/core/client-v2/src/flow/admin-shell/useLayoutRoutePage.ts": {
+    "react(refs)": 2
+  },
+  "packages/core/client-v2/src/flow/common/Markdown/Edit.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/common/Markdown/style.ts": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client-v2/src/flow/components/BlockItemCard.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client-v2/src/flow/components/ExpiresRadio/index.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(set-state-in-effect)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client-v2/src/flow/components/FieldAssignRulesEditor.tsx": {
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/core/client-v2/src/flow/components/FieldAssignValueInput.tsx": {
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/components/JsonEditor.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/components/TextAreaWithContextSelector.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/components/code-editor/index.tsx": {
+    "react(refs)": 4
+  },
+  "packages/core/client-v2/src/flow/components/code-editor/panels/LogsPanel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-noninteractive-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/components/code-editor/panels/RightExtra.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client-v2/src/flow/components/filter/__tests__/LinkageFilterItem.metaTree.test.ts": {
+    "eslint(no-unsafe-optional-chaining)": 3
+  },
+  "packages/core/client-v2/src/flow/components/filter/__tests__/LinkageFilterItem.test.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/core/client-v2/src/flow/components/filter/__tests__/VariableFilterItem.test.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client-v2/src/flow/components/placeholders/BlockPlaceholder.tsx": {
+    "react(refs)": 1
+  },
+  "packages/core/client-v2/src/flow/flows/editMarkdownFlow.tsx": {
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client-v2/src/flow/internal/components/Markdown/util.ts": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/models/base/__tests__/BlockGridModel.selectSceneAddBlock.test.ts": {
+    "eslint(no-unsafe-optional-chaining)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/assign-form/AssignFormItemModel.tsx": {
+    "react(no-this-in-sfc)": 14
+  },
+  "packages/core/client-v2/src/flow/models/blocks/assign-form/assignFieldValuesFlow.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/details/utils.ts": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client-v2/src/flow/models/blocks/filter-form/FieldModelSelect.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client-v2/src/flow/models/blocks/filter-form/FieldOperatorSelect.tsx": {
+    "react-hooks(exhaustive-deps)": 9
+  },
+  "packages/core/client-v2/src/flow/models/blocks/filter-form/SourceCascader.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/filter-form/fields/FieldComponentProps.tsx": {
+    "react-hooks(exhaustive-deps)": 8
+  },
+  "packages/core/client-v2/src/flow/models/blocks/filter-form/fields/FilterFormCustomRecordSelectFieldModel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/filter-form/fields/date-time/components/DateFilterDynamicComponent.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(interactive-supports-focus)": 2,
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "jsx-a11y(role-has-required-aria-props)": 2
+  },
+  "packages/core/client-v2/src/flow/models/blocks/filter-form/fields/date-time/components/FilterDatePicker.tsx": {
+    "react-hooks(exhaustive-deps)": 5
+  },
+  "packages/core/client-v2/src/flow/models/blocks/filter-manager/flow-actions/connectFields.tsx": {
+    "oxc(only-used-in-recursion)": 1,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/form/FormBlockModel.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client-v2/src/flow/models/blocks/form/__tests__/FormBlockModel.test.tsx": {
+    "react(refs)": 2
+  },
+  "packages/core/client-v2/src/flow/models/blocks/form/__tests__/FormItemModel.defineChildren.test.ts": {
+    "eslint(no-unsafe-optional-chaining)": 2
+  },
+  "packages/core/client-v2/src/flow/models/blocks/js-block/JSBlock.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/table/JSColumnModel.tsx": {
+    "react(no-this-in-sfc)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/table/TableBlockModel.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(immutability)": 3,
+    "react(preserve-manual-memoization)": 3,
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/table/TableColumnModel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/table/__tests__/TableBlockModel.mobileSettingsButtons.test.tsx": {
+    "eslint(no-unsafe-optional-chaining)": 2
+  },
+  "packages/core/client-v2/src/flow/models/blocks/table/dragSort/dragSortHooks.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/core/client-v2/src/flow/models/blocks/table/utils.ts": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client-v2/src/flow/models/fields/AssociationFieldModel/CascadeSelectFieldModel.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/AssociationFieldModel/PopupSubTableFieldModel/PopupSubTableFieldModel.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(set-state-in-effect)": 3
+  },
+  "packages/core/client-v2/src/flow/models/fields/AssociationFieldModel/PopupSubTableFieldModel/actions/PopupSubTableEditActionModel.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/AssociationFieldModel/PopupSubTableFieldModel/blocks/PopupSubTableFormModel.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/AssociationFieldModel/RecordPickerFieldModel.tsx": {
+    "react(immutability)": 4
+  },
+  "packages/core/client-v2/src/flow/models/fields/AssociationFieldModel/RecordSelectFieldModel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(immutability)": 2,
+    "react(refs)": 2
+  },
+  "packages/core/client-v2/src/flow/models/fields/AssociationFieldModel/SubTableFieldModel/SubTableColumnModel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/AssociationFieldModel/SubTableFieldModel/SubTableField.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/core/client-v2/src/flow/models/fields/ClickableFieldModel.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/CollectionSelectorFieldModel.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/DateTimeFieldModel/__tests__/DateTimeNoTzFieldModel.dateLimit.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/DisplayAssociationField/DisplaySubTableFieldModel.tsx": {
+    "react(set-state-in-effect)": 2
+  },
+  "packages/core/client-v2/src/flow/models/fields/DisplayAssociationField/__tests__/DisplaySubTableFieldModel.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/DisplayColorFieldModel.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/DisplayEnumFieldModel.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/IconFieldModel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(static-components)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/InputFieldModel.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/JSEditableFieldModel.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client-v2/src/flow/models/fields/MarkdownItemModel.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/RichTextFieldModel/index.tsx": {
+    "react(purity)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/mobile-components/MobileDatePicker.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/core/client-v2/src/flow/models/fields/mobile-components/MobileLazySelect.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/mobile-components/MobileSelect.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/mobile-components/MobileTimePicker.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/models/fields/mobile-components/__tests__/MobileSelect.test.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client-v2/src/flow/models/topbar/TopbarActionModel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client-v2/src/flow/models/topbar/UserCenterTopbarActionModel.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client-v2/src/layout-manager/LayoutContentRoute.tsx": {
+    "react(preserve-manual-memoization)": 2
+  },
+  "packages/core/client-v2/src/nocobase-buildin-plugin/index.tsx": {
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/core/client-v2/src/settings-center/AdminSettingsLayout.tsx": {
+    "react(refs)": 2
+  },
+  "packages/core/client-v2/src/settings-center/plugin-manager/PluginCard.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/core/client-v2/src/settings-center/plugin-manager/index.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client-v2/src/theme/globalStyles.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client-v2/src/theme/index.tsx": {
+    "react(refs)": 1
+  },
+  "packages/core/client-v2/src/utils/types.ts": {
+    "typescript(no-wrapper-object-types)": 2
+  },
+  "packages/core/client/.dumi/theme/builtins/Previewer/index.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/.dumi/theme/slots/PreviewerActions.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/acl/ACLProvider.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/acl/Configuration/PermisionProvider.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/acl/Configuration/ScopeSelect.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/acl/Configuration/schemas/roles.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/acl/Configuration/schemas/scopes.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/acl/Configuration/schemas/useRoleResourceValues.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/api-client/hooks/useRequest.ts": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/application/CustomRouterContextProvider.tsx": {
+    "react(refs)": 2
+  },
+  "packages/core/client/src/application/RouterManager.tsx": {
+    "react(no-this-in-sfc)": 2
+  },
+  "packages/core/client/src/application/__tests__/RouterManager.test.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/application/components/RouterBridge.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/application/demos/demo2.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/application/schema-initializer/components/SchemaInitializerActionModal.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/application/schema-initializer/components/SchemaInitializerChildren.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/application/schema-initializer/components/SchemaInitializerItem.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/application/schema-initializer/components/SchemaInitializerItemSearchFields.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(purity)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client/src/application/schema-initializer/hooks/useGetSchemaInitializerMenuItems.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/application/schema-initializer/hooks/useSchemaInitializerRender.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/application/schema-settings/components/SchemaSettingsChildren.tsx": {
+    "react(refs)": 2,
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/application/schema-settings/components/SchemaSettingsIcon.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/application/utils/types.ts": {
+    "typescript(no-wrapper-object-types)": 2
+  },
+  "packages/core/client/src/block-configs/BlockConfigsProvider.tsx": {
+    "react(refs)": 1
+  },
+  "packages/core/client/src/block-provider/BlockProvider.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/block-provider/DetailsBlockProvider.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/block-provider/FormFieldProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/block-provider/TableBlockProvider.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 5
+  },
+  "packages/core/client/src/block-provider/TableFieldProvider.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/block-provider/TableSelectorProvider.tsx": {
+    "react(immutability)": 4
+  },
+  "packages/core/client/src/block-provider/hooks/index.ts": {
+    "react(immutability)": 19,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/block-provider/hooks/useBlockHeightProps.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/block-provider/hooks/useParsedFilter.ts": {
+    "react(refs)": 2
+  },
+  "packages/core/client/src/collection-manager/CollectionHistoryProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/collection-manager/Configuration/AddCollectionAction.tsx": {
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/collection-manager/Configuration/AddFieldAction.tsx": {
+    "eslint(no-unused-expressions)": 3,
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 5
+  },
+  "packages/core/client/src/collection-manager/Configuration/AddSubFieldAction.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/collection-manager/Configuration/DeleteCollectionAction.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/collection-manager/Configuration/EditCollectionAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/collection-manager/Configuration/EditFieldAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/collection-manager/Configuration/EditSubFieldAction.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/collection-manager/Configuration/OverridingCollectionField.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/collection-manager/Configuration/SetPrimaryKeyAction.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client/src/collection-manager/Configuration/ViewInheritedField.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/collection-manager/Configuration/components/FieldValidation.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/collection-manager/Configuration/components/index.tsx": {
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/core/client/src/collection-manager/Configuration/interfaces.tsx": {
+    "eslint(no-constant-binary-expression)": 1
+  },
+  "packages/core/client/src/collection-manager/ResourceActionProvider.tsx": {
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/collection-manager/action-hooks.ts": {
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 5
+  },
+  "packages/core/client/src/collection-manager/demos/demo3.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/collection-manager/hooks/useCollectionManager_deprecated.ts": {
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 18
+  },
+  "packages/core/client/src/collection-manager/interfaces/components/index.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2
+  },
+  "packages/core/client/src/collection-manager/templates/components/PresetFields.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/collection-manager/templates/components/PreviewFields.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 2,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/collection-manager/templates/components/PreviewTable.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 2,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/collection-manager/templates/components/sql-collection/FieldsConfigure.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/collection-manager/templates/components/sql-collection/SQLInput.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/common/SelectWithTitle.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/common/useNiceDropdownHeight.ts": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/data-source/collection-field/CollectionField.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 4,
+    "react(static-components)": 2,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/data-source/collection-record/CollectionRecordProvider.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/data-source/components/CollectionDeletedPlaceholder.tsx": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/data-source/data-block/DataBlockRequestProvider.tsx": {
+    "react(immutability)": 1,
+    "react(refs)": 13
+  },
+  "packages/core/client/src/data-source/data-block/DataBlockResourceProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/document-title/index.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/filter-provider/FilterProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/filter-provider/utils.ts": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client/src/formily/NocoBaseRecursionField.tsx": {
+    "react(immutability)": 2,
+    "react(refs)": 8
+  },
+  "packages/core/client/src/hoc/withDynamicSchemaProps.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/hoc/withSkeletonComponent.tsx": {
+    "react(refs)": 3
+  },
+  "packages/core/client/src/hooks/useParsedValue.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/hooks/useViewport.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/icon/Icon.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/modules/actions/expand-collapse/expendableActionSettings.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/modules/actions/link/customizeLinkActionSettings.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/modules/actions/link/useURLAndHTMLSchema.tsx": {
+    "react(refs)": 4,
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/modules/actions/submit/createSubmitActionSettings.tsx": {
+    "react(immutability)": 3,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/modules/blocks/BlockLinkageRuleProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/details-multi/hooks/useDetailsWithPaginationBlockParams.ts": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/details-multi/setDataLoadingModeSettingsItem.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/details-single/ReadPrettyFormItemInitializers.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/grid-card/SetTheCountOfColumnsDisplayedInARow.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/table-selector/tableSelectorBlockSettings.ts": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/table/TableActionColumnInitializers.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(immutability)": 6
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/table/TableColumnInitializers.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/table/hooks/useTableBlockDecoratorProps.ts": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/table/hooks/useTableBlockProps.tsx": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/modules/blocks/data-blocks/table/tableColumnSettings.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client/src/modules/blocks/filter-blocks/FilterCollectionField.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 3,
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/modules/blocks/other-blocks/divider/dividerSettings.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/modules/blocks/utils.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/modules/menu/FlowPageMenuItem.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/core/client/src/modules/menu/GroupItem.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/modules/menu/LinkMenuItem.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/modules/menu/PageMenuItem.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/core/client/src/modules/popup/OpenModeProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/plugin-manager/PinnedPluginListProvider.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/pm/PluginCard.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(anchor-is-valid)": 3,
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/pm/PluginDocument.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/pm/PluginForm/form/PluginUploadForm.tsx": {
+    "eslint(no-unreachable)": 1
+  },
+  "packages/core/client/src/pm/PluginManager.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/pm/PluginManagerLink.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/pm/PluginSetting.tsx": {
+    "react(immutability)": 1,
+    "react(refs)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/route-switch/antd/admin-layout/AdminLayoutComponentV1.tsx": {
+    "jsx-a11y(alt-text)": 1,
+    "react(preserve-manual-memoization)": 2,
+    "react(set-state-in-effect)": 1,
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/route-switch/antd/admin-layout/AdminLayoutMenuUtils.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "jsx-a11y(role-supports-aria-props)": 1
+  },
+  "packages/core/client/src/route-switch/antd/admin-layout/AdminLayoutModel.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client/src/route-switch/antd/admin-layout/KeepAlive.tsx": {
+    "react(refs)": 36
+  },
+  "packages/core/client/src/route-switch/antd/admin-layout/__tests__/AdminLayoutResponsiveOpenModeProvider.test.tsx": {
+    "react(static-components)": 3
+  },
+  "packages/core/client/src/route-switch/antd/admin-layout/menuItemSettings.tsx": {
+    "react(immutability)": 6
+  },
+  "packages/core/client/src/schema-component/antd/__builtins__/style.ts": {
+    "react-hooks(exhaustive-deps)": 8
+  },
+  "packages/core/client/src/schema-component/antd/action/Action.Designer.tsx": {
+    "react(immutability)": 12,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/action/Action.Modal.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client/src/schema-component/antd/action/Action.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(refs)": 2,
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 5
+  },
+  "packages/core/client/src/schema-component/antd/action/context.tsx": {
+    "react(immutability)": 2,
+    "react(refs)": 2
+  },
+  "packages/core/client/src/schema-component/antd/action/demos/demo2.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-component/antd/action/demos/demo5.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-component/antd/action/demos/new-demos/action-context.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-component/antd/action/hooks/useGetAfterSuccessVariablesOptions.ts": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/appends-tree-select/AppendsTreeSelect.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "react(set-state-in-effect)": 2,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-component/antd/association-field/AssociationFieldProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-field/AssociationSelect.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-field/Editable.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-field/FileManager.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-field/InternalNester.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/association-field/InternalPicker.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-field/InternalPopoverNester.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-field/InternalSubTable.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/association-field/InternalTag.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-field/InternalViewer.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(refs)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/association-field/Nester.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-field/SubTable.tsx": {
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/association-field/Table.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 17
+  },
+  "packages/core/client/src/schema-component/antd/association-field/__tests__/InternalCascadeSelect.test.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-field/hooks.tsx": {
+    "react(preserve-manual-memoization)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-filter/AssociationFilter.Item.Designer.tsx": {
+    "react(immutability)": 6
+  },
+  "packages/core/client/src/schema-component/antd/association-filter/AssociationFilter.Item.tsx": {
+    "jsx-a11y(no-autofocus)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-filter/AssociationFilter.tsx": {
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/association-select/AssociationSelect.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/association-select/useServiceOptions.ts": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-component/antd/auto-complete/demos/basic.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/schema-component/antd/block-item/BlockItem.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/schema-component/antd/block-item/BlockItemCard.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/block-item/TestDesigner.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-component/antd/cascader/demos/new-demos/loadData.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/schema-component/antd/checkbox/Checkbox.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/collection-select/CollectionSelect.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/core/client/src/schema-component/antd/color-picker/ColorPicker.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 2
+  },
+  "packages/core/client/src/schema-component/antd/cron/Cron.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/cron/CronSet.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-component/antd/date-picker/DatePicker.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/edit-table/EditTable.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/edit-table/EditTableAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/edit-table/hooks/useTableColumnIntegration.ts": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/error-fallback/ErrorFallbackModal.tsx": {
+    "jsx-a11y(mouse-events-have-key-events)": 1
+  },
+  "packages/core/client/src/schema-component/antd/expand-action/Expand.Action.Design.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/schema-component/antd/expiresRadio/index.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(set-state-in-effect)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/filter/DynamicComponent.tsx": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-component/antd/filter/Filter.Action.Designer.tsx": {
+    "react(immutability)": 4
+  },
+  "packages/core/client/src/schema-component/antd/filter/Filter.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/filter/FilterAction.tsx": {
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/filter/FilterGroup.tsx": {
+    "jsx-a11y(anchor-is-valid)": 3,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "jsx-a11y(prefer-tag-over-role)": 2
+  },
+  "packages/core/client/src/schema-component/antd/filter/FilterItem.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 3
+  },
+  "packages/core/client/src/schema-component/antd/filter/SaveDefaultValue.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/schema-component/antd/filter/useFilterActionProps.ts": {
+    "react(immutability)": 5,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/filter/useOperators.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/filter/useValues.ts": {
+    "react(immutability)": 7,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-component/antd/form-dialog/index.tsx": {
+    "react(refs)": 1
+  },
+  "packages/core/client/src/schema-component/antd/form-drawer/index.tsx": {
+    "react(refs)": 2,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/form-item/SchemaSettingOptions.tsx": {
+    "react(immutability)": 27
+  },
+  "packages/core/client/src/schema-component/antd/form-item/hooks/useLazyLoadDisplayAssociationFieldsOfForm.ts": {
+    "react(refs)": 16,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/form-item/hooks/useLinkageRulesForSubTableOrSubForm.ts": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/form-item/hooks/useParseDefaultValue.ts": {
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/form-item/hooks/useSpecialCase.ts": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/schema-component/antd/form-v2/Form.tsx": {
+    "react(immutability)": 1,
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-component/antd/form-v2/FormField.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/form-v2/Templates.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(immutability)": 4,
+    "react-hooks(exhaustive-deps)": 5
+  },
+  "packages/core/client/src/schema-component/antd/form/Form.tsx": {
+    "react(immutability)": 1,
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/form/demos/demo8.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/g2plot/G2Plot.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/g2plot/G2PlotDesigner.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/schema-component/antd/grid-card/GridCard.Designer.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/schema-component/antd/grid-card/GridCard.Item.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/schema-component/antd/grid/Grid.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 5
+  },
+  "packages/core/client/src/schema-component/antd/icon-picker/IconPicker.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/schema-component/antd/input/EllipsisWithTooltip.tsx": {
+    "react(preserve-manual-memoization)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/input/Json.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/input/ScanInput/useScanner.ts": {
+    "eslint(no-unused-expressions)": 2,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/input/shared.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client/src/schema-component/antd/linkageFilter/DynamicComponent.tsx": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/core/client/src/schema-component/antd/linkageFilter/FilterGroup.tsx": {
+    "jsx-a11y(anchor-is-valid)": 3,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "jsx-a11y(prefer-tag-over-role)": 2
+  },
+  "packages/core/client/src/schema-component/antd/linkageFilter/LinkageFilter.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/linkageFilter/LinkageFilterItem.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 2
+  },
+  "packages/core/client/src/schema-component/antd/linkageFilter/useOperators.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/linkageFilter/useValues.ts": {
+    "react(immutability)": 7,
+    "react(preserve-manual-memoization)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/list/List.Designer.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/schema-component/antd/markdown/Markdown.Void.Designer.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/schema-component/antd/markdown/Markdown.Void.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/markdown/util.ts": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client/src/schema-component/antd/menu/Menu.Designer.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 8
+  },
+  "packages/core/client/src/schema-component/antd/menu/Menu.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(refs)": 4,
+    "react(set-state-in-effect)": 2,
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 10
+  },
+  "packages/core/client/src/schema-component/antd/nanoid-input/NanoIDInput.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/page/Page.tsx": {
+    "react(immutability)": 1,
+    "react(refs)": 4,
+    "react(set-state-in-effect)": 1,
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/core/client/src/schema-component/antd/page/PagePopups.tsx": {
+    "react(immutability)": 1,
+    "react(refs)": 3,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/page/PageTabDesigner.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/schema-component/antd/page/PopupRouteContextResetter.tsx": {
+    "react(refs)": 5
+  },
+  "packages/core/client/src/schema-component/antd/page/pagePopupUtils.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 8
+  },
+  "packages/core/client/src/schema-component/antd/page/usePopupContextInActionOrAssociationField.ts": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/schema-component/antd/pagination/index.tsx": {
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-component/antd/popover/Popover.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-component/antd/quick-edit/QuickEdit.tsx": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-component/antd/radio/Radio.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/record-picker/InputRecordPicker.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/record-picker/ReadPrettyRecordPicker.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-component/antd/remote-select/RemoteSelect.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 3
+  },
+  "packages/core/client/src/schema-component/antd/select/Select.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 8,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/table-v2/Table.ActionColumnDesigner.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/schema-component/antd/table-v2/Table.Column.Decorator.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "react(immutability)": 1,
+    "react(static-components)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/table-v2/Table.Column.Designer.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 19,
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/schema-component/antd/table-v2/Table.Column.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/schema-component/antd/table-v2/Table.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "react(refs)": 9,
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 20
+  },
+  "packages/core/client/src/schema-component/antd/table-v2/TableBlockDesigner.tsx": {
+    "react(immutability)": 16
+  },
+  "packages/core/client/src/schema-component/antd/table-v2/TableField.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/antd/table-v2/TableSelectorDesigner.tsx": {
+    "react(immutability)": 8
+  },
+  "packages/core/client/src/schema-component/antd/table-v2/TableSkeleton.tsx": {
+    "jsx-a11y(control-has-associated-label)": 4,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/table/Table.Array.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 3
+  },
+  "packages/core/client/src/schema-component/antd/table/Table.Column.Decorator.tsx": {
+    "react(immutability)": 1,
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/table/Table.RowActionDesigner.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/schema-component/antd/table/Table.Void.Designer.tsx": {
+    "react(immutability)": 8
+  },
+  "packages/core/client/src/schema-component/antd/tabs/Tabs.Designer.tsx": {
+    "react(immutability)": 4
+  },
+  "packages/core/client/src/schema-component/antd/tabs/Tabs.tsx": {
+    "react(preserve-manual-memoization)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/unix-timestamp/UnixTimestamp.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/antd/upload/Upload.tsx": {
+    "jsx-a11y(iframe-has-title)": 1,
+    "react(set-state-in-effect)": 1,
+    "react(static-components)": 1
+  },
+  "packages/core/client/src/schema-component/antd/variable/Input.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 3,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/core/client/src/schema-component/antd/variable/TextArea.tsx": {
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 8
+  },
+  "packages/core/client/src/schema-component/antd/variable/TextAreaWithGlobalScope.tsx": {
+    "jsx-a11y(no-autofocus)": 1
+  },
+  "packages/core/client/src/schema-component/common/date-filter-dynamic-component/DateFilterDynamicComponent.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(interactive-supports-focus)": 2,
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "jsx-a11y(role-has-required-aria-props)": 2
+  },
+  "packages/core/client/src/schema-component/common/dnd-context/index.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/common/withPopupWrapper/index.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(refs)": 4
+  },
+  "packages/core/client/src/schema-component/core/RemoteSchemaComponent.tsx": {
+    "eslint(no-unused-expressions)": 2,
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/core/SchemaComponent.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-component/core/SchemaComponentProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/core/client/src/schema-component/core/useRequestSchema.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client/src/schema-component/hooks/useBlockSize.ts": {
+    "react(refs)": 1,
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/hooks/useDesignable.tsx": {
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/core/client/src/schema-component/hooks/useFieldComponentOptions.ts": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/hooks/useFieldModeOptions.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-component/hooks/useFieldProps.ts": {
+    "react(refs)": 1
+  },
+  "packages/core/client/src/schema-component/hooks/useFieldTitle.ts": {
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-initializer/buttons/CustomFormItemInitializers.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/client/src/schema-initializer/buttons/FormItemInitializers.tsx": {
+    "eslint(no-unused-expressions)": 2
+  },
+  "packages/core/client/src/schema-initializer/buttons/TabPaneInitializers.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-initializer/components/CreateRecordAction.tsx": {
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 7
+  },
+  "packages/core/client/src/schema-initializer/components/assigned-field/AssignedField.tsx": {
+    "react(immutability)": 4,
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 7
+  },
+  "packages/core/client/src/schema-initializer/demos/insert-schema-basic.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-initializer/demos/nested-items.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-initializer/items/DataBlockInitializer.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3,
+    "react(set-state-in-effect)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-initializer/items/ModalActionSchemaInitializerItem.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-initializer/items/RecordAssociationFormBlockInitializer.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-initializer/utils.ts": {
+    "eslint(no-unused-expressions)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-items/OpenModeSchemaItems.tsx": {
+    "react(immutability)": 8,
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-settings/DataTemplates/FormDataTemplates.tsx": {
+    "eslint(no-constant-binary-expression)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-settings/DataTemplates/components/DataTemplateTitle.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-settings/DataTemplates/hooks/useCollectionState.ts": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-settings/DataTemplates/utils.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-settings/EnableChildCollections/DynamicComponent.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-settings/GeneralSchemaDesigner.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 5,
+    "react(preserve-manual-memoization)": 6,
+    "react(refs)": 2,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/DateScopeComponent.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/DynamicComponent.tsx": {
+    "react(use-memo)": 2,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/LinkageRuleAction.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(prefer-tag-over-role)": 4
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/LinkageRuleActionGroup.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/ValueDynamicComponent.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 3,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/components/BlockLinkageRuleAction.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/components/FieldStyleLinkageRuleAction.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/components/LinkageHeader.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/index.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/type.ts": {
+    "typescript(no-duplicate-enum-values)": 1
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/useActionValues.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-settings/LinkageRules/useValues.ts": {
+    "react(immutability)": 8,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingAccessControl.tsx": {
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-settings/SchemaSettings.tsx": {
+    "react(immutability)": 8,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 11
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsBlockHeightItem.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsBlockTitleItem.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsConnectDataBlocks.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsDateFormat.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsDateRange.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsDefaultValue.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 1,
+    "react(preserve-manual-memoization)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsLayoutItem.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsNumberFormat.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsRenderEngine.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsSortField.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/schema-settings/SchemaSettingsTimeFormat.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/schema-settings/VariableInput/VariableInput.tsx": {
+    "eslint(no-unreachable)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-settings/VariableInput/hooks/useBaseVariable.tsx": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-settings/VariableInput/hooks/useContextAssociationFields.tsx": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/schema-settings/VariableInput/hooks/useDateVariable.ts": {
+    "react(use-memo)": 2,
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/core/client/src/schema-settings/VariableInput/hooks/useExactDateVariable.ts": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/schema-settings/VariableInput/hooks/useVariableOptions.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-templates/BlockTemplate.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/schema-templates/BlockTemplateDetails.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/client/src/schema-templates/SchemaTemplateManagerProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/core/client/src/user/CurrentUserProvider.tsx": {
+    "react(refs)": 3
+  },
+  "packages/core/client/src/user/CurrentUserSettingsMenuProvider.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/variables/VariableScope.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/core/client/src/variables/VariablesProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/variables/__tests__/useVariables.test.tsx": {
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/variables/hooks/useBuiltinVariables.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/client/src/variables/hooks/useLocalVariables.tsx": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/core/client/src/variables/hooks/useLocalVariablesWithoutCustomVariable.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/data-source-manager/src/repository.ts": {
+    "typescript(no-wrapper-object-types)": 2
+  },
+  "packages/core/data-source-manager/src/types.ts": {
+    "typescript(no-wrapper-object-types)": 2
+  },
+  "packages/core/database/src/__tests__/database.test.ts": {
+    "eslint(no-unused-expressions)": 4
+  },
+  "packages/core/database/src/__tests__/interfaces/percent-interface.test.ts": {
+    "oxc(number-arg-out-of-range)": 1
+  },
+  "packages/core/database/src/collection.ts": {
+    "typescript(no-wrapper-object-types)": 1
+  },
+  "packages/core/database/src/fields/snowflake-id-field.ts": {
+    "typescript(no-wrapper-object-types)": 1
+  },
+  "packages/core/flow-engine/src/components/FieldModelRenderer.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/flow-engine/src/components/FlowContextSelector.tsx": {
+    "react(immutability)": 1,
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/core/flow-engine/src/components/FlowErrorFallback.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(mouse-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(error-boundaries)": 1
+  },
+  "packages/core/flow-engine/src/components/MobilePopup.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/flow-engine/src/components/dnd/index.tsx": {
+    "react(jsx-props-no-spread-multi)": 1
+  },
+  "packages/core/flow-engine/src/components/settings/wrappers/component/SelectWithTitle.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/flow-engine/src/components/settings/wrappers/component/SwitchWithTitle.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/core/flow-engine/src/components/settings/wrappers/component/__tests__/InlineControls.test.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/core/flow-engine/src/components/settings/wrappers/contextual/DefaultSettingsIcon.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/flow-engine/src/components/settings/wrappers/contextual/FlowsContextMenu.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/flow-engine/src/components/settings/wrappers/contextual/FlowsFloatContextMenu.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 3,
+    "react(immutability)": 1
+  },
+  "packages/core/flow-engine/src/components/settings/wrappers/contextual/useFloatToolbarVisibility.ts": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/core/flow-engine/src/components/subModel/AddSubModelButton.tsx": {
+    "oxc(only-used-in-recursion)": 1
+  },
+  "packages/core/flow-engine/src/components/subModel/LazyDropdown.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(preserve-manual-memoization)": 1,
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/core/flow-engine/src/components/variables/SlateVariableEditor.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/core/flow-engine/src/components/variables/VariableHybridInput.tsx": {
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/core/flow-engine/src/flowContext.ts": {
+    "eslint(no-unused-private-class-members)": 1
+  },
+  "packages/core/flow-engine/src/flowEngine.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/flow-engine/src/flowSettings.ts": {
+    "react(refs)": 2
+  },
+  "packages/core/flow-engine/src/hooks/useNiceDropdownMaxHeight.ts": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/flow-engine/src/models/flowModel.tsx": {
+    "eslint(no-unused-expressions)": 4
+  },
+  "packages/core/flow-engine/src/models/forkFlowModel.ts": {
+    "eslint(no-unused-private-class-members)": 1
+  },
+  "packages/core/flow-engine/src/reactive/observer.tsx": {
+    "react(refs)": 2,
+    "react(static-components)": 1
+  },
+  "packages/core/flow-engine/src/utils/runjsModuleLoader.ts": {
+    "eslint(no-eval)": 1
+  },
+  "packages/core/flow-engine/src/views/DrawerComponent.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/flow-engine/src/views/__tests__/useDialog.closeDestroy.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/core/flow-engine/src/views/usePopover.tsx": {
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/core/logger/src/format.ts": {
+    "eslint(no-control-regex)": 1
+  },
+  "packages/core/resourcer/src/action.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/server/src/app-command.ts": {
+    "typescript(no-wrapper-object-types)": 1
+  },
+  "packages/core/server/src/application.ts": {
+    "typescript(no-wrapper-object-types)": 1
+  },
+  "packages/core/server/src/plugin-manager/plugin-manager.ts": {
+    "eslint(no-unreachable)": 2
+  },
+  "packages/core/server/src/plugin-manager/utils.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/utils/src/collections-graph.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/core/utils/src/mixin/AsyncEmitter.ts": {
+    "promise(no-callback-in-promise)": 1
+  },
+  "packages/core/utils/src/transformFilter.ts": {
+    "eslint(no-useless-rename)": 2
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client-v2/pages/RolesManagementPage.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(refs)": 2,
+    "react(set-state-in-effect)": 4
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client-v2/pages/permissions/SystemPermissionsTab.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client/RolesMenu.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client/hooks/load-more-observer.ts": {
+    "eslint(no-unused-expressions)": 4
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client/permissions/ActionPermissions.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client/permissions/MenuPermissions.tsx": {
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client/permissions/Permissions.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client/permissions/ScopeSelect.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client/schemas/roles.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/client/schemas/scopes.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/server/__tests__/own.test.ts": {
+    "eslint(no-unassigned-vars)": 1
+  },
+  "packages/plugins/@nocobase/plugin-acl/src/server/__tests__/union-role.test.ts": {
+    "eslint(no-unused-expressions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-action-bulk-edit/src/client-v2/flow/models/BulkEditFieldModel.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-bulk-edit/src/client/BulkEditAction.Settings.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-bulk-edit/src/client/component/BulkEditField.tsx": {
+    "react(immutability)": 7,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-action-bulk-edit/src/client/component/BulkEditFieldV2.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-bulk-edit/src/client/utils.tsx": {
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-bulk-update/src/client/BulkUpdateAction.Settings.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-bulk-update/src/client/utils.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-action-custom-request/src/client/components/CustomRequestActionDesigner.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-custom-request/src/client/hooks/useCustomRequestVariableOptions.ts": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-action-custom-request/src/client/schemaSettings.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-duplicate/src/client-v2/DuplicateActionModel.tsx": {
+    "jsx-a11y(anchor-is-valid)": 3,
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3,
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-action-duplicate/src/client/DuplicateAction.Settings.tsx": {
+    "react(immutability)": 3,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-action-duplicate/src/client/DuplicateAction.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-export/src/client-v2/ExportActionModel.tsx": {
+    "react(refs)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-export/src/client/ExportActionInitializer.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-export/src/client/useExportAction.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-action-export/src/server/__tests__/export-to-xlsx.test.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-import/src/client/ImportDesigner.tsx": {
+    "react(immutability)": 5,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-action-import/src/client/schemaSettings.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-action-import/src/server/__tests__/xlsx-importer.test.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-action-print/src/client/utils.ts": {
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai-gigachat/src/client-v2/llm-providers/gigachat/ModelSettings.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/AIEmployeeDropdown.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/AIEmployeeShortcut.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/AISelectionControl.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/__tests__/AddContextButton.test.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(control-has-associated-label)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/ai-coding/AICodingButton.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/ai-coding/setup.tsx": {
+    "react(refs)": 2
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/chatbox/components/ChatBox.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/chatbox/components/ChatBoxLayout.tsx": {
+    "jsx-a11y(no-noninteractive-element-interactions)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 3,
+    "react(purity)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/chatbox/components/ChatButton.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/chatbox/components/ModelSwitcher.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/chatbox/components/ToolCard.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/chatbox/hooks/useChatBoxEffect.ts": {
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/chatbox/hooks/useChatConversationActions.ts": {
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/chatbox/hooks/useChatMessageActions.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/chatbox/hooks/useWorkflowTasks.ts": {
+    "react(refs)": 3
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/datasource/DatasourceSelector.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/tools/BusinessReportModal.tsx": {
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/tools/SubAgentDispatchCard.tsx": {
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/tools/ai-coding.ts": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/ai-employees/tools/data-modeling/Table.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/block/ai-chat-box/components/AIChatBoxView.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/components/RemoteSelect.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 3,
+    "react(refs)": 6
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/pages/DatasourceSettingsPage.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/pages/EmployeesPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 3,
+    "react(refs)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/pages/LLMServicesPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/pages/MCPSettingsPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 3,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(refs)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/pages/permissions/Permissions.tsx": {
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/pages/useUnsavedChangesBeforeClose.ts": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/client-v2/workflow/components/WorkflowListCollapse.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/server/__tests__/tool-manager.test.ts": {
+    "eslint(no-unused-expressions)": 4
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/server/ai-employees/ai-conversations.ts": {
+    "eslint(no-constant-binary-expression)": 4,
+    "oxc(const-comparisons)": 4
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/server/ai-employees/ai-employee.ts": {
+    "eslint(no-constant-binary-expression)": 1,
+    "oxc(const-comparisons)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/server/manager/work-context-handler.ts": {
+    "typescript(no-wrapper-object-types)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ai/src/server/types/work-context-handler.type.ts": {
+    "typescript(no-wrapper-object-types)": 1
+  },
+  "packages/plugins/@nocobase/plugin-api-doc/src/client-v2/pages/DocumentationContent.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-api-doc/src/server/swagger/index.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-api-keys/client.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-api-keys/src/client-v2/pages/ApiKeysPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-api-keys/src/client/Configuration/ExpiresSelect.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-async-task-manager/src/client/components/AsyncTasks.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-audit-logs/src/client/deplicated/AuditLogsDesigner.tsx": {
+    "react(immutability)": 4
+  },
+  "packages/plugins/@nocobase/plugin-audit-logs/src/client/initializers/AuditLogsTableColumnInitializers.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth-sms/client.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth-sms/server.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/client.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/server.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/src/client-v2/pages/AuthenticatorsPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/src/client-v2/pages/ResetPasswordPage.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/src/client-v2/pages/SignUpPage.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/src/client/basic/Options.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/src/client/basic/SignUpForm.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/src/client/pages/ResetPasswordPage.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/src/client/pages/SignUpPage.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-auth/src/client/settings/Authenticator.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-auth/src/types.ts": {
+    "eslint(no-useless-rename)": 1
+  },
+  "packages/plugins/@nocobase/plugin-backup-restore/src/client/Configuration.tsx": {
+    "jsx-a11y(anchor-is-valid)": 3,
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3,
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 2,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-backups/src/client-v2/components/BackupsTable.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-backups/src/client-v2/components/RestoreFromBackup.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-backups/src/client-v2/components/RestoreFromLocal.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-backups/src/client-v2/hooks/useCheckBackupMessage.ts": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-backups/src/client/components/BackupsTable.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-backups/src/client/components/RestoreFromBackup.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-backups/src/client/components/RestoreFromLocal.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-backups/src/client/hooks/useCheckBackupMessage.ts": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-block-comment/src/client-v2/models/__tests__/RecordCommentsBlockView.test.tsx": {
+    "react(refs)": 3
+  },
+  "packages/plugins/@nocobase/plugin-block-grid-card/src/client-v2/models/GridCardBlockModel.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-grid-card/src/client-v2/models/GridCardItemModel.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-iframe/src/client/Iframe.Designer.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/plugins/@nocobase/plugin-block-iframe/src/client/Iframe.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-list/src/client-v2/models/utils.ts": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-block-multi-step-form/src/client/StepsForm/schemaComponents/context.ts": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-template/src/client/components/SaveAsTemplateSetting.tsx": {
+    "react(immutability)": 4
+  },
+  "packages/plugins/@nocobase/plugin-block-template/src/client/components/TemplateGridDecorator.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-template/src/client/hooks/useCreateActionProps.ts": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-template/src/client/initializers/TemplateBlockInitializer.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-tree/src/client-v2/component/Tree.tsx": {
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-block-tree/src/client-v2/models/treeConnectDataBlocks.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 3,
+    "react(refs)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-tree/src/client/schema/index.tsx": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 8
+  },
+  "packages/plugins/@nocobase/plugin-block-workbench/src/client-v2/models/actions/components/qrcode-scanner/index.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-workbench/src/client-v2/models/actions/components/qrcode-scanner/useScanner.ts": {
+    "eslint(no-unused-expressions)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-workbench/src/client/SchemaSettingsBlockTitleItem.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/plugins/@nocobase/plugin-block-workbench/src/client/components/qrcode-scanner/index.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-workbench/src/client/components/qrcode-scanner/useScanner.ts": {
+    "eslint(no-unused-expressions)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-block-workbench/src/client/workbenchBlockSettings.tsx": {
+    "react(immutability)": 6
+  },
+  "packages/plugins/@nocobase/plugin-calendar/src/client-v2/models/components/CalendarHeader.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-calendar/src/client-v2/models/components/useCalendarHeight.ts": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-calendar/src/client/calendar/Calendar.tsx": {
+    "react-hooks(exhaustive-deps)": 6
+  },
+  "packages/plugins/@nocobase/plugin-calendar/src/client/calendar/Calender.Settings.tsx": {
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-calendar/src/client/calendar/components/Header.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-calendar/src/client/hooks/useCalendarBlockParams.ts": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-calendar/src/client/schema-initializer/CalendarBlockProvider.tsx": {
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-calendar/src/client/schema-initializer/items/CalendarBlockInitializer.tsx": {
+    "oxc(const-comparisons)": 1
+  },
+  "packages/plugins/@nocobase/plugin-charts/src/client/ChartBlockEngine.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react(static-components)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-charts/src/client/ChartBlockEngineDesigner.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-charts/src/client/ChartBlockInitializer.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-charts/src/client/ChartQueryBlockInitializer.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-charts/src/client/ChartQueryMetadataProvider.tsx": {
+    "eslint(no-unreachable)": 9,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-charts/src/client/hooks/index.ts": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-charts/src/client/select/CustomSelect.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 2
+  },
+  "packages/plugins/@nocobase/plugin-charts/src/client/settings/AddNewQuery.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-client/src/client/routesTableSchema.tsx": {
+    "eslint(no-unused-expressions)": 4
+  },
+  "packages/plugins/@nocobase/plugin-client/src/client/useTableBlockProps.ts": {
+    "react(immutability)": 3,
+    "react(refs)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-client/src/client/utils.tsx": {
+    "oxc(only-used-in-recursion)": 1
+  },
+  "packages/plugins/@nocobase/plugin-client/src/server/__tests__/desktopRoutes-union-role.test.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-collection-fdw/src/client-v2/FdwCollectionConfigure.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-collection-fdw/src/client-v2/__tests__/FdwCollectionConfigure.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-collection-fdw/src/client/components/CreateDatabaseServerAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-collection-fdw/src/client/components/DatabaseServerSelect.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(refs)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-collection-fdw/src/client/components/EditDatabaseServerAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-collection-fdw/src/client/components/PreviewFields.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 2,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-collection-fdw/src/client/components/PreviewTable.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(immutability)": 2,
+    "react(set-state-in-effect)": 2,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-collection-fdw/src/client/components/RemoteTableSelect.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-collection-fdw/src/client/hooks.ts": {
+    "react(immutability)": 4
+  },
+  "packages/plugins/@nocobase/plugin-collection-sql/src/client-v2/__tests__/SqlCollectionConfigure.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-comments/src/client/models/CommentItem.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-comments/src/client/provider/useCommentBlockDecoratorContext.tsx": {
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-comments/src/client/schema-initializer/items/CommentItemActionInitializers.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-custom-variables/src/client/index.tsx": {
+    "react-hooks(exhaustive-deps)": 6
+  },
+  "packages/plugins/@nocobase/plugin-custom-variables/src/client/useCustomVariablesOptions.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/DataSourceCollectionsPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/DataSourcesPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 3,
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/components/CollectionsPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 4,
+    "jsx-a11y(click-events-have-key-events)": 4,
+    "jsx-a11y(no-static-element-interactions)": 4,
+    "react(preserve-manual-memoization)": 28,
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/components/FieldForm.tsx": {
+    "react(immutability)": 1,
+    "react(preserve-manual-memoization)": 2,
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/components/FieldsPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 3
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/components/ViewCollectionConfigure.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/components/__tests__/FieldForm.test.tsx": {
+    "jsx-a11y(control-has-associated-label)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/components/__tests__/FieldsPageComponent.test.tsx": {
+    "jsx-a11y(control-has-associated-label)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/components/__tests__/ViewCollectionConfigure.test.tsx": {
+    "jsx-a11y(control-has-associated-label)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/permissions/DataSourcePermissionsTab.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(preserve-manual-memoization)": 1,
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/permissions/PermissionEditors.tsx": {
+    "react(preserve-manual-memoization)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client-v2/pages/permissions/ScopeSelect.tsx": {
+    "react(preserve-manual-memoization)": 3,
+    "react(refs)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/BreadcumbTitle.tsx": {
+    "react(use-memo)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CollectionsManager/AddFieldAction.tsx": {
+    "eslint(no-unused-expressions)": 3,
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CollectionsManager/CollectionFields.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CollectionsManager/ConfigurationTabs.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CollectionsManager/EditCollectionAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CollectionsManager/EditFieldAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CollectionsManager/components/CollectionFieldInterfaceSelect.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CollectionsManager/components/FieldType.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CollectionsManager/components/index.tsx": {
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CollectionsTableField.tsx": {
+    "react-hooks(exhaustive-deps)": 8
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/CreateDatabaseConnectAction.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/DatabaseConnectionManager.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/EditDatabaseConnectionAction.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/MainDataSourceManager/CollectionMainProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/MainDataSourceManager/Configuration/AddCategoryAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/MainDataSourceManager/Configuration/CollectionFields.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/MainDataSourceManager/Configuration/ConfigurationTabs.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/MainDataSourceManager/Configuration/EditCategoryAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/MainDataSourceManager/Configuration/db-sync/LoadCollectionAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/PermissionManager/PermisionProvider.tsx": {
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/PermissionManager/ScopeSelect.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/PermissionManager/schemas/scopes.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/PermissionManager/schemas/useRoleResourceValues.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/component/ViewDatabaseConnectionAction.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/hooks/index.ts": {
+    "react(immutability)": 4
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/client/hooks/useDataSourceRefresh.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/server/__tests__/data-source-with-acl.test.ts": {
+    "eslint(no-unused-expressions)": 2,
+    "typescript(no-wrapper-object-types)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-source-manager/src/server/__tests__/data-sources.test.ts": {
+    "eslint(no-unused-expressions)": 3
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization-echarts/src/client/echarts/ReactEChart.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/client.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/server.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client-v2/flow/components/CodeEditor.tsx": {
+    "react(refs)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/block/ChartBlockDesigner.tsx": {
+    "react(immutability)": 4
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/chart/antd/components/Statistic.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/configure/TransformerDynamicComponent.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/filter/FilterForm.tsx": {
+    "react(refs)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/filter/FilterItemDesigner.tsx": {
+    "react(immutability)": 13
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/filter/FilterItemInitializers.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/filter/FilterProvider.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/hooks/filter.ts": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/hooks/query.ts": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/hooks/transformer.ts": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/hooks/useUserVariable.ts": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/renderer/ChartRenderer.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/renderer/ChartRendererProvider.tsx": {
+    "jsx-a11y(mouse-events-have-key-events)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/client/settings/chartFilterItem.tsx": {
+    "react(immutability)": 13
+  },
+  "packages/plugins/@nocobase/plugin-data-visualization/src/server/__tests__/mock-data-source.ts": {
+    "typescript(no-wrapper-object-types)": 2
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client-v2/pages/DepartmentsPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(preserve-manual-memoization)": 5,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client-v2/pages/RoleDepartmentsManager.tsx": {
+    "react(preserve-manual-memoization)": 3
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/ResourcesProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/departments/AggregateSearch.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/departments/Department.tsx": {
+    "react(immutability)": 4
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/departments/DepartmentField.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/departments/DepartmentOwnersField.tsx": {
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/departments/DepartmentTable.tsx": {
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/departments/DepartmentTreeSelect.tsx": {
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/departments/DepartmentsField.tsx": {
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/departments/Member.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/departments/schemas/departments.ts": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/hooks/index.ts": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/hooks/tree-manager.ts": {
+    "react(immutability)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/hooks/useTableBlockProps.ts": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-departments/src/client/roles/RoleDepartmentsManager.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-embed/src/client-v2/EmbedAccessGuard.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-environment-variables/src/client-v2/pages/EnvironmentPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-environment-variables/src/client/components/EnvironmentTabs.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-attachment-url/src/client-v2/AttachmentURLFieldModel.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-attachment-url/src/client/component/AttachmentUrl.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-attachment-url/src/client/hook/index.ts": {
+    "react(immutability)": 2,
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-attachment-url/src/client/interfaces/attachment-url.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-china-region/src/client-v2/models/ChinaRegionFieldModel.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-code/src/client-v2/codeFieldSettings.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-field-formula/src/client-v2/__tests__/Expression.test.tsx": {
+    "eslint(no-unsafe-optional-chaining)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-formula/src/client-v2/__tests__/FormulaFieldModel.test.tsx": {
+    "react(refs)": 2
+  },
+  "packages/plugins/@nocobase/plugin-field-formula/src/client-v2/components/Expression.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-formula/src/client-v2/models/FormulaFieldModel.tsx": {
+    "react(set-state-in-effect)": 2,
+    "react-hooks(exhaustive-deps)": 8
+  },
+  "packages/plugins/@nocobase/plugin-field-formula/src/client/components/Formula/Result.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-m2m-array/src/client/ForeignKey.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-m2m-array/src/client/TargetKey.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-field-m2m-array/src/client/hooks.ts": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-field-markdown-vditor/src/client-v2/__tests__/Edit.test.tsx": {
+    "react(no-this-in-sfc)": 13
+  },
+  "packages/plugins/@nocobase/plugin-field-markdown-vditor/src/client-v2/components/style.ts": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-field-markdown-vditor/src/client/components/const.ts": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/__tests__/DisplayPreviewFieldModel.test.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/__tests__/FileCollectionConfigure.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/__tests__/UploadFieldModel.test.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/__tests__/filePreviewTypes.test.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/components/PublicAccessField.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/components/UseOriginalUrlField.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/models/DisplayPreviewFieldModel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/models/UploadActionModel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/models/UploadFieldModel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/pages/FileStoragePage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(preserve-manual-memoization)": 1,
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client-v2/previewer/filePreviewTypes.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(iframe-has-title)": 1,
+    "jsx-a11y(media-has-caption)": 2,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client/FileSizeField.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-file-manager/src/client/FileStorage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-file-previewer-office/src/client-v2/OfficeInlinePreviewer.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-flow-engine/src/server/flow-surfaces/blueprint/export-document.ts": {
+    "eslint(no-unsafe-optional-chaining)": 1
+  },
+  "packages/plugins/@nocobase/plugin-flow-engine/src/server/repository.ts": {
+    "eslint(no-useless-rename)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client-v2/models/components/GanttBlock.tree.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client-v2/models/components/GanttBlock.tsx": {
+    "jsx-a11y(no-noninteractive-tabindex)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client-v2/shared/components/gantt/task-gantt-content.tsx": {
+    "eslint(no-unused-expressions)": 2,
+    "react(preserve-manual-memoization)": 1,
+    "react(refs)": 4,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client-v2/shared/components/grid/grid-body.tsx": {
+    "react(purity)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client-v2/shared/components/task-item/bar/bar-date-handle.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client-v2/shared/components/task-item/bar/bar-small.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client-v2/shared/components/task-item/bar/bar.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client-v2/shared/components/task-item/milestone/milestone.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/Gantt.Settings.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/GanttBlockProvider.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(immutability)": 4,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/components/gantt/gantt.tsx": {
+    "jsx-a11y(no-noninteractive-tabindex)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 4
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/components/gantt/task-gantt-content.tsx": {
+    "eslint(no-unused-expressions)": 2,
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/components/gantt/task-gantt.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/components/grid/grid-body.tsx": {
+    "react(purity)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/components/task-item/bar/bar-date-handle.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/components/task-item/bar/bar-small.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/components/task-item/bar/bar.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/components/task-item/milestone/milestone.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/components/task-item/task-item.tsx": {
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-gantt/src/client/demos/demo1.tsx": {
+    "eslint(no-unreachable)": 1
+  },
+  "packages/plugins/@nocobase/plugin-graph-collection-manager/src/client/GraphCollectionShortcut.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-graph-collection-manager/src/client/GraphDrawPage.tsx": {
+    "eslint(no-unused-expressions)": 15,
+    "react(globals)": 1,
+    "react(immutability)": 11,
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-graph-collection-manager/src/client/action-hooks.tsx": {
+    "eslint(no-unused-expressions)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-graph-collection-manager/src/client/components/CollectionNodeProvder.tsx": {
+    "typescript(no-wrapper-object-types)": 1
+  },
+  "packages/plugins/@nocobase/plugin-graph-collection-manager/src/client/components/Entity.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(immutability)": 1,
+    "react(refs)": 5,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-graph-collection-manager/src/client/components/SelectCollectionsAction.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-graph-collection-manager/src/client/utils.tsx": {
+    "eslint(no-unused-expressions)": 4
+  },
+  "packages/plugins/@nocobase/plugin-idp-oauth/src/client-v2/pages/DevicePage.tsx": {
+    "jsx-a11y(no-autofocus)": 1,
+    "react(preserve-manual-memoization)": 1,
+    "react(refs)": 3,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-idp-oauth/src/client-v2/pages/InteractionPage.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-idp-oauth/src/client/DevicePage.tsx": {
+    "jsx-a11y(no-autofocus)": 1,
+    "react(preserve-manual-memoization)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-idp-oauth/src/client/InteractionPage.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client-v2/models/components/kanban-block/CardRenderer.tsx": {
+    "react(refs)": 9
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/CreateAndSelectSort/index.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/Kanban.Card.Designer.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/Kanban.Card.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/Kanban.tsx": {
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/KanbanBlockProvider.tsx": {
+    "react(immutability)": 3,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/SchemaSettingsColumnWidthItem.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/board/Board.tsx": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/board/CardForm.tsx": {
+    "jsx-a11y(no-autofocus)": 1
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/board/ColumnAdder.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/board/ColumnForm.tsx": {
+    "jsx-a11y(no-autofocus)": 1
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/board/DefaultCard.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-kanban/src/client/board/DefaultColumnHeader.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-autofocus)": 1,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-license/src/client-v2/pages/LicenseSetting.tsx": {
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-license/src/client/ServiceValidate.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-localization/client.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-localization/server.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-localization/src/client-v2/pages/LocalizationPage.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 3
+  },
+  "packages/plugins/@nocobase/plugin-logger/src/client-v2/pages/LogsDownloader.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-logger/src/client/LogsDownloader.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client-v2/hooks/useMapConfig.ts": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client-v2/models/MapBlockModel.tsx": {
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client-v2/models/components/AMap/Block.tsx": {
+    "react(refs)": 5
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client-v2/models/components/AMap/Map.tsx": {
+    "react(purity)": 1,
+    "react(refs)": 9
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client-v2/models/components/GoogleMaps/Block.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client-v2/models/components/GoogleMaps/Map.tsx": {
+    "react(immutability)": 1,
+    "react(refs)": 6,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client/block/MapBlock.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client/components/AMap/Block.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(refs)": 5,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client/components/AMap/Map.tsx": {
+    "react(purity)": 1,
+    "react(refs)": 7,
+    "react-hooks(exhaustive-deps)": 7
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client/components/Configuration.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client/components/Designer.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client/components/GoogleMaps/Block.tsx": {
+    "eslint(no-unused-expressions)": 1,
+    "react(refs)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-map/src/client/components/GoogleMaps/Map.tsx": {
+    "react(immutability)": 1,
+    "react(refs)": 6,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 3
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/core/schema/components/container/Container.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/core/schema/components/header/Header.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/core/schema/components/menu/Menu.Item.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/core/schema/components/menu/Menu.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/core/schema/components/page/Page.tsx": {
+    "react(static-components)": 2
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/core/schema/components/settings/Settings.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/core/schema/components/tab-bar/TabBar.Item.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/core/schema/components/tab-bar/TabBar.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/core/schema/hooks/useSchemaPatch.ts": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile-client/src/client/router/InterfaceRouter.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/adaptor-of-desktop/ActionDrawer.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/adaptor-of-desktop/FilterAction.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/adaptor-of-desktop/InternalPopoverNester.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/adaptor-of-desktop/mobile-action-page/MobileTabsForMobileActionPage.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/mobile-blocks/settings-block/MobileSettings.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/mobile-layout/mobile-tab-bar/MobileTabBar.Item/MobileTabBar.Item.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/mobile-providers/context/MobileRoutes.tsx": {
+    "react(refs)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/mobile/Mobile.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/pages/dynamic-page/components/MobileDatePicker.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(immutability)": 3,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/client/pages/dynamic-page/components/MobilePicker.tsx": {
+    "eslint(no-constant-binary-expression)": 1,
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-mobile/src/server/__tests__/union-role-mobileRoutes.test.ts": {
+    "eslint(no-unused-expressions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-multi-app-share-collection/src/client/TableTransfer.tsx": {
+    "react-hooks(exhaustive-deps)": 5
+  },
+  "packages/plugins/@nocobase/plugin-multi-keyword-filter/src/client/MultipleKeywordsInput.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-notification-in-app-message/src/client-v2/components/MessageList.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-notification-in-app-message/src/client/components/MessageList.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-notification-in-app-message/src/client/components/mobile/InfiniteScrollContent.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-notification-in-app-message/src/client/components/mobile/MessagePage.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-notification-manager/src/client-v2/components/ContentConfigForm.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-notification-manager/src/client-v2/components/MessageConfigForm.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-notification-manager/src/client-v2/pages/ChannelsPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-notification-manager/src/client-v2/pages/LogsPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-notification-manager/src/client/hooks/index.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-notification-manager/src/client/manager/channel/hooks.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-public-forms/src/client-v2/models/PublicFormsSettingsLayoutModel.tsx": {
+    "jsx-a11y(anchor-is-valid)": 4,
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3
+  },
+  "packages/plugins/@nocobase/plugin-public-forms/src/client-v2/pages/PublicFormsSettingsDetailPage.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-public-forms/src/client-v2/pages/PublicFormsSettingsPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 3,
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3
+  },
+  "packages/plugins/@nocobase/plugin-public-forms/src/client/__tests__/AdminPublicFormPage.test.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1
+  },
+  "packages/plugins/@nocobase/plugin-public-forms/src/client/components/AdminPublicFormPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 4,
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3
+  },
+  "packages/plugins/@nocobase/plugin-public-forms/src/client/components/PublicFormPage.tsx": {
+    "react(refs)": 8,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-public-forms/src/client/components/components/MobileDatePicker.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-public-forms/src/client/components/components/MobilePicker.tsx": {
+    "eslint(no-constant-binary-expression)": 1,
+    "eslint(no-unused-expressions)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-public-forms/src/client/hooks/usePublicSubmitActionProps.ts": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-snapshot-field/src/client/SnapshotBlock/SnapshotBlockProvider.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-snapshot-field/src/client/interface.ts": {
+    "eslint(no-unused-expressions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/client.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/server.js": {
+    "eslint(no-func-assign)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/ColorPanel.tsx": {
+    "jsx-a11y(control-has-associated-label)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/IconSwitch.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/StablePopover.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/ThemeSelect.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/TokenInput.tsx": {
+    "react(refs)": 4,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/component-demos/breadcrumb/breadcrumb.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/component-demos/card/card.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/component-demos/dropdown/dropdown.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/component-demos/table/table.tsx": {
+    "jsx-a11y(anchor-is-valid)": 3
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/component-panel/index.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/hooks/useControlledTheme.tsx": {
+    "react(refs)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/previewer.tsx": {
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/token-panel-pro/AliasPanel.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/token-panel-pro/TokenContent.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/antd-token-previewer/token-panel-pro/index.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client-v2/components/ThemeEditorPanel.tsx": {
+    "react(immutability)": 1,
+    "react(refs)": 7
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client/components/InitializeTheme.tsx": {
+    "react(refs)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client/components/ThemeCard.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client/components/ThemeList.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client/components/ThemeSettings.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client/components/theme-editor/index.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-theme-editor/src/client/hooks/useThemeSettings.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ui-layout/src/client-v2/models/MobileLayoutModel.tsx": {
+    "jsx-a11y(no-autofocus)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ui-layout/src/client-v2/models/mobileComponents.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ui-layout/src/client-v2/models/mobileFlowCompat.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ui-layout/src/client-v2/permissions/LayoutAwareDesktopRoutesPermissionsTab.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ui-templates/src/client-v2/components/FlowModelTemplatesPage.tsx": {
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-ui-templates/src/client-v2/menuExtensions.tsx": {
+    "jsx-a11y(no-autofocus)": 1
+  },
+  "packages/plugins/@nocobase/plugin-ui-templates/src/client-v2/openViewActionExtensions.tsx": {
+    "eslint(no-unassigned-vars)": 1,
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-user-data-sync/src/client-v2/pages/UserDataSyncSourcePage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 5,
+    "jsx-a11y(click-events-have-key-events)": 4,
+    "jsx-a11y(no-static-element-interactions)": 4,
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-user-data-sync/src/client/UserDataSyncSource.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-users/src/client-v2/components/resource/ResourcePickerView.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-users/src/client-v2/components/resource/ResourceTablePage.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-users/src/client/ChangePassword.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-users/src/client/EditProfile.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-users/src/client/PasswordField.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-users/src/client/RoleUsersManager.tsx": {
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-users/src/client/UsersManagement.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-users/src/client/UsersProvider.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "react(immutability)": 2,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-verification/src/client-v2/__tests__/VerifiersPage.ui.test.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-verification/src/client-v2/otp-verification/sms/AdminSettingsForm.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-verification/src/client-v2/pages/VerifiersPage.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-verification/src/client-v2/user-center/MyVerifiers.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2,
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-verification/src/client/VerificationMenu.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 4,
+    "jsx-a11y(no-static-element-interactions)": 4
+  },
+  "packages/plugins/@nocobase/plugin-workflow-aggregate/src/client-v2/__tests__/AssociatedConfig.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-aggregate/src/client-v2/__tests__/aggregateFieldset.test.tsx": {
+    "jsx-a11y(control-has-associated-label)": 2,
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-cc/src/client-v2/components/FlowModelConfigInput.tsx": {
+    "react(immutability)": 1,
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-cc/src/client-v2/components/__tests__/FlowModelConfigInput.test.tsx": {
+    "eslint(no-unsafe-optional-chaining)": 1,
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow-cc/src/client-v2/nodes/__tests__/CCFieldset.test.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-cc/src/client-v2/tasks.tsx": {
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow-custom-action-trigger/src/client-v2/triggers/TriggerCustomActionConfig.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-custom-action-trigger/src/client/hooks.ts": {
+    "react(immutability)": 8
+  },
+  "packages/plugins/@nocobase/plugin-workflow-custom-action-trigger/src/client/settings.tsx": {
+    "react(immutability)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow-date-calculation/src/client-v2/dateFunctions.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-date-calculation/src/client-v2/nodes/__tests__/dateCalculationFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-date-calculation/src/client/dateFunctions.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-delay/src/client-v2/__tests__/delayFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-javascript/src/client-v2/components/CodeEditor.tsx": {
+    "react(preserve-manual-memoization)": 1,
+    "react(refs)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-javascript/src/client-v2/nodes/components/script.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-json-query/src/client-v2/__tests__/JSONQueryFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-json-variable-mapping/src/client-v2/__tests__/JSONVariableMappingFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-json-variable-mapping/src/client/ParsingJSON.tsx": {
+    "eslint(no-unused-expressions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow-json-variable-mapping/src/client/parseActions.tsx": {
+    "eslint(no-unused-expressions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow-json-variable-mapping/src/server/JSONVariableMappingInstruction.ts": {
+    "eslint(no-unused-expressions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow-loop/src/client-v2/nodes/components/loop.tsx": {
+    "react(preserve-manual-memoization)": 3
+  },
+  "packages/plugins/@nocobase/plugin-workflow-mailer/src/client-v2/__tests__/MailerFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-manual/src/client/WorkflowTodo.tsx": {
+    "react(immutability)": 3
+  },
+  "packages/plugins/@nocobase/plugin-workflow-manual/src/client/instruction/SchemaConfig.tsx": {
+    "react(immutability)": 2,
+    "react(preserve-manual-memoization)": 1,
+    "react(refs)": 2,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow-manual/src/client/instruction/forms/custom.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-parallel/src/client-v2/__tests__/parallelFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-request/src/client-v2/__tests__/RequestFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-sql/src/client-v2/__tests__/SQLFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-test/src/server/instructions.ts": {
+    "eslint(no-unreachable)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow-variable/src/client-v2/__tests__/variableFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/ExecutionCanvas.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/AddNodeContext.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/AddNodeSlot.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/JobButton.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 3,
+    "jsx-a11y(no-static-element-interactions)": 3
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/Node.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/NodeClipboardContext.tsx": {
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/NodeConfigDrawer.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/NodeDragContext.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/WorkflowVariableTag.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(preserve-manual-memoization)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/WorkflowVariableTextArea.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/__tests__/NodeClipboardContext.test.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/__tests__/RemoveNodeContext.test.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/canvas/__tests__/WorkflowVariableJsonTextArea.test.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/components/Calculation.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/components/FilterDynamicComponent.tsx": {
+    "react(immutability)": 1,
+    "react(refs)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/components/JobResultModal.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/components/TimeoutInput.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/components/WorkflowDetailsModal.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/components/__tests__/AppendsSelect.test.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/components/__tests__/TriggerCollectionRecordSelect.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/components/collection/AppendsSelect.tsx": {
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/components/collection/AssignedFieldsEditor.tsx": {
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/nodes/__tests__/createFieldset.test.tsx": {
+    "jsx-a11y(control-has-associated-label)": 1,
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/nodes/__tests__/destroyFieldset.test.tsx": {
+    "jsx-a11y(control-has-associated-label)": 1,
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/nodes/__tests__/multiConditionsFieldset.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/nodes/__tests__/queryFieldset.test.tsx": {
+    "jsx-a11y(control-has-associated-label)": 1,
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/nodes/__tests__/updateFieldset.test.tsx": {
+    "jsx-a11y(control-has-associated-label)": 1,
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/nodes/components/multi-conditions.tsx": {
+    "jsx-a11y(anchor-is-valid)": 1,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/pages/ExecutionHistoryDrawer.tsx": {
+    "jsx-a11y(anchor-is-valid)": 2,
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(no-static-element-interactions)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/pages/WorkflowFormDrawer.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/pages/WorkflowPane.tsx": {
+    "jsx-a11y(anchor-is-valid)": 5,
+    "jsx-a11y(click-events-have-key-events)": 5,
+    "jsx-a11y(no-noninteractive-tabindex)": 1,
+    "jsx-a11y(no-static-element-interactions)": 5,
+    "jsx-a11y(prefer-tag-over-role)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/pages/WorkflowTasksPage.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(refs)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/taskCenter.ts": {
+    "react(immutability)": 1,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/triggers/ExecuteWorkflowButton.tsx": {
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/triggers/TriggerConfig.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(set-state-in-effect)": 1,
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/triggers/TriggerExecutionButton.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/triggers/__tests__/TriggerConfig.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/triggers/schedule/TriggerScheduleConfig.tsx": {
+    "react(purity)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client-v2/triggers/schedule/__tests__/TriggerScheduleConfig.test.tsx": {
+    "react(globals)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/WorkflowCanvas.tsx": {
+    "react(preserve-manual-memoization)": 1,
+    "react(set-state-in-effect)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/WorkflowCategoryTabs.tsx": {
+    "eslint(no-unused-expressions)": 2,
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-static-element-interactions)": 1,
+    "jsx-a11y(prefer-tag-over-role)": 1,
+    "react(preserve-manual-memoization)": 1,
+    "react(set-state-in-effect)": 1,
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/WorkflowPane.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/components/AssignedFieldsFormSchemaConfig.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/components/Calculation.tsx": {
+    "jsx-a11y(prefer-tag-over-role)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/components/DrawerForm.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/components/ExecutionStatus.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/components/FieldsSelect.tsx": {
+    "react-hooks(exhaustive-deps)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/hooks/useTriggerWorkflowActionProps.ts": {
+    "react(immutability)": 4
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/nodes/index.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(interactive-supports-focus)": 2,
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "react(immutability)": 2,
+    "react(preserve-manual-memoization)": 2,
+    "react(static-components)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/settings/BindWorkflowConfig.tsx": {
+    "react(immutability)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/client/triggers/index.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 2,
+    "jsx-a11y(interactive-supports-focus)": 2,
+    "jsx-a11y(prefer-tag-over-role)": 2,
+    "react(set-state-in-effect)": 1
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/server/migrations/20230221032941-change-request-body-type.ts": {
+    "eslint(no-useless-escape)": 2
+  },
+  "packages/plugins/@nocobase/plugin-workflow/src/shared/WorkflowTaskNavigation.tsx": {
+    "jsx-a11y(click-events-have-key-events)": 1,
+    "jsx-a11y(no-noninteractive-element-interactions)": 1,
+    "react(set-state-in-effect)": 4
+  },
+  "packages/presets/nocobase/src/server/index.ts": {
+    "eslint(no-unreachable)": 1
+  },
+  "scripts/release/changelogAndRelease.js": {
+    "eslint(no-useless-escape)": 1
+  }
+}
