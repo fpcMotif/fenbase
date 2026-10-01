@@ -412,7 +412,7 @@ async function verifyJourney(
   report(`${locale}: a collection with records cannot be deleted from the app, so records are never discarded`);
 
   await page.getByRole('row').getByRole('button', { name: text.delete, exact: true }).first().click();
-  await page.locator('.ant-popover:visible').getByRole('button', { name: popconfirmOk }).click();
+  await page.locator('.ant-popover:visible').getByRole('button', { name: text.delete, exact: true }).click();
   await page.getByText(text.recordDeleted, { exact: true }).first().waitFor();
   await waitForPopconfirmClosed(page);
   await page.getByRole('button', { name: text.deleteEmpty }).waitFor();
@@ -431,6 +431,7 @@ async function verifyJourney(
   await page.getByRole('button', { name: text.deleteEmpty }).click();
   await confirmPopconfirm(page, text);
   await page.getByText(text.collectionDeleted, { exact: true }).first().waitFor();
+  await page.getByRole('button', { name: journey.renamedTitle }).waitFor({ state: 'hidden' });
   assert(
     (await page.getByRole('button', { name: journey.renamedTitle }).count()) === 0,
     'Deleted renamed collection is still listed in the app',

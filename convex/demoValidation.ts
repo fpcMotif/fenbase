@@ -60,7 +60,7 @@ export function validateCollectionFields(fields: readonly DemoField[]): void {
 export function assertFieldValue(fields: readonly DemoField[], fieldName: string, value: DemoValue): DemoField {
   const field = fields.find((candidate) => candidate.name === fieldName);
   if (!field) {
-    throw new Error(`Unknown field: ${fieldName}`);
+    throw new ConvexError({ code: 'RECORD_FIELD_UNKNOWN', field: fieldName, message: `Unknown field: ${fieldName}` });
   }
 
   const matchesType =
@@ -68,10 +68,18 @@ export function assertFieldValue(fields: readonly DemoField[], fieldName: string
     (field.type === 'number' && typeof value === 'number' && Number.isFinite(value)) ||
     (field.type === 'boolean' && typeof value === 'boolean');
   if (!matchesType) {
-    throw new Error(`Value does not match the ${field.type} field: ${fieldName}`);
+    throw new ConvexError({
+      code: 'RECORD_FIELD_TYPE_INVALID',
+      field: fieldName,
+      message: `Value does not match the ${field.type} field: ${fieldName}`,
+    });
   }
   if (field.type === 'text' && typeof value === 'string' && value.length > maxTextLength) {
-    throw new Error(`Text value is too long for field: ${fieldName}`);
+    throw new ConvexError({
+      code: 'RECORD_TEXT_TOO_LONG',
+      field: fieldName,
+      message: `Text value is too long for field: ${fieldName}`,
+    });
   }
 
   return field;
@@ -85,12 +93,20 @@ export function validateRecordValues(fields: readonly DemoField[], values: Recor
   for (const field of fields) {
     if (!field.required) continue;
     if (!Object.prototype.hasOwnProperty.call(values, field.name)) {
-      throw new Error(`Required field is missing: ${field.name}`);
+      throw new ConvexError({
+        code: 'RECORD_FIELD_REQUIRED',
+        field: field.name,
+        message: `Required field is missing: ${field.name}`,
+      });
     }
     if (field.type === 'text') {
       const value = values[field.name];
       if (typeof value === 'string' && !value.trim()) {
-        throw new Error(`Required field is empty: ${field.name}`);
+        throw new ConvexError({
+          code: 'RECORD_FIELD_REQUIRED',
+          field: field.name,
+          message: `Required field is empty: ${field.name}`,
+        });
       }
     }
   }
@@ -115,7 +131,7 @@ export async function requireOwnedRecord(
 ): Promise<Doc<'demoRecords'>> {
   const record = await ctx.db.get(recordId);
   if (!record || record.ownerId !== ownerId) {
-    throw new Error('Record not found');
+    throw new ConvexError({ code: 'RECORD_NOT_FOUND', message: 'Record not found' });
   }
   return record;
 }

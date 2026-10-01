@@ -80,6 +80,14 @@ const resources = {
         recordDeleted: 'Record deleted',
         collectionDeleted: 'Collection deleted',
       },
+      records: {
+        required: 'Enter a value for {{field}}.',
+        unknownField: 'The field {{field}} is not defined in this collection.',
+        invalidType: 'Enter a value matching the type of {{field}}.',
+        textTooLong: 'Use at most 4000 characters for {{field}}.',
+        notFound: 'This record was not found. Reopen the collection and try again.',
+        deleteConfirm: 'Delete this record?',
+      },
       workflows: {
         title: 'Workflows',
         description: 'Make a simple workflow and run it manually.',
@@ -176,6 +184,14 @@ const resources = {
         recordSaved: '记录已保存',
         recordDeleted: '记录已删除',
         collectionDeleted: '集合已删除',
+      },
+      records: {
+        required: '请填写 {{field}}。',
+        unknownField: '此集合未定义字段 {{field}}。',
+        invalidType: '请输入符合 {{field}} 类型的值。',
+        textTooLong: '{{field}} 最多可输入 4000 个字符。',
+        notFound: '未找到该记录，请重新打开集合后重试。',
+        deleteConfirm: '删除这条记录？',
       },
       workflows: {
         title: '工作流',

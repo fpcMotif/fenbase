@@ -44,7 +44,7 @@ type CollectionSettingsValues = { name: string; title: string };
 type RecordFormValues = Record<string, DemoValue | null | undefined>;
 type WorkflowFormValues = { name: string; collectionId: Collection['_id']; field: string; value: DemoValue | null };
 
-const collectionErrorKeys = new Map([
+const actionErrorKeys = new Map([
   ['COLLECTION_NAME_INVALID', 'collections.nameInvalid'],
   ['COLLECTION_TITLE_INVALID', 'collections.titleRule'],
   ['COLLECTION_NAME_EXISTS', 'collections.nameExists'],
@@ -54,9 +54,14 @@ const collectionErrorKeys = new Map([
   ['COLLECTION_HAS_RECORDS', 'collections.deleteHasRecords'],
   ['COLLECTION_HAS_WORKFLOWS', 'collections.deleteHasWorkflows'],
   ['COLLECTION_NOT_FOUND', 'collections.notFound'],
+  ['RECORD_FIELD_REQUIRED', 'records.required'],
+  ['RECORD_FIELD_UNKNOWN', 'records.unknownField'],
+  ['RECORD_FIELD_TYPE_INVALID', 'records.invalidType'],
+  ['RECORD_TEXT_TOO_LONG', 'records.textTooLong'],
+  ['RECORD_NOT_FOUND', 'records.notFound'],
 ]);
 
-function collectionErrorMessage(error: unknown, t: (key: string) => string): string {
+function actionErrorMessage(error: unknown, t: (key: string, options?: { field: string }) => string): string {
   if (
     error instanceof ConvexError &&
     typeof error.data === 'object' &&
@@ -64,7 +69,8 @@ function collectionErrorMessage(error: unknown, t: (key: string) => string): str
     'code' in error.data &&
     typeof error.data.code === 'string'
   ) {
-    return t(collectionErrorKeys.get(error.data.code) ?? 'common.actionFailed');
+    const field = 'field' in error.data && typeof error.data.field === 'string' ? error.data.field : '';
+    return t(actionErrorKeys.get(error.data.code) ?? 'common.actionFailed', { field });
   }
   return t('common.actionFailed');
 }
@@ -282,6 +288,8 @@ function CollectionsPanel({
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [recordModalOpen, setRecordModalOpen] = useState(false);
   const [editingRecord, setEditingRecord] = useState<DemoRecord>();
+  const [recordError, setRecordError] = useState<string>();
+  const [deletingRecordId, setDeletingRecordId] = useState<DemoRecord['_id']>();
   const [busy, setBusy] = useState(false);
   const [settingsBusy, setSettingsBusy] = useState(false);
   const [collectionForm] = Form.useForm<CollectionFormValues>();
@@ -326,7 +334,7 @@ function CollectionsPanel({
       collectionForm.resetFields();
       await message.success(t('collections.saved'));
     } catch (error) {
-      await message.error(collectionErrorMessage(error, t));
+      await message.error(actionErrorMessage(error, t));
     } finally {
       setBusy(false);
     }
@@ -340,7 +348,7 @@ function CollectionsPanel({
       setSettingsOpen(false);
       await message.success(t('collections.renamed'));
     } catch (error) {
-      await message.error(collectionErrorMessage(error, t));
+      await message.error(actionErrorMessage(error, t));
     } finally {
       setSettingsBusy(false);
     }
@@ -352,6 +360,7 @@ function CollectionsPanel({
       Object.entries(values).filter(([, value]) => value !== undefined && value !== null),
     ) as Record<string, DemoValue>;
     setBusy(true);
+    setRecordError(undefined);
     try {
       if (editingRecord) {
         await updateRecord({ recordId: editingRecord._id, values: cleanValues });
@@ -361,24 +370,28 @@ function CollectionsPanel({
       setRecordModalOpen(false);
       setEditingRecord(undefined);
       await message.success(t('collections.recordSaved'));
-    } catch {
-      await message.error(t('common.actionFailed'));
+    } catch (error) {
+      setRecordError(actionErrorMessage(error, t));
     } finally {
       setBusy(false);
     }
   };
 
   const openRecord = (record?: DemoRecord) => {
+    setRecordError(undefined);
     setEditingRecord(record);
     setRecordModalOpen(true);
   };
 
   const deleteRecord = async (record: DemoRecord) => {
+    setDeletingRecordId(record._id);
     try {
       await removeRecord({ recordId: record._id });
       await message.success(t('collections.recordDeleted'));
-    } catch {
-      await message.error(t('common.actionFailed'));
+    } catch (error) {
+      await message.error(actionErrorMessage(error, t));
+    } finally {
+      setDeletingRecordId(undefined);
     }
   };
 
@@ -389,7 +402,7 @@ function CollectionsPanel({
       setSelectedId(undefined);
       await message.success(t('collections.collectionDeleted'));
     } catch (error) {
-      await message.error(collectionErrorMessage(error, t));
+      await message.error(actionErrorMessage(error, t));
     }
   };
 
@@ -405,11 +418,21 @@ function CollectionsPanel({
       width: 150,
       render: (_: unknown, record: DemoRecord) => (
         <Space>
-          <Button size="small" onClick={() => openRecord(record)}>
+          <Button size="small" disabled={deletingRecordId !== undefined} onClick={() => openRecord(record)}>
             {t('common.edit')}
           </Button>
-          <Popconfirm title={t('common.delete')} onConfirm={() => deleteRecord(record)}>
-            <Button size="small" danger>
+          <Popconfirm
+            title={t('records.deleteConfirm')}
+            okText={t('common.delete')}
+            cancelText={t('common.cancel')}
+            onConfirm={() => deleteRecord(record)}
+          >
+            <Button
+              size="small"
+              danger
+              loading={deletingRecordId === record._id}
+              disabled={deletingRecordId !== undefined}
+            >
               {t('common.delete')}
             </Button>
           </Popconfirm>
@@ -478,7 +501,9 @@ function CollectionsPanel({
                 <Space wrap>
                   <span>{selected?.title || selected?.name}</span>
                   <Tag>
-                    {records.length} {t('collections.records').toLowerCase()}
+                    {recordData === undefined
+                      ? t('common.loading')
+                      : `${records.length} ${t('collections.records').toLowerCase()}`}
                   </Tag>
                 </Space>
               }
@@ -486,7 +511,7 @@ function CollectionsPanel({
                 <Space wrap>
                   <Button onClick={() => setSettingsOpen(true)}>{t('collections.settings')}</Button>
                   <Button onClick={() => openRecord()}>{t('collections.addRecord')}</Button>
-                  {records.length === 0 && selected && (
+                  {recordData !== undefined && records.length === 0 && selected && (
                     <Popconfirm title={t('collections.removeConfirm')} onConfirm={deleteCollection}>
                       <Button danger>{t('collections.deleteEmpty')}</Button>
                     </Popconfirm>
@@ -495,7 +520,9 @@ function CollectionsPanel({
               }
             >
               {recordData === undefined ? (
-                <Spin />
+                <output aria-label={t('common.loading')}>
+                  <Spin />
+                </output>
               ) : records.length === 0 ? (
                 <Empty description={t('collections.noRecords')} />
               ) : (
@@ -659,6 +686,9 @@ function CollectionsPanel({
       <Modal
         title={editingRecord ? t('common.edit') : t('collections.addRecord')}
         open={recordModalOpen}
+        closable={!busy}
+        keyboard={!busy}
+        maskClosable={!busy}
         onCancel={() => {
           setRecordModalOpen(false);
           setEditingRecord(undefined);
@@ -674,7 +704,11 @@ function CollectionsPanel({
               label={field.name}
               valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
               rules={
-                field.required && field.type !== 'boolean' ? [{ required: true, message: t('auth.required') }] : []
+                field.required && field.type !== 'boolean'
+                  ? field.type === 'text'
+                    ? [{ required: true, whitespace: true, message: t('auth.required') }]
+                    : [{ required: true, type: 'number', message: t('auth.required') }]
+                  : []
               }
             >
               {field.type === 'number' ? (
@@ -686,9 +720,14 @@ function CollectionsPanel({
               )}
             </Form.Item>
           ))}
+          {recordError && (
+            <Alert role="alert" type="error" showIcon message={recordError} style={{ marginBottom: 16 }} />
+          )}
           <Form.Item style={{ marginBottom: 0 }}>
             <Space>
-              <Button onClick={() => setRecordModalOpen(false)}>{t('common.cancel')}</Button>
+              <Button disabled={busy} onClick={() => setRecordModalOpen(false)}>
+                {t('common.cancel')}
+              </Button>
               <Button type="primary" htmlType="submit" loading={busy}>
                 {t('common.save')}
               </Button>

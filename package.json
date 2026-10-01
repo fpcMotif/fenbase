@@ -29,6 +29,7 @@
     "demo:deploy": "bun run demo:build && bunx wrangler deploy -c wrangler.worker.json",
     "demo:verify": "bun --tsconfig-override tsconfig.demo.json scripts/demo-verify.ts",
     "demo:collection-journey": "bun --tsconfig-override tsconfig.demo.json scripts/demo-collection-journey.ts",
+    "demo:record-journey": "bun --tsconfig-override tsconfig.demo.json scripts/demo-record-journey.ts",
     "oa:up": "bun --tsconfig-override tsconfig.demo.json scripts/oa-demo-runtime.ts up",
     "oa:stop": "bun --tsconfig-override tsconfig.demo.json scripts/oa-demo-runtime.ts stop",
     "oa:status": "bun --tsconfig-override tsconfig.demo.json scripts/oa-demo-runtime.ts status",
