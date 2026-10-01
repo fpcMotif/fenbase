@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { create, list, remove, update } from '../records';
+import { create, get, list, remove, update } from '../records';
 import { createContext, invokeHandler } from './helpers';
 
 vi.mock('../auth', () => ({ requireUser: async () => 'user-1' }));
@@ -19,6 +19,36 @@ const collection = {
 };
 
 describe('owned collection records', () => {
+  it('reads an owned record by identifier without exposing its owner metadata', async () => {
+    const ctx = createContext({ demoCollections: [collection] });
+    const values = { company: 'Private company', amount: 0, qualified: false };
+    const recordId = await invokeHandler(create, ctx, { collectionId: collection._id, values });
+    const record = await invokeHandler(get, ctx, { recordId });
+    expect(record).toMatchObject({ _id: recordId, collectionId: collection._id, values });
+    expect(record).not.toHaveProperty('ownerId');
+    await invokeHandler(remove, ctx, { recordId });
+    await expect(invokeHandler(get, ctx, { recordId })).rejects.toMatchObject({ data: { code: 'RECORD_NOT_FOUND' } });
+  });
+
+  it('rejects a known record identifier belonging to another owner', async () => {
+    const ctx = createContext({
+      demoCollections: [collection],
+      demoRecords: [
+        {
+          _id: 'demoRecords:private',
+          _creationTime: 1,
+          ownerId: 'user-2',
+          collectionId: collection._id,
+          values: { company: 'Other owner', amount: 1, qualified: true },
+          updatedAt: 1,
+        },
+      ],
+    });
+    await expect(invokeHandler(get, ctx, { recordId: 'demoRecords:private' })).rejects.toMatchObject({
+      data: { code: 'RECORD_NOT_FOUND' },
+    });
+  });
+
   it('returns a transportable required-field error without creating a record', async () => {
     const ctx = createContext({ demoCollections: [collection] });
 

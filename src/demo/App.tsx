@@ -105,14 +105,33 @@ class DemoErrorBoundary extends Component<{ children: ReactNode }, { hasError: b
 function DemoAppContent() {
   const { t, i18n } = useTranslation();
   const { message } = AntdApp.useApp();
-  const { data: session, isPending, error: sessionError } = authClient.useSession();
+  const { data: session, isPending, isRefetching, error: sessionError } = authClient.useSession();
   const { isLoading: convexAuthLoading, isAuthenticated } = useConvexAuth();
   const viewer = useQuery(api.users.getViewer, session && isAuthenticated ? {} : 'skip');
   const [activeTab, setActiveTab] = useState('data');
   const seed = useMutation(api.demo.seed);
   const [seeding, setSeeding] = useState(false);
+  const [signingOut, setSigningOut] = useState(false);
 
-  if (isPending || (session && (convexAuthLoading || (isAuthenticated && viewer === undefined)))) {
+  const signOut = async () => {
+    setSigningOut(true);
+    try {
+      const result = await authClient.signOut();
+      if (result.error) await message.error(t('common.actionFailed'));
+    } catch {
+      await message.error(t('common.actionFailed'));
+    } finally {
+      setSigningOut(false);
+    }
+  };
+
+  if (
+    isPending ||
+    signingOut ||
+    convexAuthLoading ||
+    (!session && (isAuthenticated || isRefetching)) ||
+    (session && isAuthenticated && viewer?.id !== session.user.id)
+  ) {
     return (
       <div className="demo-page demo-centered">
         <Spin size="large" />
@@ -129,7 +148,7 @@ function DemoAppContent() {
       <main className="demo-page demo-centered">
         <Card className="demo-auth-card">
           <Alert type="warning" showIcon message={t('auth.sessionSync')} />
-          <Button block style={{ marginTop: 16 }} onClick={() => authClient.signOut()}>
+          <Button block style={{ marginTop: 16 }} onClick={signOut}>
             {t('nav.signOut')}
           </Button>
         </Card>
@@ -169,7 +188,7 @@ function DemoAppContent() {
             {t('common.language')}
           </Button>
           <Typography.Text className="demo-muted">{viewer?.name || viewer?.email}</Typography.Text>
-          <Button onClick={() => authClient.signOut()}>{t('nav.signOut')}</Button>
+          <Button onClick={signOut}>{t('nav.signOut')}</Button>
         </Space>
       </header>
       {sessionError && <Alert className="demo-content" type="error" showIcon message={t('common.error')} />}

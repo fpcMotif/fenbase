@@ -14,6 +14,18 @@ const recordValidator = v.object({
   updatedAt: v.number(),
 });
 
+export const get = query({
+  args: { recordId: v.id('demoRecords') },
+  returns: recordValidator,
+  handler: async (ctx, args) => {
+    const ownerId = await requireUser(ctx);
+    const record = await requireOwnedRecord(ctx, ownerId, args.recordId);
+    await requireOwnedCollection(ctx, ownerId, record.collectionId);
+    const { _id, _creationTime, collectionId, values, updatedAt } = record;
+    return { _id, _creationTime, collectionId, values, updatedAt };
+  },
+});
+
 export const list = query({
   args: {
     collectionId: v.id('demoCollections'),
