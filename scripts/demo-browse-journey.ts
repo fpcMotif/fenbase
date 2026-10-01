@@ -87,8 +87,8 @@ function seedValues(index: number): Values {
   return values;
 }
 
-// The expected order, written from the documented contract rather than from the implementation: a missing value is the largest, text ignores
-// letter case, and ties are newest first.
+// The expected order, written from the documented contract rather than from the implementation: a missing value is the
+// largest, text ignores letter case, and ties are newest first.
 function expectedIds(
   model: readonly ModelRecord[],
   keep: (values: Values) => boolean,

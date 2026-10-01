@@ -22,7 +22,7 @@ Every filter is combined with AND. At most 10 filters per query. Operators follo
 
 One sort key: any field, or `_creationTime`. Direction `asc` or `desc`. Default: `_creationTime` descending (newest first).
 
-- A missing value sorts as the largest value: last when ascending, first when descending.
+- A missing value sorts as the largest value: last when ascending, first when descending. An empty text value `''` is a value and sorts first when ascending, like PostgreSQL.
 - Text compares by lower-cased code units, then by exact text. No locale collation.
 - Ties fall back to newest first, then record id, so page boundaries are stable.
 
@@ -36,10 +36,11 @@ Convex cannot index the dynamic field names inside `values`, so the backend read
 
 - A collection holds at most 1000 records. Creating one more fails with `RECORD_COLLECTION_FULL`.
 - A collection above 1000 records (only possible through data written outside `records.create`) fails to browse with `RECORD_BROWSE_LIMIT_EXCEEDED`. Results are never silently truncated.
+- Convex's per-function read limit (about 16 MiB, see https://docs.convex.dev/production/state/limits) also applies. Browsing and creating stay within it while records average under about 16 KB. A collection that exceeds it (for example 1000 records with several near-4000-character text fields) fails with a generic translated error instead of returning partial results. Lifting this needs a stored record count or a per-record size budget; neither is part of this slice.
 
 ## Errors
 
-Malformed input fails with a coded `ConvexError` that the demo translates: `RECORD_QUERY_FIELD_UNKNOWN`, `RECORD_QUERY_OPERATOR_INVALID`, `RECORD_QUERY_VALUE_INVALID` (each with `field`), `RECORD_QUERY_FILTER_COUNT_INVALID`, `RECORD_QUERY_SORT_INVALID`, `RECORD_QUERY_PAGE_INVALID`. Unauthenticated calls fail; another user's collection fails with `COLLECTION_NOT_FOUND`.
+Input with the right shape but unsupported content fails with a coded `ConvexError` that the demo translates: `RECORD_QUERY_FIELD_UNKNOWN`, `RECORD_QUERY_OPERATOR_INVALID`, `RECORD_QUERY_VALUE_INVALID` (each with `field`), `RECORD_QUERY_FILTER_COUNT_INVALID`, `RECORD_QUERY_SORT_INVALID`, `RECORD_QUERY_PAGE_INVALID`. Input with the wrong shape (for example `value: null`, a missing `operator`, or a string `page`) is rejected by Convex argument validation with an untranslated error; the app never sends it. Unauthenticated calls fail; another user's collection fails with `COLLECTION_NOT_FOUND`.
 
 ## Verification
 

@@ -10,7 +10,7 @@ type DemoContext = MutationCtx | QueryCtx;
 const namePattern = /^[a-z][a-z0-9_]{0,62}$/;
 const maxTitleLength = 120;
 const maxFieldCount = 30;
-const maxTextLength = 4000;
+export const maxTextLength = 4000;
 
 export function validateCollectionName(name: string): string {
   const trimmed = name.trim();

@@ -32,8 +32,8 @@ async function readCollectionRecords(
 export const browse = query({
   args: {
     collectionId: v.id('demoCollections'),
-    // Operators, fields, and directions are checked by `validateRecordQuery` rather than by validators, so malformed input gets a coded,
-    // translatable error.
+    // Operators, fields, and directions are checked by `validateRecordQuery` rather than by validators, so malformed
+    // input gets a coded, translatable error.
     filters: v.optional(
       v.array(v.object({ field: v.string(), operator: v.string(), value: v.optional(scalarValidator) })),
     ),

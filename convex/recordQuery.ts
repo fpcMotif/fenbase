@@ -1,14 +1,11 @@
 import { ConvexError } from 'convex/values';
+import { maxTextLength, type DemoField, type DemoValue } from './demoValidation';
 
-// Filtering, sorting, and pagination for one collection's records. Shared by the `records.browse` query (authoritative) and the demo client (early
-// validation), so it must stay free of server-only imports.
+// Filtering, sorting, and pagination for one collection's records. Shared by the `records.browse` query (authoritative)
+// and the demo client (early validation), so it must stay free of server-only imports.
 
-export type RecordQueryValue = string | number | boolean;
-
-export interface RecordQueryField {
-  name: string;
-  type: 'text' | 'number' | 'boolean';
-}
+export type RecordQueryValue = DemoValue;
+export type RecordQueryField = Pick<DemoField, 'name' | 'type'>;
 
 export type RecordFilter = {
   field: string;
@@ -45,14 +42,16 @@ export interface RecordPage<T> {
 export const DEFAULT_RECORD_PAGE_SIZE = 20;
 export const MAX_RECORD_PAGE_SIZE = 100;
 export const MAX_RECORD_FILTERS = 10;
-// Records are filtered and sorted in memory because Convex cannot index the dynamic field names inside `values`. Capping each collection keeps
-// every browse complete and inside Convex's per-query read limits.
+// Records are filtered and sorted in memory because Convex cannot index the dynamic field names inside `values`. The
+// cap bounds the records read per browse; Convex's per-function read limit still applies to very wide or text-heavy
+// collections, and exceeding it fails the query rather than truncating the results.
 export const MAX_RECORDS_PER_COLLECTION = 1000;
-const maxTextValueLength = 4000;
-// Sort key for the record's creation time; field names cannot start with an underscore, so it never collides with a collection field.
+// Sort key for the record's creation time; field names cannot start with an underscore, so it never collides with a
+// collection field.
 export const RECORD_CREATED_SORT_FIELD = '_creationTime';
 
-// The bounded NocoBase operator set this journey supports for each primitive field type. Every filter is combined with AND.
+// The bounded NocoBase operator set this journey supports for each primitive field type. Every filter is combined with
+// AND.
 export const RECORD_FILTER_OPERATORS = {
   text: ['$includes', '$notIncludes', '$eq', '$ne', '$empty', '$notEmpty'],
   number: ['$eq', '$ne', '$gt', '$gte', '$lt', '$lte', '$empty', '$notEmpty'],
@@ -87,7 +86,7 @@ function validateFilter(fields: readonly RecordQueryField[], filter: RecordFilte
     : field.type === 'number'
       ? typeof value === 'number' && Number.isFinite(value)
       : typeof value === 'string' &&
-        value.length <= maxTextValueLength &&
+        value.length <= maxTextLength &&
         (value !== '' || (filter.operator !== '$includes' && filter.operator !== '$notIncludes'));
   if (!validValue) reject('RECORD_QUERY_VALUE_INVALID', `Invalid filter value for ${field.name}`, field.name);
 }
@@ -122,8 +121,8 @@ function isEmpty(value: RecordQueryValue | undefined): boolean {
   return value === undefined || value === '';
 }
 
-// Mirrors the NocoBase operators of the same names: `$ne` keeps records without a value, `$includes`/`$notIncludes` ignore letter case and skip
-// records without a value, and an empty text value counts as empty.
+// Mirrors the NocoBase operators of the same names: `$ne` keeps records without a value, `$includes`/`$notIncludes`
+// ignore letter case and skip records without a value, and an empty text value counts as empty.
 function matches(record: BrowsableRecord, filter: RecordFilter): boolean {
   const actual = record.values[filter.field];
   const expected = filter.value;
