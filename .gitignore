@@ -43,7 +43,8 @@ v8-compile-cache-**
 vitest.config.mts.timestamp-*
 .github/copilot-instructions.md
 .github/skills
-.claude/
+.claude/*
+!.claude/skills/
 .claudeignore
 python/
 git-repos.json
@@ -81,7 +82,6 @@ openspec/
 .windsurf
 .zencoder
 /skills
-/skills-lock.json
 paseo.json
 
 .env.local

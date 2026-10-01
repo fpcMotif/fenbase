@@ -24,6 +24,7 @@
     "packages/**/locale/**",
     "storage",
     "./lerna.json",
-    "locales/**"
+    "locales/**",
+    ".claude/skills/**"
   ]
 }
