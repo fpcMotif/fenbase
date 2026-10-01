@@ -30,7 +30,7 @@ jobs:
         run: bun run format:check
 
       - name: Run linter (Oxlint)
-        run: bun run lint:ratchet
+        run: bun scripts/lint-ratchet.ts
 
       - name: Run type-aware linter (Oxlint)
-        run: bun run lint:typeaware:ratchet
+        run: bun scripts/lint-ratchet.ts -- -c .oxlintrc.json --tsconfig tsconfig.oxlint.json

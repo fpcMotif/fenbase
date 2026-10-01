@@ -97,7 +97,7 @@ for (const d of errors) console.error(format(d));
 console.log(`[lint-ratchet] ${errors.length} errors, ${warnings.length} warnings, ${added} new over baseline.`);
 if (fixed > 0 && !update) {
   console.log(
-    `[lint-ratchet] ${fixed} baseline warnings are gone. Run \`bun run lint:baseline\` to lower the baseline.`,
+    `[lint-ratchet] ${fixed} baseline warnings are gone. Run \`bun scripts/lint-ratchet.ts --update\` to lower the baseline.`,
   );
 }
 
