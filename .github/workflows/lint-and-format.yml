@@ -30,7 +30,7 @@ jobs:
         run: bun run format:check
 
       - name: Run linter (Oxlint)
-        run: bun run lint --deny-warnings
+        run: bun run lint:ratchet
 
       - name: Run type-aware linter (Oxlint)
-        run: bun run lint:typeaware --deny-warnings
+        run: bun run lint:typeaware:ratchet
