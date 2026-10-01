@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import {
   Alert,
@@ -33,13 +33,33 @@ import i18n from './i18n';
 
 type DemoValue = string | number | boolean;
 type Collection = FunctionReturnType<typeof api.collections.list>['items'][number];
+type SavedCollection = FunctionReturnType<typeof api.collections.get>;
 type DemoRecord = FunctionReturnType<typeof api.records.list>['items'][number];
 type Workflow = FunctionReturnType<typeof api.workflows.list>['items'][number];
 type WorkflowRun = FunctionReturnType<typeof api.workflows.listRuns>[number];
 type DemoField = Collection['fields'][number];
 type CollectionFormValues = { name: string; title: string; fields: DemoField[] };
+type CollectionSettingsValues = { name: string; title: string };
 type RecordFormValues = Record<string, DemoValue | null | undefined>;
 type WorkflowFormValues = { name: string; collectionId: Collection['_id']; field: string; value: DemoValue | null };
+
+const collectionErrorKeys: Array<[pattern: RegExp, key: string]> = [
+  [/Collection name must start with/, 'collections.nameInvalid'],
+  [/Collection title must contain/, 'collections.titleRule'],
+  [/Collection name already exists/, 'collections.nameExists'],
+  [/Duplicate field name/, 'collections.fieldNameDuplicate'],
+  [/Invalid field name/, 'collections.fieldInvalid'],
+  [/between 1 and 30 fields/, 'collections.fieldCount'],
+  [/Remove all records before deleting/, 'collections.deleteHasRecords'],
+  [/Delete workflows before deleting/, 'collections.deleteHasWorkflows'],
+  [/Collection not found/, 'collections.notFound'],
+];
+
+function collectionErrorMessage(error: unknown, t: (key: string) => string): string {
+  const text = error instanceof Error ? error.message : String(error);
+  const match = collectionErrorKeys.find(([pattern]) => pattern.test(text));
+  return match ? t(match[1]) : t('common.actionFailed');
+}
 
 export default function DemoApp() {
   return (
@@ -247,22 +267,47 @@ function CollectionsPanel({
   const { message } = AntdApp.useApp();
   const data = useQuery(api.collections.list, {});
   const createCollection = useMutation(api.collections.create);
+  const updateCollection = useMutation(api.collections.update);
   const removeCollection = useMutation(api.collections.remove);
   const [selectedId, setSelectedId] = useState<Collection['_id']>();
   const [collectionModalOpen, setCollectionModalOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [recordModalOpen, setRecordModalOpen] = useState(false);
   const [editingRecord, setEditingRecord] = useState<DemoRecord>();
   const [busy, setBusy] = useState(false);
+  const [settingsBusy, setSettingsBusy] = useState(false);
   const [collectionForm] = Form.useForm<CollectionFormValues>();
+  const [settingsForm] = Form.useForm<CollectionSettingsValues>();
   const [recordForm] = Form.useForm<RecordFormValues>();
   const collections = data?.items ?? [];
   const selected = collections.find((collection) => collection._id === selectedId) ?? collections[0];
+  const savedConfig = useQuery(api.collections.get, selected && settingsOpen ? { collectionId: selected._id } : 'skip');
   const recordData = useQuery(api.records.list, selected ? { collectionId: selected._id, limit: 100 } : 'skip');
   const createRecord = useMutation(api.records.create);
   const updateRecord = useMutation(api.records.update);
   const removeRecord = useMutation(api.records.remove);
   const records = recordData?.items ?? [];
-  const fields = selected?.fields ?? [];
+  const fields = useMemo(() => selected?.fields ?? [], [selected]);
+
+  useEffect(() => {
+    if (settingsOpen && savedConfig) {
+      settingsForm.setFieldsValue({ name: savedConfig.name, title: savedConfig.title });
+    }
+  }, [settingsOpen, savedConfig, settingsForm]);
+
+  // The record modal is destroyed on close, so populate the form after it has mounted; writing values before the first mount would hit a form instance
+  // that is not connected yet.
+  useEffect(() => {
+    if (!recordModalOpen) return;
+    recordForm.resetFields();
+    const initialValues = Object.fromEntries(
+      fields.map((field) => [
+        field.name,
+        editingRecord?.values[field.name] ?? (field.type === 'boolean' ? false : undefined),
+      ]),
+    ) as RecordFormValues;
+    recordForm.setFieldsValue(initialValues);
+  }, [recordModalOpen, editingRecord, fields, recordForm]);
 
   const saveCollection = async (values: CollectionFormValues) => {
     setBusy(true);
@@ -272,10 +317,24 @@ function CollectionsPanel({
       setCollectionModalOpen(false);
       collectionForm.resetFields();
       await message.success(t('collections.saved'));
-    } catch {
-      await message.error(t('common.actionFailed'));
+    } catch (error) {
+      await message.error(collectionErrorMessage(error, t));
     } finally {
       setBusy(false);
+    }
+  };
+
+  const saveRename = async (values: CollectionSettingsValues) => {
+    if (!savedConfig) return;
+    setSettingsBusy(true);
+    try {
+      await updateCollection({ collectionId: savedConfig._id, name: values.name, title: values.title });
+      setSettingsOpen(false);
+      await message.success(t('collections.renamed'));
+    } catch (error) {
+      await message.error(collectionErrorMessage(error, t));
+    } finally {
+      setSettingsBusy(false);
     }
   };
 
@@ -293,7 +352,6 @@ function CollectionsPanel({
       }
       setRecordModalOpen(false);
       setEditingRecord(undefined);
-      recordForm.resetFields();
       await message.success(t('collections.recordSaved'));
     } catch {
       await message.error(t('common.actionFailed'));
@@ -304,11 +362,6 @@ function CollectionsPanel({
 
   const openRecord = (record?: DemoRecord) => {
     setEditingRecord(record);
-    recordForm.resetFields();
-    const initialValues = Object.fromEntries(
-      fields.map((field) => [field.name, record?.values[field.name] ?? (field.type === 'boolean' ? false : undefined)]),
-    ) as RecordFormValues;
-    recordForm.setFieldsValue(initialValues);
     setRecordModalOpen(true);
   };
 
@@ -327,8 +380,8 @@ function CollectionsPanel({
       await removeCollection({ collectionId: selected._id });
       setSelectedId(undefined);
       await message.success(t('collections.collectionDeleted'));
-    } catch {
-      await message.error(t('common.actionFailed'));
+    } catch (error) {
+      await message.error(collectionErrorMessage(error, t));
     }
   };
 
@@ -423,6 +476,7 @@ function CollectionsPanel({
               }
               extra={
                 <Space wrap>
+                  <Button onClick={() => setSettingsOpen(true)}>{t('collections.settings')}</Button>
                   <Button onClick={() => openRecord()}>{t('collections.addRecord')}</Button>
                   {records.length === 0 && selected && (
                     <Popconfirm title={t('collections.removeConfirm')} onConfirm={deleteCollection}>
@@ -463,6 +517,7 @@ function CollectionsPanel({
         destroyOnClose
       >
         <Form
+          name="collection-create"
           form={collectionForm}
           layout="vertical"
           onFinish={saveCollection}
@@ -480,7 +535,7 @@ function CollectionsPanel({
             label={t('collections.name')}
             rules={[
               { required: true, message: t('auth.required') },
-              { pattern: /^[a-z][a-z0-9_]*$/, message: t('collections.nameRule') },
+              { pattern: /^[a-z][a-z0-9_]*$/, message: t('collections.nameInvalid') },
             ]}
           >
             <Input />
@@ -493,21 +548,31 @@ function CollectionsPanel({
                   <Space key={item.key} align="baseline" wrap>
                     <Form.Item
                       {...item}
+                      key={`${item.key}-name`}
                       name={[item.name, 'name']}
                       label={t('collections.fieldName')}
-                      rules={[{ required: true, message: t('auth.required') }]}
+                      rules={[
+                        { required: true, message: t('auth.required') },
+                        { pattern: /^[a-z][a-z0-9_]*$/, message: t('collections.fieldInvalid') },
+                      ]}
                     >
                       <Input />
                     </Form.Item>
                     <Form.Item
                       {...item}
+                      key={`${item.key}-type`}
                       name={[item.name, 'type']}
                       label={t('collections.fieldType')}
                       rules={[{ required: true, message: t('auth.required') }]}
                     >
                       <Select style={{ minWidth: 110 }} options={fieldTypeOptions(t)} />
                     </Form.Item>
-                    <Form.Item {...item} name={[item.name, 'required']} valuePropName="checked">
+                    <Form.Item
+                      {...item}
+                      key={`${item.key}-required`}
+                      name={[item.name, 'required']}
+                      valuePropName="checked"
+                    >
                       <Checkbox>{t('collections.required')}</Checkbox>
                     </Form.Item>
                     {items.length > 1 && (
@@ -534,6 +599,56 @@ function CollectionsPanel({
         </Form>
       </Modal>
       <Modal
+        title={t('collections.settings')}
+        open={settingsOpen}
+        onCancel={() => setSettingsOpen(false)}
+        footer={null}
+      >
+        {savedConfig === undefined ? (
+          <div className="demo-centered">
+            <Spin />
+          </div>
+        ) : (
+          <Form name="collection-settings" form={settingsForm} layout="vertical" onFinish={saveRename}>
+            <Form.Item
+              name="title"
+              label={t('collections.displayName')}
+              rules={[{ required: true, message: t('auth.required') }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              name="name"
+              label={t('collections.name')}
+              rules={[
+                { required: true, message: t('auth.required') },
+                { pattern: /^[a-z][a-z0-9_]*$/, message: t('collections.nameInvalid') },
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            <Typography.Text strong>{t('collections.fields')}</Typography.Text>
+            <ul className="demo-field-list">
+              {savedConfig.fields.map((field) => (
+                <li key={field.name}>
+                  <Typography.Text code>{field.name}</Typography.Text>
+                  <span className="demo-muted">{t(`collections.${field.type}`)}</span>
+                  {field.required && <Tag>{t('collections.required')}</Tag>}
+                </li>
+              ))}
+            </ul>
+            <Form.Item style={{ marginTop: 20, marginBottom: 0 }}>
+              <Space>
+                <Button onClick={() => setSettingsOpen(false)}>{t('common.cancel')}</Button>
+                <Button type="primary" htmlType="submit" loading={settingsBusy}>
+                  {t('common.save')}
+                </Button>
+              </Space>
+            </Form.Item>
+          </Form>
+        )}
+      </Modal>
+      <Modal
         title={editingRecord ? t('common.edit') : t('collections.addRecord')}
         open={recordModalOpen}
         onCancel={() => {
@@ -543,7 +658,7 @@ function CollectionsPanel({
         footer={null}
         destroyOnClose
       >
-        <Form form={recordForm} layout="vertical" onFinish={saveRecord}>
+        <Form name="collection-record" form={recordForm} layout="vertical" onFinish={saveRecord}>
           {fields.map((field) => (
             <Form.Item
               key={field.name}
@@ -726,6 +841,7 @@ function WorkflowsPanel() {
         destroyOnClose
       >
         <Form
+          name="workflow-create"
           form={form}
           layout="vertical"
           onFinish={saveWorkflow}

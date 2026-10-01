@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as __tests___helpers from '../__tests__/helpers.js';
 import type * as auth from '../auth.js';
 import type * as collections from '../collections.js';
 import type * as demo from '../demo.js';
@@ -20,6 +21,7 @@ import type * as workflows from '../workflows.js';
 import type { ApiFromModules, FilterApi, FunctionReference } from 'convex/server';
 
 declare const fullApi: ApiFromModules<{
+  '__tests__/helpers': typeof __tests___helpers;
   auth: typeof auth;
   collections: typeof collections;
   demo: typeof demo;

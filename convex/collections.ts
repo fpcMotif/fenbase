@@ -1,7 +1,14 @@
-import { v } from 'convex/values';
+import { ConvexError, v } from 'convex/values';
+import type { Id } from './_generated/dataModel';
 import { requireUser } from './auth';
 import { mutation, query } from './_generated/server';
-import { requireOwnedCollection, validateCollectionFields } from './demoValidation';
+import type { MutationCtx } from './_generated/server';
+import {
+  requireOwnedCollection,
+  validateCollectionFields,
+  validateCollectionName,
+  validateCollectionTitle,
+} from './demoValidation';
 
 const fieldValidator = v.object({
   name: v.string(),
@@ -16,6 +23,18 @@ const collectionValidator = v.object({
   title: v.string(),
   fields: v.array(fieldValidator),
 });
+
+// Throws when another collection owned by the same user already uses `name`; pass the id being
+// renamed so keeping its own current name is allowed.
+async function assertNameAvailable(ctx: MutationCtx, ownerId: string, name: string, selfId?: Id<'demoCollections'>) {
+  const existing = await ctx.db
+    .query('demoCollections')
+    .withIndex('by_owner_name', (q) => q.eq('ownerId', ownerId).eq('name', name))
+    .first();
+  if (existing && existing._id !== selfId) {
+    throw new ConvexError(`Collection name already exists: ${name}`);
+  }
+}
 
 export const list = query({
   args: {},
@@ -44,6 +63,22 @@ export const list = query({
   },
 });
 
+export const get = query({
+  args: { collectionId: v.id('demoCollections') },
+  returns: collectionValidator,
+  handler: async (ctx, args) => {
+    const ownerId = await requireUser(ctx);
+    const collection = await requireOwnedCollection(ctx, ownerId, args.collectionId);
+    return {
+      _id: collection._id,
+      _creationTime: collection._creationTime,
+      name: collection.name,
+      title: collection.title,
+      fields: collection.fields,
+    };
+  },
+});
+
 export const create = mutation({
   args: {
     name: v.string(),
@@ -53,26 +88,10 @@ export const create = mutation({
   returns: v.id('demoCollections'),
   handler: async (ctx, args) => {
     const ownerId = await requireUser(ctx);
-    const name = args.name.trim();
-    const title = args.title.trim();
-
-    if (!/^[a-z][a-z0-9_]{0,62}$/.test(name)) {
-      throw new Error(
-        'Collection name must start with a lowercase letter and use lowercase letters, numbers, or underscores',
-      );
-    }
-    if (title.length === 0 || title.length > 120) {
-      throw new Error('Collection title must contain between 1 and 120 characters');
-    }
+    const name = validateCollectionName(args.name);
+    const title = validateCollectionTitle(args.title);
     validateCollectionFields(args.fields);
-
-    const existing = await ctx.db
-      .query('demoCollections')
-      .withIndex('by_owner_name', (q) => q.eq('ownerId', ownerId).eq('name', name))
-      .first();
-    if (existing) {
-      throw new Error(`Collection name already exists: ${name}`);
-    }
+    await assertNameAvailable(ctx, ownerId, name);
 
     return await ctx.db.insert('demoCollections', {
       ownerId,
@@ -80,6 +99,25 @@ export const create = mutation({
       title,
       fields: args.fields,
     });
+  },
+});
+
+export const update = mutation({
+  args: {
+    collectionId: v.id('demoCollections'),
+    name: v.string(),
+    title: v.string(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const ownerId = await requireUser(ctx);
+    const collection = await requireOwnedCollection(ctx, ownerId, args.collectionId);
+    const name = validateCollectionName(args.name);
+    const title = validateCollectionTitle(args.title);
+    await assertNameAvailable(ctx, ownerId, name, collection._id);
+
+    await ctx.db.patch(collection._id, { name, title });
+    return null;
   },
 });
 

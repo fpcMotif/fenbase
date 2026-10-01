@@ -173,6 +173,133 @@ async function main(): Promise<void> {
     );
     recordPass('Owned collection can be created and listed');
 
+    const savedFields = [
+      { name: 'company', type: 'text', required: true },
+      { name: 'amount', type: 'number', required: true },
+      { name: 'qualified', type: 'boolean', required: true },
+    ];
+    const reopened = await ownerClient.query(api.collections.get, { collectionId });
+    assert(
+      reopened?._id === collectionId &&
+        reopened.name === `verify_${suffix.replaceAll('-', '_')}` &&
+        reopened.title === 'Demo verification collection' &&
+        reopened.fields.length === savedFields.length &&
+        reopened.fields.every(
+          (field, index) =>
+            field.name === savedFields[index]?.name &&
+            field.type === savedFields[index]?.type &&
+            field.required === savedFields[index]?.required,
+        ),
+      'Reopened collection configuration does not match the persisted fields',
+    );
+    recordPass('Saved collection can be reopened with its persisted field configuration');
+
+    const renamedName = `verify_renamed_${suffix.replaceAll('-', '_')}`;
+    await ownerClient.mutation(api.collections.update, {
+      collectionId,
+      name: renamedName,
+      title: 'Demo verification renamed',
+    });
+    const reopenedAfterRename = await ownerClient.query(api.collections.get, { collectionId });
+    const listAfterRename = await ownerClient.query(api.collections.list, {});
+    assert(
+      reopenedAfterRename?.name === renamedName &&
+        reopenedAfterRename.title === 'Demo verification renamed' &&
+        reopenedAfterRename.fields.length === savedFields.length &&
+        listAfterRename.items.some((item) => item._id === collectionId && item.name === renamedName),
+      'Collection rename was not persisted',
+    );
+    recordPass('Collection rename is persisted and keeps its field configuration');
+
+    await ownerClient.mutation(api.collections.update, {
+      collectionId,
+      name: renamedName,
+      title: 'Demo verification renamed',
+    });
+    recordPass('Renaming a collection to its own name is allowed');
+
+    await expectRejected(
+      'Invalid collection name rename is rejected',
+      () => ownerClient.mutation(api.collections.update, { collectionId, name: 'Bad-Name', title: 'Renamed' }),
+      'Collection name must start with a lowercase letter',
+    );
+    await expectRejected(
+      'Blank collection title rename is rejected',
+      () => ownerClient.mutation(api.collections.update, { collectionId, name: renamedName, title: '   ' }),
+      'Collection title must contain between 1 and 120 characters',
+    );
+    recordPass('Collection rename validates names and titles at the backend boundary');
+
+    const duplicateName = `verify_duplicate_${suffix.replaceAll('-', '_')}`;
+    const duplicateCollectionId = await ownerClient.mutation(api.collections.create, {
+      name: duplicateName,
+      title: 'Duplicate target',
+      fields: [{ name: 'note', type: 'text' }],
+    });
+    await expectRejected(
+      'Duplicate-name collection rename is rejected',
+      () => ownerClient.mutation(api.collections.update, { collectionId, name: duplicateName, title: 'Clash' }),
+      'Collection name already exists',
+    );
+    recordPass('Collection rename rejects a name already used by the owner');
+
+    await ownerClient.mutation(api.collections.remove, { collectionId: duplicateCollectionId });
+    const listAfterDelete = await ownerClient.query(api.collections.list, {});
+    assert(
+      !listAfterDelete.items.some((item) => item._id === duplicateCollectionId),
+      'Deleted empty collection remains in the owner list',
+    );
+    recordPass('Empty collection deletion removes it from persisted state');
+
+    await expectRejected(
+      'Unauthenticated collection reopen is rejected',
+      () => unauthenticated.query(api.collections.get, { collectionId }),
+      'Unauthenticated',
+    );
+    await expectRejected(
+      'Unauthenticated collection rename is rejected',
+      () =>
+        unauthenticated.mutation(api.collections.update, { collectionId, name: 'anonymous_leads', title: 'Anonymous' }),
+      'Unauthenticated',
+    );
+    await expectRejected(
+      'Unauthenticated collection deletion is rejected',
+      () => unauthenticated.mutation(api.collections.remove, { collectionId }),
+      'Unauthenticated',
+    );
+    recordPass('Unauthenticated reopen, rename, and deletion are denied with a known collection id');
+
+    const deletionName = `verify_deletion_${suffix.replaceAll('-', '_')}`;
+    const deletionCollectionId = await ownerClient.mutation(api.collections.create, {
+      name: deletionName,
+      title: 'Deletion behavior',
+      fields: [{ name: 'note', type: 'text' }],
+    });
+    const deletionRecordId = await ownerClient.mutation(api.records.create, {
+      collectionId: deletionCollectionId,
+      values: { note: 'Blocks deletion' },
+    });
+    await expectRejected(
+      'Deleting a collection with records is rejected',
+      () => ownerClient.mutation(api.collections.remove, { collectionId: deletionCollectionId }),
+      'Remove all records before deleting this collection',
+    );
+    await ownerClient.mutation(api.records.remove, { recordId: deletionRecordId });
+    const deletionWorkflow = await ownerClient.mutation(api.workflows.create, {
+      collectionId: deletionCollectionId,
+      name: 'Deletion blocker',
+      field: 'note',
+      value: 'blocks',
+    });
+    await expectRejected(
+      'Deleting a collection with workflows is rejected',
+      () => ownerClient.mutation(api.collections.remove, { collectionId: deletionCollectionId }),
+      'Delete workflows before deleting this collection',
+    );
+    await ownerClient.mutation(api.workflows.remove, { workflowId: deletionWorkflow.workflowId });
+    await ownerClient.mutation(api.collections.remove, { collectionId: deletionCollectionId });
+    recordPass('Nonempty collections are never silently deleted; blocking records and workflows are preserved');
+
     const initialRecords = await ownerClient.query(api.records.list, { collectionId, limit: 10 });
     assert(initialRecords.items.length === 0, 'New collection unexpectedly contains records');
 
@@ -224,6 +351,28 @@ async function main(): Promise<void> {
       'Second user can list the first user’s workflow',
     );
     recordPass('Collection and workflow lists are isolated by owner');
+
+    await expectRejected(
+      'Cross-user collection reopen is rejected',
+      () => secondClient.query(api.collections.get, { collectionId }),
+      'Collection not found',
+    );
+    await expectRejected(
+      'Cross-user collection rename is rejected',
+      () =>
+        secondClient.mutation(api.collections.update, {
+          collectionId,
+          name: 'stolen_collection',
+          title: 'Stolen',
+        }),
+      'Collection not found',
+    );
+    await expectRejected(
+      'Cross-user collection deletion is rejected',
+      () => secondClient.mutation(api.collections.remove, { collectionId }),
+      'Collection not found',
+    );
+    recordPass('Cross-user collection reopen, rename, and deletion are denied with a known collection id');
 
     await expectRejected(
       'Cross-user record update is rejected',

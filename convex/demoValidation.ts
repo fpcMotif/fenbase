@@ -6,9 +6,28 @@ export type DemoValue = string | number | boolean;
 
 type DemoContext = MutationCtx | QueryCtx;
 
-const fieldNamePattern = /^[a-z][a-z0-9_]{0,62}$/;
+const namePattern = /^[a-z][a-z0-9_]{0,62}$/;
+const maxTitleLength = 120;
 const maxFieldCount = 30;
 const maxTextLength = 4000;
+
+export function validateCollectionName(name: string): string {
+  const trimmed = name.trim();
+  if (!namePattern.test(trimmed)) {
+    throw new Error(
+      'Collection name must start with a lowercase letter and use lowercase letters, numbers, or underscores',
+    );
+  }
+  return trimmed;
+}
+
+export function validateCollectionTitle(title: string): string {
+  const trimmed = title.trim();
+  if (trimmed.length === 0 || trimmed.length > maxTitleLength) {
+    throw new Error(`Collection title must contain between 1 and ${maxTitleLength} characters`);
+  }
+  return trimmed;
+}
 
 export function validateCollectionFields(fields: readonly DemoField[]): void {
   if (fields.length === 0 || fields.length > maxFieldCount) {
@@ -17,7 +36,7 @@ export function validateCollectionFields(fields: readonly DemoField[]): void {
 
   const names = new Set<string>();
   for (const field of fields) {
-    if (!fieldNamePattern.test(field.name)) {
+    if (!namePattern.test(field.name)) {
       throw new Error(`Invalid field name: ${field.name}`);
     }
     if (names.has(field.name)) {

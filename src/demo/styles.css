@@ -102,6 +102,20 @@ input {
   border-radius: 10px;
 }
 
+.demo-field-list {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.demo-field-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .demo-workspace-title {
   display: flex;
   align-items: flex-start;

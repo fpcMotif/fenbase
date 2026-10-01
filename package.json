@@ -28,6 +28,7 @@
     "demo:typecheck": "tsc --noEmit -p tsconfig.demo.json",
     "demo:deploy": "bun run demo:build && bunx wrangler deploy -c wrangler.worker.json",
     "demo:verify": "bun --tsconfig-override tsconfig.demo.json scripts/demo-verify.ts",
+    "demo:collection-journey": "bun --tsconfig-override tsconfig.demo.json scripts/demo-collection-journey.ts",
     "oa:up": "bun --tsconfig-override tsconfig.demo.json scripts/oa-demo-runtime.ts up",
     "oa:stop": "bun --tsconfig-override tsconfig.demo.json scripts/oa-demo-runtime.ts stop",
     "oa:status": "bun --tsconfig-override tsconfig.demo.json scripts/oa-demo-runtime.ts status",
@@ -140,7 +141,7 @@
   "dependencies": {
     "@convex-dev/better-auth": "^0.12.5",
     "antd": "^6.6.5",
-    "better-auth": "^1.7.6",
+    "better-auth": "1.6.11",
     "convex": "^1.46.0",
     "i18next": "^26.4.2",
     "react-i18next": "^17.0.15"
