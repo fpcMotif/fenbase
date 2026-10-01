@@ -3,6 +3,8 @@
 import { randomUUID } from 'node:crypto';
 import { createAuthClient } from 'better-auth/client';
 import { ConvexHttpClient } from 'convex/browser';
+import { ConvexError } from 'convex/values';
+import { makeFunctionReference } from 'convex/server';
 import { crossDomainClient, convexClient } from '@convex-dev/better-auth/client/plugins';
 import { api } from '../convex/_generated/api';
 import type { Id } from '../convex/_generated/dataModel';
@@ -55,6 +57,7 @@ export async function expectRejected(
   label: string,
   operation: () => Promise<unknown>,
   expectedMessage?: string,
+  expectedCode?: string,
 ): Promise<void> {
   try {
     await operation();
@@ -62,6 +65,16 @@ export async function expectRejected(
     const message = errorMessage(error);
     if (expectedMessage && !message.includes(expectedMessage)) {
       throw new Error(`${label} rejected for an unexpected reason: ${message}`);
+    }
+    if (expectedCode) {
+      assert(
+        error instanceof ConvexError &&
+          typeof error.data === 'object' &&
+          error.data !== null &&
+          'code' in error.data &&
+          error.data.code === expectedCode,
+        `${label} did not return application error code ${expectedCode}`,
+      );
     }
     return;
   }
@@ -173,6 +186,54 @@ async function main(): Promise<void> {
     );
     recordPass('Owned collection can be created and listed');
 
+    const invalidCollectionCases = [
+      { fields: [], code: 'COLLECTION_FIELD_COUNT_INVALID', message: 'between 1 and 30 fields' },
+      {
+        fields: [{ name: 'Bad name', type: 'text' as const }],
+        code: 'COLLECTION_FIELD_NAME_INVALID',
+        message: 'Invalid field name',
+      },
+      {
+        fields: [
+          { name: 'note', type: 'text' as const },
+          { name: 'note', type: 'number' as const },
+        ],
+        code: 'COLLECTION_FIELD_NAME_DUPLICATE',
+        message: 'Duplicate field name',
+      },
+    ];
+    for (const invalid of invalidCollectionCases) {
+      await expectRejected(
+        'Invalid collection fields are rejected',
+        () =>
+          ownerClient.mutation(api.collections.create, {
+            name: 'invalid_fields',
+            title: 'Invalid',
+            fields: invalid.fields,
+          }),
+        invalid.message,
+        invalid.code,
+      );
+    }
+    const createAtBoundary = makeFunctionReference<
+      'mutation',
+      { name: string; title: string; fields: Array<{ name: string; type: string; required?: boolean | string }> },
+      Id<'demoCollections'>
+    >('collections:create');
+    for (const field of [
+      { name: 'note', type: 'date' },
+      { name: 'note', type: 'text', required: 'yes' },
+    ]) {
+      await expectRejected(
+        'Unsupported field types and malformed required settings are rejected',
+        () => ownerClient.mutation(createAtBoundary, { name: 'invalid_fields', title: 'Invalid', fields: [field] }),
+        'ArgumentValidationError',
+      );
+    }
+    const afterInvalidFields = await ownerClient.query(api.collections.list, {});
+    assert(afterInvalidFields.items.length === collections.items.length, 'Invalid fields created a collection');
+    recordPass('Field names, counts, types, and required settings are validated without creating collections');
+
     const savedFields = [
       { name: 'company', type: 'text', required: true },
       { name: 'amount', type: 'number', required: true },
@@ -222,11 +283,13 @@ async function main(): Promise<void> {
       'Invalid collection name rename is rejected',
       () => ownerClient.mutation(api.collections.update, { collectionId, name: 'Bad-Name', title: 'Renamed' }),
       'Collection name must start with a lowercase letter',
+      'COLLECTION_NAME_INVALID',
     );
     await expectRejected(
       'Blank collection title rename is rejected',
       () => ownerClient.mutation(api.collections.update, { collectionId, name: renamedName, title: '   ' }),
       'Collection title must contain between 1 and 120 characters',
+      'COLLECTION_TITLE_INVALID',
     );
     recordPass('Collection rename validates names and titles at the backend boundary');
 
@@ -240,6 +303,7 @@ async function main(): Promise<void> {
       'Duplicate-name collection rename is rejected',
       () => ownerClient.mutation(api.collections.update, { collectionId, name: duplicateName, title: 'Clash' }),
       'Collection name already exists',
+      'COLLECTION_NAME_EXISTS',
     );
     recordPass('Collection rename rejects a name already used by the owner');
 
@@ -283,6 +347,7 @@ async function main(): Promise<void> {
       'Deleting a collection with records is rejected',
       () => ownerClient.mutation(api.collections.remove, { collectionId: deletionCollectionId }),
       'Remove all records before deleting this collection',
+      'COLLECTION_HAS_RECORDS',
     );
     await ownerClient.mutation(api.records.remove, { recordId: deletionRecordId });
     const deletionWorkflow = await ownerClient.mutation(api.workflows.create, {
@@ -295,6 +360,7 @@ async function main(): Promise<void> {
       'Deleting a collection with workflows is rejected',
       () => ownerClient.mutation(api.collections.remove, { collectionId: deletionCollectionId }),
       'Delete workflows before deleting this collection',
+      'COLLECTION_HAS_WORKFLOWS',
     );
     await ownerClient.mutation(api.workflows.remove, { workflowId: deletionWorkflow.workflowId });
     await ownerClient.mutation(api.collections.remove, { collectionId: deletionCollectionId });
@@ -356,6 +422,7 @@ async function main(): Promise<void> {
       'Cross-user collection reopen is rejected',
       () => secondClient.query(api.collections.get, { collectionId }),
       'Collection not found',
+      'COLLECTION_NOT_FOUND',
     );
     await expectRejected(
       'Cross-user collection rename is rejected',
@@ -366,11 +433,13 @@ async function main(): Promise<void> {
           title: 'Stolen',
         }),
       'Collection not found',
+      'COLLECTION_NOT_FOUND',
     );
     await expectRejected(
       'Cross-user collection deletion is rejected',
       () => secondClient.mutation(api.collections.remove, { collectionId }),
       'Collection not found',
+      'COLLECTION_NOT_FOUND',
     );
     recordPass('Cross-user collection reopen, rename, and deletion are denied with a known collection id');
 

@@ -32,7 +32,7 @@ async function assertNameAvailable(ctx: MutationCtx, ownerId: string, name: stri
     .withIndex('by_owner_name', (q) => q.eq('ownerId', ownerId).eq('name', name))
     .first();
   if (existing && existing._id !== selfId) {
-    throw new ConvexError(`Collection name already exists: ${name}`);
+    throw new ConvexError({ code: 'COLLECTION_NAME_EXISTS', message: `Collection name already exists: ${name}` });
   }
 }
 
@@ -138,8 +138,18 @@ export const remove = mutation({
         .first(),
     ]);
 
-    if (record) throw new Error('Remove all records before deleting this collection');
-    if (workflow) throw new Error('Delete workflows before deleting this collection');
+    if (record) {
+      throw new ConvexError({
+        code: 'COLLECTION_HAS_RECORDS',
+        message: 'Remove all records before deleting this collection',
+      });
+    }
+    if (workflow) {
+      throw new ConvexError({
+        code: 'COLLECTION_HAS_WORKFLOWS',
+        message: 'Delete workflows before deleting this collection',
+      });
+    }
 
     await ctx.db.delete(collection._id);
     return null;

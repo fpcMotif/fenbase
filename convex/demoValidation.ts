@@ -1,5 +1,6 @@
 import type { Doc, Id } from './_generated/dataModel';
 import type { MutationCtx, QueryCtx } from './_generated/server';
+import { ConvexError } from 'convex/values';
 
 export type DemoField = Doc<'demoCollections'>['fields'][number];
 export type DemoValue = string | number | boolean;
@@ -14,9 +15,10 @@ const maxTextLength = 4000;
 export function validateCollectionName(name: string): string {
   const trimmed = name.trim();
   if (!namePattern.test(trimmed)) {
-    throw new Error(
-      'Collection name must start with a lowercase letter and use lowercase letters, numbers, or underscores',
-    );
+    throw new ConvexError({
+      code: 'COLLECTION_NAME_INVALID',
+      message: 'Collection name must start with a lowercase letter and use lowercase letters, numbers, or underscores',
+    });
   }
   return trimmed;
 }
@@ -24,23 +26,32 @@ export function validateCollectionName(name: string): string {
 export function validateCollectionTitle(title: string): string {
   const trimmed = title.trim();
   if (trimmed.length === 0 || trimmed.length > maxTitleLength) {
-    throw new Error(`Collection title must contain between 1 and ${maxTitleLength} characters`);
+    throw new ConvexError({
+      code: 'COLLECTION_TITLE_INVALID',
+      message: `Collection title must contain between 1 and ${maxTitleLength} characters`,
+    });
   }
   return trimmed;
 }
 
 export function validateCollectionFields(fields: readonly DemoField[]): void {
   if (fields.length === 0 || fields.length > maxFieldCount) {
-    throw new Error(`A collection must have between 1 and ${maxFieldCount} fields`);
+    throw new ConvexError({
+      code: 'COLLECTION_FIELD_COUNT_INVALID',
+      message: `A collection must have between 1 and ${maxFieldCount} fields`,
+    });
   }
 
   const names = new Set<string>();
   for (const field of fields) {
     if (!namePattern.test(field.name)) {
-      throw new Error(`Invalid field name: ${field.name}`);
+      throw new ConvexError({ code: 'COLLECTION_FIELD_NAME_INVALID', message: `Invalid field name: ${field.name}` });
     }
     if (names.has(field.name)) {
-      throw new Error(`Duplicate field name: ${field.name}`);
+      throw new ConvexError({
+        code: 'COLLECTION_FIELD_NAME_DUPLICATE',
+        message: `Duplicate field name: ${field.name}`,
+      });
     }
     names.add(field.name);
   }
@@ -92,7 +103,7 @@ export async function requireOwnedCollection(
 ): Promise<Doc<'demoCollections'>> {
   const collection = await ctx.db.get(collectionId);
   if (!collection || collection.ownerId !== ownerId) {
-    throw new Error('Collection not found');
+    throw new ConvexError({ code: 'COLLECTION_NOT_FOUND', message: 'Collection not found' });
   }
   return collection;
 }

@@ -25,6 +25,7 @@ import {
 } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { useConvexAuth, useMutation, useQuery } from 'convex/react';
+import { ConvexError } from 'convex/values';
 import type { FunctionReturnType } from 'convex/server';
 import { api } from '../../convex/_generated/api';
 import { authClient } from '../lib/auth/client';
@@ -43,22 +44,29 @@ type CollectionSettingsValues = { name: string; title: string };
 type RecordFormValues = Record<string, DemoValue | null | undefined>;
 type WorkflowFormValues = { name: string; collectionId: Collection['_id']; field: string; value: DemoValue | null };
 
-const collectionErrorKeys: Array<[pattern: RegExp, key: string]> = [
-  [/Collection name must start with/, 'collections.nameInvalid'],
-  [/Collection title must contain/, 'collections.titleRule'],
-  [/Collection name already exists/, 'collections.nameExists'],
-  [/Duplicate field name/, 'collections.fieldNameDuplicate'],
-  [/Invalid field name/, 'collections.fieldInvalid'],
-  [/between 1 and 30 fields/, 'collections.fieldCount'],
-  [/Remove all records before deleting/, 'collections.deleteHasRecords'],
-  [/Delete workflows before deleting/, 'collections.deleteHasWorkflows'],
-  [/Collection not found/, 'collections.notFound'],
-];
+const collectionErrorKeys = new Map([
+  ['COLLECTION_NAME_INVALID', 'collections.nameInvalid'],
+  ['COLLECTION_TITLE_INVALID', 'collections.titleRule'],
+  ['COLLECTION_NAME_EXISTS', 'collections.nameExists'],
+  ['COLLECTION_FIELD_NAME_DUPLICATE', 'collections.fieldNameDuplicate'],
+  ['COLLECTION_FIELD_NAME_INVALID', 'collections.fieldInvalid'],
+  ['COLLECTION_FIELD_COUNT_INVALID', 'collections.fieldCount'],
+  ['COLLECTION_HAS_RECORDS', 'collections.deleteHasRecords'],
+  ['COLLECTION_HAS_WORKFLOWS', 'collections.deleteHasWorkflows'],
+  ['COLLECTION_NOT_FOUND', 'collections.notFound'],
+]);
 
 function collectionErrorMessage(error: unknown, t: (key: string) => string): string {
-  const text = error instanceof Error ? error.message : String(error);
-  const match = collectionErrorKeys.find(([pattern]) => pattern.test(text));
-  return match ? t(match[1]) : t('common.actionFailed');
+  if (
+    error instanceof ConvexError &&
+    typeof error.data === 'object' &&
+    error.data !== null &&
+    'code' in error.data &&
+    typeof error.data.code === 'string'
+  ) {
+    return t(collectionErrorKeys.get(error.data.code) ?? 'common.actionFailed');
+  }
+  return t('common.actionFailed');
 }
 
 export default function DemoApp() {

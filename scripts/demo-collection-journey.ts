@@ -52,6 +52,8 @@ type ExpectedText = {
   required: string;
   nameInvalid: string;
   nameExists: string;
+  titleRule: string;
+  fieldNameDuplicate: string;
   renamed: string;
   addRecord: string;
   recordSaved: string;
@@ -85,6 +87,8 @@ const expectedText = {
     nameInvalid:
       'Start the internal name with a lowercase letter, then use lowercase letters, numbers, or underscores.',
     nameExists: 'A collection with this internal name already exists.',
+    titleRule: 'The display name must contain between 1 and 120 characters.',
+    fieldNameDuplicate: 'Each field name must be unique.',
     renamed: 'Collection renamed',
     addRecord: 'New record',
     recordSaved: 'Record saved',
@@ -116,6 +120,8 @@ const expectedText = {
     required: '必填',
     nameInvalid: '内部名称必须以小写字母开头，且只能使用小写字母、数字或下划线。',
     nameExists: '已存在相同内部名称的集合。',
+    titleRule: '显示名称长度需在 1 至 120 个字符之间。',
+    fieldNameDuplicate: '字段名称不能重复。',
     renamed: '集合已重命名',
     addRecord: '新建记录',
     recordSaved: '记录已保存',
@@ -180,17 +186,16 @@ async function configureFieldRow(
 ): Promise<void> {
   await dialog.getByLabel(text.fieldName, { exact: true }).nth(index).fill(name);
   if (type !== text.text) {
-    // The dropdown options render in a portal whose open animation can stall in dev mode, so choose by keyboard: antd Select commits the active option on
-    // Enter without needing the dropdown to be visible. Opening activates the current selection, and each ArrowDown moves one position with wrap, so
-    // open + one ArrowDown + Enter advances one option.
-    const optionOrder = [text.text, text.number, text.boolean];
-    for (let attempt = 0; attempt < optionOrder.length; attempt++) {
-      const displayed = await dialog.locator('.ant-select-selection-item').nth(index).getAttribute('title');
-      if (displayed === type) break;
-      await dialog.locator('.ant-select').nth(index).click();
-      await page.keyboard.press('ArrowDown');
-      await page.keyboard.press('Enter');
-    }
+    const select = dialog.locator('.ant-select').nth(index);
+    await select.click();
+    const listId = await select.getByRole('combobox').getAttribute('aria-controls');
+    assert(listId, 'Field type selector does not identify its option list');
+    await page
+      .locator('.ant-select-dropdown')
+      .filter({ has: page.locator(`[id="${listId}"]`) })
+      .getByText(type, { exact: true })
+      .click();
+    await select.getByTitle(type, { exact: true }).waitFor();
     const selectedType = await dialog.locator('.ant-select-selection-item').nth(index).getAttribute('title');
     assert(selectedType === type, `Field ${name} was not set to type ${type} (found ${selectedType})`);
   }
@@ -239,8 +244,14 @@ async function verifyJourney(
       pageErrors.push(message.text());
     }
   });
-  const capture = (name: string) =>
-    page.screenshot({ path: join(artifactsDir, `${locale}-${name}.png`), fullPage: true });
+  const capture = async (name: string) => {
+    await page.locator('button.ant-btn-loading').first().waitFor({ state: 'hidden' });
+    await page.screenshot({
+      path: join(artifactsDir, `${locale}-${name}.png`),
+      fullPage: true,
+      animations: 'disabled',
+    });
+  };
 
   await page.goto(target.appUrl);
   await page.getByRole('heading', { name: text.welcome }).waitFor();
@@ -314,6 +325,34 @@ async function verifyJourney(
   await createDialog.getByRole('button', { name: text.cancel, exact: true }).click();
   report(
     `${locale}: invalid and conflicting names show translated errors in the dialog without losing the typed input`,
+  );
+
+  await page.getByRole('button', { name: text.newCollection }).click();
+  await createDialog.getByLabel(text.internalName, { exact: true }).fill(`${journey.internalName}_invalid`);
+  await createDialog.getByLabel(text.displayName, { exact: true }).fill('   ');
+  await createDialog.getByRole('button', { name: text.create, exact: true }).click();
+  await page.getByText(text.titleRule, { exact: true }).first().waitFor();
+  assert(
+    (await createDialog.getByLabel(text.displayName, { exact: true }).inputValue()) === '   ',
+    'Rejected title lost the typed input',
+  );
+  await capture('11-invalid-title');
+  await createDialog.getByLabel(text.displayName, { exact: true }).fill(journey.title);
+  await createDialog.getByLabel(text.fieldName, { exact: true }).first().fill('title');
+  await createDialog.getByRole('button', { name: text.addField }).click();
+  await createDialog.getByLabel(text.fieldName, { exact: true }).nth(1).fill('title');
+  await createDialog.getByRole('button', { name: text.create, exact: true }).click();
+  await page.getByText(text.fieldNameDuplicate, { exact: true }).first().waitFor();
+  assert(
+    (await createDialog.getByLabel(text.fieldName, { exact: true }).nth(1).inputValue()) === 'title',
+    'Rejected duplicate field lost the typed input',
+  );
+  const afterInvalid = await backend.query(api.collections.list, {});
+  assert(afterInvalid.items.length === persisted.items.length, 'Rejected collection persisted after validation');
+  await capture('12-duplicate-fields');
+  await createDialog.getByRole('button', { name: text.cancel, exact: true }).click();
+  report(
+    `${locale}: backend title and duplicate-field errors are translated, preserve input, and persist no collection`,
   );
 
   await page.getByRole('button', { name: journey.title }).click();
