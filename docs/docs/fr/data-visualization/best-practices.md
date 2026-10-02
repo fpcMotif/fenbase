@@ -1,3 +1,0 @@
-# Meilleures pratiques
-
-Documentation en cours de rédaction...

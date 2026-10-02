@@ -1,3 +1,0 @@
-# Weitere Inhalte
-
-Inhalte folgen in Kürze...

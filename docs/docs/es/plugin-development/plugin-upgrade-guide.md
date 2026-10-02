@@ -1,1 +1,0 @@
-# Guía de actualización de plugins

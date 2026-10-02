@@ -1,3 +1,0 @@
-# Mais conteúdo
-
-Conteúdo em breve...

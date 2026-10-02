@@ -1,1 +1,0 @@
-# Colonne de tableau en JS

@@ -1,3 +1,0 @@
-# Mejores prácticas
-
-Documentación en desarrollo...

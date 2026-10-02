@@ -1,1 +1,0 @@
-Bitte geben Sie den chinesischen Quelltext an, den Sie übersetzen möchten. Ich bin bereit, alle in Ihren Anweisungen festgelegten Regeln und Terminologien anzuwenden.

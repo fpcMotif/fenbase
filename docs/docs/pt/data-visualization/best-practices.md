@@ -1,3 +1,0 @@
-# Melhores práticas
-
-Documentação em andamento...

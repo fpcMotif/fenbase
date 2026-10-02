@@ -1,1 +1,0 @@
-## Autenticação e Verificação
