@@ -49,6 +49,10 @@ If a file `AGENTS.local.md` exists in this repository root, read it once at the 
 
 - Commit messages follow Conventional Commits, prefixed with the affected scope: `fix(plugin-workflow): ...`, `feat(client): ...`, `chore: ...`, `docs: ...`.
 
+## Pull Requests
+
+- Write PR titles and bodies in English only. Use `.github/pull_request_template.md` as-is; do not add Chinese (or other language) changelog or docs rows.
+
 ## Agent skills
 
 ### Issue tracker
