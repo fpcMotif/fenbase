@@ -169,6 +169,11 @@ async function main() {
           call: () => client.query(api.records.list, { collectionId }),
         },
         {
+          name: 'record browse',
+          code: 'COLLECTION_NOT_FOUND',
+          call: () => client.query(api.records.browse, { collectionId }),
+        },
+        {
           name: 'record create',
           code: 'COLLECTION_NOT_FOUND',
           call: () => client.mutation(api.records.create, { collectionId, values: { private_note: 'Intruder' } }),

@@ -147,3 +147,21 @@ input {
     flex-direction: column;
   }
 }
+
+.demo-record-query {
+  margin-bottom: 16px;
+}
+
+.demo-record-filters {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  margin: 0 0 12px;
+  padding: 0;
+  border: 0;
+}
+
+.demo-record-filters legend {
+  margin-bottom: 8px;
+  font-weight: 600;
+}

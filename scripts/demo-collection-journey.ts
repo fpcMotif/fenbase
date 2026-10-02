@@ -60,6 +60,8 @@ type ExpectedText = {
   recordDeleted: string;
   deleteEmpty: string;
   removeConfirm: string;
+  // antd's own confirm button, translated through the ConfigProvider locale.
+  popconfirmOk: string;
   collectionDeleted: string;
 };
 
@@ -95,6 +97,7 @@ const expectedText = {
     recordDeleted: 'Record deleted',
     deleteEmpty: 'Delete empty collection',
     removeConfirm: 'Delete this empty collection?',
+    popconfirmOk: 'OK',
     collectionDeleted: 'Collection deleted',
   },
   'zh-CN': {
@@ -128,13 +131,13 @@ const expectedText = {
     recordDeleted: '记录已删除',
     deleteEmpty: '删除空集合',
     removeConfirm: '删除这个空集合？',
+    popconfirmOk: '确 定',
     collectionDeleted: '集合已删除',
   },
 } satisfies Record<Locale, ExpectedText>;
 
 const artifactsDir = join('dist', 'collection-journey');
 const localHosts = new Set(['localhost', '127.0.0.1', '[::1]']);
-const popconfirmOk = 'OK';
 
 function assertLocalTarget(...urls: string[]): void {
   for (const url of urls) {
@@ -214,7 +217,7 @@ async function signInThroughUi(page: Page, text: ExpectedText, account: Account)
 async function confirmPopconfirm(page: Page, text: ExpectedText): Promise<void> {
   const popover = page.locator('.ant-popover:visible');
   await popover.getByText(text.removeConfirm).waitFor();
-  await popover.getByRole('button', { name: popconfirmOk }).click();
+  await popover.getByRole('button', { name: text.popconfirmOk }).click();
 }
 
 // Delete Collection's onConfirm is async, so antd keeps the popconfirm open with a loading OK button until the mutation settles; wait for that before

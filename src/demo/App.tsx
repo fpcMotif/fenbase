@@ -24,10 +24,20 @@ import {
   Typography,
 } from 'antd';
 import type { TableColumnsType } from 'antd';
-import { useConvexAuth, useMutation, useQuery } from 'convex/react';
+import { useConvexAuth, useMutation, useQueries, useQuery } from 'convex/react';
+import type { RequestForQueries } from 'convex/react';
 import { ConvexError } from 'convex/values';
 import type { FunctionReturnType } from 'convex/server';
 import { api } from '../../convex/_generated/api';
+import {
+  RECORD_CREATED_SORT_FIELD,
+  RECORD_FILTER_OPERATORS,
+  DEFAULT_RECORD_PAGE_SIZE,
+  MAX_RECORD_FILTERS,
+  filterTakesValue,
+  validateRecordQuery,
+} from '../../convex/recordQuery';
+import type { RecordFilter, RecordSort } from '../../convex/recordQuery';
 import { authClient } from '../lib/auth/client';
 import { useTranslation } from 'react-i18next';
 import i18n from './i18n';
@@ -35,13 +45,21 @@ import i18n from './i18n';
 type DemoValue = string | number | boolean;
 type Collection = FunctionReturnType<typeof api.collections.list>['items'][number];
 type SavedCollection = FunctionReturnType<typeof api.collections.get>;
-type DemoRecord = FunctionReturnType<typeof api.records.list>['items'][number];
+type RecordPage = FunctionReturnType<typeof api.records.browse>;
+type DemoRecord = RecordPage['items'][number];
 type Workflow = FunctionReturnType<typeof api.workflows.list>['items'][number];
 type WorkflowRun = FunctionReturnType<typeof api.workflows.listRuns>[number];
 type DemoField = Collection['fields'][number];
 type CollectionFormValues = { name: string; title: string; fields: DemoField[] };
 type CollectionSettingsValues = { name: string; title: string };
 type RecordFormValues = Record<string, DemoValue | null | undefined>;
+type RecordQueryFormValues = {
+  filters: Array<{ field?: string; operator?: string; value?: DemoValue | null }>;
+  sortField: string;
+  sortDirection: 'asc' | 'desc';
+};
+type AppliedRecordQuery = { filters: RecordFilter[]; sort: RecordSort };
+type RecordBrowseState = AppliedRecordQuery & { collectionId?: Collection['_id']; page: number; pageSize: number };
 type WorkflowFormValues = { name: string; collectionId: Collection['_id']; field: string; value: DemoValue | null };
 
 const actionErrorKeys = new Map([
@@ -59,7 +77,20 @@ const actionErrorKeys = new Map([
   ['RECORD_FIELD_TYPE_INVALID', 'records.invalidType'],
   ['RECORD_TEXT_TOO_LONG', 'records.textTooLong'],
   ['RECORD_NOT_FOUND', 'records.notFound'],
+  ['RECORD_COLLECTION_FULL', 'records.collectionFull'],
+  ['RECORD_BROWSE_LIMIT_EXCEEDED', 'records.browseLimit'],
+  ['RECORD_QUERY_FIELD_UNKNOWN', 'records.queryFieldUnknown'],
+  ['RECORD_QUERY_OPERATOR_INVALID', 'records.queryOperatorInvalid'],
+  ['RECORD_QUERY_VALUE_INVALID', 'records.queryValueInvalid'],
+  ['RECORD_QUERY_FILTER_COUNT_INVALID', 'records.queryFilterCount'],
+  ['RECORD_QUERY_SORT_INVALID', 'records.querySortInvalid'],
+  ['RECORD_QUERY_PAGE_INVALID', 'records.queryPageInvalid'],
 ]);
+
+const defaultRecordQuery: AppliedRecordQuery = {
+  filters: [],
+  sort: { field: RECORD_CREATED_SORT_FIELD, direction: 'desc' },
+};
 
 function actionErrorMessage(error: unknown, t: (key: string, options?: { field: string }) => string): string {
   if (
@@ -317,11 +348,63 @@ function CollectionsPanel({
   const collections = data?.items ?? [];
   const selected = collections.find((collection) => collection._id === selectedId) ?? collections[0];
   const savedConfig = useQuery(api.collections.get, selected && settingsOpen ? { collectionId: selected._id } : 'skip');
-  const recordData = useQuery(api.records.list, selected ? { collectionId: selected._id, limit: 100 } : 'skip');
+  const [browseState, setBrowseState] = useState<RecordBrowseState>({
+    ...defaultRecordQuery,
+    page: 1,
+    pageSize: DEFAULT_RECORD_PAGE_SIZE,
+  });
+  // Filters, sort, and page belong to one collection; selecting another collection starts from the defaults.
+  const browse: RecordBrowseState =
+    browseState.collectionId === selected?._id
+      ? browseState
+      : { ...defaultRecordQuery, collectionId: selected?._id, page: 1, pageSize: browseState.pageSize };
+  const selectedCollectionId = selected?._id;
+  // `useQueries` resubscribes whenever it receives a new request object, so the request must keep its identity between
+  // renders.
+  const browseRequest = useMemo((): RequestForQueries => {
+    if (!selectedCollectionId) return {};
+    return {
+      page: {
+        query: api.records.browse,
+        args: {
+          collectionId: selectedCollectionId,
+          filters: browse.filters,
+          sort: browse.sort,
+          page: browse.page,
+          pageSize: browse.pageSize,
+        },
+      },
+    };
+  }, [selectedCollectionId, browse.filters, browse.sort, browse.page, browse.pageSize]);
+  const browseResults = useQueries(browseRequest);
+  // `useQueries` returns errors as values instead of throwing, so a rejected query shows a translated message rather
+  // than the error boundary.
+  const browseResult: RecordPage | Error | undefined = browseResults.page;
+  const browseError = browseResult instanceof Error ? browseResult : undefined;
+  const loadedPage = browseResult instanceof Error ? undefined : browseResult;
+  // Keep the previous page on screen while the next one loads, instead of flashing an empty table. `filtered` belongs
+  // to that page, so the count label never mixes the old totals with the new filters.
+  const [shownPage, setShownPage] = useState<{
+    collectionId: Collection['_id'];
+    result: RecordPage;
+    filtered: boolean;
+  }>();
+  if (selected && loadedPage && shownPage?.result !== loadedPage) {
+    setShownPage({ collectionId: selected._id, result: loadedPage, filtered: browse.filters.length > 0 });
+  }
+  const shown = shownPage?.collectionId === selected?._id ? shownPage : undefined;
+  const recordPage = loadedPage ?? shown?.result;
+  // The backend moves a page past the end (for example after deleting the last record on it) back to the last page;
+  // follow it.
+  if (loadedPage && loadedPage.page !== browse.page) {
+    setBrowseState({ ...browse, page: loadedPage.page });
+  }
   const createRecord = useMutation(api.records.create);
   const updateRecord = useMutation(api.records.update);
   const removeRecord = useMutation(api.records.remove);
-  const records = recordData?.items ?? [];
+  const records = recordPage?.items ?? [];
+  const filtersApplied = browse.filters.length > 0;
+  const shownFiltered = loadedPage ? filtersApplied : (shown?.filtered ?? filtersApplied);
   const fields = useMemo(() => selected?.fields ?? [], [selected]);
 
   useEffect(() => {
@@ -330,8 +413,8 @@ function CollectionsPanel({
     }
   }, [settingsOpen, savedConfig, settingsForm]);
 
-  // The record modal is destroyed on close, so populate the form after it has mounted; writing values before the first mount would hit a form instance
-  // that is not connected yet.
+  // The record modal is destroyed on close, so populate the form after it has mounted; writing values before the first
+  // mount would hit a form instance that is not connected yet.
   useEffect(() => {
     if (!recordModalOpen) return;
     recordForm.resetFields();
@@ -412,6 +495,14 @@ function CollectionsPanel({
     } finally {
       setDeletingRecordId(undefined);
     }
+  };
+
+  const applyRecordQuery = (query: AppliedRecordQuery) => {
+    setBrowseState({ ...browse, ...query, page: 1 });
+  };
+
+  const changeRecordPage = (page: number, pageSize: number) => {
+    setBrowseState({ ...browse, page: pageSize === browse.pageSize ? page : 1, pageSize });
   };
 
   const deleteCollection = async () => {
@@ -520,9 +611,11 @@ function CollectionsPanel({
                 <Space wrap>
                   <span>{selected?.title || selected?.name}</span>
                   <Tag>
-                    {recordData === undefined
+                    {recordPage === undefined
                       ? t('common.loading')
-                      : `${records.length} ${t('collections.records').toLowerCase()}`}
+                      : shownFiltered
+                        ? t('records.matching', { count: recordPage.total, total: recordPage.collectionTotal })
+                        : t('records.count', { count: recordPage.collectionTotal })}
                   </Tag>
                 </Space>
               }
@@ -530,7 +623,7 @@ function CollectionsPanel({
                 <Space wrap>
                   <Button onClick={() => setSettingsOpen(true)}>{t('collections.settings')}</Button>
                   <Button onClick={() => openRecord()}>{t('collections.addRecord')}</Button>
-                  {recordData !== undefined && records.length === 0 && selected && (
+                  {recordPage !== undefined && recordPage.collectionTotal === 0 && selected && (
                     <Popconfirm title={t('collections.removeConfirm')} onConfirm={deleteCollection}>
                       <Button danger>{t('collections.deleteEmpty')}</Button>
                     </Popconfirm>
@@ -538,26 +631,51 @@ function CollectionsPanel({
                 </Space>
               }
             >
-              {recordData === undefined ? (
+              {selected && (recordPage === undefined || recordPage.collectionTotal > 0 || filtersApplied) && (
+                <RecordQueryForm
+                  key={`${selected._id}:${JSON.stringify([browse.filters, browse.sort])}`}
+                  fields={fields}
+                  applied={browse}
+                  onApply={applyRecordQuery}
+                  onReset={() => applyRecordQuery(defaultRecordQuery)}
+                />
+              )}
+              {browseError ? (
+                <Alert
+                  type="error"
+                  showIcon
+                  message={actionErrorMessage(browseError, t)}
+                  action={
+                    <Button size="small" onClick={() => applyRecordQuery(defaultRecordQuery)}>
+                      {t('records.reset')}
+                    </Button>
+                  }
+                />
+              ) : recordPage === undefined ? (
                 <output aria-label={t('common.loading')}>
                   <Spin />
                 </output>
-              ) : records.length === 0 ? (
+              ) : recordPage.collectionTotal === 0 ? (
                 <Empty description={t('collections.noRecords')} />
+              ) : recordPage.total === 0 ? (
+                <Empty description={t('records.noMatches')} />
               ) : (
-                <>
-                  <Table
-                    rowKey="_id"
-                    size="small"
-                    scroll={{ x: true }}
-                    dataSource={records}
-                    columns={columns}
-                    pagination={{ pageSize: 10 }}
-                  />
-                  {recordData.hasMore && (
-                    <Typography.Text className="demo-muted">{t('collections.limit')}</Typography.Text>
-                  )}
-                </>
+                <Table
+                  rowKey="_id"
+                  size="small"
+                  scroll={{ x: true }}
+                  dataSource={records}
+                  columns={columns}
+                  loading={loadedPage === undefined}
+                  pagination={{
+                    current: recordPage.page,
+                    pageSize: recordPage.pageSize,
+                    total: recordPage.total,
+                    showSizeChanger: true,
+                    pageSizeOptions: [10, 20, 50, 100],
+                    onChange: changeRecordPage,
+                  }}
+                />
               )}
             </Card>
           </Col>
@@ -954,6 +1072,184 @@ function WorkflowsPanel() {
         </Form>
       </Modal>
     </>
+  );
+}
+
+function toQueryFormValues(query: AppliedRecordQuery): RecordQueryFormValues {
+  return {
+    filters: query.filters.map((filter) => ({ ...filter })),
+    sortField: query.sort.field,
+    sortDirection: query.sort.direction === 'asc' ? 'asc' : 'desc',
+  };
+}
+
+// A new or re-targeted filter row starts with the first condition its field type supports.
+function newFilterRow(field: DemoField | undefined): RecordQueryFormValues['filters'][number] {
+  return { field: field?.name, operator: field && RECORD_FILTER_OPERATORS[field.type][0], value: undefined };
+}
+
+function RecordQueryForm({
+  fields,
+  applied,
+  onApply,
+  onReset,
+}: {
+  fields: DemoField[];
+  applied: AppliedRecordQuery;
+  onApply: (query: AppliedRecordQuery) => void;
+  onReset: () => void;
+}) {
+  const { t } = useTranslation();
+  const [form] = Form.useForm<RecordQueryFormValues>();
+  const [error, setError] = useState<string>();
+  const initialValues = toQueryFormValues(applied);
+
+  const submit = (values: RecordQueryFormValues) => {
+    const query: AppliedRecordQuery = {
+      filters: (values.filters ?? []).map(({ field = '', operator = '', value }) =>
+        filterTakesValue(operator) && value !== null && value !== undefined
+          ? { field, operator, value }
+          : { field, operator },
+      ),
+      sort: { field: values.sortField, direction: values.sortDirection },
+    };
+    try {
+      validateRecordQuery(fields, query);
+    } catch (validationError) {
+      setError(actionErrorMessage(validationError, t));
+      return;
+    }
+    setError(undefined);
+    onApply(query);
+  };
+
+  const reset = () => {
+    form.setFieldsValue(toQueryFormValues(defaultRecordQuery));
+    setError(undefined);
+    onReset();
+  };
+
+  return (
+    <Form
+      name="record-query"
+      form={form}
+      layout="vertical"
+      className="demo-record-query"
+      initialValues={initialValues}
+      onFinish={submit}
+      onValuesChange={() => setError(undefined)}
+    >
+      <Form.List name="filters">
+        {(items, { add, remove }) => (
+          <fieldset className="demo-record-filters">
+            <legend>{t('records.filters')}</legend>
+            {items.map((item, position) => (
+              <RecordFilterRow
+                key={item.key}
+                name={item.name}
+                index={position + 1}
+                fields={fields}
+                onRemove={() => remove(item.name)}
+              />
+            ))}
+            <Button disabled={items.length >= MAX_RECORD_FILTERS} onClick={() => add(newFilterRow(fields[0]))}>
+              {t('records.addFilter')}
+            </Button>
+          </fieldset>
+        )}
+      </Form.List>
+      <Space wrap align="end">
+        <Form.Item name="sortField" label={t('records.sortField')}>
+          <Select
+            style={{ minWidth: 180 }}
+            options={[
+              { value: RECORD_CREATED_SORT_FIELD, label: t('records.createdTime') },
+              ...fields.map((field) => ({ value: field.name, label: field.name })),
+            ]}
+          />
+        </Form.Item>
+        <Form.Item name="sortDirection" label={t('records.sortDirection')}>
+          <Select
+            style={{ minWidth: 140 }}
+            options={[
+              { value: 'asc', label: t('records.ascending') },
+              { value: 'desc', label: t('records.descending') },
+            ]}
+          />
+        </Form.Item>
+        <Form.Item>
+          <Space>
+            <Button type="primary" htmlType="submit">
+              {t('records.apply')}
+            </Button>
+            <Button onClick={reset}>{t('records.reset')}</Button>
+          </Space>
+        </Form.Item>
+      </Space>
+      {error && <Alert type="error" showIcon message={error} role="alert" />}
+    </Form>
+  );
+}
+
+function RecordFilterRow({
+  name,
+  index,
+  fields,
+  onRemove,
+}: {
+  name: number;
+  index: number;
+  fields: DemoField[];
+  onRemove: () => void;
+}) {
+  const { t } = useTranslation();
+  const form = Form.useFormInstance<RecordQueryFormValues>();
+  const fieldName = Form.useWatch(['filters', name, 'field'], form);
+  const operator = Form.useWatch(['filters', name, 'operator'], form);
+  const field = fields.find((candidate) => candidate.name === fieldName);
+  const operators: readonly string[] = field ? RECORD_FILTER_OPERATORS[field.type] : [];
+
+  // A different field type supports different conditions and values, so start the row over for the new field.
+  const changeField = (next: string) => {
+    const nextField = fields.find((candidate) => candidate.name === next);
+    // Replace the whole list: `setFieldValue` on a single path makes antd log a false circular-reference warning in
+    // development.
+    const filters: RecordQueryFormValues['filters'] = form.getFieldValue('filters');
+    form.setFieldsValue({
+      filters: filters.map((filter, position) => (position === name ? newFilterRow(nextField) : filter)),
+    });
+  };
+
+  return (
+    <Space wrap align="start" className="demo-record-filter">
+      <Form.Item name={[name, 'field']} noStyle>
+        <Select
+          aria-label={t('records.filterField', { index })}
+          style={{ minWidth: 150 }}
+          options={fields.map((candidate) => ({ value: candidate.name, label: candidate.name }))}
+          onChange={changeField}
+        />
+      </Form.Item>
+      <Form.Item name={[name, 'operator']} noStyle>
+        <Select
+          aria-label={t('records.filterOperator', { index })}
+          style={{ minWidth: 160 }}
+          options={operators.map((value) => ({ value, label: t(`records.operators.${value.slice(1)}`) }))}
+        />
+      </Form.Item>
+      {field && operator && filterTakesValue(operator) && (
+        <Form.Item name={[name, 'value']} noStyle>
+          {field.type === 'number' ? (
+            <InputNumber aria-label={t('records.filterValue', { index })} style={{ width: 160 }} />
+          ) : (
+            <Input aria-label={t('records.filterValue', { index })} style={{ width: 200 }} />
+          )}
+        </Form.Item>
+      )}
+      <Button aria-label={t('records.removeFilter', { index })} onClick={onRemove}>
+        {t('records.remove')}
+      </Button>
+    </Space>
   );
 }
 

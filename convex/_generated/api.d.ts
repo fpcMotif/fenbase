@@ -14,6 +14,7 @@ import type * as collections from '../collections.js';
 import type * as demo from '../demo.js';
 import type * as demoValidation from '../demoValidation.js';
 import type * as http from '../http.js';
+import type * as recordQuery from '../recordQuery.js';
 import type * as records from '../records.js';
 import type * as users from '../users.js';
 import type * as workflows from '../workflows.js';
@@ -27,6 +28,7 @@ declare const fullApi: ApiFromModules<{
   demo: typeof demo;
   demoValidation: typeof demoValidation;
   http: typeof http;
+  recordQuery: typeof recordQuery;
   records: typeof records;
   users: typeof users;
   workflows: typeof workflows;

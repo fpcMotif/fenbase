@@ -1,7 +1,10 @@
-import { v } from 'convex/values';
+import { ConvexError, v } from 'convex/values';
+import type { Id } from './_generated/dataModel';
 import { requireUser } from './auth';
 import { mutation, query } from './_generated/server';
+import type { MutationCtx, QueryCtx } from './_generated/server';
 import { requireOwnedCollection, requireOwnedRecord, validateRecordValues } from './demoValidation';
+import { MAX_RECORDS_PER_COLLECTION, queryRecords, validateRecordQuery } from './recordQuery';
 
 const scalarValidator = v.union(v.string(), v.number(), v.boolean());
 const valuesValidator = v.record(v.string(), scalarValidator);
@@ -12,6 +15,64 @@ const recordValidator = v.object({
   collectionId: v.id('demoCollections'),
   values: valuesValidator,
   updatedAt: v.number(),
+});
+
+// Reads one past the cap so callers can tell a full collection from an oversized one.
+async function readCollectionRecords(
+  ctx: QueryCtx | MutationCtx,
+  ownerId: string,
+  collectionId: Id<'demoCollections'>,
+) {
+  return await ctx.db
+    .query('demoRecords')
+    .withIndex('by_owner_and_collection', (q) => q.eq('ownerId', ownerId).eq('collectionId', collectionId))
+    .take(MAX_RECORDS_PER_COLLECTION + 1);
+}
+
+export const browse = query({
+  args: {
+    collectionId: v.id('demoCollections'),
+    // Operators, fields, and directions are checked by `validateRecordQuery` rather than by validators, so malformed
+    // input gets a coded, translatable error.
+    filters: v.optional(
+      v.array(v.object({ field: v.string(), operator: v.string(), value: v.optional(scalarValidator) })),
+    ),
+    sort: v.optional(v.object({ field: v.string(), direction: v.string() })),
+    page: v.optional(v.number()),
+    pageSize: v.optional(v.number()),
+  },
+  returns: v.object({
+    items: v.array(recordValidator),
+    total: v.number(),
+    collectionTotal: v.number(),
+    page: v.number(),
+    pageSize: v.number(),
+    pageCount: v.number(),
+  }),
+  handler: async (ctx, { collectionId: requestedCollectionId, ...query }) => {
+    const ownerId = await requireUser(ctx);
+    const collection = await requireOwnedCollection(ctx, ownerId, requestedCollectionId);
+    validateRecordQuery(collection.fields, query);
+    const rows = await readCollectionRecords(ctx, ownerId, collection._id);
+    if (rows.length > MAX_RECORDS_PER_COLLECTION) {
+      throw new ConvexError({
+        code: 'RECORD_BROWSE_LIMIT_EXCEEDED',
+        message: `Collections with more than ${MAX_RECORDS_PER_COLLECTION} records cannot be browsed`,
+      });
+    }
+    const result = queryRecords(rows, collection.fields, query);
+    return {
+      ...result,
+      items: result.items.map(({ _id, _creationTime, collectionId, values, updatedAt }) => ({
+        _id,
+        _creationTime,
+        collectionId,
+        values,
+        updatedAt,
+      })),
+      collectionTotal: rows.length,
+    };
+  },
 });
 
 export const get = query({
@@ -72,6 +133,13 @@ export const create = mutation({
     const ownerId = await requireUser(ctx);
     const collection = await requireOwnedCollection(ctx, ownerId, args.collectionId);
     validateRecordValues(collection.fields, args.values);
+    const existing = await readCollectionRecords(ctx, ownerId, collection._id);
+    if (existing.length >= MAX_RECORDS_PER_COLLECTION) {
+      throw new ConvexError({
+        code: 'RECORD_COLLECTION_FULL',
+        message: `A collection can hold at most ${MAX_RECORDS_PER_COLLECTION} records`,
+      });
+    }
 
     return await ctx.db.insert('demoRecords', {
       ownerId,

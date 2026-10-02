@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { ConvexBetterAuthProvider } from '@convex-dev/better-auth/react';
 import { ConvexReactClient } from 'convex/react';
 import { Alert, App as AntdApp, Card, ConfigProvider, Spin, Typography } from 'antd';
+import type { ReactNode } from 'react';
+import enUS from 'antd/locale/en_US';
+import zhCN from 'antd/locale/zh_CN';
 import 'antd/dist/reset.css';
 import { useTranslation } from 'react-i18next';
 import { authClient } from '../lib/auth/client';
@@ -23,6 +26,12 @@ function MissingConfiguration() {
   );
 }
 
+// Follows the app language so antd's own texts, such as the pagination size picker, are translated too.
+function LocalizedConfigProvider({ children }: { children: ReactNode }) {
+  const { i18n } = useTranslation();
+  return <ConfigProvider locale={i18n.language === 'zh-CN' ? zhCN : enUS}>{children}</ConfigProvider>;
+}
+
 const convexUrl = import.meta.env.VITE_CONVEX_URL;
 const convexSiteUrl = import.meta.env.VITE_CONVEX_SITE_URL;
 const root = ReactDOM.createRoot(document.getElementById('root')!);
@@ -30,11 +39,11 @@ const root = ReactDOM.createRoot(document.getElementById('root')!);
 if (!convexUrl || !convexSiteUrl) {
   root.render(
     <React.StrictMode>
-      <ConfigProvider>
+      <LocalizedConfigProvider>
         <AntdApp>
           <MissingConfiguration />
         </AntdApp>
-      </ConfigProvider>
+      </LocalizedConfigProvider>
     </React.StrictMode>,
   );
 } else {
@@ -42,13 +51,13 @@ if (!convexUrl || !convexSiteUrl) {
 
   root.render(
     <React.StrictMode>
-      <ConfigProvider>
+      <LocalizedConfigProvider>
         <AntdApp>
           <ConvexBetterAuthProvider client={convex} authClient={authClient}>
             <DemoApp />
           </ConvexBetterAuthProvider>
         </AntdApp>
-      </ConfigProvider>
+      </LocalizedConfigProvider>
     </React.StrictMode>,
   );
 }
