@@ -27,24 +27,15 @@ and provide some testing suggestions.
 <!-- Including any screenshots of the changes. -->
 
 ### Changelog
-
-| Language   | Changelog |
-| ---------- | --------- |
-| 🇺🇸 English |           |
-| 🇨🇳 Chinese |           |
+<!-- Describe the change in English. -->
 
 ### Docs
-
-| Language   | Link |
-| ---------- | --------- |
-| 🇺🇸 English |  <!-- [Title](link) -->    |
-| 🇨🇳 Chinese |  <!-- [标题](link) -->  |
+<!-- English docs only. Add a link if docs were updated, e.g. [Title](link) -->
 
 ### Checklists
 - [ ] All changes have been self-tested and work as expected
 - [ ] Test cases are updated/provided or not needed
 - [ ] Doc is updated/provided or not needed
-- [ ] If documentation was changed, the corresponding files in all other languages have been updated to keep them in sync (or this change does not affect docs)
 - [ ] Component demo is updated/provided or not needed
 - [ ] Changelog is provided or not needed
 - [ ] Request a code review if it is necessary
