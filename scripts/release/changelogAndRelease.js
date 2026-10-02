@@ -340,7 +340,6 @@ async function writeChangelog(cn, en, from, to) {
     const newChangelog = `${header[lang]}\n${title}\n\n${lang === 'cn' ? cn : en}${oldChangelog.slice(fromIndex)}`;
     await fs.writeFile(path.join(__dirname, `../../${file}`), newChangelog);
   };
-  write('cn');
   write('en');
 }
 
@@ -372,7 +371,7 @@ async function getExistsChangelog(from, to) {
     const toIndex = oldChangelog.indexOf(`## [${to}]`);
     return oldChangelog.slice(toIndex, fromIndex);
   };
-  const cn = await get('cn');
+  const cn = null;
   const en = await get('en');
   return { cn, en };
 }

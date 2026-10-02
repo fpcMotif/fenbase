@@ -103,6 +103,6 @@ jobs:
         if: ${{ steps.get-info.outputs.version == 'rc' }}
         run: |
           git pull origin main
-          git add CHANGELOG.md CHANGELOG.zh-CN.md
+          git add CHANGELOG.md
           git commit -m "docs: update changelogs"
           git push origin main

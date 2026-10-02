@@ -33,19 +33,10 @@ const locales = {
 
 const currentLocale = locales[lang as keyof typeof locales] || locales.en;
 
-const indexLanguages = ['en', 'cn', 'ja', 'es', 'pt', 'de', 'fr', 'ru', 'id', 'vi'];
+const indexLanguages = ['en'];
 
 const langMap = {
   en: 'en-US',
-  cn: 'zh-CN',
-  ja: 'ja-JP',
-  es: 'es-ES',
-  pt: 'pt-PT',
-  de: 'de-DE',
-  fr: 'fr-FR',
-  ru: 'ru-RU',
-  id: 'id-ID',
-  vi: 'vi-VN',
 };
 
 /**
