@@ -1,57 +1,50 @@
-# Migration Feature Map
+# Migration feature map
 
-Migration path from NocoBase legacy client/server architecture to **TanStack Query** + **Effect-TS** (Frontend on **Cloudflare**) with **Convex** (Backend).
+This is the preservation inventory for [M1.1 (#13)](https://github.com/fpcMotif/fenbase/issues/13), inspected at `0cfb7b558e27dfb6d6ff3459c12a20eb91175f3f` on 2026-10-03 (Australia/Perth). See [baseline commands and evidence](baseline-13.md) for the verified environment, results, retained resources, and limitations.
 
-## Architecture Stack
+M1 targets **one configurable `leaveRequests` application**. The expense example remains reference material. Existing package source, setup instructions, or a credentials file do not prove an installed or running instance. No runtime, dependency, example, seed, schema, or route is retired by this inventory.
 
-| Layer | Technology | Role |
-| :--- | :--- | :--- |
-| **Backend / DB** | Convex (`convex`) | Reactive database, serverless queries/mutations, real-time sync |
-| **Type & Error System** | Effect-TS (`effect`) | Typed RPC boundary, schema validation (`Schema`), error tagged unions |
-| **Data Fetching & Cache** | TanStack Query (`@tanstack/react-query`) | Declarative hooks, query caching, invalidation, mutation tracking |
-| **Edge Hosting** | Cloudflare Pages / Workers (`wrangler`) | Edge-rendered SPA bundle, edge functions, environment routing |
+## Actual runtime and consumers
 
----
+| Layer | Current implementation and consumers | Target / limitation |
+| --- | --- | --- |
+| Selected frontend | `index.html` → `src/demo/main.tsx` → `src/demo/App.tsx`; React/Vite, Ant Design, i18next; `demo:dev` and `demo:build` | Existing standalone demo, not the Legacy client or Modern client shell. Keep it for M1; no frontend rewrite. Root dependency is antd 6.6.5; upstream workspace resolutions still name antd 5.24.2. No upgrade performed. |
+| Authentication | `src/lib/auth/client.ts`, `ConvexBetterAuthProvider`; `convex/auth.ts`, `auth.config.ts`, `http.ts`, `users.getViewer` | Better Auth component owns actual authenticated identities/sessions; `requireUser` enforces backend access. Synthetic email/password accounts need no external identity provider. |
+| Data and subscriptions | `src/demo/App.tsx` calls `useQuery`, `useQueries`, `useMutation` from `convex/react`; `convex/collections.ts`, `records.ts`, `recordQuery.ts` | Owner-scoped primitive collections and records. [Browsing limits](record-browsing.md) apply. Application membership and delegated review are future #14–#17 work. |
+| Persistence | `convex/schema.ts`: `demoCollections`, `demoRecords`, `demoWorkflows`, `demoWorkflowRuns`; Better Auth component | Root `users` and `sessions` declarations are not evidence that the demo uses them instead of Better Auth. The baseline uses a separate SQLite-backed real Convex server. |
+| Hosting | `vite.config.ts` builds `dist/demo`; `wrangler.worker.json` configures SPA assets; `demo:deploy` builds and invokes Wrangler | Cloudflare configuration exists. This baseline does not deploy or verify a remote instance. |
+| “Effect” wrapper | `src/lib/effect/client.ts`: tagged result values and a Promise try/catch | No Effect import/runtime. `scripts/migrate-verify.ts` and the query wrapper consume it. Retain pending an explicit consumer decision; do not describe it as Effect adoption. |
+| “Query” wrapper | `src/lib/query/useConvexEffectQuery.ts` exports async `executeConvexEffectQuery`, forwarding only `queryFn` to the Promise wrapper | Not a React hook or TanStack Query integration; `queryKey` and `enabled` do not implement caching or conditional execution. Its only external source consumer is `scripts/migrate-verify.ts`. |
+| User schema helper | `src/lib/effect/schemas/user.ts` contains handwritten interfaces/validators | No Effect Schema import; no consumer found outside this file. Retain, not automatically delete. |
+| Migration verifier | `scripts/migrate-verify.ts` imports the wrappers and checks local source/configuration | A simulated or passing wrapper check is not proof of stack adoption or a live deployment. Use the real journeys below for baseline behavior. |
 
-## Domain Entity Mapping
+The previous feature map's proposed collection/workflow/file Effect schemas, `convex/files.ts`, TanStack hooks, Cloudflare session middleware, and R2 integration are **not current implementations**. They are not prerequisites to preserving the working baseline.
 
-### 1. Auth & Users Subsystem
-- **Legacy Subsystem**: `packages/core/auth`, `packages/plugins/@nocobase/plugin-auth`
-- **Convex Target**: `convex/users.ts` (`viewer`, `login`, `register`, `getSession`)
-- **Effect Schema**: `src/lib/effect/schemas/user.ts` (`UserSchema`, `AuthSessionSchema`, `AuthFailureError`)
-- **TanStack Hook**: `useViewerQuery()`, `useLoginMutation()`
-- **Edge Deployment**: Cloudflare JWT / cookie sessions via Pages Middleware
+## Convex Target and Effect Schema status
 
-### 2. Collection & Data Modeling (ACL / Schema)
-- **Legacy Subsystem**: `packages/core/database`, `packages/core/acl`
-- **Convex Target**: `convex/schema.ts` (`defineSchema`, `defineTable`), `convex/collections.ts`
-- **Effect Schema**: `src/lib/effect/schemas/collection.ts` (`RecordSchema`, `FilterRuleSchema`)
-- **TanStack Hook**: `useCollectionRecordsQuery(name, filter)`, `useUpdateRecordMutation(name)`
-- **Edge Deployment**: Real-time optimistic queries served over WebSocket to Cloudflare edge clients
+**Convex Target** currently means the authenticated demo APIs listed above (`users.getViewer`, collections, records, and field-update workflows), not the future configured leave workflow. **Effect Schema** remains a proposed integration: handwritten user validators are present, but no real Effect Schema implementation or collection/workflow/file schema module is established. These labels are retained because `scripts/migrate-verify.ts` uses a literal substring check (`CHK-DOC-01`); its pass confirms label presence, not architecture completeness.
 
-### 3. Workflow Engine
-- **Legacy Subsystem**: `packages/plugins/@nocobase/plugin-workflow`
-- **Convex Target**: `convex/workflows.ts` (`triggerWorkflow`, `workflowExecutions`, `getExecutionLog`)
-- **Effect Schema**: `src/lib/effect/schemas/workflow.ts` (`WorkflowExecutionSchema`, `StepResultSchema`)
-- **TanStack Hook**: `useWorkflowExecutionsQuery()`, `useRunWorkflowMutation()`
-- **Edge Deployment**: Webhook handlers hosted on Cloudflare Workers calling Convex internal mutations
+## Preservation and capability matrix
 
-### 4. File & Media Storage
-- **Legacy Subsystem**: `packages/plugins/@nocobase/plugin-file-manager`
-- **Convex Target**: `convex/files.ts` (`generateUploadUrl`, `saveFileMetadata`)
-- **Effect Schema**: `src/lib/effect/schemas/file.ts` (`FileUploadResponseSchema`)
-- **TanStack Hook**: `useUploadFileMutation()`, `useFileMetadataQuery()`
-- **Edge Deployment**: Direct client upload to Convex File Storage or Cloudflare R2 bucket
+Paths in this table are repository-relative. “Unavailable” means not verified with the available access, not absent in production.
 
----
+| Artifact / capability | Purpose, runtime, data owner | Actual consumers / dependencies | Disposition | Source / configured / running evidence and missing access |
+| --- | --- | --- | --- | --- |
+| `src/demo/`, `convex/`, `scripts/demo-*.ts` | Convex reference UI, Better Auth identity, owner-scoped data | Vite entry, package `demo:*` scripts, Convex/React/Better Auth/antd/i18next | **Migrate for M1** using this frontend | Source and local target verified; auth, collection, record, isolation, browsing journeys recorded in baseline report. Does not yet implement configurable leave approval. |
+| `convex/demo.ts` | Synthetic CRM-like `sample_leads`, three company records and a field-update workflow; Convex owns them | Demo seed button in `App.tsx`; collections/records/workflows APIs | **Retain** fixture; field-update workflow **defer** (#8) | Source present, callable seed. Not a complete CRM or human approval engine. Existing source-target rows were not queried or changed. |
+| `scripts/oa-demo-{seed,pages,workflows,auth,verify,runtime}.ts`, `docker/oa-demo/compose.yaml` | NocoBase `leaveRequests` and `expenseClaims` reference; PostgreSQL and NocoBase storage own source data | `oa:up/stop/status/seed/verify`; NocoBase image 2.2.18, PostgreSQL 16, collections/UI-schema/workflow/manual task APIs | Leave semantics **migrate for M1**; all source artifacts and expense example **retain** | Configured credentials file `storage/oa-demo/runtime.env` exists. Compose uses loopback 13000 and named `oa-database`/`oa-storage` volumes. Docker daemon unavailable; installation, current records and running status unverified. Seeds/verifier were not run. |
+| `scripts/oa-demo-pages.ts` | OA menus/pages `oa-leave-requests-*`, `oa-expense-claims-*`; legacy UI schema configuration | Seed script; collections and UI schema/menu APIs | **Retain** routes and layout definitions | Source confirms both examples. No claim that menus are installed in the unavailable source instance. |
+| `docs/docs/en/solution/crm/` | CRM design, schema descriptions, roles, routes, backup restoration/setup | NocoBase Backup Manager; documented CRM v2 `.nbdata` download; optional enterprise capabilities | **Retain** documentation; expansion/sync **defer** | Documentation present; no checked-in `.nbdata` archive or separately named CRM plugin found. No verified restored CRM instance or production access. Do not restore over an existing installation. |
+| `docs/docs/en/solution/all-in-one/` | CRM/sales/help desk/project/assets/HR suite installation instructions | NocoBase backup restoration and documented plugin dependencies | **Retain**; suite rollout **defer** | Source instructions present. Backup installation, ERP-like business data and production consumers unverified. No SAP/Salesforce target configured or required by this baseline. |
+| `examples/`, `packages/plugins/@nocobase-example/` | App, database, API and UI extension examples | `run:example`; existing core packages and Legacy/Modern examples | **Retain** | Source available; examples not started. Their existence does not prove configured ERP/CRM tenants. |
+| `packages/core/{auth,acl,database,client,client-v2,flow-engine}`, `packages/plugins/@nocobase/plugin-{auth,users,acl,departments,ui-schema-storage}` | Identity, permissions, configuration, forms, runtime foundations | NocoBase app/preset/plugins; OA APIs depend on these capability contracts, while Docker image supplies its own packaged code | **Retain**; bounded contracts **migrate for M1** | Package source does not establish enabled plugins. Preserve Legacy → Modern import direction and ADR-0001 routing while both are supported. Demo imports neither client shell. |
+| `packages/plugins/@nocobase/plugin-workflow*`, `convex/workflows.ts` | Upstream workflow engine/manual tasks; separate demo field-update runner | OA seed/verification consume workflow/manual tasks; demo consumes Convex runner | Source/manual reference **retain**; universal nodes **defer** | Neither Convex field updates nor package presence prove the M1 one-reviewer state machine (#17). |
+| `packages/plugins/@nocobase/plugin-file-manager`, audit-related source/docs | Files and attributable events | Existing upstream plugins/instances; M1 protected attachments and decision history are #18/#17 | **Retain**; bounded functionality **migrate for M1** | No `convex/files.ts`; no protected attachment journey established here. Optional pro plugin installation and production retention are unavailable. |
+| SQL federation, BI, generic ERP/CRM connectors, multi-app, broad AI/MCP package source | Other platform capabilities | Upstream preset/plugin references; not imported by selected demo | **Retain** source; migration **defer** | No consumer-free retirement demonstrated. Do not infer disabled/safe-to-remove from this baseline. |
+| `.convex/local/default/`, `.env`, `.env.local`, `storage/oa-demo/`, `storage/db`, uploads | Existing local configuration and source/reference persistence | Existing runtimes, scripts, user installations | **Retain unchanged** | Source environment and Convex/OA file fingerprints checked before/after. No source backend launched; Docker/remote data not accessed. New baseline resources are separately enumerated. |
 
-## Migration Verification Matrix
+No capability is currently classified **eligible for later retirement**: that requires actual consumer, job, callback, active-execution and retention evidence. Missing production access must remain an explicit discovery limitation.
 
-| Check ID | Verification Dimension | Target Contract | Dry Run Behavior | Live Verification |
-| :--- | :--- | :--- | :--- | :--- |
-| `CHK-ENV` | Environment & Tooling | Bun/Bunx runtime, node engine >= 22 | Emits detected engines | Checks version strings |
-| `CHK-DEP` | Dependencies | `convex`, `effect`, `@tanstack/react-query`, `wrangler` | Simulates package presence | Reads `package.json` |
-| `CHK-CVX` | Convex Backend | `convex/schema.ts` valid definitions | Validates AST syntax | Verifies schema exports |
-| `CHK-EFF` | Effect-TS Client | `src/lib/effect/client.ts` with error channels | Synthesizes sample pipe | Checks Effect module import |
-| `CHK-TSQ` | TanStack Query Bridge | `useConvexEffectQuery` hook contract | Mock query execution | Validates hook signature |
-| `CHK-CFL` | Cloudflare Config | `wrangler.jsonc` Pages config | Checks JSON schema | Validates output dir & compatibility |
+## Next work
+
+[#10](https://github.com/fpcMotif/fenbase/issues/10) is the next executable ticket: tooling enforcement and staging safety, including the observed test-wrapper incompatibility. Then #14 establishes membership and backend permissions; #15–#17 build the configurable leave application. Preserve expense and ERP/CRM reference material throughout. Passing this baseline is not M1 application acceptance or production readiness.
