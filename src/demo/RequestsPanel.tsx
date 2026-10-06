@@ -27,7 +27,7 @@ import { api } from '../../convex/_generated/api';
 import type { Id } from '../../convex/_generated/dataModel';
 import type { DefinitionField } from '../../convex/definitionModel';
 import { DEFAULT_RECORD_PAGE_SIZE, RECORD_CREATED_SORT_FIELD } from '../../convex/recordQuery';
-import { REQUEST_ERROR_CODES, validateRequestValues, type RequestIssue } from '../../convex/requestValues';
+import { REQUEST_ERROR_CODES, ownValue, validateRequestValues, type RequestIssue } from '../../convex/requestValues';
 import { actionErrorData, actionErrorMessage, requestIssueMessage } from './actionErrors';
 import { runPendingAction } from './pendingAction';
 import { carryOverValues, fieldLabel, toFormValues, toRequestValues, type RequestFormValues } from './requestForm';
@@ -181,7 +181,7 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
         ? t('requests.me')
         : t('requests.member', { ref: membershipReference(row.requester.membershipId) });
     }
-    const value = row.values[key];
+    const value = ownValue(row.values, key);
     if (value === undefined) return t('requests.missingValue');
     if (typeof value === 'boolean') return value ? t('requests.yes') : t('requests.no');
     return String(value);

@@ -65,6 +65,12 @@ export function requestValuesBytes(values: Record<string, unknown>): number {
   return new TextEncoder().encode(canonicalJson(values)).length;
 }
 
+// Field keys may be named like built-in object properties (`toString`, `constructor`), so a plain lookup would return
+// the inherited function for a value the record does not hold.
+export function ownValue<T>(values: Record<string, T>, key: string): T | undefined {
+  return Object.hasOwn(values, key) ? values[key] : undefined;
+}
+
 function isBlank(value: unknown): boolean {
   return value === undefined || (typeof value === 'string' && value.trim() === '');
 }
@@ -83,7 +89,7 @@ export function validateRequestValues(
   if (unknown !== undefined) return { code: 'RECORD_FIELD_UNKNOWN', field: unknown };
 
   for (const field of definition.fields) {
-    const value = values[field.key];
+    const value = ownValue(values, field.key);
     if (isBlank(value)) {
       if (field.required) return { code: 'RECORD_FIELD_REQUIRED', field: field.key };
       if (value === undefined) continue;
@@ -110,8 +116,8 @@ export function validateRequestValues(
   }
 
   for (const rule of definition.dateRules) {
-    const start = values[rule.startKey];
-    const end = values[rule.endKey];
+    const start = ownValue(values, rule.startKey);
+    const end = ownValue(values, rule.endKey);
     // YYYY-MM-DD strings sort in calendar order, so a string comparison is a date comparison.
     if (typeof start === 'string' && typeof end === 'string' && start !== '' && end !== '' && end < start) {
       return { code: 'RECORD_DATE_RANGE_INVALID', field: rule.endKey };

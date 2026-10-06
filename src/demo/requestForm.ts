@@ -1,5 +1,5 @@
 import type { Definition, DefinitionField } from '../../convex/definitionModel';
-import type { RequestValue, RequestValues } from '../../convex/requestValues';
+import { ownValue, type RequestValue, type RequestValues } from '../../convex/requestValues';
 
 export type RequestFormValues = Record<string, RequestValue | null | undefined>;
 
@@ -12,7 +12,7 @@ function hasFieldType(field: DefinitionField, value: unknown): value is RequestV
 export function toFormValues(definition: Pick<Definition, 'fields'>, values: RequestFormValues): RequestFormValues {
   const form: RequestFormValues = {};
   for (const field of definition.fields) {
-    const value = values[field.key];
+    const value = ownValue(values, field.key);
     if (hasFieldType(field, value)) form[field.key] = value;
     else if (field.type === 'boolean') form[field.key] = false;
   }
@@ -22,7 +22,7 @@ export function toFormValues(definition: Pick<Definition, 'fields'>, values: Req
 export function toRequestValues(definition: Pick<Definition, 'fields'>, form: RequestFormValues): RequestValues {
   const values: RequestValues = {};
   for (const field of definition.fields) {
-    const value = form[field.key];
+    const value = ownValue(form, field.key);
     if (value === null || value === undefined || value === '') continue;
     values[field.key] = value;
   }
@@ -32,7 +32,7 @@ export function toRequestValues(definition: Pick<Definition, 'fields'>, form: Re
 export function carryOverValues(definition: Pick<Definition, 'fields'>, form: RequestFormValues): RequestFormValues {
   const kept: RequestFormValues = {};
   for (const field of definition.fields) {
-    const value = form[field.key];
+    const value = ownValue(form, field.key);
     if (hasFieldType(field, value)) kept[field.key] = value;
   }
   return kept;

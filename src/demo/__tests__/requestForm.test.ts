@@ -54,6 +54,18 @@ describe('request form values', () => {
     });
   });
 
+  it('fills nothing for keys named like built-in object properties', () => {
+    const builtIns = {
+      fields: [
+        { type: 'text', key: 'toString', label: { enUS: 'A', zhCN: '甲' }, required: false, maxLength: 10 } as const,
+        { type: 'boolean', key: 'valueOf', label: { enUS: 'B', zhCN: '乙' }, required: false } as const,
+      ],
+    };
+    expect(toFormValues(builtIns, {})).toEqual({ valueOf: false });
+    expect(toRequestValues(builtIns, {})).toEqual({});
+    expect(carryOverValues(builtIns, {})).toEqual({});
+  });
+
   it('labels a field in the active language', () => {
     expect(fieldLabel(fields[0], 'zh-CN')).toBe('开始日期');
     expect(fieldLabel(fields[0], 'en-US')).toBe('Start date');

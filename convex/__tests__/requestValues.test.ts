@@ -176,6 +176,27 @@ describe('request value validation', () => {
     expect(validateRequestValues(wide, { a: '汉'.repeat(3000) })).toEqual({ code: 'RECORD_TOO_LARGE' });
   });
 
+  it('treats keys named like built-in object properties as ordinary fields', () => {
+    const builtIns = {
+      fields: [
+        { type: 'text', key: 'toString', label: { enUS: 'A', zhCN: '甲' }, required: false, maxLength: 10 } as const,
+        {
+          type: 'number',
+          key: 'constructor',
+          label: { enUS: 'B', zhCN: '乙' },
+          required: true,
+          min: 0,
+          max: 9,
+        } as const,
+        { type: 'date', key: 'valueOf', label: { enUS: 'C', zhCN: '丙' }, required: false } as const,
+        { type: 'date', key: 'hasOwnProperty', label: { enUS: 'D', zhCN: '丁' }, required: false } as const,
+      ],
+      dateRules: [{ startKey: 'valueOf', endKey: 'hasOwnProperty' }],
+    };
+    expect(validateRequestValues(builtIns, { constructor: 1 })).toBeNull();
+    expect(validateRequestValues(builtIns, {})).toEqual({ code: 'RECORD_FIELD_REQUIRED', field: 'constructor' });
+  });
+
   it('reports field issues in definition order', () => {
     expect(validateRequestValues(leave, { startDate: 'bad', endDate: 'bad', days: 0, reason: '' })).toEqual({
       code: 'RECORD_DATE_INVALID',

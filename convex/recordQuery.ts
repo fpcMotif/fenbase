@@ -1,6 +1,6 @@
 import { ConvexError } from 'convex/values';
 import { maxTextLength, type DemoField, type DemoValue } from './demoValidation';
-import { isCalendarDate } from './requestValues';
+import { isCalendarDate, ownValue } from './requestValues';
 
 // Filtering, sorting, and pagination for one collection's records. Shared by the `records.browse` query (authoritative)
 // and the demo client (early validation), so it must stay free of server-only imports.
@@ -128,7 +128,7 @@ function isEmpty(value: RecordQueryValue | undefined): boolean {
 // Mirrors the NocoBase operators of the same names: `$ne` keeps records without a value, `$includes`/`$notIncludes`
 // ignore letter case and skip records without a value, and an empty text value counts as empty.
 function matches(record: BrowsableRecord, filter: RecordFilter): boolean {
-  const actual = record.values[filter.field];
+  const actual = ownValue(record.values, filter.field);
   const expected = filter.value;
   switch (filter.operator) {
     case '$eq':
@@ -181,7 +181,7 @@ function compareValues(left: RecordQueryValue | undefined, right: RecordQueryVal
 }
 
 function sortValue(record: BrowsableRecord, field: string): RecordQueryValue | undefined {
-  return field === RECORD_CREATED_SORT_FIELD ? record._creationTime : record.values[field];
+  return field === RECORD_CREATED_SORT_FIELD ? record._creationTime : ownValue(record.values, field);
 }
 
 // Ties fall back to newest first, then to the record id, so every page boundary is stable.
