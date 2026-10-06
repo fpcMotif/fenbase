@@ -247,6 +247,21 @@ describe('browsing date-only values', () => {
     ).toThrow(ConvexError);
   });
 
+  it('reads only values a record holds, even for keys named like built-in object properties', () => {
+    const builtInFields = [
+      { name: 'toString', type: 'text' },
+      { name: 'constructor', type: 'number' },
+    ] as const;
+    const rows = [record('b1', 1, { constructor: 2 }), record('b2', 2, { toString: 'x', constructor: 1 })];
+    expect(ids(queryRecords(rows, builtInFields, { filters: [{ field: 'toString', operator: '$empty' }] }))).toEqual([
+      'b1',
+    ]);
+    expect(ids(queryRecords(rows, builtInFields, { sort: { field: 'toString', direction: 'asc' } }))).toEqual([
+      'b2',
+      'b1',
+    ]);
+  });
+
   it('rejects text operators on a date field', () => {
     expect(() =>
       queryRecords(leave, dateFields, { filters: [{ field: 'startDate', operator: '$includes', value: '2026' }] }),

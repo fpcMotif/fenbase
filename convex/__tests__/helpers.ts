@@ -1,3 +1,5 @@
+import schema from '../schema';
+
 export type TableName =
   | 'demoCollections'
   | 'demoRecords'
@@ -8,7 +10,8 @@ export type TableName =
   | 'memberships'
   | 'applicationDefinitions'
   | 'applicationDefinitionVersions'
-  | 'requests';
+  | 'requests'
+  | 'requestCounts';
 
 export type WriteOperation = 'insert' | 'patch' | 'replace' | 'delete';
 
@@ -40,6 +43,7 @@ export interface TestContext {
   };
   counts: { inserts: number; patches: number; deletes: number };
   writes: Array<{ table: TableName; operation: WriteOperation; id: string }>;
+  indexReads: Array<{ table: TableName; index: string; rows: number }>;
   read(table: TableName, id: string): TestDoc | null;
   rows(table: TableName): TestDoc[];
   seed(table: TableName, doc: TestDoc): void;
@@ -58,6 +62,7 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
     'applicationDefinitions',
     'applicationDefinitionVersions',
     'requests',
+    'requestCounts',
   ];
   for (const table of tableNames) {
     tables.set(table, new Map((seed[table] ?? []).map((doc) => [doc._id, doc])));
@@ -65,6 +70,7 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
 
   const counts = { inserts: 0, patches: 0, deletes: 0 };
   const writes: TestContext['writes'] = [];
+  const indexReads: TestContext['indexReads'] = [];
   let nextId = 1;
   let lastCreationTime = 0;
   const getTable = (table: TableName) => {
@@ -88,7 +94,7 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
     },
     query(table) {
       return {
-        withIndex(_indexName, buildRange) {
+        withIndex(indexName, buildRange) {
           const conditions: Array<{ field: string; value: unknown }> = [];
           const range: IndexRange = {
             eq(field, value) {
@@ -97,9 +103,16 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
             },
           };
           buildRange(range);
+          // Like Convex, accept only an index the schema declares, ranged over a prefix of its fields in order.
+          const index = schema.tables[table][' indexes']().find((item) => item.indexDescriptor === indexName);
+          if (!index) throw new Error(`Unknown index ${table}.${indexName}`);
+          conditions.forEach(({ field }, position) => {
+            if (index.fields[position] !== field) throw new Error(`${table}.${indexName} cannot range on ${field}`);
+          });
           let docs = [...getTable(table).values()].filter((doc) =>
             conditions.every(({ field, value }) => doc[field] === value),
           );
+          const record = (rows: number) => indexReads.push({ table, index: indexName, rows });
 
           const query: IndexedQuery = {
             order(direction) {
@@ -108,13 +121,17 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
               return query;
             },
             take(count) {
-              return docs.slice(0, count);
+              const taken = docs.slice(0, count);
+              record(taken.length);
+              return taken;
             },
             first() {
+              record(Math.min(docs.length, 1));
               return docs[0] ?? null;
             },
             unique() {
-              if (docs.length > 1) throw new Error(`Expected a unique document in ${_indexName}`);
+              if (docs.length > 1) throw new Error(`Expected a unique document in ${indexName}`);
+              record(docs.length);
               return docs[0] ?? null;
             },
           };
@@ -149,6 +166,7 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
     db,
     counts,
     writes,
+    indexReads,
     read(table, id) {
       return getTable(table).get(id) ?? null;
     },

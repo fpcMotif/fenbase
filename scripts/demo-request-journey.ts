@@ -117,6 +117,10 @@ const texts = {
     versionColumn: 'Version',
     me: 'Me',
     missing: '—',
+    filterFrom: 'Start date on or after',
+    filterTo: 'End date on or before',
+    clearFilter: 'Clear dates',
+    noMatches: 'No requests match these dates.',
     date: (value: string) => value.replaceAll('-', ''),
   },
   'zh-CN': {
@@ -150,6 +154,10 @@ const texts = {
     versionColumn: '版本',
     me: '我',
     missing: '—',
+    filterFrom: '开始日期不早于',
+    filterTo: '结束日期不晚于',
+    clearFilter: '清除日期',
+    noMatches: '没有符合这些日期的申请。',
     date: (value: string) => value.replaceAll('-', ''),
   },
 } as const;
@@ -233,6 +241,25 @@ async function keyboardInput(page: Page, target: Locator, value: string): Promis
 async function keyboardDate(page: Page, target: Locator, digits: string): Promise<void> {
   await keyboardFocus(page, target);
   await page.keyboard.type(digits);
+}
+
+// The operation id of a `requests:create` mutation the page sent over the Convex WebSocket, if this frame is one.
+function sentCreateOperationId(payload: string): string | undefined {
+  let message: unknown;
+  try {
+    message = JSON.parse(payload);
+  } catch {
+    return undefined;
+  }
+  if (typeof message !== 'object' || message === null) return undefined;
+  if (Reflect.get(message, 'type') !== 'Mutation') return undefined;
+  const udfPath: unknown = Reflect.get(message, 'udfPath');
+  if (typeof udfPath !== 'string' || !/^requests(\.js)?:create$/.test(udfPath)) return undefined;
+  const args: unknown = Reflect.get(message, 'args');
+  const first: unknown = Array.isArray(args) ? args[0] : undefined;
+  if (typeof first !== 'object' || first === null) return undefined;
+  const operationId: unknown = Reflect.get(first, 'operationId');
+  return typeof operationId === 'string' ? operationId : undefined;
 }
 
 async function main(): Promise<void> {
@@ -606,10 +633,30 @@ async function main(): Promise<void> {
           (value) => (value as { total: number }).total,
           (error: unknown) => outcomeOf(error),
         );
+    const listScope = async (key: ActorKey, applicationId: Id<'applications'>) =>
+      client(key)
+        .query(looseQuery('requests:list'), { applicationId })
+        .then(
+          (value) => (value as { scope: string }).scope,
+          (error: unknown) => outcomeOf(error),
+        );
+    const requestCount = (applicationId: Id<'applications'>) =>
+      tableRows(envFile, 'requestCounts').find((row) => row.applicationId === applicationId)?.count ?? 0;
     check(
       'http.read.isolation',
-      { A: 'visible', B: 'null', C: 'null', R: 'null', Z: 'APPLICATION_ACCESS_DENIED', listB: 0, listR: 0, listA: 1 },
       {
+        A: 'visible',
+        B: 'null',
+        C: 'null',
+        R: 'null',
+        Z: 'APPLICATION_ACCESS_DENIED',
+        listB: 0,
+        listR: 0,
+        listA: 1,
+        scopeR: 'own',
+      },
+      {
+        scopeR: await listScope('R', app('one')),
         A: await readOutcome('A', app('one')),
         B: await readOutcome('B', app('one')),
         C: await readOutcome('C', app('one')),
@@ -659,11 +706,13 @@ async function main(): Promise<void> {
         {
           readerSees: { isMe: false, canEdit: false },
           readerTotal: 1,
+          readerScope: 'application',
           reviewerTotal: 0,
           readerEdit: 'RECORD_NOT_FOUND',
         },
         {
           readerSees: readerView && { isMe: readerView.requester.isMe, canEdit: readerView.canEdit },
+          readerScope: await listScope('R', app('readers')),
           readerTotal: await listTotal('R', app('readers')),
           reviewerTotal: await listTotal('B', app('readers')),
           readerEdit: await client('R')
@@ -712,6 +761,11 @@ async function main(): Promise<void> {
           });
         }
       }
+      check(
+        'persist.request-count-tracks-creates-and-deletes',
+        { counter: 28, rows: 28 },
+        { counter: requestCount(app('one')), rows: requestRows(app('one')).length },
+      );
       type Page = {
         items: Array<{ _id: string; values: { days: number } }>;
         total: number;
@@ -769,7 +823,11 @@ async function main(): Promise<void> {
           expectedRevision: row.revision,
         });
       }
-      check('http.list.seeded-requests-removed', 0, requestRows(app('one')).length);
+      check(
+        'http.list.seeded-requests-removed',
+        { rows: 0, counter: 0 },
+        { rows: requestRows(app('one')).length, counter: requestCount(app('one')) },
+      );
     } catch (error) {
       check('http.list.filter-before-page-without-dropping-records', 'listed', outcomeOf(error));
     }
@@ -816,6 +874,13 @@ async function main(): Promise<void> {
         page.setDefaultTimeout(20_000);
         const pageErrors: string[] = [];
         page.on('pageerror', (error) => pageErrors.push(error.message));
+        const createOperations: string[] = [];
+        page.on('websocket', (socket) => {
+          socket.on('framesent', ({ payload }) => {
+            const sent = typeof payload === 'string' ? sentCreateOperationId(payload) : undefined;
+            if (sent) createOperations.push(sent);
+          });
+        });
         const consoleLines: string[] = [];
         page.on('console', (message) => {
           consoleLines.push(
@@ -941,6 +1006,42 @@ async function main(): Promise<void> {
               { revision: requestsOf()[0]?.revision, values: requestsOf()[0]?.values },
             );
 
+            // The list's date filter follows the configured date rule: start on or after, end on or before.
+            const fromFilter = page.getByLabel(text.filterFrom, { exact: true });
+            const toFilter = page.getByLabel(text.filterTo, { exact: true });
+            const noMatches = page.getByText(text.noMatches, { exact: true });
+            await keyboardDate(page, fromFilter, text.date('2026-03-03'));
+            await noMatches.waitFor();
+            const startAfterRequest = { rows: await rowWith('2026-03-02').count(), empty: await noMatches.isVisible() };
+            await capture('3a-filtered-out');
+            await keyboardDate(page, fromFilter, text.date('2026-03-02'));
+            await rowWith('2026-03-02').waitFor();
+            const startOnRequest = await rowWith('2026-03-02').count();
+            await keyboardDate(page, toFilter, text.date('2026-03-03'));
+            await noMatches.waitFor();
+            const endBeforeRequest = await rowWith('2026-03-02').count();
+            await keyboardActivate(page, page.getByRole('button', { name: text.clearFilter, exact: true }));
+            await rowWith('2026-03-02').waitFor();
+            must(
+              'ui.en.date-filter-narrows-the-list-on-the-server',
+              {
+                startAfterRequest: { rows: 0, empty: true },
+                startOnRequest: 1,
+                endBeforeRequest: 0,
+                cleared: { rows: 1, from: '', to: '' },
+              },
+              {
+                startAfterRequest,
+                startOnRequest,
+                endBeforeRequest,
+                cleared: {
+                  rows: await rowWith('2026-03-02').count(),
+                  from: await fromFilter.inputValue(),
+                  to: await toFilter.inputValue(),
+                },
+              },
+            );
+
             // Publish V2 with an optional Note field and column through the #15 builder operations.
             const v2 = await publishDefinition('C', 'one', v2Definition);
             labels.set(v2.versionId, '<version:one:2>');
@@ -968,6 +1069,7 @@ async function main(): Promise<void> {
               await openButton.evaluate((element) => element === document.activeElement),
             );
 
+            const operationsBeforeV2Form = createOperations.length;
             await keyboardActivate(page, page.getByRole('button', { name: text.newRequest, exact: true }));
             await dialog.getByText(text.versionTag(2), { exact: true }).waitFor();
             must(
@@ -1020,6 +1122,16 @@ async function main(): Promise<void> {
               },
               { version: v3Row?.version, values: v3Row?.values },
             );
+            const attempts = createOperations.slice(operationsBeforeV2Form);
+            must(
+              'ui.en.load-new-version-sends-a-new-operation-id',
+              { attempts: 2, distinct: true, storedIsLatest: true },
+              {
+                attempts: attempts.length,
+                distinct: new Set(attempts).size === attempts.length,
+                storedIsLatest: v3Row?.operationId === attempts.at(-1),
+              },
+            );
             await rowWith('2026-04-06').waitFor();
             await capture('6-v3-created');
 
@@ -1041,8 +1153,11 @@ async function main(): Promise<void> {
             await row.waitFor();
             must(
               'ui.zh.localized-list',
-              { headers: true, cells: ['我', '2026-03-02', '2026-03-04', '2', text.missing, 'V1'] },
+              { headers: true, filters: true, cells: ['我', '2026-03-02', '2026-03-04', '2', text.missing, 'V1'] },
               {
+                filters:
+                  (await page.getByLabel(text.filterFrom, { exact: true }).count()) === 1 &&
+                  (await page.getByLabel(text.filterTo, { exact: true }).count()) === 1,
                 headers:
                   (await page.getByRole('columnheader', { name: text.labels.startDate }).count()) === 1 &&
                   (await page.getByRole('columnheader', { name: text.versionColumn, exact: true }).count()) === 1,
@@ -1176,8 +1291,18 @@ async function main(): Promise<void> {
   }
   check(
     'cleanup.fixture-and-request-rows-removed',
-    { organizations: 0, applications: 0, memberships: 0, definitions: 0, definitionVersions: 0, requests: 0 },
     {
+      organizations: 0,
+      applications: 0,
+      memberships: 0,
+      definitions: 0,
+      definitionVersions: 0,
+      requests: 0,
+      requestCounts: 0,
+    },
+    {
+      requestCounts: tableRows(envFile, 'requestCounts').filter((row) => fixtureApplicationIds.has(row.applicationId))
+        .length,
       organizations: tableRows(envFile, 'organizations').filter(
         (row) => typeof row.key === 'string' && seededOrganizations.has(row.key),
       ).length,

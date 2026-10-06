@@ -406,12 +406,47 @@ describe('creating a request', () => {
     expect(await getAs(ctx, 'user-a', v1Request.requestId)).toMatchObject({ version: 1, versionId: V1, values: leave });
   });
 
-  it('caps an application at 1000 requests', async () => {
+  it('stores a blank optional value as absent, on create and on update', async () => {
     const ctx = fixtureContext();
+    await seedV2(ctx);
+    const created = await createAs(
+      ctx,
+      'user-a',
+      { ...leave, note: '   ' },
+      { definitionVersionId: V2, operationId: 'blank-0001' },
+    );
+    expect(ctx.read('requests', created.requestId)?.values).toEqual(leave);
+
+    const replay = await createAs(ctx, 'user-a', leave, { definitionVersionId: V2, operationId: 'blank-0001' });
+    expect(replay).toEqual({ ...created, created: false });
+
+    const writesBefore = ctx.writes.length;
+    expect(await updateAs(ctx, 'user-a', created.requestId, 1, { ...leave, note: '' })).toEqual({ revision: 1 });
+    expect(ctx.writes.length).toBe(writesBefore);
+  });
+
+  it('caps an application at 1000 requests and frees a slot when one is deleted', async () => {
+    const ctx = fixtureContext();
+    let last: Created | undefined;
     for (let index = 0; index < 1000; index += 1) {
-      await ctx.db.insert('requests', requestDoc(`seed-${index}`, 'memberships:a2'));
+      last = await createAs(ctx, index % 2 === 0 ? 'user-a' : 'user-a2');
     }
     await expectRejectedWithoutWrites(ctx, () => createAs(ctx, 'user-a'), 'RECORD_APPLICATION_FULL');
+    if (!last) throw new Error('No request was created');
+    await removeAs(ctx, 'user-a2', last.requestId, 1);
+    expect(await createAs(ctx, 'user-a')).toMatchObject({ created: true });
+    await expectRejectedWithoutWrites(ctx, () => createAs(ctx, 'user-a'), 'RECORD_APPLICATION_FULL');
+  });
+
+  it('checks the cap without reading the application’s requests, so creates stay cheap as it fills', async () => {
+    const ctx = fixtureContext();
+    for (let index = 0; index < 30; index += 1) await createAs(ctx, 'user-a2');
+    ctx.indexReads.length = 0;
+    await createAs(ctx, 'user-a');
+    const requestRowsRead = ctx.indexReads
+      .filter((read) => read.table === 'requests')
+      .reduce((total, read) => total + read.rows, 0);
+    expect(requestRowsRead).toBe(0);
   });
 });
 
@@ -544,11 +579,13 @@ describe('reading requests', () => {
     expect(page).toMatchObject({ total: 1, scope: 'own' });
     expect(page.items.map((item) => item._id)).toEqual([mine.requestId]);
     expect(await listAs(ctx, 'user-b')).toMatchObject({ total: 0, items: [] });
-    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, items: [], scope: 'application' });
+    // The grant adds nothing under this preset, so the reader's list is labelled as their own.
+    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, items: [], scope: 'own' });
   });
 
   it('lets readApplicationRecords read every request only under the readers preset, per pinned version', async () => {
     const ctx = fixtureContext({ app1Preset: 'requesterAssignedReviewerAndReaders' });
+    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, scope: 'application' });
     const first = await createAs(ctx, 'user-a');
     await createAs(ctx, 'user-a2');
     const readerView = await getAs(ctx, 'user-r', first.requestId);
@@ -561,8 +598,15 @@ describe('reading requests', () => {
     const v2 = await createAs(ctx, 'user-a', leave, { definitionVersionId: V2 });
     expect(await getAs(ctx, 'user-r', v2.requestId)).toBeNull();
     const readable = await listAs(ctx, 'user-r');
-    expect(readable.total).toBe(2);
+    expect(readable).toMatchObject({ total: 2, scope: 'application' });
     expect(readable.items.map((item) => item._id)).not.toContain(v2.requestId);
+  });
+
+  it('labels the list as own when the grant reads nothing beyond the reader’s requests', async () => {
+    const ctx = fixtureContext({ app1Preset: 'requesterAssignedReviewerAndReaders' });
+    await seedV2(ctx, 'requesterAndAssignedReviewer');
+    await createAs(ctx, 'user-a', leave, { definitionVersionId: V2 });
+    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, scope: 'own' });
   });
 
   it('keeps a second organization apart even when it holds the same grants', async () => {
@@ -635,6 +679,16 @@ describe('reading requests', () => {
     signIn('user-a');
     await expectCode(invokeHandler(list, ctx, { applicationId: APP_1 }), 'RECORD_BROWSE_LIMIT_EXCEEDED');
   });
+
+  it('rejects a malformed query before reading any request', async () => {
+    const ctx = fixtureContext();
+    await createAs(ctx, 'user-a');
+    ctx.indexReads.length = 0;
+    const filters = Array.from({ length: 11 }, () => ({ field: 'reason', operator: '$notEmpty' }));
+    await expectCode(listAs(ctx, 'user-a', { filters }), 'RECORD_QUERY_FILTER_COUNT_INVALID');
+    await expectCode(listAs(ctx, 'user-a', { pageSize: 101 }), 'RECORD_QUERY_PAGE_INVALID');
+    expect(ctx.indexReads.filter((read) => read.table === 'requests')).toEqual([]);
+  });
 });
 
 describe('fixture cleanup', () => {
@@ -646,5 +700,6 @@ describe('fixture cleanup', () => {
     const removed = await invokeHandler(removeOrganization, ctx, { organizationKey: 'fixture-org-1' });
     expect(removed).toMatchObject({ organizations: 1, applications: 2, requests: 2 });
     expect(ctx.rows('requests').map((row) => row.applicationId)).toEqual([APP_Z]);
+    expect(ctx.rows('requestCounts').map((row) => [row.applicationId, row.count])).toEqual([[APP_Z, 1]]);
   });
 });

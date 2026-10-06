@@ -111,13 +111,20 @@ describe('request text', () => {
     expect(requestIssueMessage({ code: 'RECORD_DATE_RANGE_INVALID', field: 'days' }, zh, labelOf)).toContain('Days');
   });
 
-  it('reads bounds, revisions and the current version from a server error', () => {
-    const error = new ConvexError({
-      code: 'RECORD_DEFINITION_OUTDATED',
-      message: 'x',
-      currentVersionId: 'applicationDefinitionVersions:2',
-    });
-    expect(actionErrorData(error)).toMatchObject({ currentVersionId: 'applicationDefinitionVersions:2' });
+  it('names the date filter after the configured fields in both languages', () => {
+    for (const key of ['filterTitle', 'filterFrom', 'filterTo', 'clearFilter', 'noMatches']) {
+      for (const language of ['en-US', 'zh-CN']) {
+        expect(i18n.exists(`requests.${key}`, { lng: language, fallbackLng: false }), `${language} ${key}`).toBe(true);
+      }
+    }
+    expect(i18n.getFixedT('en-US')('requests.filterFrom', { field: 'Start date' })).toBe('Start date on or after');
+    expect(i18n.getFixedT('zh-CN')('requests.filterTo', { field: '结束日期' })).toBe('结束日期不晚于');
+  });
+
+  it('reads bounds and revisions from a server error', () => {
+    expect(
+      actionErrorData(new ConvexError({ code: 'RECORD_REVISION_CONFLICT', message: 'x', currentRevision: 4 })),
+    ).toMatchObject({ code: 'RECORD_REVISION_CONFLICT', currentRevision: 4 });
     expect(
       actionErrorData(
         new ConvexError({ code: 'RECORD_NUMBER_OUT_OF_RANGE', message: 'x', field: 'days', min: 1, max: 3 }),
