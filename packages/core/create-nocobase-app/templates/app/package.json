@@ -28,8 +28,8 @@
     "pm2": "^7.0.0"
   },
   "devDependencies": {
-    "oxfmt": "^0.71.0",
-    "oxlint": "^1.86.0"
+    "oxfmt": "0.71.0",
+    "oxlint": "1.86.0"
   },
   "resolutions": {
     "@types/react": "18.3.18",
@@ -43,6 +43,7 @@
     "semver": "^7.7.1"
   },
   "engines": {
-    "node": ">=18"
-  }
+    "node": ">=22.12.0"
+  },
+  "packageManager": "bun@1.4.2"
 }

@@ -1,0 +1,19 @@
+amends "package://github.com/jdx/hk/releases/download/v2.5.0/hk@2.5.0#/Config.pkl"
+steps {
+    ["quality"] {
+        check = "bun scripts/quality-gate.ts --staged"
+    }
+}
+hooks {
+    ["pre-commit"] {
+        fix = true
+        stage = false
+        stash = "none"
+        steps {
+            ["quality"] {
+                check = "bun scripts/quality-gate.ts --staged"
+                fix = "bun scripts/pre-commit.ts"
+            }
+        }
+    }
+}

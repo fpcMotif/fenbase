@@ -1,43 +1,57 @@
-# Migrate lint and format tooling to Oxc (Oxlint, Oxfmt, type-aware)
+# Oxc quality policy and staged snapshots
 
 ## Context
 
-Contributors and AI coding agents previously operated under a slow, inconsistent, and fragmented linting and formatting toolchain:
-- Root workspace used ESLint 8 (legacy config format) running Prettier as an ESLint plugin (`eslint-plugin-prettier`).
-- The `docs` workspace ran ESLint 9 (flat config), Prettier, and Biome simultaneously across overlapping scopes.
-- Scaffold templates (`create-nocobase-app`) distributed deprecated ESLint and Prettier setups to generated projects.
-- Written contributor guidelines (banning `any` and fire-and-forget `void` calls) were largely unenforced because `no-explicit-any` was disabled and no rule caught unhandled/void promises.
-- No CI workflow gated lint or format errors, and local git hooks failed with opaque errors in environments without globally linked binaries.
+The initial migration selected Oxc plugins without enabling type-aware execution in CI.
+The hook used regular expressions and could stage unrelated working-tree changes.
+Legacy application compiler settings also conflict with the native TypeScript lint engine.
 
 ## Decision
 
-We migrate the whole repository to the unified **Oxc toolchain**: **Oxlint** for linting (including type-aware checks via `oxlint-tsgolint`) and **Oxfmt** for formatting.
+Use repository-installed Oxlint 1.86.0, Oxfmt 0.71.0, and oxlint-tsgolint 7.0.2003.
+Bun 1.4.2 and bun.lock define the supported installation path.
+Node 22 is the CI runtime; package metadata requires at least 22.12.0.
+Vitest 1.5.2 matches the existing test runner and coverage packages.
 
-1. **Replacement, Not Coexistence:**
-   - ESLint, Prettier, Biome, all ESLint plugins and parsers, and `pretty-quick` are completely removed from root, docs, and scaffold templates.
-   - All ESLint/Prettier package overrides and resolutions are pruned.
+The shared quality checker accepts either the staged index or committed HEAD against an explicit merge base.
+Both paths materialize an isolated source snapshot.
+Oxlint diagnostics enforce introduced code through .oxlintrc.policy.json.
+Added-line matching includes multiline diagnostic spans and never exempts an entire removal hunk.
+Valid targeted suppression directives retain their meaning.
+Void type annotations and the void-zero sentinel remain valid.
 
-2. **Rule Parity & Formatting Parity:**
-   - Oxlint provides native plugin implementations for `typescript`, `react` (with React hooks), `promise`, and `oxc`.
-   - Oxfmt reproduces existing Prettier formatting conventions: single quotes (`singleQuote: true`), trailing commas everywhere (`trailingComma: "all"`), and explicit print width of 120 (`printWidth: 120`).
-   - Markdown, HTML, SVG, and template files remain excluded from automated formatting, preserving existing boundaries.
+Type-aware checks cover E2E files, Convex, the demo application, and scripts.
+Snapshots use tsconfig.oxlint.json as their root compiler configuration.
+Generated workspace aliases resolve into snapshot sources.
+Nested compiler configurations are removed only inside the disposable snapshot.
+Application compiler configurations remain unchanged.
+Configuration errors, malformed output, missing tools, and process failures block checks.
 
-3. **Contributor Guide Enforcement:**
-   - Staged changes strictly enforce contributor rules: avoiding `any` via `typescript/no-explicit-any` and fire-and-forget `void` via `no-void` and `typescript/no-floating-promises` with `{ "ignoreVoid": false }`.
-   - Legacy violations in untouched files warn without blocking commits, allowing incremental improvement as files are edited.
+Ordinary warnings retain the existing per-file, per-rule ratchet.
+Updating that baseline can only lower counts after a successful complete scan.
+Type-aware debt is reported separately by the full-scope audit.
+Existing typed findings outside introduced spans do not block unrelated changes.
 
-4. **Dedicated Type-Aware Configuration & Scoped Rollout:**
-   - Type-aware linting runs through dedicated, TypeScript 7 native compiler-compatible configurations (`tsconfig.oxlint.json`, `convex/tsconfig.json`, `src/demo/tsconfig.json`, `scripts/tsconfig.json`, and `packages/core/test/src/e2e/tsconfig.json`).
-   - Initial rollout is scoped to the files that already relied on type-aware rules (e2e test suites), plus the Convex backend code, the demo application, and maintenance scripts.
-   - Coverage will widen to individual packages as their TypeScript configurations are upgraded to modern compiler options.
+The hook runs formatting and the existing license-header tool inside the staged snapshot.
+It updates index blobs only after every check succeeds.
+Partially staged working-tree bytes remain intact.
+The hk hook disables automatic restaging and stashing because the snapshot hook owns index updates.
+CI uses the non-mutating checker and a separate static client-runtime import check.
+The import check ignores `__tests__`, `lib`, `dist`, and `esm` directories; all other client-v2 source is checked.
 
-5. **Local Hook & CI Alignment:**
-   - Pre-commit checks invoke `bun scripts/pre-commit.ts`, checking that required tools exist (with clear remediation guidance if missing), formatting staged files with `oxfmt`, and linting staged files with `oxlint`.
-   - GitHub Actions CI workflow (`.github/workflows/lint-and-format.yml`) runs the identical commands on pushes and pull requests.
+Formatting keeps single quotes, trailing commas, width 120, and existing root exclusions.
+Scaffolds use the root package-manifest formatting exclusion and pinned Oxc versions.
+Commit-message and license-header tooling remain in place.
 
 ## Consequences
 
-- Installs and package audits are smaller and faster with ESLint and Prettier dependencies removed.
-- Linting time for changes drops from tens of seconds to sub-second runs.
-- Format and lint failures are decoupled into distinct check and fix commands (`bun run format` / `bun run format:check` vs `bun run lint`).
-- Upstream merges will require maintaining the diverged root tooling configuration.
+Direct legacy lint and format dependencies are removed.
+Reachable Umi and Convex dependencies still contain legacy tooling.
+Deleting those lock entries would break dependency resolution.
+
+Native rule coverage does not establish complete historical rule parity.
+Supported root mappings are restored for introduced code.
+Docs overrides restore supported recommendations and Biome mappings labeled same for introduced docs code.
+Unsupported and approximate mappings remain explicit exceptions in the rule inventory.
+See [Issue 10 evidence](../migration/tooling-10.md) for commands, coverage, timings, and limits.
+Live workflow and required-status evidence belongs to [PR 20](https://github.com/fpcMotif/fenbase/pull/20).

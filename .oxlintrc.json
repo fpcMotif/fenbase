@@ -26,6 +26,7 @@
     "no-empty-function": "off",
     "typescript/no-empty-function": "off",
     "react/display-name": "off",
+    "promise/always-return": "off",
     "typescript/ban-ts-comment": "off",
     "typescript/no-require-imports": "off",
     "typescript/no-var-requires": "off",
@@ -42,6 +43,7 @@
     "typescript/no-unnecessary-parameter-property-assignment": "off",
     "typescript/no-unsafe-unary-minus": "off",
     "typescript/no-array-delete": "off",
+    "typescript/no-misused-promises": "error",
     "typescript/no-floating-promises": [
       "error",
       {
@@ -54,23 +56,6 @@
       "files": ["**/e2e/**/*.{ts,js,tsx,jsx}", "**/__e2e__/**/*.{ts,js,tsx,jsx}"],
       "rules": {
         "react/rules-of-hooks": "off"
-      }
-    },
-    {
-      "files": [
-        "**/e2e/**/*.{ts,js,tsx,jsx}",
-        "**/__e2e__/**/*.{ts,js,tsx,jsx}",
-        "src/demo/**/*.{ts,js,tsx,jsx}",
-        "convex/**/*.{ts,js,tsx,jsx}",
-        "scripts/**/*.{ts,js,tsx,jsx}"
-      ],
-      "rules": {
-        "typescript/no-floating-promises": [
-          "error",
-          {
-            "ignoreVoid": false
-          }
-        ]
       }
     }
   ],
