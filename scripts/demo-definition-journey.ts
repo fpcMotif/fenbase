@@ -699,6 +699,31 @@ async function main(): Promise<void> {
               },
             );
             await capture('2-duplicate-key');
+            const rejectedSaveAttempts = 20;
+            let settledAfterRejectedSave = 0;
+            for (let attempt = 1; attempt <= rejectedSaveAttempts; attempt += 1) {
+              const settled = await page
+                .getByRole('button', { name: text.save, exact: true })
+                .waitFor({ timeout: 2_000 })
+                .then(
+                  () => true,
+                  () => false,
+                );
+              if (!settled) break;
+              settledAfterRejectedSave += 1;
+              if (attempt === rejectedSaveAttempts) break;
+              const rejected = page.waitForEvent('console', (message) =>
+                message.text().includes('DEFINITION_FIELD_KEY_DUPLICATE'),
+              );
+              await save();
+              await rejected;
+              await page.locator('form#definition button.ant-btn-loading').waitFor({ state: 'hidden' });
+            }
+            must(
+              'ui.zh.save-button-settles-after-rejected-saves',
+              { settled: rejectedSaveAttempts, unchanged: true },
+              { settled: settledAfterRejectedSave, unchanged: before === JSON.stringify(definitionRows(appOne())) },
+            );
             await keyboardActivate(page, page.getByRole('button', { name: text.remove(6), exact: true }));
 
             const headBefore = definitionRows(appOne()).heads[0];
