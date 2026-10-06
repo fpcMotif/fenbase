@@ -42,6 +42,7 @@ import { useTranslation } from 'react-i18next';
 import i18n from './i18n';
 import { actionErrorMessage } from './actionErrors';
 import { DefinitionBuilder } from './DefinitionBuilder';
+import { RequestsPanel } from './RequestsPanel';
 
 type DemoValue = string | number | boolean;
 type Collection = FunctionReturnType<typeof api.collections.list>['items'][number];
@@ -198,6 +199,15 @@ function DemoAppContent() {
               children: <CollectionsPanel onLoadSample={loadSample} seeding={seeding} />,
             },
             { key: 'workflows', label: t('nav.workflows'), children: <WorkflowsPanel /> },
+            ...(myMemberships && myMemberships.length > 0
+              ? [
+                  {
+                    key: 'requests',
+                    label: t('nav.requests'),
+                    children: <RequestsPanel applications={myMemberships} />,
+                  },
+                ]
+              : []),
             ...(builderApplications.length > 0
               ? [
                   {

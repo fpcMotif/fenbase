@@ -258,7 +258,7 @@ An active member with `manageMembers`. They can list members, change other membe
 _Avoid_: owner, superuser
 
 **Server-owned field**:
-A field that no public argument can set. For memberships: `authUserId`, `applicationId`, `organizationId`, `updatedAt` and `manageMembers`. For later request records: requester, organization, state, version and decision.
+A field that no public argument can set. For memberships: `authUserId`, `applicationId`, `organizationId`, `updatedAt` and `manageMembers`. For requests: requester, organization, version, policy preset, state, revision and (with #17) decision.
 _Avoid_: hidden field, read-only field
 
 **Revocation**:
@@ -318,7 +318,7 @@ The draft's `reviewerMembershipId`: an active membership of the same application
 _Avoid_: approver user, reviewer email
 
 **Calendar date**:
-A `YYYY-MM-DD` string for a `date` field. Record validation (#16) checks it as a real date without time-zone conversion.
+A `YYYY-MM-DD` string for a `date` field. Request validation checks it as a real Gregorian day, years 0001–9999, by arithmetic without `Date` or time-zone conversion.
 _Avoid_: timestamp, datetime
 
 ## Relationships
@@ -332,3 +332,37 @@ _Avoid_: timestamp, datetime
 
 - **"version"** meant both the draft revision and the published version number. Resolved: `revision` counts head writes; `version` numbers published rows.
 - **"date"** in the NocoBase reference is a timestamp column. Resolved: a definition `date` field is a **Calendar date**.
+
+# Requests
+
+Draft requests that employees fill in through the published definition. Seeded by issue #16 (see ADR-0007 and `docs/migration/records-16.md`).
+
+## Language
+
+**Request**:
+One `requests` row: field values entered by a requester, pinned to one **Published version**. In #16 its state is always `draft`; #17 adds submission and decisions.
+_Avoid_: record (the owner-scoped demo collections also have records), form entry
+
+**Pinned version**:
+The **Published version** a **Request** was created against (`definitionVersionId`, `version`). Edits validate against it forever; a later version never changes it.
+_Avoid_: current version (that is the head's pointer), schema version
+
+**Request revision**:
+The request's `revision` counter. It starts at 1 and goes up by 1 on every changed edit. Callers send it back as `expectedRevision`; a mismatch is a revision conflict.
+_Avoid_: version (a revision is not a **Pinned version**)
+
+**Operation ID**:
+A client-chosen ID, 8 to 64 letters, digits, `-` or `_`, that names one create attempt for one membership. Repeating it with the same values returns the first **Request**; repeating it with other values is an operation conflict.
+_Avoid_: idempotency key (in code), request ID
+
+## Relationships
+
+- A **Request** belongs to one **Application** and one requester **Membership**; the server copies the organization, **Pinned version** and **Policy preset** onto it.
+- New requests must use the **Current version pointer**; a form built from an older version is refused until it loads the new one.
+- The requester reads their own requests. `readApplicationRecords` reads every request only where the request's own **Policy preset** is `requesterAssignedReviewerAndReaders`.
+- Only the requester edits or deletes a **Request**, and only while holding `submitRequests`.
+
+## Flagged ambiguities
+
+- **"record"** meant a demo collection row and a request. Resolved: the generic `demoRecords` stay owner-scoped; definition-driven entries are **Requests**.
+- **"draft"** means the definition draft on the head and a request in state `draft`. Resolved: say "definition draft" or "draft request" when both are in play.

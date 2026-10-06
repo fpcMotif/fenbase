@@ -111,10 +111,18 @@ export const removeOrganization = internalMutation({
     memberships: v.number(),
     definitions: v.number(),
     definitionVersions: v.number(),
+    requests: v.number(),
   }),
   handler: async (ctx, args) => {
     assertFixtureOrganizationKey(args.organizationKey);
-    const removed = { organizations: 0, applications: 0, memberships: 0, definitions: 0, definitionVersions: 0 };
+    const removed = {
+      organizations: 0,
+      applications: 0,
+      memberships: 0,
+      definitions: 0,
+      definitionVersions: 0,
+      requests: 0,
+    };
     const organization = await ctx.db
       .query('organizations')
       .withIndex('by_key', (q) => q.eq('key', args.organizationKey))
@@ -128,6 +136,17 @@ export const removeOrganization = internalMutation({
         .take(FIXTURE_DELETE_BATCH);
       if (applications.length === 0) break;
       for (const application of applications) {
+        for (;;) {
+          const requests = await ctx.db
+            .query('requests')
+            .withIndex('by_application', (q) => q.eq('applicationId', application._id))
+            .take(FIXTURE_DELETE_BATCH);
+          if (requests.length === 0) break;
+          for (const request of requests) {
+            await ctx.db.delete(request._id);
+            removed.requests += 1;
+          }
+        }
         for (;;) {
           const versions = await ctx.db
             .query('applicationDefinitionVersions')

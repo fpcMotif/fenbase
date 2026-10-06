@@ -1,5 +1,6 @@
 import { ConvexError } from 'convex/values';
 import { DEFINITION_ERROR_CODES } from '../../convex/definitionModel';
+import { REQUEST_ERROR_CODES } from '../../convex/requestValues';
 
 export const actionErrorKeys = new Map<string, string>([
   ['COLLECTION_NAME_INVALID', 'collections.nameInvalid'],
@@ -33,7 +34,20 @@ export const actionErrorKeys = new Map<string, string>([
   ...DEFINITION_ERROR_CODES.map((code): [string, string] => [code, `definitionErrors.${code}`]),
 ]);
 
-export type ActionErrorData = { code: string; field: string; currentRevision?: number };
+export type ActionErrorData = {
+  code: string;
+  field: string;
+  currentRevision?: number;
+  currentVersionId?: string;
+  min?: number;
+  max?: number;
+  maxLength?: number;
+};
+
+function numberProperty(data: object, key: string): number | undefined {
+  const value: unknown = Reflect.get(data, key);
+  return typeof value === 'number' ? value : undefined;
+}
 
 export function actionErrorData(error: unknown): ActionErrorData | null {
   if (
@@ -46,11 +60,37 @@ export function actionErrorData(error: unknown): ActionErrorData | null {
     return null;
   }
   const field = 'field' in error.data && typeof error.data.field === 'string' ? error.data.field : '';
-  const currentRevision =
-    'currentRevision' in error.data && typeof error.data.currentRevision === 'number'
-      ? error.data.currentRevision
+  const currentVersionId =
+    'currentVersionId' in error.data && typeof error.data.currentVersionId === 'string'
+      ? error.data.currentVersionId
       : undefined;
-  return { code: error.data.code, field, currentRevision };
+  return {
+    code: error.data.code,
+    field,
+    currentRevision: numberProperty(error.data, 'currentRevision'),
+    currentVersionId,
+    min: numberProperty(error.data, 'min'),
+    max: numberProperty(error.data, 'max'),
+    maxLength: numberProperty(error.data, 'maxLength'),
+  };
+}
+
+type RequestIssueText = { code: string; field?: string; min?: number; max?: number; maxLength?: number };
+
+// Request errors name a field by key; the message shows the label of the pinned version in the active language.
+export function requestIssueMessage(
+  issue: RequestIssueText,
+  t: (key: string, options?: Record<string, string | number | undefined>) => string,
+  labelOf: (key: string) => string,
+): string {
+  const isRequestCode = REQUEST_ERROR_CODES.some((code) => code === issue.code);
+  if (!isRequestCode) return t(actionErrorKeys.get(issue.code) ?? 'common.actionFailed', { field: issue.field ?? '' });
+  return t(`requestErrors.${issue.code}`, {
+    field: issue.field ? labelOf(issue.field) : '',
+    min: issue.min,
+    max: issue.max,
+    maxLength: issue.maxLength,
+  });
 }
 
 export function actionErrorMessage(error: unknown, t: (key: string, options?: { field: string }) => string): string {

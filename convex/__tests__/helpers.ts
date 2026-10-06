@@ -7,7 +7,8 @@ export type TableName =
   | 'applications'
   | 'memberships'
   | 'applicationDefinitions'
-  | 'applicationDefinitionVersions';
+  | 'applicationDefinitionVersions'
+  | 'requests';
 
 export type WriteOperation = 'insert' | 'patch' | 'replace' | 'delete';
 
@@ -41,6 +42,7 @@ export interface TestContext {
   writes: Array<{ table: TableName; operation: WriteOperation; id: string }>;
   read(table: TableName, id: string): TestDoc | null;
   rows(table: TableName): TestDoc[];
+  seed(table: TableName, doc: TestDoc): void;
 }
 
 export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}): TestContext {
@@ -55,6 +57,7 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
     'memberships',
     'applicationDefinitions',
     'applicationDefinitionVersions',
+    'requests',
   ];
   for (const table of tableNames) {
     tables.set(table, new Map((seed[table] ?? []).map((doc) => [doc._id, doc])));
@@ -151,6 +154,9 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
     },
     rows(table) {
       return [...getTable(table).values()];
+    },
+    seed(table, doc) {
+      getTable(table).set(doc._id, doc);
     },
   };
 }

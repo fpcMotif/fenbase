@@ -161,6 +161,6 @@ Other antd buttons with `loading` in `src/demo/App.tsx` can hit the same race. T
 
 ## Not covered
 
-- Rendering V2 forms for requests, showing the requester column, validating record values as calendar dates and date rules at submit time, and enforcing policy presets: #16. Its acceptance criteria do not yet name policy-preset enforcement or `getPublishedVersion` explicitly.
-- Pinning requests to a version, re-checking the reviewer at submit and decision time, and the effects of a reviewer change: #17.
+- Rendering request forms and lists from published versions, the requester column, calendar-date and date-rule validation of request values, pinning requests to a version, and the read side of the policy presets are delivered by #16 ([records-16.md](records-16.md)). The request form reads its pinned version through `getPublishedVersion`.
+- Re-checking the reviewer at submit and decision time, the reviewer side of the policy presets, and the effects of a reviewer change: #17.
 - Excluded by the issue: drag and drop, a full schema editor, expression or script engines, destructive field migrations, holiday or leave-balance logic, and Feishu.

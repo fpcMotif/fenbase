@@ -34,6 +34,7 @@
     "demo:membership-journey": "bun --tsconfig-override tsconfig.demo.json scripts/demo-membership-journey.ts",
     "demo:browse-journey": "bun --tsconfig-override tsconfig.demo.json scripts/demo-browse-journey.ts",
     "demo:definition-journey": "bun --tsconfig-override tsconfig.demo.json scripts/demo-definition-journey.ts",
+    "demo:request-journey": "bun --tsconfig-override tsconfig.demo.json scripts/demo-request-journey.ts",
     "demo:definition-seed": "bun --tsconfig-override tsconfig.demo.json scripts/demo-definition-seed.ts",
     "oa:up": "bun --tsconfig-override tsconfig.demo.json scripts/oa-demo-runtime.ts up",
     "oa:stop": "bun --tsconfig-override tsconfig.demo.json scripts/oa-demo-runtime.ts stop",

@@ -21,7 +21,7 @@ Issue: [#14](https://github.com/fpcMotif/fenbase/issues/14), parent [#1](https:/
 | `configureApplication` | Builder: configure and publish the application (#15 enforces it) | Yes |
 | `submitRequests` | Employee/requester | Yes |
 | `reviewRequests` | Reviewer | Yes |
-| `readApplicationRecords` | Read every record in the application (#16 enforces it) | Yes |
+| `readApplicationRecords` | Read every request in the application, drafts included, but only requests whose policy preset is `requesterAssignedReviewerAndReaders` (#16 enforces it) | Yes |
 | `manageMembers` | Membership admin | No; fixture seed only |
 
 `configureApplication` never implies `readApplicationRecords`.
@@ -46,16 +46,16 @@ The demo frontend maps every membership error code to a `membershipErrors.*` key
 ### Field ownership
 
 - Memberships: `authUserId`, `applicationId`, `organizationId`, `updatedAt` and `manageMembers` are server-owned. Public validators accept none of them. `status` changes only through `setMemberStatus` by another admin.
-- Request records (#16, #17): requester membership, organization, state, version and decision fields must be server-owned in the same way. Application-configurable fields are the only client-writable business fields.
+- Requests (#16, see [records-16.md](records-16.md)): requester membership, organization, version, policy preset, state and revision are server-owned in the same way, and #17 adds decision fields. Fields of the pinned definition version are the only client-writable business fields.
 
 ### Request predicates
 
-Except `isEligibleReviewer`, these predicates need request facts that do not exist yet. Each ticket implements and tests them against its real functions.
+#16 implements the read and edit predicates in `convex/requests.ts`; #17 implements the decision predicate. Each ticket tests them against its real functions.
 
 | Predicate | Rule | Ticket |
 | --- | --- | --- |
-| `canReadRequest` | Own request, an assigned submitted request, or `readApplicationRecords` | #16 |
-| `canEditBusinessFields` | Requester edits their own draft only; builders need an extra edit grant | #16 |
+| `canReadRequest` | Own request; or `readApplicationRecords` when the request's own policy preset is `requesterAssignedReviewerAndReaders`; or (#17) an assigned submitted request | #16, #17 |
+| `canEditBusinessFields` | Requester edits or deletes their own draft only, while holding `submitRequests`; no grant lets another member edit | #16 |
 | `isEligibleReviewer` | Active member of the same application with `reviewRequests`. Built in #15 for definition save and publish; #17 re-checks it at submit and decision time | #15, #17 |
 | `canDecideRequest` | Eligible reviewer, request pending and assigned to them, not their own request; decision fields only | #17 |
 
