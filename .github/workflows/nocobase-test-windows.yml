@@ -62,7 +62,7 @@ jobs:
           bun add --no-save sqlite3@5.1.7
 
       - name: Test with Sqlite
-        run: bun run test --server --single-thread=false
+        run: bun run test --server --maxWorkers=1
         env:
           LOGGER_LEVEL: error
           DB_DIALECT: sqlite

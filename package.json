@@ -7,7 +7,7 @@
   ],
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12.0"
   },
   "licenses": [
     {
@@ -52,7 +52,7 @@
     "tc": "nocobase-v1 test:client",
     "benchmark": "nocobase-v1 benchmark",
     "perf": "nocobase-v1 perf",
-    "docs": "yarn --cwd docs",
+    "docs": "bun run --cwd docs",
     "doc": "nocobase-v1 doc",
     "doc:cn": "nocobase-v1 doc --lang=zh-CN",
     "postinstall": "nocobase-v1 postinstall",

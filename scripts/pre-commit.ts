@@ -24,7 +24,7 @@ try {
     const formattable = files.filter((file) => /\.(?:[cm]?[jt]sx?|json|css|scss)$/.test(file));
     if (formattable.length > 0) command(stage, tool(stage, 'oxfmt'), ['--write', '--', ...formattable]);
     command(stage, 'git', ['add', '--', ...files], undefined, true);
-    command(stage, 'bun', [path.join(import.meta.dirname, 'quality-gate.ts'), '--staged'], undefined, true);
+    command(stage, process.execPath, [path.join(import.meta.dirname, 'quality-gate.ts'), '--staged'], undefined, true);
     if (command(root, 'git', ['write-tree']).trim() !== snapshot.tree) {
       throw new Error('Index changed during checks; retry the commit.');
     }

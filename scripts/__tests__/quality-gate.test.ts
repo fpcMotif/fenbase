@@ -247,3 +247,59 @@ test('type-aware checks use staged dependency types instead of unstaged workspac
   expect(good.stderr).toBe('');
   expect(good.status).toBe(0);
 });
+
+test('snapshot configuration replacement preserves external symlink targets', () => {
+  const root = repository();
+  const external = fs.mkdtempSync(path.join(os.tmpdir(), 'quality-gate-external-'));
+  directories.push(external);
+  for (const name of ['tsconfig.json', 'tsconfig.paths.json']) {
+    fs.writeFileSync(path.join(external, name), '{"compilerOptions":{"paths":{}}}\n');
+    fs.symlinkSync(path.join(external, name), path.join(root, name));
+  }
+  fs.writeFileSync(path.join(root, 'scripts/example.ts'), 'export const value = 1;\n');
+  run(root, 'git', ['add', '.']);
+  const result = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(result.status).toBe(0);
+  for (const name of ['tsconfig.json', 'tsconfig.paths.json']) {
+    expect(fs.readFileSync(path.join(external, name), 'utf8')).toBe('{"compilerOptions":{"paths":{}}}\n');
+    expect(fs.lstatSync(path.join(root, name)).isSymbolicLink()).toBe(true);
+  }
+});
+
+test('introduced docs code retains historical accessibility checks', () => {
+  const root = repository();
+  const file = path.join(root, 'docs/example.tsx');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, "import React from 'react';\nexport function Example() { return <button>Run</button>; }\n");
+  run(root, 'git', ['add', '.']);
+  const bad = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(bad.status).toBe(1);
+  expect(bad.stderr).toContain('button-has-type');
+  fs.writeFileSync(
+    file,
+    'import React from \'react\';\nexport function Example() { return <button type="button">Run</button>; }\n',
+  );
+  run(root, 'git', ['add', '.']);
+  const good = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(good.stderr).toBe('');
+  expect(good.status).toBe(0);
+});
+
+test('docs font-display plugin runs only in its intended scope', () => {
+  const root = repository();
+  const file = path.join(root, 'docs/font.tsx');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const contents =
+    'import React from \'react\';\nexport function Font() { return <link href="https://fonts.googleapis.com/css2?family=Roboto" rel="stylesheet" />; }\n';
+  fs.writeFileSync(file, contents);
+  fs.writeFileSync(path.join(root, 'font.tsx'), contents);
+  run(root, 'git', ['add', '.']);
+  const bad = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(bad.status).toBe(1);
+  expect(bad.stderr).toContain('google-font-display');
+  fs.writeFileSync(file, contents.replace('family=Roboto', 'family=Roboto&display=swap'));
+  run(root, 'git', ['add', '.']);
+  const good = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(good.stderr).toBe('');
+  expect(good.status).toBe(0);
+});

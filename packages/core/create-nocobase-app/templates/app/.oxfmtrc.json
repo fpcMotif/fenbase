@@ -2,5 +2,5 @@
   "singleQuote": true,
   "trailingComma": "all",
   "printWidth": 120,
-  "ignorePatterns": ["node_modules", "lib", "dist", "build", "coverage", "package.json"]
+  "ignorePatterns": ["node_modules", "lib", "dist", "build", "coverage", "package.json", "tsconfig.paths.json"]
 }

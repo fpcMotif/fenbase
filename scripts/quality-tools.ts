@@ -7,6 +7,7 @@ export type Diagnostic = {
   code: string;
   severity: 'error' | 'warning';
   message: string;
+  help?: string;
   filename: string;
   labels: { span: { line: number; column: number; offset?: number; length?: number } }[];
 };
@@ -86,7 +87,10 @@ export function stagedSnapshot(root: string, revision?: string) {
     command(directory, 'git', ['checkout-index', '--all'], undefined, true);
     fs.symlinkSync(path.join(root, 'node_modules'), path.join(directory, 'node_modules'));
     const generatedPaths = path.join(root, 'tsconfig.paths.json');
-    if (fs.existsSync(generatedPaths)) fs.copyFileSync(generatedPaths, path.join(directory, 'tsconfig.paths.json'));
+    if (fs.existsSync(generatedPaths)) {
+      fs.rmSync(path.join(directory, 'tsconfig.paths.json'), { force: true });
+      fs.copyFileSync(generatedPaths, path.join(directory, 'tsconfig.paths.json'));
+    }
     return { directory, tree };
   } catch (error) {
     fs.rmSync(directory, { recursive: true, force: true });
@@ -108,6 +112,7 @@ export function prepareTypeAware(root: string) {
       ]),
     );
   }
+  fs.rmSync(path.join(root, 'tsconfig.json'), { force: true });
   fs.writeFileSync(path.join(root, 'tsconfig.json'), `${JSON.stringify(config, null, 2)}\n`);
   for (const file of command(root, 'git', ['ls-files', '-z'], undefined, true).split('\0')) {
     if (file.endsWith('/tsconfig.json')) fs.rmSync(path.join(root, file));
@@ -116,5 +121,5 @@ export function prepareTypeAware(root: string) {
 
 export function report(diagnostic: Diagnostic) {
   const span = diagnostic.labels[0]?.span;
-  return `${diagnostic.filename}:${span?.line ?? 1}:${span?.column ?? 1}: ${diagnostic.code}: ${diagnostic.message}`;
+  return `${diagnostic.filename}:${span?.line ?? 1}:${span?.column ?? 1}: ${diagnostic.code}: ${diagnostic.message}${diagnostic.help ? ` ${diagnostic.help}` : ''}`;
 }
