@@ -57,23 +57,6 @@
       "rules": {
         "react/rules-of-hooks": "off"
       }
-    },
-    {
-      "files": [
-        "**/e2e/**/*.{ts,js,tsx,jsx}",
-        "**/__e2e__/**/*.{ts,js,tsx,jsx}",
-        "src/demo/**/*.{ts,js,tsx,jsx}",
-        "convex/**/*.{ts,js,tsx,jsx}",
-        "scripts/**/*.{ts,js,tsx,jsx}"
-      ],
-      "rules": {
-        "typescript/no-floating-promises": [
-          "error",
-          {
-            "ignoreVoid": false
-          }
-        ]
-      }
     }
   ],
   "ignorePatterns": [

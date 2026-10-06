@@ -224,17 +224,6 @@
         "prefer-rest-params": "warn"
       },
       "plugins": ["react", "typescript", "oxc", "promise", "jsx-a11y", "unicorn", "nextjs"]
-    },
-    {
-      "files": ["docs/**/*.{ts,tsx,mts,cts}"],
-      "rules": {
-        "no-undef": "off",
-        "no-var": "error",
-        "prefer-const": "error",
-        "prefer-rest-params": "error",
-        "prefer-spread": "error"
-      },
-      "plugins": ["react", "typescript", "oxc", "promise", "jsx-a11y", "unicorn", "nextjs"]
     }
   ],
   "ignorePatterns": [],

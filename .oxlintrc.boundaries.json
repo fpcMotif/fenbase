@@ -1,6 +1,5 @@
 {
   "categories": { "correctness": "off" },
-  "rules": {},
   "overrides": [
     {
       "files": ["**/client-v2/**/*.{ts,tsx,js,jsx}"],

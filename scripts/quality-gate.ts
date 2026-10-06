@@ -1,8 +1,10 @@
 import fs from 'node:fs';
 import { command, lint, prepareTypeAware, report, stagedSnapshot, type Diagnostic } from './quality-tools';
 
-function isTypeAware(file: string) {
-  return (/^(scripts|convex|src\/demo)\//.test(file) || /\/(?:__e2e__|e2e)\//.test(file)) && !file.endsWith('.d.ts');
+function typeAwareScope(root: string) {
+  const include: string[] = JSON.parse(fs.readFileSync(`${root}/tsconfig.oxlint.json`, 'utf8')).include;
+  const globs = include.map((pattern) => new Bun.Glob(pattern));
+  return (file: string) => !file.endsWith('.d.ts') && globs.some((glob) => glob.match(file));
 }
 
 function introduced(root: string, diagnostic: Diagnostic, changed: Map<string, Set<number>>) {
@@ -21,17 +23,19 @@ function introduced(root: string, diagnostic: Diagnostic, changed: Map<string, S
   return diagnostic.labels.some(({ span }) => {
     const end =
       span.offset !== undefined && span.length !== undefined
-        ? contents
-            .subarray(0, span.offset + span.length)
+        ? span.line +
+          contents
+            .subarray(span.offset, span.offset + span.length)
             .toString()
-            .split('\n').length
+            .split('\n').length -
+          1
         : span.line;
     for (let line = span.line; line <= end; line++) if (lines.has(line)) return true;
     return false;
   });
 }
 
-function check(root: string, base: string) {
+export function check(root: string, base: string) {
   const files = command(root, 'git', ['diff', '--name-only', '-z', '--diff-filter=ACMR', base, '--'], undefined, true)
     .split('\0')
     .filter((file) => /\.[cm]?[jt]sx?$/.test(file));
@@ -46,6 +50,7 @@ function check(root: string, base: string) {
     }
     changed.set(file, lines);
   }
+  const isTypeAware = typeAwareScope(root);
   prepareTypeAware(root);
   let failures = 0;
   for (const typed of [false, true]) {
@@ -65,6 +70,7 @@ function check(root: string, base: string) {
 }
 
 function audit(root: string) {
+  const isTypeAware = typeAwareScope(root);
   const files = command(root, 'git', ['ls-files', '-z'], undefined, true)
     .split('\0')
     .filter((file) => /\.[cm]?[jt]sx?$/.test(file) && isTypeAware(file));
@@ -75,25 +81,27 @@ function audit(root: string) {
   return diagnostics.length > 0 ? 1 : 0;
 }
 
-let snapshot: ReturnType<typeof stagedSnapshot> | undefined;
-try {
-  const args = process.argv.slice(2);
-  if (args.length === 1 && args[0] === '--staged') {
-    snapshot = stagedSnapshot(process.cwd());
-    process.exitCode = check(snapshot.directory, 'HEAD');
-  } else if (args.length === 2 && args[0] === '--base') {
-    const base = command(process.cwd(), 'git', ['merge-base', 'HEAD', args[1]]).trim();
-    snapshot = stagedSnapshot(process.cwd(), 'HEAD');
-    process.exitCode = check(snapshot.directory, base);
-  } else if (args.length === 1 && args[0] === '--audit') {
-    snapshot = stagedSnapshot(process.cwd());
-    process.exitCode = audit(snapshot.directory);
-  } else {
-    throw new Error('Usage: bun scripts/quality-gate.ts --staged | --base <revision> | --audit');
+if (import.meta.main) {
+  let snapshot: ReturnType<typeof stagedSnapshot> | undefined;
+  try {
+    const args = process.argv.slice(2);
+    if (args.length === 1 && args[0] === '--staged') {
+      snapshot = stagedSnapshot(process.cwd());
+      process.exitCode = check(snapshot.directory, 'HEAD');
+    } else if (args.length === 2 && args[0] === '--base') {
+      const base = command(process.cwd(), 'git', ['merge-base', 'HEAD', args[1]]).trim();
+      snapshot = stagedSnapshot(process.cwd(), 'HEAD');
+      process.exitCode = check(snapshot.directory, base);
+    } else if (args.length === 1 && args[0] === '--audit') {
+      snapshot = stagedSnapshot(process.cwd());
+      process.exitCode = audit(snapshot.directory);
+    } else {
+      throw new Error('Usage: bun scripts/quality-gate.ts --staged | --base <revision> | --audit');
+    }
+  } catch (error) {
+    console.error(`[quality-gate] ${error instanceof Error ? error.message : String(error)}`);
+    process.exitCode = 1;
+  } finally {
+    if (snapshot) fs.rmSync(snapshot.directory, { recursive: true, force: true });
   }
-} catch (error) {
-  console.error(`[quality-gate] ${error instanceof Error ? error.message : String(error)}`);
-  process.exitCode = 1;
-} finally {
-  if (snapshot) fs.rmSync(snapshot.directory, { recursive: true, force: true });
 }

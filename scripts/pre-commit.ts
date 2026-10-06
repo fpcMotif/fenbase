@@ -1,5 +1,7 @@
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { check } from './quality-gate';
 import { command, stagedSnapshot, tool } from './quality-tools';
 
 const root = process.cwd();
@@ -13,31 +15,42 @@ try {
   if (files.length > 0) {
     snapshot = stagedSnapshot(root);
     const stage = snapshot.directory;
-    for (const file of files) {
-      if (fs.lstatSync(path.join(stage, file)).isSymbolicLink()) {
-        throw new Error(`Staged symlink requires separate review: ${file}`);
-      }
+    const entries = new Map<string, { mode: string; original: string }>();
+    const index = command(
+      stage,
+      'git',
+      ['--literal-pathspecs', 'ls-files', '--stage', '-z', '--', ...files],
+      undefined,
+      true,
+    );
+    for (const record of index.split('\0').filter(Boolean)) {
+      const tab = record.indexOf('\t');
+      const [mode, original] = record.slice(0, tab).split(' ');
+      entries.set(record.slice(tab + 1), { mode, original });
     }
-    if (fs.existsSync(path.join(stage, 'scripts/addLicense.js'))) {
+    const staged = files.map((file) => {
+      const entry = entries.get(file);
+      if (entry?.mode === '120000') throw new Error(`Staged symlink requires separate review: ${file}`);
+      if (entry?.mode !== '100644' && entry?.mode !== '100755')
+        throw new Error(`Unsupported staged file mode: ${file}`);
+      return { file, ...entry };
+    });
+    const merging = spawnSync('git', ['rev-parse', '-q', '--verify', 'MERGE_HEAD'], { cwd: root }).status === 0;
+    if (!merging && fs.existsSync(path.join(stage, 'scripts/addLicense.js'))) {
       command(stage, 'node', ['scripts/addLicense.js'], undefined, true);
     }
     const formattable = files.filter((file) => /\.(?:[cm]?[jt]sx?|json|css|scss)$/.test(file));
     if (formattable.length > 0) command(stage, tool(stage, 'oxfmt'), ['--write', '--', ...formattable]);
     command(stage, 'git', ['add', '--', ...files], undefined, true);
-    command(stage, process.execPath, [path.join(import.meta.dirname, 'quality-gate.ts'), '--staged'], undefined, true);
+    const updates = staged.map((entry) => ({ ...entry, content: fs.readFileSync(path.join(stage, entry.file)) }));
+    if (check(stage, 'HEAD') !== 0) throw new Error('Introduced diagnostics');
     if (command(root, 'git', ['write-tree']).trim() !== snapshot.tree) {
       throw new Error('Index changed during checks; retry the commit.');
     }
     const records: string[] = [];
-    const updates: { file: string; content: Buffer; original: string }[] = [];
-    for (const file of files) {
-      const metadata = command(stage, 'git', ['ls-files', '--stage', '-z', '--', file], undefined, true);
-      if (!metadata.startsWith('100')) throw new Error(`Unsupported staged file mode: ${file}`);
-      const content = fs.readFileSync(path.join(stage, file));
-      const original = command(root, 'git', ['rev-parse', `:${file}`]).trim();
+    for (const { file, mode, content } of updates) {
       const oid = command(root, 'git', ['hash-object', '-w', '--stdin'], content).trim();
-      records.push(`${metadata.slice(0, 6)} ${oid}\t${file}\0`);
-      updates.push({ file, content, original });
+      records.push(`${mode} ${oid}\t${file}\0`);
     }
     command(root, 'git', ['update-index', '-z', '--index-info'], records.join(''));
     const canonicalRoot = fs.realpathSync(root);

@@ -1,5 +1,5 @@
 const fs = require('fs/promises');
-const { exec, execFile } = require('child_process');
+const { execFileSync } = require('child_process');
 const path = require('path');
 
 const commercialLicense = `
@@ -44,70 +44,17 @@ async function addLicenseToFile(filePath) {
   return true;
 }
 
-function isMergeCommit() {
-  return new Promise((resolve, reject) => {
-    exec('git rev-parse --verify MERGE_HEAD', (error, stdout, stderr) => {
-      if (error || stderr) {
-        resolve(false);
-      } else {
-        resolve(true);
-      }
-    });
-  });
-}
-
-function getDiffFiles() {
-  return new Promise((resolve, reject) => {
-    execFile('git', ['diff', '--cached', '--name-only', '-z', '--diff-filter=ACM'], (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-      }
-      if (stderr) {
-        reject(stderr);
-      }
-      resolve(stdout.split('\0').filter(Boolean));
-    });
-  });
-}
-
-function gitAddFiles(files) {
-  return new Promise((resolve, reject) => {
-    execFile('git', ['add', '--', ...files], (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-      }
-      if (stderr) {
-        reject(stderr);
-      }
-      resolve(stdout);
-    });
-  });
-}
-
 async function main() {
-  const isMerge = await isMergeCommit();
-  if (isMerge) return;
-
-  const diffFiles = await getDiffFiles();
-  const files = diffFiles
+  const files = execFileSync('git', ['diff', '--cached', '--name-only', '-z', '--diff-filter=ACM'], {
+    encoding: 'utf8',
+  })
+    .split('\0')
+    .filter(Boolean)
     .filter((file) => file.includes('/src/')) // 只检查 src 目录下的文件
     .filter((file) => !file.includes('/demos/')) // 忽略 demos 目录
     .filter((file) => file.endsWith('.js') || file.endsWith('.jsx') || file.endsWith('.ts') || file.endsWith('.tsx'));
 
-  const validFiles = [];
-  for (const file of files) {
-    const res = await addLicenseToFile(file);
-    if (res) {
-      validFiles.push(file);
-    }
-  }
-
-  if (validFiles.length === 0) {
-    return;
-  }
-
-  // 执行 git add 这些文件
-  await gitAddFiles(validFiles);
+  for (const file of files) await addLicenseToFile(file);
 }
 
 main().catch((error) => {
