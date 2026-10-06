@@ -406,6 +406,25 @@ describe('creating a request', () => {
     expect(await getAs(ctx, 'user-a', v1Request.requestId)).toMatchObject({ version: 1, versionId: V1, values: leave });
   });
 
+  it('stores a blank optional value as absent, on create and on update', async () => {
+    const ctx = fixtureContext();
+    await seedV2(ctx);
+    const created = await createAs(
+      ctx,
+      'user-a',
+      { ...leave, note: '   ' },
+      { definitionVersionId: V2, operationId: 'blank-0001' },
+    );
+    expect(ctx.read('requests', created.requestId)?.values).toEqual(leave);
+
+    const replay = await createAs(ctx, 'user-a', leave, { definitionVersionId: V2, operationId: 'blank-0001' });
+    expect(replay).toEqual({ ...created, created: false });
+
+    const writesBefore = ctx.writes.length;
+    expect(await updateAs(ctx, 'user-a', created.requestId, 1, { ...leave, note: '' })).toEqual({ revision: 1 });
+    expect(ctx.writes.length).toBe(writesBefore);
+  });
+
   it('caps an application at 1000 requests', async () => {
     const ctx = fixtureContext();
     for (let index = 0; index < 1000; index += 1) {

@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import type { Definition, DefinitionField } from '../definitionModel';
-import { MAX_REQUEST_VALUES_BYTES, isCalendarDate, validateRequestValues } from '../requestValues';
+import {
+  MAX_REQUEST_VALUES_BYTES,
+  isCalendarDate,
+  normalizeRequestValues,
+  validateRequestValues,
+} from '../requestValues';
 
 const leaveFields: DefinitionField[] = [
   { type: 'date', key: 'startDate', label: { enUS: 'Start date', zhCN: '开始日期' }, required: true },
@@ -197,10 +202,38 @@ describe('request value validation', () => {
     expect(validateRequestValues(builtIns, {})).toEqual({ code: 'RECORD_FIELD_REQUIRED', field: 'constructor' });
   });
 
+  it('treats a blank optional value of any type as missing', () => {
+    const optional = {
+      fields: [
+        { type: 'text', key: 'note', label: { enUS: 'Note', zhCN: '备注' }, required: false, maxLength: 10 } as const,
+        { type: 'date', key: 'returnDate', label: { enUS: 'Return', zhCN: '返回' }, required: false } as const,
+      ],
+      dateRules: [],
+    };
+    expect(validateRequestValues(optional, { note: '   ', returnDate: '' })).toBeNull();
+  });
+
   it('reports field issues in definition order', () => {
     expect(validateRequestValues(leave, { startDate: 'bad', endDate: 'bad', days: 0, reason: '' })).toEqual({
       code: 'RECORD_DATE_INVALID',
       field: 'startDate',
     });
+  });
+});
+
+describe('request value normalization', () => {
+  it('drops blank text so an empty value is never stored', () => {
+    expect(normalizeRequestValues({ note: '', reason: '  ', days: 3, urgent: false })).toEqual({
+      days: 3,
+      urgent: false,
+    });
+  });
+
+  it('stores negative zero as zero, so a later 0 to -0 change is not a silent no-op', () => {
+    expect(Object.is(normalizeRequestValues({ balance: -0 }).balance, 0)).toBe(true);
+  });
+
+  it('keeps text with surrounding spaces as typed', () => {
+    expect(normalizeRequestValues({ reason: ' Visit ' })).toEqual({ reason: ' Visit ' });
   });
 });

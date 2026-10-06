@@ -13,6 +13,7 @@ import { queryRecords, type RecordQueryField } from './recordQuery';
 import {
   MAX_REQUESTS_PER_APPLICATION,
   OPERATION_ID_PATTERN,
+  normalizeRequestValues,
   requestValuesValidator,
   requestValueValidator,
   validateRequestValues,
@@ -138,7 +139,8 @@ export const create = mutation({
       throw requestError('RECORD_OPERATION_ID_INVALID', 'Use 8 to 64 letters, digits, hyphens or underscores');
     }
 
-    const operationFingerprint = await fingerprint(args.definitionVersionId, args.values);
+    const values = normalizeRequestValues(args.values);
+    const operationFingerprint = await fingerprint(args.definitionVersionId, values);
     const previous = await ctx.db
       .query('requests')
       .withIndex('by_requester_operation', (q) =>
@@ -167,7 +169,7 @@ export const create = mutation({
     if (!version || version.applicationId !== principal.applicationId) {
       throw new ConvexError({ code: 'DEFINITION_VERSION_NOT_FOUND', message: 'Definition version not found' });
     }
-    assertValidValues(version.definition, args.values);
+    assertValidValues(version.definition, values);
 
     const existing = await ctx.db
       .query('requests')
@@ -191,7 +193,7 @@ export const create = mutation({
       revision: 1,
       operationId: args.operationId,
       operationFingerprint,
-      values: args.values,
+      values,
       updatedAt: Date.now(),
     });
     return { requestId, revision: 1, version: version.version, created: true };
@@ -208,10 +210,11 @@ export const update = mutation({
   returns: v.object({ revision: v.number() }),
   handler: async (ctx, args) => {
     const { row } = await requireEditable(ctx, args.applicationId, args.requestId, args.expectedRevision);
-    assertValidValues(await pinnedDefinition(ctx, row), args.values);
-    if (canonicalJson(row.values) === canonicalJson(args.values)) return { revision: row.revision };
+    const values = normalizeRequestValues(args.values);
+    assertValidValues(await pinnedDefinition(ctx, row), values);
+    if (canonicalJson(row.values) === canonicalJson(values)) return { revision: row.revision };
     const revision = row.revision + 1;
-    await ctx.db.patch(row._id, { values: args.values, revision, updatedAt: Date.now() });
+    await ctx.db.patch(row._id, { values, revision, updatedAt: Date.now() });
     return { revision };
   },
 });

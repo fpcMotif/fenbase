@@ -34,6 +34,7 @@ describe('request form values', () => {
       toRequestValues(definition, { startDate: '2026-03-02', days: 3, reason: 'Visit', urgent: false, note: '' }),
     ).toEqual({ startDate: '2026-03-02', days: 3, reason: 'Visit', urgent: false });
     expect(toRequestValues(definition, { startDate: null, days: undefined, reason: 'x' })).toEqual({ reason: 'x' });
+    expect(toRequestValues(definition, { reason: 'x', note: '   ' })).toEqual({ reason: 'x' });
   });
 
   it('drops keys the definition does not name', () => {

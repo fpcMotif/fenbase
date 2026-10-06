@@ -1,5 +1,5 @@
 import type { Definition, DefinitionField } from '../../convex/definitionModel';
-import { ownValue, type RequestValue, type RequestValues } from '../../convex/requestValues';
+import { normalizeRequestValues, ownValue, type RequestValue, type RequestValues } from '../../convex/requestValues';
 
 export type RequestFormValues = Record<string, RequestValue | null | undefined>;
 
@@ -23,10 +23,10 @@ export function toRequestValues(definition: Pick<Definition, 'fields'>, form: Re
   const values: RequestValues = {};
   for (const field of definition.fields) {
     const value = ownValue(form, field.key);
-    if (value === null || value === undefined || value === '') continue;
+    if (value === null || value === undefined) continue;
     values[field.key] = value;
   }
-  return values;
+  return normalizeRequestValues(values);
 }
 
 export function carryOverValues(definition: Pick<Definition, 'fields'>, form: RequestFormValues): RequestFormValues {
