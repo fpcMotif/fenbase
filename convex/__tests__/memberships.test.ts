@@ -174,6 +174,25 @@ describe('listMine', () => {
     ]);
   });
 
+  it('still lists an active membership behind more than 100 inactive ones', async () => {
+    const inactive = Array.from({ length: 150 }, (_, index) =>
+      membership(`q-${index}`, 'user-q', [], { applicationId: `applications:old-${index}`, status: 'inactive' }),
+    );
+    const ctx = fixtureContext([...inactive, membership('q', 'user-q', ['submitRequests'])]);
+    signIn('user-q');
+    expect(await invokeHandler(listMine, ctx, {})).toEqual([
+      expect.objectContaining({ membershipId: 'memberships:q', applicationId: APP_1 }),
+    ]);
+  });
+
+  it('rejects more than 100 active memberships instead of truncating them', async () => {
+    const active = Array.from({ length: 101 }, (_, index) =>
+      membership(`q-${index}`, 'user-q', [], { applicationId: `applications:many-${index}` }),
+    );
+    signIn('user-q');
+    await expectCode(invokeHandler(listMine, fixtureContext(active), {}), 'MEMBERSHIP_LIST_LIMIT_EXCEEDED');
+  });
+
   it('returns nothing for a signed-in nonmember and rejects an anonymous caller', async () => {
     signIn('user-outsider');
     expect(await invokeHandler(listMine, fixtureContext(), {})).toEqual([]);
@@ -219,11 +238,20 @@ describe('listMembers', () => {
     await expectUnauthenticated(invokeHandler(listMembers, fixtureContext(), { applicationId: APP_1 }));
   });
 
-  it('returns at most 101 rows', async () => {
-    const extra = Array.from({ length: 120 }, (_, index) => membership(`extra-${index}`, `user-extra-${index}`, []));
+  it('lists 100 members in full', async () => {
+    const extra = Array.from({ length: 95 }, (_, index) => membership(`extra-${index}`, `user-extra-${index}`, []));
     signIn('user-m');
     const members = await invokeHandler(listMembers, fixtureContext(extra), { applicationId: APP_1 });
-    expect(members).toHaveLength(101);
+    expect(members).toHaveLength(100);
+  });
+
+  it('rejects a member list longer than 100 instead of truncating it', async () => {
+    const extra = Array.from({ length: 96 }, (_, index) => membership(`extra-${index}`, `user-extra-${index}`, []));
+    signIn('user-m');
+    await expectCode(
+      invokeHandler(listMembers, fixtureContext(extra), { applicationId: APP_1 }),
+      'MEMBERSHIP_LIST_LIMIT_EXCEEDED',
+    );
   });
 });
 
