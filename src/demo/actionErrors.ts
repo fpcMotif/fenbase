@@ -1,6 +1,6 @@
 import { ConvexError } from 'convex/values';
 import { DEFINITION_ERROR_CODES } from '../../convex/definitionModel';
-import { REQUEST_ERROR_CODES } from '../../convex/requestValues';
+import { isRequestErrorCode } from '../../convex/requestValues';
 
 export const actionErrorKeys = new Map<string, string>([
   ['COLLECTION_NAME_INVALID', 'collections.nameInvalid'],
@@ -38,7 +38,6 @@ export type ActionErrorData = {
   code: string;
   field: string;
   currentRevision?: number;
-  currentVersionId?: string;
   min?: number;
   max?: number;
   maxLength?: number;
@@ -60,15 +59,10 @@ export function actionErrorData(error: unknown): ActionErrorData | null {
     return null;
   }
   const field = 'field' in error.data && typeof error.data.field === 'string' ? error.data.field : '';
-  const currentVersionId =
-    'currentVersionId' in error.data && typeof error.data.currentVersionId === 'string'
-      ? error.data.currentVersionId
-      : undefined;
   return {
     code: error.data.code,
     field,
     currentRevision: numberProperty(error.data, 'currentRevision'),
-    currentVersionId,
     min: numberProperty(error.data, 'min'),
     max: numberProperty(error.data, 'max'),
     maxLength: numberProperty(error.data, 'maxLength'),
@@ -83,8 +77,8 @@ export function requestIssueMessage(
   t: (key: string, options?: Record<string, string | number | undefined>) => string,
   labelOf: (key: string) => string,
 ): string {
-  const isRequestCode = REQUEST_ERROR_CODES.some((code) => code === issue.code);
-  if (!isRequestCode) return t(actionErrorKeys.get(issue.code) ?? 'common.actionFailed', { field: issue.field ?? '' });
+  if (!isRequestErrorCode(issue.code))
+    return t(actionErrorKeys.get(issue.code) ?? 'common.actionFailed', { field: issue.field ?? '' });
   return t(`requestErrors.${issue.code}`, {
     field: issue.field ? labelOf(issue.field) : '',
     min: issue.min,

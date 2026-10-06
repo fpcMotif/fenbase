@@ -30,6 +30,10 @@ export const REQUEST_ERROR_CODES = [
 
 export type RequestErrorCode = (typeof REQUEST_ERROR_CODES)[number];
 
+export function isRequestErrorCode(code: string): code is RequestErrorCode {
+  return REQUEST_ERROR_CODES.some((known) => known === code);
+}
+
 export const requestValueValidator = v.union(v.string(), v.number(), v.boolean());
 export const requestValuesValidator = v.record(v.string(), requestValueValidator);
 

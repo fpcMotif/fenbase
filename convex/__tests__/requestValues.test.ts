@@ -3,6 +3,7 @@ import type { Definition, DefinitionField } from '../definitionModel';
 import {
   MAX_REQUEST_VALUES_BYTES,
   isCalendarDate,
+  isRequestErrorCode,
   normalizeRequestValues,
   validateRequestValues,
 } from '../requestValues';
@@ -219,6 +220,14 @@ describe('request value validation', () => {
       code: 'RECORD_DATE_INVALID',
       field: 'startDate',
     });
+  });
+});
+
+describe('request error codes', () => {
+  it('recognizes request codes and nothing else', () => {
+    expect(isRequestErrorCode('RECORD_DATE_RANGE_INVALID')).toBe(true);
+    expect(isRequestErrorCode('DEFINITION_NOT_FOUND')).toBe(false);
+    expect(isRequestErrorCode('')).toBe(false);
   });
 });
 

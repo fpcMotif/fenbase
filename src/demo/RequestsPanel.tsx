@@ -18,7 +18,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import type { TableColumnsType, TableColumnType, TablePaginationConfig, TableProps, ThemeConfig } from 'antd';
+import type { TableColumnsType, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
 import { useMutation, useQueries } from 'convex/react';
 import type { RequestForQueries } from 'convex/react';
 import type { FunctionReturnType } from 'convex/server';
@@ -26,28 +26,38 @@ import { useTranslation } from 'react-i18next';
 import { api } from '../../convex/_generated/api';
 import type { Id } from '../../convex/_generated/dataModel';
 import type { DefinitionField } from '../../convex/definitionModel';
-import { DEFAULT_RECORD_PAGE_SIZE, RECORD_CREATED_SORT_FIELD } from '../../convex/recordQuery';
-import { REQUEST_ERROR_CODES, ownValue, validateRequestValues, type RequestIssue } from '../../convex/requestValues';
+import { DEFAULT_RECORD_PAGE_SIZE, RECORD_CREATED_SORT_FIELD, type RecordFilter } from '../../convex/recordQuery';
+import { isRequestErrorCode, ownValue, validateRequestValues, type RequestIssue } from '../../convex/requestValues';
 import { actionErrorData, actionErrorMessage, requestIssueMessage } from './actionErrors';
-import { runPendingAction } from './pendingAction';
-import { carryOverValues, fieldLabel, toFormValues, toRequestValues, type RequestFormValues } from './requestForm';
+import { runPendingAction, withoutMotion } from './pendingAction';
+import {
+  carryOverValues,
+  columnTitle,
+  dateRangeFilters,
+  fieldLabel,
+  toFormValues,
+  toRequestValues,
+  type DateRange,
+  type RequestFormValues,
+} from './requestForm';
+import { newCreateAttempt, requestModalStatus } from './requestModal';
 
 type MyApplication = FunctionReturnType<typeof api.memberships.listMine>[number];
 type PublishedVersion = FunctionReturnType<typeof api.applicationDefinitions.getPublishedVersion>;
 type RequestPage = FunctionReturnType<typeof api.requests.list>;
 type RequestView = RequestPage['items'][number];
 type Sort = { field: string; direction: 'asc' | 'desc' };
-type Browse = { page: number; pageSize: number; sort: Sort };
+type Browse = { page: number; pageSize: number; sort: Sort; filters: RecordFilter[] };
 type ModalState = { kind: 'create' } | { kind: 'edit'; requestId: Id<'requests'> };
 type IssueText = Omit<RequestIssue, 'code'> & { code: string };
 type SortOrder = TableColumnType<RequestView>['sortOrder'];
 type TableSorter = Parameters<NonNullable<TableProps<RequestView>['onChange']>>[2];
 
-const withoutMotion: ThemeConfig = { token: { motion: false } };
 const defaultBrowse: Browse = {
   page: 1,
   pageSize: DEFAULT_RECORD_PAGE_SIZE,
   sort: { field: RECORD_CREATED_SORT_FIELD, direction: 'desc' },
+  filters: [],
 };
 
 function membershipReference(membershipId: string): string {
@@ -56,10 +66,6 @@ function membershipReference(membershipId: string): string {
 
 function controlId(key: string): string {
   return `request-field-${key}`;
-}
-
-function isRequestCode(code: string): boolean {
-  return REQUEST_ERROR_CODES.some((known) => known === code);
 }
 
 export function RequestsPanel({ applications }: { applications: MyApplication[] }) {
@@ -97,6 +103,7 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
   const [status, setStatus] = useState('');
   const [panelError, setPanelError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [range, setRange] = useState<DateRange>({});
   const openerRef = useRef<HTMLElement | null>(null);
   const removeRequest = useMutation(api.requests.remove);
 
@@ -115,6 +122,7 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
           page: browse.page,
           pageSize: browse.pageSize,
           sort: browse.sort,
+          filters: browse.filters,
         },
       },
     }),
@@ -195,7 +203,7 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
       const field = fieldsByKey.get(key);
       return {
         key,
-        title: field ? fieldLabel(field, language) : t('builder.systemColumns.requester'),
+        title: columnTitle(key, field, language, t),
         sorter: field !== undefined,
         sortOrder: field ? sortOrder(key) : null,
         render: (_value: unknown, row: RequestView) => renderValue(row, key),
@@ -244,6 +252,7 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
     const single = Array.isArray(sorter) ? sorter[0] : sorter;
     const field = typeof single?.columnKey === 'string' && single.order ? single.columnKey : undefined;
     setBrowse({
+      filters: browse.filters,
       page: pagination.current ?? 1,
       pageSize: pagination.pageSize ?? DEFAULT_RECORD_PAGE_SIZE,
       sort: field
@@ -251,6 +260,49 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
         : { field: RECORD_CREATED_SORT_FIELD, direction: 'desc' },
     });
   };
+
+  const dateRule = definition?.dateRules[0];
+  const applyRange = (next: DateRange) => {
+    setRange(next);
+    if (definition) setBrowse({ ...browse, page: 1, filters: dateRangeFilters(definition, next) });
+  };
+  const ruleLabel = (key: string) => {
+    const field = fieldsByKey.get(key);
+    return field ? fieldLabel(field, language) : key;
+  };
+  const filtered = browse.filters.length > 0;
+  const rangeFilter = dateRule && (
+    <Form layout="inline" aria-label={t('requests.filterTitle')} onFinish={() => applyRange(range)}>
+      <Form.Item
+        label={t('requests.filterFrom', { field: ruleLabel(dateRule.startKey) })}
+        htmlFor="requests-filter-from"
+      >
+        <Input
+          id="requests-filter-from"
+          type="date"
+          min="0001-01-01"
+          max="9999-12-31"
+          value={range.from ?? ''}
+          onChange={(event) => applyRange({ ...range, from: event.target.value })}
+        />
+      </Form.Item>
+      <Form.Item label={t('requests.filterTo', { field: ruleLabel(dateRule.endKey) })} htmlFor="requests-filter-to">
+        <Input
+          id="requests-filter-to"
+          type="date"
+          min="0001-01-01"
+          max="9999-12-31"
+          value={range.to ?? ''}
+          onChange={(event) => applyRange({ ...range, to: event.target.value })}
+        />
+      </Form.Item>
+      <Form.Item>
+        <Button onClick={() => applyRange({})} disabled={!range.from && !range.to}>
+          {t('requests.clearFilter')}
+        </Button>
+      </Form.Item>
+    </Form>
+  );
 
   const newButton = canSubmit && current && (
     <Button type="primary" onClick={() => openModal({ kind: 'create' })}>
@@ -282,10 +334,11 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
       )}
 
       <Card>
+        {!noDefinition && rangeFilter && <div style={{ marginBottom: 16 }}>{rangeFilter}</div>}
         {noDefinition ? (
           <Empty description={t('requests.noDefinition')} />
         ) : page && page.total === 0 ? (
-          <Empty description={t('requests.empty')} />
+          <Empty description={t(filtered ? 'requests.noMatches' : 'requests.empty')} />
         ) : (
           <Space direction="vertical" size={8} style={{ width: '100%' }}>
             {page && (
@@ -349,8 +402,8 @@ function RequestModal({
   const requestId = state.kind === 'edit' ? state.requestId : undefined;
 
   // A new request is pinned to the version shown when the form opened; it only moves on "Load new version".
-  const [createVersion, setCreateVersion] = useState<PublishedVersion | undefined>(currentVersion);
-  const [operationId] = useState(() => crypto.randomUUID());
+  const [attempt, setAttempt] = useState(() => newCreateAttempt(currentVersion));
+  const createVersion = attempt.version;
   const [revisionOverride, setRevisionOverride] = useState<number | null>(null);
   const [conflictRevision, setConflictRevision] = useState<number | null>(null);
   const [outdated, setOutdated] = useState(false);
@@ -420,7 +473,7 @@ function RequestModal({
       setOutdated(true);
       return;
     }
-    if (data && isRequestCode(data.code)) {
+    if (data && isRequestErrorCode(data.code)) {
       showIssue(data);
       return;
     }
@@ -441,7 +494,7 @@ function RequestModal({
         createRequest({
           applicationId: application.applicationId,
           definitionVersionId: pinned.versionId,
-          operationId,
+          operationId: attempt.operationId,
           values,
         }),
       )
@@ -494,14 +547,22 @@ function RequestModal({
       currentVersion.definition.fields,
       carryOverValues(currentVersion.definition, form.getFieldsValue()),
     );
-    setCreateVersion(currentVersion);
+    setAttempt(newCreateAttempt(currentVersion));
     setOutdated(false);
   };
 
   const title =
     state.kind === 'create' ? t('requests.createTitle') : canEdit ? t('requests.editTitle') : t('requests.viewTitle');
-  const missing = state.kind === 'edit' && request === null;
-  const loading = !missing && (!definition || (state.kind === 'edit' && !loadedRequest));
+  const status = requestModalStatus({
+    mode: state.kind,
+    request: requestResult,
+    pinnedVersion: state.kind === 'edit' ? pinnedResult : createVersion,
+    hasDefinition: definition !== undefined,
+    hasSnapshot: loadedRequest !== null,
+  });
+  const missing = status.kind === 'missing';
+  const failed = status.kind === 'failed' ? status.error : null;
+  const loading = status.kind === 'loading';
 
   const control = (field: DefinitionField) => {
     const id = controlId(field.key);
@@ -535,7 +596,7 @@ function RequestModal({
         <ConfigProvider theme={withoutMotion}>
           <Space wrap>
             <Button onClick={onClose}>{canEdit ? t('requests.cancel') : t('requests.close')}</Button>
-            {canEdit && !missing && (
+            {canEdit && !missing && !failed && (
               <Button type="primary" loading={saving} disabled={loading} onClick={submit}>
                 {t('requests.save')}
               </Button>
@@ -546,7 +607,8 @@ function RequestModal({
     >
       <Space direction="vertical" size={12} style={{ width: '100%' }}>
         {missing && <Alert role="alert" type="warning" showIcon message={t('requests.notFound')} />}
-        {!canEdit && !missing && request && <Alert type="info" showIcon message={t('requests.readOnly')} />}
+        {failed && <Alert role="alert" type="error" showIcon message={actionErrorMessage(failed, t)} />}
+        {!canEdit && !missing && !failed && request && <Alert type="info" showIcon message={t('requests.readOnly')} />}
         {conflictRevision !== null && (
           <div ref={conflictRef} tabIndex={-1} aria-label={t('requests.conflictTitle')}>
             <Alert
@@ -595,7 +657,7 @@ function RequestModal({
           </div>
         ) : (
           definition &&
-          !missing && (
+          status.kind === 'ready' && (
             <Form<RequestFormValues>
               form={form}
               name="request"

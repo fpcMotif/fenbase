@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { DefinitionField } from '../../../convex/definitionModel';
-import { carryOverValues, fieldLabel, toFormValues, toRequestValues } from '../requestForm';
+import {
+  carryOverValues,
+  columnTitle,
+  dateRangeFilters,
+  fieldLabel,
+  toFormValues,
+  toRequestValues,
+} from '../requestForm';
 
 const fields: DefinitionField[] = [
   { type: 'date', key: 'startDate', label: { enUS: 'Start date', zhCN: '开始日期' }, required: true },
@@ -65,6 +72,26 @@ describe('request form values', () => {
     expect(toFormValues(builtIns, {})).toEqual({ valueOf: false });
     expect(toRequestValues(builtIns, {})).toEqual({});
     expect(carryOverValues(builtIns, {})).toEqual({});
+  });
+
+  it('titles a field column by its label and a system column by its own key', () => {
+    const t = (key: string) => `t:${key}`;
+    expect(columnTitle('days', fields[1], 'zh-CN', t)).toBe('天数');
+    expect(columnTitle('requester', undefined, 'en-US', t)).toBe('t:builder.systemColumns.requester');
+    expect(columnTitle('submittedAt', undefined, 'en-US', t)).toBe('t:builder.systemColumns.submittedAt');
+  });
+
+  it('turns a date range into filters on the configured rule’s start and end keys', () => {
+    const ruled = { dateRules: [{ startKey: 'leaveFrom', endKey: 'leaveTo' }] };
+    expect(dateRangeFilters(ruled, { from: '2026-05-01', to: '2026-05-31' })).toEqual([
+      { field: 'leaveFrom', operator: '$gte', value: '2026-05-01' },
+      { field: 'leaveTo', operator: '$lte', value: '2026-05-31' },
+    ]);
+    expect(dateRangeFilters(ruled, { from: '', to: '2026-05-31' })).toEqual([
+      { field: 'leaveTo', operator: '$lte', value: '2026-05-31' },
+    ]);
+    expect(dateRangeFilters(ruled, {})).toEqual([]);
+    expect(dateRangeFilters({ dateRules: [] }, { from: '2026-05-01' })).toEqual([]);
   });
 
   it('labels a field in the active language', () => {
