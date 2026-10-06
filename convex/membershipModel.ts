@@ -61,6 +61,25 @@ export function assertHasManageMembers(principal: ApplicationPrincipal): void {
   }
 }
 
+export function assertCanConfigureApplication(principal: ApplicationPrincipal): void {
+  if (!canConfigureApplication(principal)) {
+    throw permissionDenied('You do not have permission to configure this application');
+  }
+}
+
+export async function isEligibleReviewer(
+  ctx: QueryCtx | MutationCtx,
+  applicationId: Id<'applications'>,
+  membershipId: Id<'memberships'>,
+): Promise<boolean> {
+  const membership = await ctx.db.get(membershipId);
+  return membership !== null && membership.applicationId === applicationId && isActiveReviewer(membership);
+}
+
+export function isActiveReviewer(membership: Doc<'memberships'>): boolean {
+  return membership.status === 'active' && membership.grants.includes('reviewRequests');
+}
+
 export function assertManageableTarget(principal: ApplicationPrincipal, target: Doc<'memberships'>): void {
   if (target.applicationId !== principal.applicationId) throw membershipNotFound();
   if (target.authUserId === principal.authUserId) {

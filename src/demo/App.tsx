@@ -26,7 +26,6 @@ import {
 import type { TableColumnsType } from 'antd';
 import { useConvexAuth, useMutation, useQueries, useQuery } from 'convex/react';
 import type { RequestForQueries } from 'convex/react';
-import { ConvexError } from 'convex/values';
 import type { FunctionReturnType } from 'convex/server';
 import { api } from '../../convex/_generated/api';
 import {
@@ -41,6 +40,8 @@ import type { RecordFilter, RecordSort } from '../../convex/recordQuery';
 import { authClient } from '../lib/auth/client';
 import { useTranslation } from 'react-i18next';
 import i18n from './i18n';
+import { actionErrorMessage } from './actionErrors';
+import { DefinitionBuilder } from './DefinitionBuilder';
 
 type DemoValue = string | number | boolean;
 type Collection = FunctionReturnType<typeof api.collections.list>['items'][number];
@@ -62,55 +63,10 @@ type AppliedRecordQuery = { filters: RecordFilter[]; sort: RecordSort };
 type RecordBrowseState = AppliedRecordQuery & { collectionId?: Collection['_id']; page: number; pageSize: number };
 type WorkflowFormValues = { name: string; collectionId: Collection['_id']; field: string; value: DemoValue | null };
 
-const actionErrorKeys = new Map([
-  ['COLLECTION_NAME_INVALID', 'collections.nameInvalid'],
-  ['COLLECTION_TITLE_INVALID', 'collections.titleRule'],
-  ['COLLECTION_NAME_EXISTS', 'collections.nameExists'],
-  ['COLLECTION_FIELD_NAME_DUPLICATE', 'collections.fieldNameDuplicate'],
-  ['COLLECTION_FIELD_NAME_INVALID', 'collections.fieldInvalid'],
-  ['COLLECTION_FIELD_COUNT_INVALID', 'collections.fieldCount'],
-  ['COLLECTION_HAS_RECORDS', 'collections.deleteHasRecords'],
-  ['COLLECTION_HAS_WORKFLOWS', 'collections.deleteHasWorkflows'],
-  ['COLLECTION_NOT_FOUND', 'collections.notFound'],
-  ['RECORD_FIELD_REQUIRED', 'records.required'],
-  ['RECORD_FIELD_UNKNOWN', 'records.unknownField'],
-  ['RECORD_FIELD_TYPE_INVALID', 'records.invalidType'],
-  ['RECORD_TEXT_TOO_LONG', 'records.textTooLong'],
-  ['RECORD_NOT_FOUND', 'records.notFound'],
-  ['RECORD_COLLECTION_FULL', 'records.collectionFull'],
-  ['RECORD_BROWSE_LIMIT_EXCEEDED', 'records.browseLimit'],
-  ['RECORD_QUERY_FIELD_UNKNOWN', 'records.queryFieldUnknown'],
-  ['RECORD_QUERY_OPERATOR_INVALID', 'records.queryOperatorInvalid'],
-  ['RECORD_QUERY_VALUE_INVALID', 'records.queryValueInvalid'],
-  ['RECORD_QUERY_FILTER_COUNT_INVALID', 'records.queryFilterCount'],
-  ['RECORD_QUERY_SORT_INVALID', 'records.querySortInvalid'],
-  ['RECORD_QUERY_PAGE_INVALID', 'records.queryPageInvalid'],
-  ['APPLICATION_ACCESS_DENIED', 'membershipErrors.APPLICATION_ACCESS_DENIED'],
-  ['PERMISSION_DENIED', 'membershipErrors.PERMISSION_DENIED'],
-  ['SELF_ADMINISTRATION_DENIED', 'membershipErrors.SELF_ADMINISTRATION_DENIED'],
-  ['MEMBERSHIP_NOT_FOUND', 'membershipErrors.MEMBERSHIP_NOT_FOUND'],
-  ['MEMBERSHIP_INACTIVE', 'membershipErrors.MEMBERSHIP_INACTIVE'],
-  ['MEMBERSHIP_LIST_LIMIT_EXCEEDED', 'membershipErrors.MEMBERSHIP_LIST_LIMIT_EXCEEDED'],
-]);
-
 const defaultRecordQuery: AppliedRecordQuery = {
   filters: [],
   sort: { field: RECORD_CREATED_SORT_FIELD, direction: 'desc' },
 };
-
-function actionErrorMessage(error: unknown, t: (key: string, options?: { field: string }) => string): string {
-  if (
-    error instanceof ConvexError &&
-    typeof error.data === 'object' &&
-    error.data !== null &&
-    'code' in error.data &&
-    typeof error.data.code === 'string'
-  ) {
-    const field = 'field' in error.data && typeof error.data.field === 'string' ? error.data.field : '';
-    return t(actionErrorKeys.get(error.data.code) ?? 'common.actionFailed', { field });
-  }
-  return t('common.actionFailed');
-}
 
 export default function DemoApp() {
   return (
@@ -145,6 +101,8 @@ function DemoAppContent() {
   const { data: session, isPending, isRefetching, error: sessionError } = authClient.useSession();
   const { isLoading: convexAuthLoading, isAuthenticated } = useConvexAuth();
   const viewer = useQuery(api.users.getViewer, session && isAuthenticated ? {} : 'skip');
+  const myMemberships = useQuery(api.memberships.listMine, session && isAuthenticated ? {} : 'skip');
+  const builderApplications = (myMemberships ?? []).filter((item) => item.grants.includes('configureApplication'));
   const [activeTab, setActiveTab] = useState('data');
   const seed = useMutation(api.demo.seed);
   const [seeding, setSeeding] = useState(false);
@@ -240,6 +198,15 @@ function DemoAppContent() {
               children: <CollectionsPanel onLoadSample={loadSample} seeding={seeding} />,
             },
             { key: 'workflows', label: t('nav.workflows'), children: <WorkflowsPanel /> },
+            ...(builderApplications.length > 0
+              ? [
+                  {
+                    key: 'builder',
+                    label: t('nav.builder'),
+                    children: <DefinitionBuilder applications={builderApplications} />,
+                  },
+                ]
+              : []),
           ]}
         />
       </section>

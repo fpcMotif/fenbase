@@ -105,10 +105,16 @@ export const upsertMember = internalMutation({
 
 export const removeOrganization = internalMutation({
   args: { organizationKey: v.string() },
-  returns: v.object({ organizations: v.number(), applications: v.number(), memberships: v.number() }),
+  returns: v.object({
+    organizations: v.number(),
+    applications: v.number(),
+    memberships: v.number(),
+    definitions: v.number(),
+    definitionVersions: v.number(),
+  }),
   handler: async (ctx, args) => {
     assertFixtureOrganizationKey(args.organizationKey);
-    const removed = { organizations: 0, applications: 0, memberships: 0 };
+    const removed = { organizations: 0, applications: 0, memberships: 0, definitions: 0, definitionVersions: 0 };
     const organization = await ctx.db
       .query('organizations')
       .withIndex('by_key', (q) => q.eq('key', args.organizationKey))
@@ -122,6 +128,25 @@ export const removeOrganization = internalMutation({
         .take(FIXTURE_DELETE_BATCH);
       if (applications.length === 0) break;
       for (const application of applications) {
+        for (;;) {
+          const versions = await ctx.db
+            .query('applicationDefinitionVersions')
+            .withIndex('by_application_version', (q) => q.eq('applicationId', application._id))
+            .take(FIXTURE_DELETE_BATCH);
+          if (versions.length === 0) break;
+          for (const version of versions) {
+            await ctx.db.delete(version._id);
+            removed.definitionVersions += 1;
+          }
+        }
+        const definition = await ctx.db
+          .query('applicationDefinitions')
+          .withIndex('by_application', (q) => q.eq('applicationId', application._id))
+          .unique();
+        if (definition) {
+          await ctx.db.delete(definition._id);
+          removed.definitions += 1;
+        }
         for (;;) {
           const memberships = await ctx.db
             .query('memberships')

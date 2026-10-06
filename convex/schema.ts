@@ -1,5 +1,6 @@
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
+import { definitionValidator } from './definitionModel';
 import { capabilityValidator, membershipStatusValidator } from './membershipValidators';
 
 export default defineSchema({
@@ -25,6 +26,28 @@ export default defineSchema({
     .index('by_auth_user_application', ['authUserId', 'applicationId'])
     .index('by_auth_user_status', ['authUserId', 'status'])
     .index('by_application', ['applicationId']),
+
+  applicationDefinitions: defineTable({
+    applicationId: v.id('applications'),
+    organizationId: v.id('organizations'),
+    draft: definitionValidator,
+    revision: v.number(),
+    publishedRevision: v.union(v.number(), v.null()),
+    currentVersionId: v.union(v.id('applicationDefinitionVersions'), v.null()),
+    latestVersion: v.number(),
+    updatedAt: v.number(),
+    updatedByMembershipId: v.id('memberships'),
+  }).index('by_application', ['applicationId']),
+
+  applicationDefinitionVersions: defineTable({
+    applicationId: v.id('applications'),
+    organizationId: v.id('organizations'),
+    version: v.number(),
+    definition: definitionValidator,
+    sourceRevision: v.number(),
+    publishedAt: v.number(),
+    publishedByMembershipId: v.id('memberships'),
+  }).index('by_application_version', ['applicationId', 'version']),
 
   demoCollections: defineTable({
     ownerId: v.string(),
