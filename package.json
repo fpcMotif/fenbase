@@ -57,8 +57,10 @@
     "doc:cn": "nocobase-v1 doc --lang=zh-CN",
     "postinstall": "nocobase-v1 postinstall",
     "lint": "oxlint",
-    "lint:typeaware": "oxlint -c .oxlintrc.json --tsconfig tsconfig.oxlint.json",
-    "format": "oxfmt --write .",
+    "lint:typeaware": "bun scripts/quality-gate.ts --audit",
+    "quality:check": "bun scripts/quality-gate.ts",
+    "quality:test": "bun test scripts/__tests__/quality-gate.test.ts",
+    "format": "oxfmt --write",
     "format:check": "oxfmt --check .",
     "check": "oxlint && oxfmt --check .",
     "pre-commit": "bun scripts/pre-commit.ts",
@@ -99,15 +101,6 @@
       "commit-msg": "bunx commitlint --edit"
     }
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "oxfmt --write",
-      "oxlint --deny-warnings"
-    ],
-    "*.json": [
-      "oxfmt --write"
-    ]
-  },
   "devDependencies": {
     "@alicloud/cdn20180510": "^9.2.0",
     "@commitlint/cli": "^21.2.3",
@@ -121,11 +114,10 @@
     "dependency-cruiser": "^18.4.0",
     "ghooks": "^2.0.4",
     "joi": "^18.2.9",
-    "lint-staged": "^17.6.0",
     "loadjs": "^4.3.0",
-    "oxfmt": "^0.71.0",
-    "oxlint": "^1.86.0",
-    "oxlint-tsgolint": "^7.0.2003",
+    "oxfmt": "0.71.0",
+    "oxlint": "1.86.0",
+    "oxlint-tsgolint": "7.0.2003",
     "patch-package": "^8.0.1",
     "playwright": "^1.63.0",
     "pm2": "^7.0.4",
@@ -134,11 +126,11 @@
     "safe-load-script": "^0.0.1",
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
-    "vitest": "^5.0.2",
+    "vitest": "1.5.2",
     "wrangler": "^4.144.0"
   },
   "volta": {
-    "node": "20.16.0",
+    "node": "22.22.0",
     "yarn": "1.22.19"
   },
   "dependencies": {
@@ -149,5 +141,5 @@
     "i18next": "^26.4.2",
     "react-i18next": "^17.0.15"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "bun@1.4.2"
 }

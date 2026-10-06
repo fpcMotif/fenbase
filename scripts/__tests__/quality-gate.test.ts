@@ -1,0 +1,249 @@
+import { afterEach, expect, setDefaultTimeout, test } from 'bun:test';
+import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+
+const source = path.resolve(import.meta.dirname, '../..');
+setDefaultTimeout(30_000);
+const directories: string[] = [];
+function run(root: string, command: string, args: string[]) {
+  return spawnSync(command, args, { cwd: root, encoding: 'utf8' });
+}
+function repository() {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'quality-gate-'));
+  directories.push(root);
+  fs.mkdirSync(path.join(root, 'scripts'), { recursive: true });
+  fs.writeFileSync(path.join(root, '.gitignore'), 'node_modules\n');
+  fs.symlinkSync(path.join(source, 'node_modules'), path.join(root, 'node_modules'));
+  for (const file of [
+    '.oxlintrc.json',
+    '.oxlintrc.policy.json',
+    '.oxlintrc.boundaries.json',
+    '.oxfmtrc.json',
+    'tsconfig.oxlint.json',
+  ]) {
+    fs.copyFileSync(path.join(source, file), path.join(root, file));
+  }
+  run(root, 'git', ['init', '-q']);
+  run(root, 'git', ['config', 'user.email', 'fixture@example.com']);
+  run(root, 'git', ['config', 'user.name', 'Fixture']);
+  run(root, 'git', ['add', '.']);
+  run(root, 'git', ['-c', 'core.hooksPath=/dev/null', 'commit', '-qm', 'fixture']);
+  return root;
+}
+afterEach(() => {
+  for (const root of directories.splice(0)) fs.rmSync(root, { recursive: true, force: true });
+});
+test('CI rejects introduced multiline any syntax and accepts its correction', () => {
+  const root = repository();
+  const file = path.join(root, 'scripts/example.ts');
+  fs.writeFileSync(file, 'export type Value = Array<\n  any\n>;\n');
+  run(root, 'git', ['add', '.']);
+  const bad = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(bad.status).not.toBe(0);
+  expect(bad.stdout + bad.stderr).toContain('no-explicit-any');
+  fs.writeFileSync(file, 'export type Value = Array<\n  unknown\n>;\n');
+  run(root, 'git', ['add', '.']);
+  const good = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(good.status).toBe(0);
+});
+
+test('PR CI and index checks reject floating promises and void calls but allow handled promises', () => {
+  const root = repository();
+  const file = path.join(root, 'scripts/example.ts');
+  const base = run(root, 'git', ['rev-parse', 'HEAD']).stdout.trim();
+  for (const [text, rule] of [
+    ['Promise.resolve(1);\n', 'no-floating-promises'],
+    ['void Promise.resolve(1);\n', 'no-void'],
+    ['Promise.resolve(1).catch(console.error);\n', ''],
+  ]) {
+    fs.writeFileSync(file, text);
+    run(root, 'git', ['add', '.']);
+    for (const args of [['--staged'], ['--base', base]]) {
+      if (args[0] === '--base') run(root, 'git', ['-c', 'core.hooksPath=/dev/null', 'commit', '-qm', 'fixture change']);
+      const result = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), ...args]);
+      expect(result.status).toBe(rule ? 1 : 0);
+      if (rule) expect(result.stdout + result.stderr).toContain(rule);
+    }
+  }
+});
+
+test('a real commit preserves unstaged bytes, including unusual filenames, on pass and failure', () => {
+  const root = repository();
+  const filename = "scripts/odd '$ name\n.ts";
+  const file = path.join(root, filename);
+  fs.writeFileSync(file, 'export const first = 1;\nexport const second = 2;\n');
+  run(root, 'git', ['add', '.']);
+  run(root, 'git', ['-c', 'core.hooksPath=/dev/null', 'commit', '-qm', 'initial']);
+  const hook = path.join(root, '.git/hooks/pre-commit');
+  fs.writeFileSync(hook, `#!/bin/sh\nexec bun '${source}/scripts/pre-commit.ts'\n`, { mode: 0o755 });
+  run(root, 'git', ['config', 'core.hooksPath', path.dirname(hook)]);
+  fs.writeFileSync(file, 'export const first=3;\nexport const second = 2;\n');
+  run(root, 'git', ['add', '--', filename]);
+  const unstaged = 'export const first=3;\nexport const second = 4;\n';
+  fs.writeFileSync(file, unstaged);
+  const committed = run(root, 'git', ['commit', '-qm', 'test partial staging']);
+  expect(committed.stderr + committed.stdout).not.toContain('[pre-commit] Failed');
+  expect(committed.status).toBe(0);
+  expect(run(root, 'git', ['show', `HEAD:${filename}`]).stdout).toContain('second = 2');
+  expect(fs.readFileSync(file, 'utf8')).toBe(unstaged);
+  fs.writeFileSync(file, 'export type Unsafe = any;\n');
+  run(root, 'git', ['add', '--', filename]);
+  fs.writeFileSync(file, unstaged);
+  const before = run(root, 'git', ['write-tree']).stdout;
+  expect(run(root, 'git', ['commit', '-qm', 'rejected']).status).not.toBe(0);
+  expect(run(root, 'git', ['write-tree']).stdout).toBe(before);
+  expect(fs.readFileSync(file, 'utf8')).toBe(unstaged);
+});
+
+test('ratchet fails closed and update cannot bless a regression', () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'ratchet-'));
+  directories.push(root);
+  fs.mkdirSync(path.join(root, 'node_modules/.bin'), { recursive: true });
+  const baseline = path.join(root, '.oxlint-baseline.json');
+  fs.writeFileSync(baseline, '{}\n');
+  const binary = path.join(root, 'node_modules/.bin/oxlint');
+  for (const output of [
+    '{}',
+    '{"diagnostics":[{}]}',
+    JSON.stringify({
+      number_of_files: 1,
+      diagnostics: [{ code: 'rule', severity: 'warning', message: 'new debt', filename: 'new.ts', labels: [] }],
+    }),
+  ]) {
+    fs.writeFileSync(binary, `#!/bin/sh\nprintf '%s' '${output}'\n`, { mode: 0o755 });
+    const result = run(root, 'bun', [path.join(source, 'scripts/lint-ratchet.ts'), '--update']);
+    expect(result.status).not.toBe(0);
+    expect(fs.readFileSync(baseline, 'utf8')).toBe('{}\n');
+  }
+  fs.writeFileSync(binary, '#!/bin/sh\nprintf \'{"diagnostics":[]}\'\nexit 2\n', { mode: 0o755 });
+  expect(run(root, 'bun', [path.join(source, 'scripts/lint-ratchet.ts')]).status).not.toBe(0);
+  fs.writeFileSync(binary, '#!/bin/sh\nprintf \'{"number_of_files":1,"diagnostics":[]}\'\n', { mode: 0o755 });
+  fs.writeFileSync(baseline, '{"old.ts":{"rule":1}}\n');
+  expect(run(root, 'bun', [path.join(source, 'scripts/lint-ratchet.ts'), '--update']).status).toBe(0);
+  expect(JSON.parse(fs.readFileSync(baseline, 'utf8'))).toEqual({});
+});
+
+test('unchanged debt is allowed but removed violations do not excuse added violations', () => {
+  const root = repository();
+  const file = path.join(root, 'scripts/legacy.ts');
+  fs.writeFileSync(file, 'export type Legacy = any;\nexport const value = 1;\n');
+  run(root, 'git', ['add', '.']);
+  run(root, 'git', ['-c', 'core.hooksPath=/dev/null', 'commit', '-qm', 'legacy']);
+  fs.writeFileSync(file, 'export type Legacy = any;\nexport const value = 2;\n');
+  run(root, 'git', ['add', '.']);
+  expect(run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']).status).toBe(0);
+  fs.writeFileSync(file, 'export type Replacement = any | Array<any>;\nexport const value = 2;\n');
+  run(root, 'git', ['add', '.']);
+  const result = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(result.status).toBe(1);
+  expect(result.stderr).toContain('no-explicit-any');
+});
+
+test('real suppression semantics apply without exempting whole files or ignored directories', () => {
+  const root = repository();
+  const file = path.join(root, 'docs/example.ts');
+  fs.mkdirSync(path.dirname(file));
+  fs.writeFileSync(
+    file,
+    '// eslint-disable-next-line @typescript-eslint/no-explicit-any\nexport type ValidSuppression = any;\n',
+  );
+  run(root, 'git', ['add', '.']);
+  const suppressed = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(suppressed.stderr).toBe('');
+  expect(suppressed.status).toBe(0);
+  fs.appendFileSync(file, 'export type Unrelated = any;\n');
+  run(root, 'git', ['add', '.']);
+  const result = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(result.status).toBe(1);
+  expect(result.stderr).toContain('no-explicit-any');
+});
+
+test('license updates stay inside the staged snapshot and binary contents remain exact', () => {
+  const root = repository();
+  fs.copyFileSync(path.join(source, 'scripts/addLicense.js'), path.join(root, 'scripts/addLicense.js'));
+  fs.mkdirSync(path.join(root, 'packages/example/src'), { recursive: true });
+  const file = path.join(root, "packages/example/src/odd '$\n.ts");
+  fs.writeFileSync(file, 'export const staged = 1;\n');
+  const binary = Buffer.from([0, 255, 1, 192, 128, 64]);
+  fs.writeFileSync(path.join(root, 'asset.bin'), binary);
+  run(root, 'git', ['add', '.']);
+  fs.writeFileSync(file, 'export const unstaged = 2;\n');
+  const result = run(root, 'bun', [path.join(source, 'scripts/pre-commit.ts')]);
+  expect(result.stderr + result.stdout).not.toContain('[pre-commit] Failed');
+  expect(result.status).toBe(0);
+  expect(run(root, 'git', ['show', ":packages/example/src/odd '$\n.ts"]).stdout).toContain('NocoBase');
+  expect(fs.readFileSync(file, 'utf8')).toBe('export const unstaged = 2;\n');
+  expect(spawnSync('git', ['show', ':asset.bin'], { cwd: root }).stdout).toEqual(binary);
+});
+
+test('missing repository binaries fail with an installation command', () => {
+  const root = repository();
+  fs.unlinkSync(path.join(root, 'node_modules'));
+  fs.writeFileSync(path.join(root, 'scripts/example.ts'), 'export const ok = 1;\n');
+  run(root, 'git', ['add', '.']);
+  const result = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(result.status).toBe(1);
+  expect(result.stderr).toContain('bun install --frozen-lockfile');
+});
+
+test('client boundary rejects legacy runtime imports and accepts modern imports', () => {
+  const root = repository();
+  const file = path.join(root, 'packages/example/src/client-v2/example.ts');
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, "export { Plugin } from '@nocobase/client';\n");
+  const bad = run(root, 'bun', [path.join(source, 'scripts/check-client-imports.ts')]);
+  expect(bad.status).toBe(1);
+  expect(bad.stderr).toContain('no-restricted-imports');
+  fs.writeFileSync(file, "export { Plugin } from '@nocobase/client-v2';\n");
+  expect(run(root, 'bun', [path.join(source, 'scripts/check-client-imports.ts')]).status).toBe(0);
+});
+
+test('hook rules and promise misuse remain enforced through the shared CLI', () => {
+  const root = repository();
+  const file = path.join(root, 'scripts/example.tsx');
+  for (const [contents, rule] of [
+    [
+      "import React, { useState } from 'react';\nexport function Component({ condition }: {condition: boolean}) {\nif (condition) useState(0);\nreturn <div />;\n}\n",
+      'rules-of-hooks',
+    ],
+    ['export const values = [1];\nvalues.forEach(async () => { await Promise.resolve(1); });\n', 'no-misused-promises'],
+    ['export function handler(): void { console.log(1); }\nexport const sentinel = void 0;\n', ''],
+  ]) {
+    fs.writeFileSync(file, contents);
+    run(root, 'git', ['add', '.']);
+    const result = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+    expect(result.status).toBe(rule ? 1 : 0);
+    if (rule) expect(result.stderr).toContain(rule);
+  }
+});
+
+test('type-aware checks use staged dependency types instead of unstaged workspace symlinks', () => {
+  const root = repository();
+  const producer = path.join(root, 'packages/provider/src/index.ts');
+  fs.mkdirSync(path.dirname(producer), { recursive: true });
+  fs.writeFileSync(path.join(root, 'packages/provider/package.json'), '{"types":"src/index.ts"}\n');
+  fs.unlinkSync(path.join(root, 'node_modules'));
+  fs.mkdirSync(path.join(root, 'node_modules/@fixture'), { recursive: true });
+  fs.symlinkSync(path.join(source, 'node_modules/.bin'), path.join(root, 'node_modules/.bin'));
+  fs.symlinkSync(path.join(root, 'packages/provider'), path.join(root, 'node_modules/@fixture/provider'));
+  fs.appendFileSync(path.join(root, '.gitignore'), 'tsconfig.paths.json\n');
+  fs.writeFileSync(
+    path.join(root, 'tsconfig.paths.json'),
+    JSON.stringify({
+      compilerOptions: { paths: { '@fixture/provider': ['packages/provider/src/index.ts'] } },
+    }),
+  );
+  fs.writeFileSync(producer, 'export function load() { return Promise.resolve(1); }\n');
+  fs.writeFileSync(path.join(root, 'scripts/consumer.ts'), "import { load } from '@fixture/provider';\nload();\n");
+  run(root, 'git', ['add', '.']);
+  fs.writeFileSync(producer, 'export function load() { return 1; }\n');
+  const bad = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(bad.status).toBe(1);
+  expect(bad.stderr).toContain('no-floating-promises');
+  run(root, 'git', ['add', '--', 'packages/provider/src/index.ts']);
+  const good = run(root, 'bun', [path.join(source, 'scripts/quality-gate.ts'), '--staged']);
+  expect(good.stderr).toBe('');
+  expect(good.status).toBe(0);
+});

@@ -1,0 +1,50 @@
+{
+  "env": { "browser": true, "node": true, "es2022": true },
+  "plugins": ["react", "typescript", "oxc", "promise", "jsx-a11y"],
+  "rules": {
+    "no-case-declarations": "error",
+    "no-empty": "error",
+    "no-fallthrough": "error",
+    "no-inner-declarations": "error",
+    "no-prototype-builtins": "error",
+    "no-regex-spaces": "error",
+    "no-array-constructor": "error",
+    "typescript/no-namespace": "error",
+    "typescript/no-unnecessary-type-constraint": "error",
+    "react/jsx-no-comment-textnodes": "error",
+    "react/jsx-no-target-blank": "error",
+    "react/no-unescaped-entities": "error",
+    "react/no-unknown-property": "error",
+    "react/react-in-jsx-scope": "error",
+    "react/require-render-return": "error",
+    "promise/no-return-wrap": "error",
+    "promise/param-names": "error",
+    "promise/catch-or-return": "error",
+    "promise/no-nesting": "warn",
+    "promise/no-promise-in-callback": "warn",
+    "promise/no-return-in-finally": "warn",
+    "typescript/no-explicit-any": "error",
+    "no-void": "error",
+    "typescript/no-unsafe-declaration-merging": "error"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.{js,jsx,mjs,cjs}"],
+      "rules": {
+        "no-redeclare": "error",
+        "no-undef": "error"
+      }
+    },
+    {
+      "files": ["**/*.{ts,tsx,mts,cts}"],
+      "rules": {
+        "no-var": "error",
+        "prefer-const": "error",
+        "prefer-rest-params": "error",
+        "prefer-spread": "error"
+      }
+    }
+  ],
+  "ignorePatterns": [],
+  "extends": ["./.oxlintrc.json"]
+}

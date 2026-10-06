@@ -5,8 +5,10 @@ on:
     paths:
       - 'package.json'
       - 'yarn.lock'
+      - 'bun.lock'
       - 'docs/package.json'
       - 'docs/yarn.lock'
+      - 'docs/bun.lock'
       - 'packages/**/package.json'
 
 permissions:

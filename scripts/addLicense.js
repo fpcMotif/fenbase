@@ -1,5 +1,5 @@
 const fs = require('fs/promises');
-const { exec } = require('child_process');
+const { exec, execFile } = require('child_process');
 const path = require('path');
 
 const commercialLicense = `
@@ -58,21 +58,21 @@ function isMergeCommit() {
 
 function getDiffFiles() {
   return new Promise((resolve, reject) => {
-    exec('git diff --cached --name-only --diff-filter=ACM', (error, stdout, stderr) => {
+    execFile('git', ['diff', '--cached', '--name-only', '-z', '--diff-filter=ACM'], (error, stdout, stderr) => {
       if (error) {
         reject(error);
       }
       if (stderr) {
         reject(stderr);
       }
-      resolve(stdout.split('\n').filter(Boolean));
+      resolve(stdout.split('\0').filter(Boolean));
     });
   });
 }
 
 function gitAddFiles(files) {
   return new Promise((resolve, reject) => {
-    exec(`git add ${files.join(' ')}`, (error, stdout, stderr) => {
+    execFile('git', ['add', '--', ...files], (error, stdout, stderr) => {
       if (error) {
         reject(error);
       }
@@ -110,4 +110,7 @@ async function main() {
   await gitAddFiles(validFiles);
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

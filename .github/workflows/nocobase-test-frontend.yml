@@ -13,6 +13,8 @@ on:
     paths:
       - 'packages/**'
       - '**/yarn.lock'
+      - '**/bun.lock'
+      - 'package.json'
       - '.github/workflows/nocobase-test-frontend.yml'
       - '!packages/core/acl/**'
       - '!packages/core/actions/**'
@@ -24,6 +26,8 @@ on:
       - '.github/workflows/nocobase-test-frontend.yml'
       - 'packages/**'
       - '**/yarn.lock'
+      - '**/bun.lock'
+      - 'package.json'
       - '!packages/core/acl/**'
       - '!packages/core/actions/**'
       - '!packages/core/database/**'
@@ -44,9 +48,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node_version }}
-          cache: 'yarn'
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
 
-      - run: yarn install --frozen-lockfile
+      - run: bun install --frozen-lockfile
       - name: Pack dependencies
         run: |
           find . -name node_modules -type d -prune -print0 > node_modules.list
@@ -88,7 +94,10 @@ jobs:
           path: .
 
       - run: tar -xf node_modules.tar
-      - run: yarn test:client --shard=${{ matrix.shard }}/4 --silent
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.2
+      - run: bun run test:client --shard=${{ matrix.shard }}/4 --silent
         env:
           LOGGER_LEVEL: error
     timeout-minutes: 30

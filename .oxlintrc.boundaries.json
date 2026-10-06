@@ -1,0 +1,13 @@
+{
+  "categories": { "correctness": "off" },
+  "rules": {},
+  "overrides": [
+    {
+      "files": ["**/client-v2/**/*.{ts,tsx,js,jsx}"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["@nocobase/client", "@nocobase/client/*", "**/client/**"] }]
+      }
+    }
+  ],
+  "ignorePatterns": ["**/node_modules/**", "**/__tests__/**", "**/lib/**", "**/dist/**", "**/esm/**"]
+}
