@@ -10,12 +10,13 @@ The repository already had a root `users` table with a free-string `role` column
 
 1. **Membership rows hold the grants.** A `memberships` row links one Better Auth user to one application. It carries `status` and `grants`, an array of capability literals. There is no separate role table and no policy language.
 2. **`users.role` is not used.** The legacy `users` and `sessions` tables stay in place until consumer tracing proves they can be retired.
-3. **`applicationId` is only a lookup key.** The server finds the caller's own membership for that application with `requireApplicationPrincipal`. Organization, grants and membership ID always come from that row. No public function accepts an actor, role, organization or auth user ID; strict argument validators reject extra keys.
-4. **One denial code for every outsider.** Nonmember, inactive, foreign-organization and guessed applications all return `APPLICATION_ACCESS_DENIED`.
+3. **`applicationId` is only a lookup key.** The server finds the caller's own membership for that application with `requireApplicationPrincipal`. Grants and membership ID come from that row. The organization comes from the application document, and a row whose stored organization differs from it is denied. No public function accepts an actor, role, organization or auth user ID; strict argument validators reject extra keys.
+4. **One denial code for every outsider.** Nonmember, inactive, foreign-organization, organization-mismatched and guessed applications all return `APPLICATION_ACCESS_DENIED`.
 5. **No public member creation.** Only the internal `fixtures:upsertMember` seed creates organizations, applications and memberships in M1. This avoids an email-enumeration path.
-6. **`manageMembers` is seed-only, and admins cannot administer themselves.** `assignGrant` and `revokeGrant` accept only the four assignable capabilities. Every admin mutation compares the target's `authUserId` with the caller's and returns `SELF_ADMINISTRATION_DENIED` on a match. A target in another application returns `MEMBERSHIP_NOT_FOUND`.
-7. **Builder access is not record access.** `configureApplication` and `readApplicationRecords` are separate grants.
-8. **Revocation is checked on every call.** The principal is resolved for every query and mutation and nothing is memoized or put in the session token.
+6. **`manageMembers` is seed-only, and admins cannot administer themselves or each other.** `assignGrant` and `revokeGrant` accept only the four assignable capabilities. Every admin mutation compares the target's `authUserId` with the caller's and returns `SELF_ADMINISTRATION_DENIED` on a match. A target that holds `manageMembers` returns `PERMISSION_DENIED`, so only the fixture seed changes an admin. A target in another application returns `MEMBERSHIP_NOT_FOUND`.
+7. **Membership lists fail instead of truncating.** `listMine` and `listMembers` return at most 100 rows and throw `MEMBERSHIP_LIST_LIMIT_EXCEEDED` when a 101st exists.
+8. **Builder access is not record access.** `configureApplication` and `readApplicationRecords` are separate grants.
+9. **Revocation is checked on every call.** The principal is resolved for every query and mutation and nothing is memoized or put in the session token.
 
 ## Consequences
 

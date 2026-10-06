@@ -242,7 +242,7 @@ The single row that links one **Auth user** to one **Application** (`memberships
 _Avoid_: role assignment, user record
 
 **Application principal**:
-The server-resolved actor for one call: the auth user, the membership ID, the application, the organization and the grants. Every call resolves it again from the caller's own membership row. The membership ID is the principal that later tickets store, for example as `requesterMembershipId`.
+The server-resolved actor for one call: the auth user, the membership ID, the application, the organization and the grants. Every call resolves it again from the caller's own membership row. The organization comes from the application, and a row whose stored organization differs is denied. The membership ID is the principal that later tickets store, for example as `requesterMembershipId`.
 _Avoid_: current user, actor argument
 
 **Membership status**:
@@ -254,7 +254,7 @@ One literal on a membership's `grants` list: `configureApplication`, `submitRequ
 _Avoid_: role (as a free string), permission level
 
 **Membership admin**:
-An active member with `manageMembers`. They can list members, change other members' status, and assign or revoke the four assignable grants. They cannot change their own membership.
+An active member with `manageMembers`. They can list members, change other members' status, and assign or revoke the four assignable grants. They cannot change their own membership or another admin's; only the fixture seed changes an admin.
 _Avoid_: owner, superuser
 
 **Server-owned field**:
@@ -277,4 +277,4 @@ _Avoid_: sign-out, logout
 
 - **"role"** meant a free string (`users.role` in the legacy table) and a set of capabilities. Resolved: the legacy `users.role` column is never read. Access comes only from **Capability grants** on a **Membership**.
 - **"user ID"** meant the Better Auth `_id` and the membership `_id`. Resolved: `authUserId` names the identity; `membershipId` names the **Application principal**. They are different values.
-- **"not found" vs "denied"** for applications. Resolved: nonmember, inactive, foreign-organization and guessed applications all return `APPLICATION_ACCESS_DENIED`, so a caller cannot tell them apart.
+- **"not found" vs "denied"** for applications. Resolved: nonmember, inactive, foreign-organization, organization-mismatched and guessed applications all return `APPLICATION_ACCESS_DENIED`, so a caller cannot tell them apart.
