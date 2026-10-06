@@ -165,3 +165,27 @@ input {
   margin-bottom: 8px;
   font-weight: 600;
 }
+
+.demo-card-heading {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.demo-builder-field {
+  margin: 0;
+  padding: 12px 16px 16px;
+  border: 1px solid #e5eaf2;
+  border-radius: 12px;
+}
+
+.demo-builder-field legend {
+  padding: 0 6px;
+  font-weight: 600;
+}
+
+.demo-builder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  column-gap: 16px;
+}
