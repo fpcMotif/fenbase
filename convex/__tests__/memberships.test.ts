@@ -287,6 +287,20 @@ describe('setMemberStatus', () => {
   });
 
   it.each([
+    ['setMemberStatus', setMemberStatus, { status: 'inactive' }],
+    ['assignGrant', assignGrant, { capability: 'reviewRequests' }],
+    ['revokeGrant', revokeGrant, { capability: 'submitRequests' }],
+  ])('%s denies an admin changing a peer admin’s membership without writing', async (_name, fn, change) => {
+    const ctx = fixtureContext([membership('m2', 'user-m2', ['submitRequests', 'manageMembers'])]);
+    signIn('user-m');
+    await expectCode(
+      invokeHandler(fn, ctx, { applicationId: APP_1, membershipId: 'memberships:m2', ...change }),
+      'PERMISSION_DENIED',
+    );
+    expectNoWrites(ctx);
+  });
+
+  it.each([
     ['a known membership in another organization', 'memberships:z'],
     ['a guessed membership id', 'memberships:999'],
   ])('hides %s from the admin without writing', async (_label, membershipId) => {

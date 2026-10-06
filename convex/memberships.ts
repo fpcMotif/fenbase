@@ -4,7 +4,8 @@ import { mutation, query, type MutationCtx } from './_generated/server';
 import { requireUser } from './auth';
 import {
   applicationAccessDenied,
-  assertCanManageMember,
+  assertHasManageMembers,
+  assertManageableTarget,
   canConfigureApplication,
   canReadAllRecords,
   membershipNotFound,
@@ -64,7 +65,7 @@ export const listMembers = query({
   returns: v.array(memberSummaryValidator),
   handler: async (ctx, args) => {
     const principal = await requireApplicationPrincipal(ctx, args.applicationId);
-    assertCanManageMember(principal);
+    assertHasManageMembers(principal);
     const members = await ctx.db
       .query('memberships')
       .withIndex('by_application', (q) => q.eq('applicationId', principal.applicationId))
@@ -88,10 +89,10 @@ async function requireManagedMember(
   membershipId: Id<'memberships'>,
 ): Promise<Doc<'memberships'>> {
   const principal = await requireApplicationPrincipal(ctx, applicationId);
-  assertCanManageMember(principal);
+  assertHasManageMembers(principal);
   const target = await ctx.db.get(membershipId);
   if (!target) throw membershipNotFound();
-  assertCanManageMember(principal, target);
+  assertManageableTarget(principal, target);
   return target;
 }
 
