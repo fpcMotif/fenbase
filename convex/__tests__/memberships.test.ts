@@ -533,7 +533,13 @@ describe('membership fixtures', () => {
 
     const removed = await invokeHandler(removeOrganization, ctx, { organizationKey: 'fixture-org-2' });
 
-    expect(removed).toEqual({ organizations: 1, applications: 1, memberships: 1 });
+    expect(removed).toEqual({
+      organizations: 1,
+      applications: 1,
+      memberships: 1,
+      definitions: 0,
+      definitionVersions: 0,
+    });
     expect(ctx.read('organizations', ORG_2)).toBeNull();
     expect(ctx.read('memberships', 'memberships:z')).toBeNull();
     expect(ctx.read('organizations', ORG_1)).not.toBeNull();
@@ -542,6 +548,8 @@ describe('membership fixtures', () => {
       organizations: 0,
       applications: 0,
       memberships: 0,
+      definitions: 0,
+      definitionVersions: 0,
     });
   });
 
@@ -567,7 +575,13 @@ describe('membership fixtures', () => {
 
     const removed = await invokeHandler(removeOrganization, ctx, { organizationKey: 'fixture-org-2' });
 
-    expect(removed).toEqual({ organizations: 1, applications: 12, memberships: 600 });
+    expect(removed).toEqual({
+      organizations: 1,
+      applications: 12,
+      memberships: 600,
+      definitions: 0,
+      definitionVersions: 0,
+    });
     expect(ctx.counts.deletes).toBe(613);
   });
 

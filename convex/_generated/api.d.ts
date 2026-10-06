@@ -9,8 +9,10 @@
  */
 
 import type * as __tests___helpers from '../__tests__/helpers.js';
+import type * as applicationDefinitions from '../applicationDefinitions.js';
 import type * as auth from '../auth.js';
 import type * as collections from '../collections.js';
+import type * as definitionModel from '../definitionModel.js';
 import type * as demo from '../demo.js';
 import type * as demoValidation from '../demoValidation.js';
 import type * as fixtures from '../fixtures.js';
@@ -27,8 +29,10 @@ import type { ApiFromModules, FilterApi, FunctionReference } from 'convex/server
 
 declare const fullApi: ApiFromModules<{
   '__tests__/helpers': typeof __tests___helpers;
+  applicationDefinitions: typeof applicationDefinitions;
   auth: typeof auth;
   collections: typeof collections;
+  definitionModel: typeof definitionModel;
   demo: typeof demo;
   demoValidation: typeof demoValidation;
   fixtures: typeof fixtures;
