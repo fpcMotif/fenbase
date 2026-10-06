@@ -1,4 +1,11 @@
-export type TableName = 'demoCollections' | 'demoRecords' | 'demoWorkflows' | 'demoWorkflowRuns';
+export type TableName =
+  | 'demoCollections'
+  | 'demoRecords'
+  | 'demoWorkflows'
+  | 'demoWorkflowRuns'
+  | 'organizations'
+  | 'applications'
+  | 'memberships';
 
 export interface TestDoc extends Record<string, unknown> {
   _id: string;
@@ -32,7 +39,15 @@ export interface TestContext {
 
 export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}): TestContext {
   const tables = new Map<TableName, Map<string, TestDoc>>();
-  const tableNames: TableName[] = ['demoCollections', 'demoRecords', 'demoWorkflows', 'demoWorkflowRuns'];
+  const tableNames: TableName[] = [
+    'demoCollections',
+    'demoRecords',
+    'demoWorkflows',
+    'demoWorkflowRuns',
+    'organizations',
+    'applications',
+    'memberships',
+  ];
   for (const table of tableNames) {
     tables.set(table, new Map((seed[table] ?? []).map((doc) => [doc._id, doc])));
   }

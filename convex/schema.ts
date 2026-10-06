@@ -1,7 +1,31 @@
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
+import { capabilityValidator, membershipStatusValidator } from './membershipValidators';
 
 export default defineSchema({
+  organizations: defineTable({
+    key: v.string(),
+    name: v.string(),
+  }).index('by_key', ['key']),
+
+  applications: defineTable({
+    organizationId: v.id('organizations'),
+    key: v.string(),
+    name: v.string(),
+  }).index('by_organization_key', ['organizationId', 'key']),
+
+  memberships: defineTable({
+    authUserId: v.string(),
+    applicationId: v.id('applications'),
+    organizationId: v.id('organizations'),
+    status: membershipStatusValidator,
+    grants: v.array(capabilityValidator),
+    updatedAt: v.number(),
+  })
+    .index('by_auth_user_application', ['authUserId', 'applicationId'])
+    .index('by_auth_user', ['authUserId'])
+    .index('by_application', ['applicationId']),
+
   demoCollections: defineTable({
     ownerId: v.string(),
     name: v.string(),
