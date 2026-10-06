@@ -218,3 +218,63 @@ _Avoid_: initializer (that's the v1 term `useInitializers`)
 **Unmigrated-node placeholder**:
 In the modern canvas, a node whose Instruction still has only `fieldset` (no `FieldsetLoader`) renders its card normally (topology is intact) but its config drawer shows a placeholder ("config UI not yet migrated"), not a Formily form. This keeps the modern canvas shippable before any config UI migrates — the two axes stay orthogonal. Rendering Formily as a fallback is forbidden (would drag the Formily runtime into client-v2).
 _Avoid_: fallback form, legacy drawer (the modern canvas never renders `fieldset`)
+
+# Application Membership
+
+Who may use the Convex reference application, and what they may do in it. Seeded by issue #14 (see ADR-0005 and `docs/migration/membership-14.md`).
+
+## Language
+
+**Auth user**:
+A Better Auth identity, named by its component `_id` (`authUserId`). It proves who signed in. It grants nothing by itself.
+_Avoid_: user role, account permissions
+
+**Organization**:
+A tenant that owns applications (`organizations` table, unique `key`). M1 fixtures use keys that start with `fixture-`.
+_Avoid_: department, company (in code)
+
+**Application**:
+One configurable business application inside an organization (`applications` table). M1 has one: `leaveRequests`.
+_Avoid_: app (when "the demo frontend" could be meant)
+
+**Membership**:
+The single row that links one **Auth user** to one **Application** (`memberships` table). It holds a status and the grants.
+_Avoid_: role assignment, user record
+
+**Application principal**:
+The server-resolved actor for one call: the auth user, the membership ID, the application, the organization and the grants. Every call resolves it again from the caller's own membership row. The membership ID is the principal that later tickets store, for example as `requesterMembershipId`.
+_Avoid_: current user, actor argument
+
+**Membership status**:
+`active` or `inactive`. Only an active membership resolves to a principal.
+_Avoid_: enabled, disabled, banned
+
+**Capability grant**:
+One literal on a membership's `grants` list: `configureApplication`, `submitRequests`, `reviewRequests`, `readApplicationRecords` or `manageMembers`. Grants are never caller-supplied strings. `manageMembers` is given only by the internal fixture seed.
+_Avoid_: role (as a free string), permission level
+
+**Membership admin**:
+An active member with `manageMembers`. They can list members, change other members' status, and assign or revoke the four assignable grants. They cannot change their own membership.
+_Avoid_: owner, superuser
+
+**Server-owned field**:
+A field that no public argument can set. For memberships: `authUserId`, `applicationId`, `organizationId`, `updatedAt` and `manageMembers`. For later request records: requester, organization, state, version and decision.
+_Avoid_: hidden field, read-only field
+
+**Revocation**:
+Making a membership inactive or removing a grant. The Better Auth session stays valid. The next query or mutation is denied because the principal is resolved on every call.
+_Avoid_: sign-out, logout
+
+## Relationships
+
+- An **Auth user** has at most one **Membership** per **Application**. A duplicate row makes resolution fail closed.
+- A **Membership** belongs to one **Application**, and its organization is copied from that application by the server.
+- An **Application principal** exists only for an active **Membership**. The `applicationId` argument is only a lookup key into the caller's own membership.
+- `configureApplication` does not imply `readApplicationRecords`. A builder needs both to see every record.
+- A **Membership admin** can only reach members of the application they resolved into.
+
+## Flagged ambiguities
+
+- **"role"** meant a free string (`users.role` in the legacy table) and a set of capabilities. Resolved: the legacy `users.role` column is never read. Access comes only from **Capability grants** on a **Membership**.
+- **"user ID"** meant the Better Auth `_id` and the membership `_id`. Resolved: `authUserId` names the identity; `membershipId` names the **Application principal**. They are different values.
+- **"not found" vs "denied"** for applications. Resolved: nonmember, inactive, foreign-organization and guessed applications all return `APPLICATION_ACCESS_DENIED`, so a caller cannot tell them apart.
