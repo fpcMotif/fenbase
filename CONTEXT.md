@@ -318,7 +318,7 @@ The draft's `reviewerMembershipId`: an active membership of the same application
 _Avoid_: approver user, reviewer email
 
 **Calendar date**:
-A `YYYY-MM-DD` string for a `date` field, checked as a real date without time-zone conversion.
+A `YYYY-MM-DD` string for a `date` field. Record validation (#16) checks it as a real date without time-zone conversion.
 _Avoid_: timestamp, datetime
 
 ## Relationships
