@@ -7,6 +7,7 @@ import type { Capability } from './membershipValidators';
 export type ApplicationPrincipal = {
   authUserId: string;
   membershipId: Id<'memberships'>;
+  application: Doc<'applications'>;
   applicationId: Id<'applications'>;
   organizationId: Id<'organizations'>;
   grants: ReadonlySet<Capability>;
@@ -30,13 +31,14 @@ export async function requireApplicationPrincipal(
     .unique();
   if (!membership || membership.status !== 'active') throw applicationAccessDenied();
   const application = await ctx.db.get(membership.applicationId);
-  if (!application) throw applicationAccessDenied();
+  if (!application || application.organizationId !== membership.organizationId) throw applicationAccessDenied();
 
   return {
     authUserId,
     membershipId: membership._id,
-    applicationId: membership.applicationId,
-    organizationId: membership.organizationId,
+    application,
+    applicationId: application._id,
+    organizationId: application.organizationId,
     grants: new Set(membership.grants),
   };
 }
@@ -49,20 +51,26 @@ export function canReadAllRecords(principal: ApplicationPrincipal): boolean {
   return principal.grants.has('readApplicationRecords');
 }
 
-export function assertCanManageMember(principal: ApplicationPrincipal, target?: Doc<'memberships'>): void {
+function permissionDenied(message: string): ConvexError<{ code: string; message: string }> {
+  return new ConvexError({ code: 'PERMISSION_DENIED', message });
+}
+
+export function assertHasManageMembers(principal: ApplicationPrincipal): void {
   if (!principal.grants.has('manageMembers')) {
-    throw new ConvexError({
-      code: 'PERMISSION_DENIED',
-      message: 'You do not have permission to manage members of this application',
-    });
+    throw permissionDenied('You do not have permission to manage members of this application');
   }
-  if (!target) return;
+}
+
+export function assertManageableTarget(principal: ApplicationPrincipal, target: Doc<'memberships'>): void {
   if (target.applicationId !== principal.applicationId) throw membershipNotFound();
   if (target.authUserId === principal.authUserId) {
     throw new ConvexError({
       code: 'SELF_ADMINISTRATION_DENIED',
       message: 'You cannot change your own membership',
     });
+  }
+  if (target.grants.includes('manageMembers')) {
+    throw permissionDenied('Membership administrators can only be changed by the fixture seed');
   }
 }
 

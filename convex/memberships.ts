@@ -4,7 +4,8 @@ import { mutation, query, type MutationCtx } from './_generated/server';
 import { requireUser } from './auth';
 import {
   applicationAccessDenied,
-  assertCanManageMember,
+  assertHasManageMembers,
+  assertManageableTarget,
   canConfigureApplication,
   canReadAllRecords,
   membershipNotFound,
@@ -12,8 +13,16 @@ import {
 } from './membershipModel';
 import { assignableCapabilityValidator, capabilityValidator, membershipStatusValidator } from './membershipValidators';
 
-const MAX_MEMBERSHIPS_PER_USER = 100;
-export const MAX_MEMBERS_PER_PAGE = 101;
+const MAX_LISTED_MEMBERSHIPS = 100;
+
+function assertWithinListLimit(rows: readonly unknown[]): void {
+  if (rows.length > MAX_LISTED_MEMBERSHIPS) {
+    throw new ConvexError({
+      code: 'MEMBERSHIP_LIST_LIMIT_EXCEEDED',
+      message: `Membership lists are limited to ${MAX_LISTED_MEMBERSHIPS} rows`,
+    });
+  }
+}
 
 export const listMine = query({
   args: {},
@@ -30,15 +39,16 @@ export const listMine = query({
     const authUserId = await requireUser(ctx);
     const memberships = await ctx.db
       .query('memberships')
-      .withIndex('by_auth_user', (q) => q.eq('authUserId', authUserId))
-      .take(MAX_MEMBERSHIPS_PER_USER);
+      .withIndex('by_auth_user_status', (q) => q.eq('authUserId', authUserId).eq('status', 'active'))
+      .take(MAX_LISTED_MEMBERSHIPS + 1);
+    assertWithinListLimit(memberships);
 
     const items = [];
     for (const membership of memberships) {
-      if (membership.status !== 'active') continue;
       const application = await ctx.db.get(membership.applicationId);
-      const organization = await ctx.db.get(membership.organizationId);
-      if (!application || !organization) continue;
+      if (!application || application.organizationId !== membership.organizationId) continue;
+      const organization = await ctx.db.get(application.organizationId);
+      if (!organization) continue;
       items.push({
         membershipId: membership._id,
         applicationId: membership.applicationId,
@@ -63,11 +73,12 @@ export const listMembers = query({
   returns: v.array(memberSummaryValidator),
   handler: async (ctx, args) => {
     const principal = await requireApplicationPrincipal(ctx, args.applicationId);
-    assertCanManageMember(principal);
+    assertHasManageMembers(principal);
     const members = await ctx.db
       .query('memberships')
       .withIndex('by_application', (q) => q.eq('applicationId', principal.applicationId))
-      .take(MAX_MEMBERS_PER_PAGE);
+      .take(MAX_LISTED_MEMBERSHIPS + 1);
+    assertWithinListLimit(members);
     return members.map(toMemberSummary);
   },
 });
@@ -87,10 +98,10 @@ async function requireManagedMember(
   membershipId: Id<'memberships'>,
 ): Promise<Doc<'memberships'>> {
   const principal = await requireApplicationPrincipal(ctx, applicationId);
-  assertCanManageMember(principal);
+  assertHasManageMembers(principal);
   const target = await ctx.db.get(membershipId);
   if (!target) throw membershipNotFound();
-  assertCanManageMember(principal, target);
+  assertManageableTarget(principal, target);
   return target;
 }
 
@@ -167,9 +178,9 @@ export const getMyAccess = query({
   }),
   handler: async (ctx, args) => {
     const principal = await requireApplicationPrincipal(ctx, args.applicationId);
-    const application = await ctx.db.get(principal.applicationId);
+    const { application } = principal;
     const organization = await ctx.db.get(principal.organizationId);
-    if (!application || !organization) throw applicationAccessDenied();
+    if (!organization) throw applicationAccessDenied();
 
     return {
       membershipId: principal.membershipId,

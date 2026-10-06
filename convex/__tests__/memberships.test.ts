@@ -137,6 +137,14 @@ describe('application principal', () => {
     await expectCode(invokeHandler(getMyAccess, ctx, { applicationId: 'applications:9' }), 'APPLICATION_ACCESS_DENIED');
   });
 
+  it('denies a membership whose stored organization differs from its application’s organization', async () => {
+    const ctx = fixtureContext([membership('x', 'user-x', ['manageMembers'], { organizationId: ORG_2 })]);
+    signIn('user-x');
+    await expectCode(invokeHandler(getMyAccess, ctx, { applicationId: APP_1 }), 'APPLICATION_ACCESS_DENIED');
+    await expectCode(invokeHandler(listMembers, ctx, { applicationId: APP_1 }), 'APPLICATION_ACCESS_DENIED');
+    expect(await invokeHandler(listMine, ctx, {})).toEqual([]);
+  });
+
   it('fails closed when one user has two rows for the same application', async () => {
     const ctx = fixtureContext([membership('a2', 'user-a', ['manageMembers'])]);
     signIn('user-a');
@@ -164,6 +172,25 @@ describe('listMine', () => {
         grants: ['submitRequests'],
       },
     ]);
+  });
+
+  it('still lists an active membership behind more than 100 inactive ones', async () => {
+    const inactive = Array.from({ length: 150 }, (_, index) =>
+      membership(`q-${index}`, 'user-q', [], { applicationId: `applications:old-${index}`, status: 'inactive' }),
+    );
+    const ctx = fixtureContext([...inactive, membership('q', 'user-q', ['submitRequests'])]);
+    signIn('user-q');
+    expect(await invokeHandler(listMine, ctx, {})).toEqual([
+      expect.objectContaining({ membershipId: 'memberships:q', applicationId: APP_1 }),
+    ]);
+  });
+
+  it('rejects more than 100 active memberships instead of truncating them', async () => {
+    const active = Array.from({ length: 101 }, (_, index) =>
+      membership(`q-${index}`, 'user-q', [], { applicationId: `applications:many-${index}` }),
+    );
+    signIn('user-q');
+    await expectCode(invokeHandler(listMine, fixtureContext(active), {}), 'MEMBERSHIP_LIST_LIMIT_EXCEEDED');
   });
 
   it('returns nothing for a signed-in nonmember and rejects an anonymous caller', async () => {
@@ -211,11 +238,20 @@ describe('listMembers', () => {
     await expectUnauthenticated(invokeHandler(listMembers, fixtureContext(), { applicationId: APP_1 }));
   });
 
-  it('returns at most 101 rows', async () => {
-    const extra = Array.from({ length: 120 }, (_, index) => membership(`extra-${index}`, `user-extra-${index}`, []));
+  it('lists 100 members in full', async () => {
+    const extra = Array.from({ length: 95 }, (_, index) => membership(`extra-${index}`, `user-extra-${index}`, []));
     signIn('user-m');
     const members = await invokeHandler(listMembers, fixtureContext(extra), { applicationId: APP_1 });
-    expect(members).toHaveLength(101);
+    expect(members).toHaveLength(100);
+  });
+
+  it('rejects a member list longer than 100 instead of truncating it', async () => {
+    const extra = Array.from({ length: 96 }, (_, index) => membership(`extra-${index}`, `user-extra-${index}`, []));
+    signIn('user-m');
+    await expectCode(
+      invokeHandler(listMembers, fixtureContext(extra), { applicationId: APP_1 }),
+      'MEMBERSHIP_LIST_LIMIT_EXCEEDED',
+    );
   });
 });
 
@@ -274,6 +310,20 @@ describe('setMemberStatus', () => {
     await expectCode(
       invokeHandler(setMemberStatus, ctx, { applicationId: APP_1, membershipId: 'memberships:m', status: 'inactive' }),
       'SELF_ADMINISTRATION_DENIED',
+    );
+    expectNoWrites(ctx);
+  });
+
+  it.each([
+    ['setMemberStatus', setMemberStatus, { status: 'inactive' }],
+    ['assignGrant', assignGrant, { capability: 'reviewRequests' }],
+    ['revokeGrant', revokeGrant, { capability: 'submitRequests' }],
+  ])('%s denies an admin changing a peer admin’s membership without writing', async (_name, fn, change) => {
+    const ctx = fixtureContext([membership('m2', 'user-m2', ['submitRequests', 'manageMembers'])]);
+    signIn('user-m');
+    await expectCode(
+      invokeHandler(fn, ctx, { applicationId: APP_1, membershipId: 'memberships:m2', ...change }),
+      'PERMISSION_DENIED',
     );
     expectNoWrites(ctx);
   });
@@ -493,5 +543,47 @@ describe('membership fixtures', () => {
       applications: 0,
       memberships: 0,
     });
+  });
+
+  it('removes every membership and application of a large fixture organization before the organization', async () => {
+    const applications = Array.from({ length: 12 }, (_, index) => ({
+      _id: `applications:big-${index}`,
+      _creationTime: 1,
+      organizationId: ORG_2,
+      key: `app-${index}`,
+      name: `App ${index}`,
+    }));
+    const members = Array.from({ length: 600 }, (_, index) =>
+      membership(`big-${index}`, `user-big-${index}`, [], {
+        applicationId: `applications:big-${index % 2}`,
+        organizationId: ORG_2,
+      }),
+    );
+    const ctx = createContext({
+      organizations: [{ _id: ORG_2, _creationTime: 1, key: 'fixture-org-2', name: 'Fixture Org Two' }],
+      applications,
+      memberships: members,
+    });
+
+    const removed = await invokeHandler(removeOrganization, ctx, { organizationKey: 'fixture-org-2' });
+
+    expect(removed).toEqual({ organizations: 1, applications: 12, memberships: 600 });
+    expect(ctx.counts.deletes).toBe(613);
+  });
+
+  it('rejects a non-fixture organization key on removal without writing', async () => {
+    const ctx = fixtureContext();
+    await expectCode(
+      invokeHandler(removeOrganization, ctx, { organizationKey: 'acme' }),
+      'FIXTURE_ORGANIZATION_KEY_INVALID',
+    );
+    expectNoWrites(ctx);
+  });
+
+  it('does not rewrite a membership when the same grants are seeded in another order', async () => {
+    const ctx = createContext();
+    await invokeHandler(upsertMember, ctx, { ...seedA, capabilities: ['submitRequests', 'reviewRequests'] });
+    await invokeHandler(upsertMember, ctx, { ...seedA, capabilities: ['reviewRequests', 'submitRequests'] });
+    expect(ctx.counts.patches).toBe(0);
   });
 });

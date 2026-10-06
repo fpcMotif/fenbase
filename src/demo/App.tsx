@@ -85,6 +85,12 @@ const actionErrorKeys = new Map([
   ['RECORD_QUERY_FILTER_COUNT_INVALID', 'records.queryFilterCount'],
   ['RECORD_QUERY_SORT_INVALID', 'records.querySortInvalid'],
   ['RECORD_QUERY_PAGE_INVALID', 'records.queryPageInvalid'],
+  ['APPLICATION_ACCESS_DENIED', 'membershipErrors.APPLICATION_ACCESS_DENIED'],
+  ['PERMISSION_DENIED', 'membershipErrors.PERMISSION_DENIED'],
+  ['SELF_ADMINISTRATION_DENIED', 'membershipErrors.SELF_ADMINISTRATION_DENIED'],
+  ['MEMBERSHIP_NOT_FOUND', 'membershipErrors.MEMBERSHIP_NOT_FOUND'],
+  ['MEMBERSHIP_INACTIVE', 'membershipErrors.MEMBERSHIP_INACTIVE'],
+  ['MEMBERSHIP_LIST_LIMIT_EXCEEDED', 'membershipErrors.MEMBERSHIP_LIST_LIMIT_EXCEEDED'],
 ]);
 
 const defaultRecordQuery: AppliedRecordQuery = {

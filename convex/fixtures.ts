@@ -1,12 +1,25 @@
 import { ConvexError, v } from 'convex/values';
 import { internalMutation } from './_generated/server';
-import { capabilityValidator, membershipStatusValidator } from './membershipValidators';
+import { capabilityValidator, membershipStatusValidator, type Capability } from './membershipValidators';
 
 const FIXTURE_ORGANIZATION_PREFIX = 'fixture-';
 const FIXTURE_APPLICATION_KEY = 'leaveRequests';
 const FIXTURE_APPLICATION_NAME = 'Leave requests';
-const MAX_FIXTURE_APPLICATIONS = 10;
-const MAX_FIXTURE_MEMBERSHIPS = 500;
+const FIXTURE_DELETE_BATCH = 500;
+
+function assertFixtureOrganizationKey(organizationKey: string): void {
+  if (!organizationKey.startsWith(FIXTURE_ORGANIZATION_PREFIX)) {
+    throw new ConvexError({
+      code: 'FIXTURE_ORGANIZATION_KEY_INVALID',
+      message: `Fixture organization keys must start with ${FIXTURE_ORGANIZATION_PREFIX}`,
+    });
+  }
+}
+
+function sameGrants(left: readonly Capability[], right: readonly Capability[]): boolean {
+  const rightSet = new Set(right);
+  return left.length === rightSet.size && left.every((grant) => rightSet.has(grant));
+}
 
 export const upsertMember = internalMutation({
   args: {
@@ -23,12 +36,7 @@ export const upsertMember = internalMutation({
     created: v.object({ organization: v.boolean(), application: v.boolean(), membership: v.boolean() }),
   }),
   handler: async (ctx, args) => {
-    if (!args.organizationKey.startsWith(FIXTURE_ORGANIZATION_PREFIX)) {
-      throw new ConvexError({
-        code: 'FIXTURE_ORGANIZATION_KEY_INVALID',
-        message: `Fixture organization keys must start with ${FIXTURE_ORGANIZATION_PREFIX}`,
-      });
-    }
+    assertFixtureOrganizationKey(args.organizationKey);
     if (new Set(args.capabilities).size !== args.capabilities.length) {
       throw new ConvexError({ code: 'FIXTURE_CAPABILITY_DUPLICATE', message: 'Capabilities must not repeat' });
     }
@@ -61,19 +69,19 @@ export const upsertMember = internalMutation({
         q.eq('authUserId', args.authUserId).eq('applicationId', applicationId),
       )
       .unique();
-    let membershipId = existingMembership?._id;
-    if (!existingMembership) {
-      membershipId = await ctx.db.insert('memberships', {
+    const membershipId =
+      existingMembership?._id ??
+      (await ctx.db.insert('memberships', {
         authUserId: args.authUserId,
         applicationId,
         organizationId,
         status: args.status,
         grants: args.capabilities,
         updatedAt: Date.now(),
-      });
-    } else if (
-      existingMembership.status !== args.status ||
-      existingMembership.grants.join(',') !== args.capabilities.join(',')
+      }));
+    if (
+      existingMembership &&
+      (existingMembership.status !== args.status || !sameGrants(existingMembership.grants, args.capabilities))
     ) {
       await ctx.db.patch(existingMembership._id, {
         status: args.status,
@@ -81,7 +89,6 @@ export const upsertMember = internalMutation({
         updatedAt: Date.now(),
       });
     }
-    if (!membershipId) throw new Error('Fixture membership was not written');
 
     return {
       organizationId,
@@ -100,34 +107,35 @@ export const removeOrganization = internalMutation({
   args: { organizationKey: v.string() },
   returns: v.object({ organizations: v.number(), applications: v.number(), memberships: v.number() }),
   handler: async (ctx, args) => {
+    assertFixtureOrganizationKey(args.organizationKey);
     const removed = { organizations: 0, applications: 0, memberships: 0 };
-    if (!args.organizationKey.startsWith(FIXTURE_ORGANIZATION_PREFIX)) {
-      throw new ConvexError({
-        code: 'FIXTURE_ORGANIZATION_KEY_INVALID',
-        message: `Fixture organization keys must start with ${FIXTURE_ORGANIZATION_PREFIX}`,
-      });
-    }
     const organization = await ctx.db
       .query('organizations')
       .withIndex('by_key', (q) => q.eq('key', args.organizationKey))
       .unique();
     if (!organization) return removed;
 
-    const applications = await ctx.db
-      .query('applications')
-      .withIndex('by_organization_key', (q) => q.eq('organizationId', organization._id))
-      .take(MAX_FIXTURE_APPLICATIONS);
-    for (const application of applications) {
-      const memberships = await ctx.db
-        .query('memberships')
-        .withIndex('by_application', (q) => q.eq('applicationId', application._id))
-        .take(MAX_FIXTURE_MEMBERSHIPS);
-      for (const membership of memberships) {
-        await ctx.db.delete(membership._id);
-        removed.memberships += 1;
+    for (;;) {
+      const applications = await ctx.db
+        .query('applications')
+        .withIndex('by_organization_key', (q) => q.eq('organizationId', organization._id))
+        .take(FIXTURE_DELETE_BATCH);
+      if (applications.length === 0) break;
+      for (const application of applications) {
+        for (;;) {
+          const memberships = await ctx.db
+            .query('memberships')
+            .withIndex('by_application', (q) => q.eq('applicationId', application._id))
+            .take(FIXTURE_DELETE_BATCH);
+          if (memberships.length === 0) break;
+          for (const membership of memberships) {
+            await ctx.db.delete(membership._id);
+            removed.memberships += 1;
+          }
+        }
+        await ctx.db.delete(application._id);
+        removed.applications += 1;
       }
-      await ctx.db.delete(application._id);
-      removed.applications += 1;
     }
     await ctx.db.delete(organization._id);
     removed.organizations += 1;
