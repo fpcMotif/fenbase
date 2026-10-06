@@ -90,6 +90,23 @@ function tableRows(envFile: string, table: string, component?: string): Array<Re
     .map((line) => JSON.parse(line) as Record<string, unknown>);
 }
 
+type FixtureTables = Record<'organizations' | 'applications' | 'memberships', Array<Record<string, unknown>>>;
+
+export function countRemainingFixtureRows(
+  tables: FixtureTables,
+  seededOrganizationIds: ReadonlySet<unknown>,
+): { organizations: number; applications: number; memberships: number } {
+  const fixtureOrganizations = tables.organizations.filter(
+    (row) => seededOrganizationIds.has(row._id) || (typeof row.key === 'string' && row.key.startsWith('fixture-')),
+  );
+  const organizationIds = new Set<unknown>([...seededOrganizationIds, ...fixtureOrganizations.map((row) => row._id)]);
+  return {
+    organizations: fixtureOrganizations.length,
+    applications: tables.applications.filter((row) => organizationIds.has(row.organizationId)).length,
+    memberships: tables.memberships.filter((row) => organizationIds.has(row.organizationId)).length,
+  };
+}
+
 function outcomeOf(error: unknown): string {
   if (error instanceof ConvexError) {
     const data: unknown = error.data;
@@ -202,6 +219,7 @@ async function main(): Promise<void> {
   };
 
   const cleanup: Record<string, unknown> = {};
+  const seededOrganizationIds = new Set<unknown>();
   let failure: unknown;
   const authUsersBefore = tableRows(envFile, 'user', 'betterAuth').length;
 
@@ -252,6 +270,7 @@ async function main(): Promise<void> {
       secondSeed.map((result) => ({ actor: result.actor, membershipId: result.membershipId, created: result.created })),
     );
     const fixtureOrgIds = new Set<unknown>(firstSeed.map(({ result }) => result.organizationId));
+    for (const organizationId of fixtureOrgIds) seededOrganizationIds.add(organizationId);
     const countFixtureRows = () => ({
       organizations: tableRows(envFile, 'organizations').filter((row) => fixtureOrgIds.has(row._id)).length,
       applications: tableRows(envFile, 'applications').filter((row) => fixtureOrgIds.has(row.organizationId)).length,
@@ -267,6 +286,7 @@ async function main(): Promise<void> {
       capabilities: [],
       status: 'active',
     });
+    seededOrganizationIds.add(guess.organizationId);
     labels.set(guess.membershipId, '<membership:guessed>');
     labels.set(guess.applicationId, '<application:guessed>');
     cleanup.guessOrganization = runInternal(envFile, 'fixtures:removeOrganization', {
@@ -532,11 +552,14 @@ async function main(): Promise<void> {
     const result = await target.auth.signOut();
     cleanup[`signOut.${target.key}`] = result.error ? 'failed' : 'ok';
   }
-  const remainingFixtureRows = {
-    organizations: tableRows(envFile, 'organizations').length,
-    applications: tableRows(envFile, 'applications').length,
-    memberships: tableRows(envFile, 'memberships').length,
-  };
+  const remainingFixtureRows = countRemainingFixtureRows(
+    {
+      organizations: tableRows(envFile, 'organizations'),
+      applications: tableRows(envFile, 'applications'),
+      memberships: tableRows(envFile, 'memberships'),
+    },
+    seededOrganizationIds,
+  );
   check('cleanup.fixture-rows-removed', { organizations: 0, applications: 0, memberships: 0 }, remainingFixtureRows);
   const retained = {
     betterAuthUsers: tableRows(envFile, 'user', 'betterAuth').length,
