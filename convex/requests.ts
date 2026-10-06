@@ -9,7 +9,7 @@ import {
   requireApplicationPrincipal,
   type ApplicationPrincipal,
 } from './membershipModel';
-import { queryRecords, type RecordQueryField } from './recordQuery';
+import { queryRecords, validateRecordQuery, type RecordQueryField } from './recordQuery';
 import {
   MAX_REQUESTS_PER_APPLICATION,
   OPERATION_ID_PATTERN,
@@ -45,6 +45,8 @@ const requestViewValidator = v.object({
   canEdit: v.boolean(),
 });
 
+const READERS_PRESET = 'requesterAssignedReviewerAndReaders';
+
 function isOwn(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
   return row.applicationId === principal.applicationId && row.requesterMembershipId === principal.membershipId;
 }
@@ -53,7 +55,7 @@ function isOwn(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
 function canRead(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
   if (row.applicationId !== principal.applicationId) return false;
   if (row.requesterMembershipId === principal.membershipId) return true;
-  return row.policyPreset === 'requesterAssignedReviewerAndReaders' && canReadAllRecords(principal);
+  return row.policyPreset === READERS_PRESET && canReadAllRecords(principal);
 }
 
 function toView(principal: ApplicationPrincipal, row: Doc<'requests'>) {
@@ -148,7 +150,6 @@ export const create = mutation({
     }
 
     const values = normalizeRequestValues(args.values);
-    const operationFingerprint = await fingerprint(args.definitionVersionId, values);
     const previous = await ctx.db
       .query('requests')
       .withIndex('by_requester_operation', (q) =>
@@ -156,7 +157,7 @@ export const create = mutation({
       )
       .first();
     if (previous) {
-      if (previous.operationFingerprint !== operationFingerprint) {
+      if (previous.operationFingerprint !== (await fingerprint(args.definitionVersionId, values))) {
         throw requestError('RECORD_OPERATION_CONFLICT', 'This operation id was already used for different values');
       }
       return { requestId: previous._id, revision: previous.revision, version: previous.version, created: false };
@@ -200,7 +201,7 @@ export const create = mutation({
       state: 'draft',
       revision: 1,
       operationId: args.operationId,
-      operationFingerprint,
+      operationFingerprint: await fingerprint(version._id, values),
       values,
       updatedAt: Date.now(),
     });
@@ -277,19 +278,21 @@ export const list = query({
       type: field.type,
     }));
 
-    const scope: 'own' | 'application' = canReadAllRecords(principal) ? 'application' : 'own';
-    const rows =
-      scope === 'application'
-        ? await ctx.db
-            .query('requests')
-            .withIndex('by_application_requester', (q) => q.eq('applicationId', principal.applicationId))
-            .take(MAX_REQUESTS_PER_APPLICATION + 1)
-        : await ctx.db
-            .query('requests')
-            .withIndex('by_application_requester', (q) =>
-              q.eq('applicationId', principal.applicationId).eq('requesterMembershipId', principal.membershipId),
-            )
-            .take(MAX_REQUESTS_PER_APPLICATION + 1);
+    const query = { filters: args.filters, sort: args.sort, page: args.page, pageSize: args.pageSize };
+    validateRecordQuery(fields, query);
+
+    const readsAll = canReadAllRecords(principal);
+    const rows = readsAll
+      ? await ctx.db
+          .query('requests')
+          .withIndex('by_application_requester', (q) => q.eq('applicationId', principal.applicationId))
+          .take(MAX_REQUESTS_PER_APPLICATION + 1)
+      : await ctx.db
+          .query('requests')
+          .withIndex('by_application_requester', (q) =>
+            q.eq('applicationId', principal.applicationId).eq('requesterMembershipId', principal.membershipId),
+          )
+          .take(MAX_REQUESTS_PER_APPLICATION + 1);
     if (rows.length > MAX_REQUESTS_PER_APPLICATION) {
       throw requestError(
         'RECORD_BROWSE_LIMIT_EXCEEDED',
@@ -298,12 +301,14 @@ export const list = query({
     }
 
     const readable = rows.filter((row) => canRead(principal, row));
-    const page = queryRecords(readable, fields, {
-      filters: args.filters,
-      sort: args.sort,
-      page: args.page,
-      pageSize: args.pageSize,
-    });
+    // The grant widens the list only where a readers preset applies: the current form, or a request pinned to one.
+    const scope: 'own' | 'application' =
+      readsAll &&
+      (current?.definition.policyPreset === READERS_PRESET ||
+        readable.some((row) => row.policyPreset === READERS_PRESET))
+        ? 'application'
+        : 'own';
+    const page = queryRecords(readable, fields, query);
     return { ...page, items: page.items.map((row) => toView(principal, row)), scope };
   },
 });

@@ -579,11 +579,13 @@ describe('reading requests', () => {
     expect(page).toMatchObject({ total: 1, scope: 'own' });
     expect(page.items.map((item) => item._id)).toEqual([mine.requestId]);
     expect(await listAs(ctx, 'user-b')).toMatchObject({ total: 0, items: [] });
-    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, items: [], scope: 'application' });
+    // The grant adds nothing under this preset, so the reader's list is labelled as their own.
+    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, items: [], scope: 'own' });
   });
 
   it('lets readApplicationRecords read every request only under the readers preset, per pinned version', async () => {
     const ctx = fixtureContext({ app1Preset: 'requesterAssignedReviewerAndReaders' });
+    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, scope: 'application' });
     const first = await createAs(ctx, 'user-a');
     await createAs(ctx, 'user-a2');
     const readerView = await getAs(ctx, 'user-r', first.requestId);
@@ -596,8 +598,15 @@ describe('reading requests', () => {
     const v2 = await createAs(ctx, 'user-a', leave, { definitionVersionId: V2 });
     expect(await getAs(ctx, 'user-r', v2.requestId)).toBeNull();
     const readable = await listAs(ctx, 'user-r');
-    expect(readable.total).toBe(2);
+    expect(readable).toMatchObject({ total: 2, scope: 'application' });
     expect(readable.items.map((item) => item._id)).not.toContain(v2.requestId);
+  });
+
+  it('labels the list as own when the grant reads nothing beyond the reader’s requests', async () => {
+    const ctx = fixtureContext({ app1Preset: 'requesterAssignedReviewerAndReaders' });
+    await seedV2(ctx, 'requesterAndAssignedReviewer');
+    await createAs(ctx, 'user-a', leave, { definitionVersionId: V2 });
+    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, scope: 'own' });
   });
 
   it('keeps a second organization apart even when it holds the same grants', async () => {
@@ -669,6 +678,16 @@ describe('reading requests', () => {
     }
     signIn('user-a');
     await expectCode(invokeHandler(list, ctx, { applicationId: APP_1 }), 'RECORD_BROWSE_LIMIT_EXCEEDED');
+  });
+
+  it('rejects a malformed query before reading any request', async () => {
+    const ctx = fixtureContext();
+    await createAs(ctx, 'user-a');
+    ctx.indexReads.length = 0;
+    const filters = Array.from({ length: 11 }, () => ({ field: 'reason', operator: '$notEmpty' }));
+    await expectCode(listAs(ctx, 'user-a', { filters }), 'RECORD_QUERY_FILTER_COUNT_INVALID');
+    await expectCode(listAs(ctx, 'user-a', { pageSize: 101 }), 'RECORD_QUERY_PAGE_INVALID');
+    expect(ctx.indexReads.filter((read) => read.table === 'requests')).toEqual([]);
   });
 });
 
