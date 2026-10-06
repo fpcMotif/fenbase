@@ -37,7 +37,7 @@ function membership(
   };
 }
 
-function fixtureContext(): TestContext {
+function fixtureContext(versions: TestDoc[] = []): TestContext {
   return createContext({
     organizations: [
       { _id: ORG_1, _creationTime: 1, key: 'fixture-org-1', name: 'Fixture Org One' },
@@ -61,6 +61,7 @@ function fixtureContext(): TestContext {
         organizationId: ORG_2,
       }),
     ],
+    applicationDefinitionVersions: versions,
   });
 }
 
@@ -252,6 +253,21 @@ describe('definition validation', () => {
       'DEFINITION_DATE_RULE_INVALID',
       { field: 'days' },
     ],
+    [
+      'a second date rule, which the builder could not show or keep',
+      leave({
+        fields: [
+          ...leaveFields,
+          { type: 'date', key: 'returnDate', label: { enUS: 'Return', zhCN: '返回' }, required: false },
+        ],
+        dateRules: [
+          { startKey: 'startDate', endKey: 'endDate' },
+          { startKey: 'startDate', endKey: 'returnDate' },
+        ],
+      }),
+      'DEFINITION_DATE_RULE_INVALID',
+      {},
+    ],
     ['an unknown policy preset', leave({ policyPreset: 'everyone' }), 'DEFINITION_POLICY_INVALID', {}],
   ])('rejects %s without a write', async (_label, definition, code, extra) => {
     const ctx = fixtureContext();
@@ -271,6 +287,46 @@ describe('definition validation', () => {
       () => save(ctx, 'user-d', 0, leave({ reviewerMembershipId })),
       'DEFINITION_REVIEWER_INVALID',
     );
+  });
+});
+
+describe('builder state limits', () => {
+  it('opens for an application with more than 100 members and flags the truncated reviewer list', async () => {
+    const ctx = fixtureContext();
+    for (let index = 0; index < 100; index += 1) {
+      await ctx.db.insert('memberships', membership(`bulk${index}`, `bulk-${index}`, ['reviewRequests']));
+    }
+    signIn('user-d');
+    const state = await invokeHandler(getBuilderState, ctx, { applicationId: APP_1 });
+    expect(state).toMatchObject({ reviewerCandidatesTruncated: true, versionsTruncated: false });
+    expect((state as { reviewerCandidates: unknown[] }).reviewerCandidates.length).toBeLessThanOrEqual(100);
+  });
+
+  it('returns the newest 100 versions and flags that older ones exist', async () => {
+    const ctx = fixtureContext(
+      Array.from({ length: 101 }, (_, index) => ({
+        _id: `applicationDefinitionVersions:v${index + 1}`,
+        _creationTime: index + 1,
+        applicationId: APP_1,
+        organizationId: ORG_1,
+        version: index + 1,
+        definition: leave(),
+        sourceRevision: index + 1,
+        publishedAt: index + 1,
+        publishedByMembershipId: 'memberships:d',
+      })),
+    );
+    signIn('user-d');
+    const state = (await invokeHandler(getBuilderState, ctx, { applicationId: APP_1 })) as {
+      versions: Array<{ version: number }>;
+      versionsTruncated: boolean;
+      reviewerCandidatesTruncated: boolean;
+    };
+    expect(state.versionsTruncated).toBe(true);
+    expect(state.reviewerCandidatesTruncated).toBe(false);
+    expect(state.versions).toHaveLength(100);
+    expect(state.versions[0].version).toBe(101);
+    expect(state.versions.at(-1)?.version).toBe(2);
   });
 });
 
@@ -305,6 +361,29 @@ describe('definition lifecycle', () => {
     const published = await publishAs(ctx, 'user-d', 2);
     expect(published).toMatchObject({ version: 1, revision: 3 });
     await expectRejectedWithoutWrites(ctx, () => publishAs(ctx, 'user-d', 3), 'DEFINITION_NOTHING_TO_PUBLISH');
+    expect(ctx.rows('applicationDefinitionVersions')).toHaveLength(1);
+  });
+
+  it('stores labels without surrounding whitespace, so padding cannot slip past the length limit', async () => {
+    const ctx = fixtureContext();
+    const padded = { ...noteField, label: { enUS: ` ${'x'.repeat(120)}${' '.repeat(5000)}`, zhCN: '\t备注 ' } };
+    await save(ctx, 'user-d', 0, leave({ fields: [...leaveFields, padded] }));
+    const [, , , , stored] = (head(ctx).draft as DefinitionInput).fields as Array<{ label: unknown }>;
+    expect(stored.label).toEqual({ enUS: 'x'.repeat(120), zhCN: '备注' });
+
+    const writesBefore = ctx.writes.length;
+    expect(await save(ctx, 'user-d', 1, leave({ fields: [...leaveFields, padded] }))).toEqual({ revision: 1 });
+    expect(ctx.writes.length).toBe(writesBefore);
+  });
+
+  it('refuses to publish a draft that was edited back to the current version', async () => {
+    const ctx = fixtureContext();
+    await save(ctx, 'user-d', 0, leave());
+    await publishAs(ctx, 'user-d', 1);
+    await save(ctx, 'user-d', 2, leave({ reviewerMembershipId: 'memberships:c' }));
+    expect(await save(ctx, 'user-d', 3, leave())).toEqual({ revision: 4 });
+
+    await expectRejectedWithoutWrites(ctx, () => publishAs(ctx, 'user-d', 4), 'DEFINITION_NOTHING_TO_PUBLISH');
     expect(ctx.rows('applicationDefinitionVersions')).toHaveLength(1);
   });
 

@@ -5,7 +5,7 @@ import { v, type Infer } from 'convex/values';
 
 export const MAX_DEFINITION_FIELDS = 30;
 export const MAX_LIST_COLUMNS = 10;
-export const MAX_DATE_RULES = 5;
+export const MAX_DATE_RULES = 1;
 export const MAX_LABEL_LENGTH = 120;
 export const MAX_TEXT_FIELD_LENGTH = 4000;
 export const FIELD_KEY_PATTERN = /^[a-z][a-zA-Z0-9]{0,62}$/;
@@ -22,6 +22,8 @@ export const RESERVED_FIELD_KEYS: readonly string[] = [
   'updatedAt',
   'id',
 ];
+
+export const SYSTEM_LIST_COLUMNS = ['requester'] as const;
 
 export const DEFINITION_FIELD_TYPES = ['text', 'number', 'boolean', 'date'] as const;
 export const POLICY_PRESETS = ['requesterAndAssignedReviewer', 'requesterAssignedReviewerAndReaders'] as const;
@@ -86,27 +88,6 @@ export type PolicyPreset = Infer<typeof policyPresetValidator>;
 export type PublishedKey = Infer<typeof publishedKeyValidator>;
 export type DefinitionIssue = { code: DefinitionErrorCode; field?: string };
 
-const calendarDatePattern = /^(\d{4})-(\d{2})-(\d{2})$/;
-
-function daysInMonth(year: number, month: number): number {
-  if (month === 2) return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28;
-  return [4, 6, 9, 11].includes(month) ? 30 : 31;
-}
-
-export function isCalendarDate(value: string): boolean {
-  const match = calendarDatePattern.exec(value);
-  if (!match) return false;
-  const year = Number(match[1]);
-  const month = Number(match[2]);
-  const day = Number(match[3]);
-  return year >= 1 && month >= 1 && month <= 12 && day >= 1 && day <= daysInMonth(year, month);
-}
-
-export function compareCalendarDates(left: string, right: string): number {
-  if (left === right) return 0;
-  return left < right ? -1 : 1;
-}
-
 function isFieldType(type: unknown): type is DefinitionFieldType {
   return DEFINITION_FIELD_TYPES.some((known) => known === type);
 }
@@ -159,22 +140,17 @@ export function validateDefinition(
     return { code: 'DEFINITION_LIST_COLUMNS_INVALID' };
   const seenColumns = new Set<string>();
   for (const column of listColumns) {
-    if (!types.has(column) || seenColumns.has(column))
-      return { code: 'DEFINITION_LIST_COLUMNS_INVALID', field: column };
+    const known = types.has(column) || SYSTEM_LIST_COLUMNS.some((system) => system === column);
+    if (!known || seenColumns.has(column)) return { code: 'DEFINITION_LIST_COLUMNS_INVALID', field: column };
     seenColumns.add(column);
   }
 
   if (definition.dateRules.length > MAX_DATE_RULES) return { code: 'DEFINITION_DATE_RULE_INVALID' };
-  const seenRules = new Set<string>();
   for (const rule of definition.dateRules) {
     for (const key of [rule.startKey, rule.endKey]) {
       if (types.get(key) !== 'date') return { code: 'DEFINITION_DATE_RULE_INVALID', field: key };
     }
-    const ruleKey = `${rule.startKey}\u0000${rule.endKey}`;
-    if (rule.startKey === rule.endKey || seenRules.has(ruleKey)) {
-      return { code: 'DEFINITION_DATE_RULE_INVALID', field: rule.endKey };
-    }
-    seenRules.add(ruleKey);
+    if (rule.startKey === rule.endKey) return { code: 'DEFINITION_DATE_RULE_INVALID', field: rule.endKey };
   }
 
   if (!POLICY_PRESETS.some((preset) => preset === definition.policyPreset))
@@ -182,6 +158,17 @@ export function validateDefinition(
   return null;
 }
 
-export function publishedKeysOf(definition: Definition): PublishedKey[] {
+export function withTrimmedLabels(definition: Definition): Definition {
+  return {
+    ...definition,
+    fields: definition.fields.map((field) => ({
+      ...field,
+      label: { enUS: field.label.enUS.trim(), zhCN: field.label.zhCN.trim() },
+    })),
+  };
+}
+
+export function publishedKeysOf(definition: Definition | null): PublishedKey[] {
+  if (definition === null) return [];
   return definition.fields.map(({ key, type }) => ({ key, type }));
 }
