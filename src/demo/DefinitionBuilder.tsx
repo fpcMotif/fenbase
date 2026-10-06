@@ -18,7 +18,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import type { TableColumnsType } from 'antd';
+import type { FormRule, TableColumnsType } from 'antd';
 import { useMutation, useQuery } from 'convex/react';
 import type { FunctionReturnType } from 'convex/server';
 import { useTranslation } from 'react-i18next';
@@ -26,113 +26,29 @@ import { api } from '../../convex/_generated/api';
 import type { Id } from '../../convex/_generated/dataModel';
 import {
   DEFINITION_FIELD_TYPES,
+  FIELD_KEY_PATTERN,
   MAX_DEFINITION_FIELDS,
+  MAX_LABEL_LENGTH,
+  MAX_TEXT_FIELD_LENGTH,
   POLICY_PRESETS,
-  type Definition,
-  type DefinitionField,
-  type DefinitionFieldType,
-  type PolicyPreset,
+  SYSTEM_LIST_COLUMNS,
 } from '../../convex/definitionModel';
 import { actionErrorData, actionErrorMessage } from './actionErrors';
+import { runPendingAction } from './pendingAction';
+import {
+  emptyForm,
+  incompleteDateRuleControl,
+  invalidLabelControl,
+  newFieldRow,
+  toDefinition,
+  toFormValues,
+  type BuilderFormValues,
+  type FieldRow,
+} from './definitionForm';
 
 type BuilderApplication = FunctionReturnType<typeof api.memberships.listMine>[number];
 type BuilderState = FunctionReturnType<typeof api.applicationDefinitions.getBuilderState>;
 type VersionSummary = BuilderState['versions'][number];
-
-type FieldRow = {
-  key: string;
-  type: DefinitionFieldType;
-  labelEnUS: string;
-  labelZhCN: string;
-  required: boolean;
-  maxLength?: number | null;
-  min?: number | null;
-  max?: number | null;
-  integer?: boolean;
-};
-
-type BuilderFormValues = {
-  fields: FieldRow[];
-  listColumns: string[];
-  dateRuleStart?: string | null;
-  dateRuleEnd?: string | null;
-  policyPreset: PolicyPreset;
-  reviewerMembershipId?: Id<'memberships'>;
-};
-
-const newFieldRow: FieldRow = {
-  key: '',
-  type: 'text',
-  labelEnUS: '',
-  labelZhCN: '',
-  required: false,
-  maxLength: 500,
-  min: 0,
-  max: 100,
-  integer: true,
-};
-
-const emptyForm: BuilderFormValues = {
-  fields: [newFieldRow],
-  listColumns: [],
-  dateRuleStart: null,
-  dateRuleEnd: null,
-  policyPreset: 'requesterAndAssignedReviewer',
-  reviewerMembershipId: undefined,
-};
-
-function toFormValues(definition: Definition): BuilderFormValues {
-  const [rule] = definition.dateRules;
-  return {
-    fields: definition.fields.map((field) => ({
-      ...newFieldRow,
-      key: field.key,
-      type: field.type,
-      labelEnUS: field.label.enUS,
-      labelZhCN: field.label.zhCN,
-      required: field.required,
-      ...(field.type === 'text' ? { maxLength: field.maxLength } : {}),
-      ...(field.type === 'number' ? { min: field.min, max: field.max, integer: field.integer } : {}),
-    })),
-    listColumns: definition.listColumns,
-    dateRuleStart: rule?.startKey ?? null,
-    dateRuleEnd: rule?.endKey ?? null,
-    policyPreset: definition.policyPreset,
-    reviewerMembershipId: definition.reviewerMembershipId,
-  };
-}
-
-function toField(row: FieldRow): DefinitionField {
-  const base = {
-    key: row.key.trim(),
-    label: { enUS: row.labelEnUS, zhCN: row.labelZhCN },
-    required: Boolean(row.required),
-  };
-  if (row.type === 'text') return { type: 'text', ...base, maxLength: row.maxLength ?? Number.NaN };
-  if (row.type === 'number') {
-    return {
-      type: 'number',
-      ...base,
-      min: row.min ?? Number.NaN,
-      max: row.max ?? Number.NaN,
-      integer: Boolean(row.integer),
-    };
-  }
-  return { type: row.type, ...base };
-}
-
-function toDefinition(values: BuilderFormValues, reviewerMembershipId: Id<'memberships'>): Definition {
-  return {
-    fields: values.fields.map(toField),
-    listColumns: values.listColumns ?? [],
-    dateRules:
-      values.dateRuleStart && values.dateRuleEnd
-        ? [{ startKey: values.dateRuleStart, endKey: values.dateRuleEnd }]
-        : [],
-    policyPreset: values.policyPreset,
-    reviewerMembershipId,
-  };
-}
 
 function membershipReference(membershipId: string): string {
   return membershipId.slice(-6);
@@ -216,9 +132,29 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
   const dateKeys = watchedFields.filter((row) => row?.type === 'date' && row.key?.trim()).map((row) => row.key.trim());
   const fieldLabel = (key: string) => {
     const row = watchedFields.find((candidate) => candidate?.key?.trim() === key);
-    const label = i18n.language === 'zh-CN' ? row?.labelZhCN : row?.labelEnUS;
-    return label?.trim() ? `${label} (${key})` : key;
+    const label = (i18n.language === 'zh-CN' ? row?.labelZhCN : row?.labelEnUS)?.trim();
+    return label ? t('builder.fieldOption', { label, key }) : key;
   };
+  const labelRules: FormRule[] = [
+    { required: true, whitespace: true, message: t('auth.required') },
+    {
+      type: 'string',
+      transform: (value?: string) => value?.trim(),
+      max: MAX_LABEL_LENGTH,
+      message: t('builder.labelTooLong'),
+    },
+  ];
+  const dateRulePairRule = (control: 'dateRuleStart' | 'dateRuleEnd'): FormRule => ({
+    validator: async () => {
+      if (incompleteDateRuleControl(form.getFieldsValue(['dateRuleStart', 'dateRuleEnd'])) === control) {
+        throw new Error(t('builder.dateRulePair'));
+      }
+    },
+  });
+  const listColumnOptions = [
+    ...SYSTEM_LIST_COLUMNS.map((column) => ({ value: column, label: t(`builder.systemColumns.${column}`) })),
+    ...fieldKeys.map((key) => ({ value: key, label: fieldLabel(key) })),
+  ];
   const reviewerLabel = (membershipId: string) => {
     const candidate = state.reviewerCandidates.find((entry) => entry.membershipId === membershipId);
     const reference = t('builder.reviewerOption', { ref: membershipReference(membershipId) });
@@ -255,7 +191,7 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
     if (index < 0) return false;
     const target =
       code === 'DEFINITION_FIELD_LABEL_INVALID'
-        ? 'labelEnUS'
+        ? invalidLabelControl(rows[index])
         : code === 'DEFINITION_FIELD_BOUNDS_INVALID'
           ? 'maxLength'
           : code === 'DEFINITION_FIELD_TYPE_UNKNOWN' || code === 'DEFINITION_FIELD_TYPE_CHANGED'
@@ -266,50 +202,50 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
     return true;
   };
 
-  const handleError = async (error: unknown) => {
+  const handleError = (error: unknown) => {
     const data = actionErrorData(error);
     if (data?.code === 'DEFINITION_REVISION_CONFLICT') {
       setConflictRevision(data.currentRevision ?? 0);
-      return;
+      return undefined;
     }
     const text = actionErrorMessage(error, t);
-    if (!data || !showFieldError(data.code, data.field, text)) await message.error(text);
+    if (data && showFieldError(data.code, data.field, text)) return undefined;
+    return message.error(text);
   };
 
-  const save = async (values: BuilderFormValues) => {
-    if (!values.reviewerMembershipId || baseRevision === null) return;
-    setSaving(true);
-    try {
-      const result = await saveDraft({
+  const save = (values: BuilderFormValues) => {
+    const reviewerMembershipId = values.reviewerMembershipId;
+    if (!reviewerMembershipId || baseRevision === null) return;
+    runPendingAction(setSaving, () =>
+      saveDraft({
         applicationId: application.applicationId,
         expectedRevision: baseRevision,
-        definition: toDefinition(values, values.reviewerMembershipId),
-      });
-      setBaseRevision(result.revision);
-      setDirty(false);
-      await message.success(t('builder.saved', { revision: result.revision }));
-    } catch (error) {
-      await handleError(error);
-    } finally {
-      setSaving(false);
-    }
+        definition: toDefinition(values, reviewerMembershipId),
+      }),
+    )
+      .then((result) => {
+        setBaseRevision(result.revision);
+        setDirty(false);
+        return message.success(t('builder.saved', { revision: result.revision }));
+      })
+      .catch(handleError);
   };
 
-  const publishDraft = async () => {
+  const publishDraft = () => {
     if (!head) return;
-    setPublishing(true);
-    try {
-      const result = await publish({ applicationId: application.applicationId, expectedRevision: head.revision });
-      await message.success(t('builder.published', { version: result.version }));
-    } catch (error) {
-      await handleError(error);
-    } finally {
-      setPublishing(false);
-    }
+    runPendingAction(setPublishing, () =>
+      publish({ applicationId: application.applicationId, expectedRevision: head.revision }),
+    )
+      .then((result) => message.success(t('builder.published', { version: result.version })))
+      .catch(handleError);
   };
 
   const versionColumns: TableColumnsType<VersionSummary> = [
-    { title: t('builder.versionColumn'), dataIndex: 'version', render: (version: number) => `v${version}` },
+    {
+      title: t('builder.versionColumn'),
+      dataIndex: 'version',
+      render: (version: number) => t('builder.versionLabel', { version }),
+    },
     { title: t('builder.revisionColumn'), dataIndex: 'sourceRevision' },
     {
       title: t('builder.publishedAtColumn'),
@@ -366,9 +302,7 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
         layout="vertical"
         initialValues={emptyForm}
         onValuesChange={() => setDirty(true)}
-        onFinish={(values) => {
-          save(values).catch(handleError);
-        }}
+        onFinish={save}
       >
         <Card title={<h3 className="demo-card-heading">{t('builder.fieldsHeading')}</h3>}>
           <Form.List name="fields">
@@ -391,7 +325,7 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
                           extra={locked ? t('builder.publishedLocked') : t('builder.keyHelp')}
                           rules={[
                             { required: true, message: t('auth.required') },
-                            { pattern: /^[a-z][a-zA-Z0-9]{0,62}$/, message: t('builder.keyRule') },
+                            { pattern: FIELD_KEY_PATTERN, message: t('builder.keyRule') },
                           ]}
                         >
                           <Input disabled={locked} autoComplete="off" />
@@ -407,18 +341,10 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
                             }))}
                           />
                         </Form.Item>
-                        <Form.Item
-                          name={[row.name, 'labelEnUS']}
-                          label={t('builder.labelEnUS')}
-                          rules={[{ required: true, whitespace: true, message: t('auth.required') }]}
-                        >
+                        <Form.Item name={[row.name, 'labelEnUS']} label={t('builder.labelEnUS')} rules={labelRules}>
                           <Input lang="en" autoComplete="off" />
                         </Form.Item>
-                        <Form.Item
-                          name={[row.name, 'labelZhCN']}
-                          label={t('builder.labelZhCN')}
-                          rules={[{ required: true, whitespace: true, message: t('auth.required') }]}
-                        >
+                        <Form.Item name={[row.name, 'labelZhCN']} label={t('builder.labelZhCN')} rules={labelRules}>
                           <Input lang="zh-CN" autoComplete="off" />
                         </Form.Item>
                         {current?.type === 'text' && (
@@ -427,7 +353,7 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
                             label={t('builder.maxLength')}
                             rules={[{ required: true, message: t('auth.required') }]}
                           >
-                            <InputNumber min={1} max={4000} precision={0} style={{ width: '100%' }} />
+                            <InputNumber min={1} max={MAX_TEXT_FIELD_LENGTH} precision={0} style={{ width: '100%' }} />
                           </Form.Item>
                         )}
                         {current?.type === 'number' && (
@@ -512,14 +438,16 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
             extra={t('builder.listColumnsHelp')}
             rules={[{ required: true, message: t('auth.required') }]}
           >
-            <Select
-              mode="multiple"
-              optionFilterProp="label"
-              options={fieldKeys.map((key) => ({ value: key, label: fieldLabel(key) }))}
-            />
+            <Select mode="multiple" optionFilterProp="label" options={listColumnOptions} />
           </Form.Item>
           <div className="demo-builder-grid">
-            <Form.Item name="dateRuleStart" label={t('builder.dateRuleStart')} extra={t('builder.dateRuleHelp')}>
+            <Form.Item
+              name="dateRuleStart"
+              label={t('builder.dateRuleStart')}
+              extra={t('builder.dateRuleHelp')}
+              dependencies={['dateRuleEnd']}
+              rules={[dateRulePairRule('dateRuleStart')]}
+            >
               <Select
                 allowClear
                 showSearch
@@ -527,7 +455,12 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
                 options={dateKeys.map((key) => ({ value: key, label: fieldLabel(key) }))}
               />
             </Form.Item>
-            <Form.Item name="dateRuleEnd" label={t('builder.dateRuleEnd')}>
+            <Form.Item
+              name="dateRuleEnd"
+              label={t('builder.dateRuleEnd')}
+              dependencies={['dateRuleStart']}
+              rules={[dateRulePairRule('dateRuleEnd')]}
+            >
               <Select
                 allowClear
                 showSearch
@@ -557,7 +490,11 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
           <Form.Item
             name="reviewerMembershipId"
             label={t('builder.reviewer')}
-            extra={t('builder.reviewerHelp')}
+            extra={
+              state.reviewerCandidatesTruncated
+                ? `${t('builder.reviewerHelp')} ${t('builder.reviewersTruncated')}`
+                : t('builder.reviewerHelp')
+            }
             rules={[{ required: true, message: t('auth.required') }]}
           >
             <Select
@@ -580,9 +517,7 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
             title={t('builder.publishConfirm', { version: nextVersion })}
             okText={t('builder.publish')}
             cancelText={t('builder.cancel')}
-            onConfirm={() => {
-              publishDraft().catch(handleError);
-            }}
+            onConfirm={publishDraft}
             disabled={!canPublish}
           >
             <Button disabled={!canPublish} loading={publishing}>
@@ -604,6 +539,11 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
             pagination={false}
             size="small"
           />
+        )}
+        {state.versionsTruncated && (
+          <Typography.Paragraph className="demo-muted" style={{ marginTop: 12, marginBottom: 0 }}>
+            {t('builder.versionsTruncated')}
+          </Typography.Paragraph>
         )}
       </Card>
     </Space>

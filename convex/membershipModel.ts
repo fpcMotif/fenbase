@@ -73,12 +73,11 @@ export async function isEligibleReviewer(
   membershipId: Id<'memberships'>,
 ): Promise<boolean> {
   const membership = await ctx.db.get(membershipId);
-  return (
-    membership !== null &&
-    membership.applicationId === applicationId &&
-    membership.status === 'active' &&
-    membership.grants.includes('reviewRequests')
-  );
+  return membership !== null && membership.applicationId === applicationId && isActiveReviewer(membership);
+}
+
+export function isActiveReviewer(membership: Doc<'memberships'>): boolean {
+  return membership.status === 'active' && membership.grants.includes('reviewRequests');
 }
 
 export function assertManageableTarget(principal: ApplicationPrincipal, target: Doc<'memberships'>): void {

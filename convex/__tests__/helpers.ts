@@ -63,6 +63,7 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
   const counts = { inserts: 0, patches: 0, deletes: 0 };
   const writes: TestContext['writes'] = [];
   let nextId = 1;
+  let lastCreationTime = 0;
   const getTable = (table: TableName) => {
     const docs = tables.get(table);
     if (!docs) throw new Error(`Unknown table: ${table}`);
@@ -121,7 +122,8 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
     async insert(table, value) {
       counts.inserts += 1;
       const id = `${table}:${nextId++}`;
-      getTable(table).set(id, { ...value, _id: id, _creationTime: Date.now() });
+      lastCreationTime = Math.max(Date.now(), lastCreationTime + 1);
+      getTable(table).set(id, { ...value, _id: id, _creationTime: lastCreationTime });
       writes.push({ table, operation: 'insert', id });
       return id;
     },

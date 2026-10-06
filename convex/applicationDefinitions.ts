@@ -6,12 +6,14 @@ import {
   publishedKeysOf,
   publishedKeyValidator,
   validateDefinition,
+  withTrimmedLabels,
   type Definition,
   type DefinitionErrorCode,
   type PublishedKey,
 } from './definitionModel';
 import {
   assertCanConfigureApplication,
+  isActiveReviewer,
   isEligibleReviewer,
   requireApplicationPrincipal,
   type ApplicationPrincipal,
@@ -41,13 +43,13 @@ async function findHead(
     .unique();
 }
 
-async function currentPublishedKeys(
+async function currentDefinition(
   ctx: QueryCtx | MutationCtx,
   head: Doc<'applicationDefinitions'> | null,
-): Promise<PublishedKey[]> {
-  if (!head?.currentVersionId) return [];
+): Promise<Definition | null> {
+  if (!head?.currentVersionId) return null;
   const current = await ctx.db.get(head.currentVersionId);
-  return current ? publishedKeysOf(current.definition) : [];
+  return current?.definition ?? null;
 }
 
 async function assertValidDefinition(
@@ -108,7 +110,9 @@ export const getBuilderState = query({
       v.null(),
     ),
     versions: v.array(versionSummaryValidator),
+    versionsTruncated: v.boolean(),
     reviewerCandidates: v.array(v.object({ membershipId: v.id('memberships'), isSelf: v.boolean() })),
+    reviewerCandidatesTruncated: v.boolean(),
     publishedKeys: v.array(publishedKeyValidator),
   }),
   handler: async (ctx, args) => {
@@ -119,30 +123,23 @@ export const getBuilderState = query({
       .query('memberships')
       .withIndex('by_application', (q) => q.eq('applicationId', principal.applicationId))
       .take(MAX_LISTED_ROWS + 1);
-    if (members.length > MAX_LISTED_ROWS) {
-      throw new ConvexError({
-        code: 'MEMBERSHIP_LIST_LIMIT_EXCEEDED',
-        message: `Membership lists are limited to ${MAX_LISTED_ROWS} rows`,
-      });
-    }
     const reviewerCandidates = members
-      .filter((member) => member.status === 'active' && member.grants.includes('reviewRequests'))
+      .slice(0, MAX_LISTED_ROWS)
+      .filter(isActiveReviewer)
       .map((member) => ({ membershipId: member._id, isSelf: member._id === principal.membershipId }));
 
     const versionRows = await ctx.db
       .query('applicationDefinitionVersions')
       .withIndex('by_application_version', (q) => q.eq('applicationId', principal.applicationId))
       .order('desc')
-      .take(MAX_LISTED_ROWS);
-    const versions = versionRows
-      .map((row) => ({
-        versionId: row._id,
-        version: row.version,
-        sourceRevision: row.sourceRevision,
-        publishedAt: row.publishedAt,
-        publishedByMembershipId: row.publishedByMembershipId,
-      }))
-      .sort((left, right) => right.version - left.version);
+      .take(MAX_LISTED_ROWS + 1);
+    const versions = versionRows.slice(0, MAX_LISTED_ROWS).map((row) => ({
+      versionId: row._id,
+      version: row.version,
+      sourceRevision: row.sourceRevision,
+      publishedAt: row.publishedAt,
+      publishedByMembershipId: row.publishedByMembershipId,
+    }));
 
     const current = head?.currentVersionId ? await ctx.db.get(head.currentVersionId) : null;
     return {
@@ -154,7 +151,9 @@ export const getBuilderState = query({
         latestVersion: head.latestVersion,
       },
       versions,
+      versionsTruncated: versionRows.length > MAX_LISTED_ROWS,
       reviewerCandidates,
+      reviewerCandidatesTruncated: members.length > MAX_LISTED_ROWS,
       publishedKeys: current ? publishedKeysOf(current.definition) : [],
     };
   },
@@ -200,14 +199,15 @@ export const saveDraft = mutation({
     const head = await findHead(ctx, principal.applicationId);
     const currentRevision = head?.revision ?? 0;
     if (args.expectedRevision !== currentRevision) throw revisionConflict(currentRevision);
-    await assertValidDefinition(ctx, principal, args.definition, await currentPublishedKeys(ctx, head));
+    const definition = withTrimmedLabels(args.definition);
+    await assertValidDefinition(ctx, principal, definition, publishedKeysOf(await currentDefinition(ctx, head)));
 
     const updatedAt = Date.now();
     if (!head) {
       await ctx.db.insert('applicationDefinitions', {
         applicationId: principal.applicationId,
         organizationId: principal.organizationId,
-        draft: args.definition,
+        draft: definition,
         revision: 1,
         publishedRevision: null,
         currentVersionId: null,
@@ -217,11 +217,11 @@ export const saveDraft = mutation({
       });
       return { revision: 1 };
     }
-    if (canonicalJson(head.draft) === canonicalJson(args.definition)) return { revision: head.revision };
+    if (canonicalJson(head.draft) === canonicalJson(definition)) return { revision: head.revision };
 
     const revision = head.revision + 1;
     await ctx.db.patch(head._id, {
-      draft: args.definition,
+      draft: definition,
       revision,
       updatedAt,
       updatedByMembershipId: principal.membershipId,
@@ -242,10 +242,14 @@ export const publish = mutation({
     const head = await findHead(ctx, principal.applicationId);
     if (!head) throw definitionError('DEFINITION_NOT_FOUND', 'Save a draft before publishing');
     if (args.expectedRevision !== head.revision) throw revisionConflict(head.revision);
-    if (head.publishedRevision === head.revision) {
+    const current = await currentDefinition(ctx, head);
+    if (
+      head.publishedRevision === head.revision ||
+      (current !== null && canonicalJson(head.draft) === canonicalJson(current))
+    ) {
       throw definitionError('DEFINITION_NOTHING_TO_PUBLISH', 'The draft has no changes since the last publish');
     }
-    await assertValidDefinition(ctx, principal, head.draft, await currentPublishedKeys(ctx, head));
+    await assertValidDefinition(ctx, principal, head.draft, publishedKeysOf(current));
 
     const now = Date.now();
     const version = head.latestVersion + 1;

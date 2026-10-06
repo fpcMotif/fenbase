@@ -1,11 +1,5 @@
-import { afterEach, describe, expect, it } from 'vitest';
-import {
-  compareCalendarDates,
-  isCalendarDate,
-  validateDefinition,
-  type Definition,
-  type DefinitionField,
-} from '../definitionModel';
+import { describe, expect, it } from 'vitest';
+import { validateDefinition, type Definition, type DefinitionField } from '../definitionModel';
 
 const REVIEWER = 'memberships:b';
 
@@ -44,32 +38,6 @@ function leave(overrides: Partial<Definition> = {}): Definition {
     ...overrides,
   } as Definition;
 }
-
-const originalTimeZone = process.env.TZ;
-afterEach(() => {
-  process.env.TZ = originalTimeZone;
-});
-
-describe('calendar dates', () => {
-  it.each(['UTC', 'Australia/Perth', 'Pacific/Kiritimati', 'America/Los_Angeles'])(
-    'checks real calendar dates without time-zone conversion in %s',
-    (timeZone) => {
-      process.env.TZ = timeZone;
-      expect(isCalendarDate('2028-02-29')).toBe(true);
-      expect(isCalendarDate('2026-02-28')).toBe(true);
-      expect(isCalendarDate('2026-12-31')).toBe(true);
-      expect(isCalendarDate('2026-02-29')).toBe(false);
-      expect(isCalendarDate('2100-02-29')).toBe(false);
-      expect(isCalendarDate('2026-1-5')).toBe(false);
-      expect(isCalendarDate('2026-13-01')).toBe(false);
-      expect(isCalendarDate('2026-04-31')).toBe(false);
-      expect(isCalendarDate('2026-01-01T00:00:00Z')).toBe(false);
-      expect(compareCalendarDates('2026-01-31', '2026-02-01')).toBeLessThan(0);
-      expect(compareCalendarDates('2026-02-01', '2026-02-01')).toBe(0);
-      expect(compareCalendarDates('2027-01-01', '2026-12-31')).toBeGreaterThan(0);
-    },
-  );
-});
 
 describe('validateDefinition', () => {
   it('accepts the leave reference definition', () => {
@@ -191,6 +159,18 @@ describe('validateDefinition', () => {
     ],
   ])('rejects %s with the first error code', (_label, definition, expected) => {
     expect(validateDefinition(definition, [])).toEqual(expected);
+  });
+
+  it('lets the list show the system-owned requester column once, alongside field keys', () => {
+    expect(validateDefinition(leave({ listColumns: ['requester', 'startDate', 'days'] }), [])).toBeNull();
+    expect(validateDefinition(leave({ listColumns: ['startDate', 'requester', 'requester'] }), [])).toEqual({
+      code: 'DEFINITION_LIST_COLUMNS_INVALID',
+      field: 'requester',
+    });
+    expect(validateDefinition(leave({ listColumns: ['requesterMembershipId'] }), [])).toEqual({
+      code: 'DEFINITION_LIST_COLUMNS_INVALID',
+      field: 'requesterMembershipId',
+    });
   });
 
   it('rejects a field type the builder does not support', () => {

@@ -59,10 +59,28 @@ describe('definition builder text', () => {
     }
   });
 
-  it('defines the same builder keys in both languages', () => {
-    const english = leafKeys(i18n.getResourceBundle('en-US', 'translation').builder, 'builder').sort();
-    const chinese = leafKeys(i18n.getResourceBundle('zh-CN', 'translation').builder, 'builder').sort();
+  it.each(['builder', 'nav'])('defines the same %s keys in both languages', (section) => {
+    const english = leafKeys(i18n.getResourceBundle('en-US', 'translation')[section], section).sort();
+    const chinese = leafKeys(i18n.getResourceBundle('zh-CN', 'translation')[section], section).sort();
     expect(english.length).toBeGreaterThan(0);
     expect(chinese).toEqual(english);
+  });
+
+  it('formats version numbers, field options and the system requester column through translations', () => {
+    for (const language of ['en-US', 'zh-CN']) {
+      const t = i18n.getFixedT(language);
+      expect(t('builder.versionLabel', { version: 3 }), language).toContain('3');
+      expect(t('builder.fieldOption', { label: 'Days', key: 'days' }), language).toMatch(/Days.*days/);
+      for (const key of [
+        'builder.systemColumns.requester',
+        'builder.versionsTruncated',
+        'builder.reviewersTruncated',
+        'builder.dateRulePair',
+        'builder.labelTooLong',
+      ]) {
+        expect(i18n.exists(key, { lng: language, fallbackLng: false }), `${language} ${key}`).toBe(true);
+      }
+    }
+    expect(i18n.getFixedT('en-US')('builder.versionLabel', { version: 3 })).toBe('v3');
   });
 });

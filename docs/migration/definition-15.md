@@ -22,21 +22,23 @@ Before #15 the leave application had no stored configuration, so nothing could p
 ```text
 {
   fields: Field[]                      // 1..30, array order is the form order
-  listColumns: string[]                // 1..10 distinct field keys, in order
-  dateRules: { startKey, endKey }[]    // 0..5, two different 'date' fields; end on or after start
+  listColumns: string[]                // 1..10 distinct field keys or system columns, in order
+  dateRules: { startKey, endKey }[]    // 0..1, two different 'date' fields
   policyPreset: 'requesterAndAssignedReviewer' | 'requesterAssignedReviewerAndReaders'
   reviewerMembershipId: Id<'memberships'>
 }
 ```
 
-Every field has `type`, `key`, `label: {enUS, zhCN}` (1..120 characters after trim) and `required`.
+Every field has `type`, `key`, `label: {enUS, zhCN}` (1..120 characters after trim; `saveDraft` stores the trimmed text) and `required`.
+
+The only system column is `requester`, the authenticated requester. A builder can place it in `listColumns` but cannot define or edit it as a field, because `requester` is a reserved key. A date rule records which fields form a range. #16 enforces "end on or after start" on record values; this ticket only stores the rule.
 
 | Type | Bounds |
 | --- | --- |
 | `text` | `maxLength`, integer 1..4000 |
 | `number` | finite `min <= max`, `integer`; integer fields need integer bounds |
 | `boolean` | none |
-| `date` | none; values are `YYYY-MM-DD` calendar dates, checked by `isCalendarDate` without `Date` or UTC conversion |
+| `date` | none; #16 checks record values as `YYYY-MM-DD` calendar dates without `Date` or UTC conversion |
 
 Keys match `^[a-z][a-zA-Z0-9]{0,62}$`. Reserved keys: `requester`, `requesterMembershipId`, `status`, `state`, `reviewer`, `reviewerMembershipId`, `version`, `versionId`, `createdAt`, `updatedAt`, `id`. Every key in the current version must stay in the draft with the same type.
 
@@ -46,10 +48,10 @@ The leave reference definition (`scripts/leave-definition.ts`): `startDate` and 
 
 | Function | Gate | Behavior |
 | --- | --- | --- |
-| `getBuilderState({applicationId})` | `configureApplication` | Head (draft, revision, published revision, current version, latest version), up to 100 versions newest first, reviewer candidates (active members with `reviewRequests`), and the frozen published keys |
+| `getBuilderState({applicationId})` | `configureApplication` | Head (draft, revision, published revision, current version, latest version), the newest 100 versions with `versionsTruncated`, reviewer candidates (active members with `reviewRequests` among the first 100 members) with `reviewerCandidatesTruncated`, and the frozen published keys |
 | `getPublishedVersion({applicationId, versionId?})` | Any active member | The frozen definition of `versionId`, or of the current version; `isCurrent` |
-| `saveDraft({applicationId, expectedRevision, definition})` | `configureApplication` | `expectedRevision: 0` creates the head; otherwise it must equal the head revision. An identical draft writes nothing. Returns `{revision}` |
-| `publish({applicationId, expectedRevision})` | `configureApplication` | Revalidates the draft and reviewer, inserts version `latestVersion + 1`, moves the pointer. Returns `{versionId, version, revision}` |
+| `saveDraft({applicationId, expectedRevision, definition})` | `configureApplication` | `expectedRevision: 0` creates the head; otherwise it must equal the head revision. Labels are trimmed first. An identical draft writes nothing. Returns `{revision}` |
+| `publish({applicationId, expectedRevision})` | `configureApplication` | Refuses a draft equal to the current version. Revalidates the draft and reviewer, inserts version `latestVersion + 1`, moves the pointer. Returns `{versionId, version, revision}` |
 
 No function accepts `organizationId`, a version number or a publisher. Strict validators reject extra keys and unknown field types. Checks run before any write: principal, grant, head, revision, definition, reviewer.
 
@@ -60,7 +62,7 @@ No function accepts `organizationId`, a version number or a publisher. Strict va
 | `APPLICATION_ACCESS_DENIED`, `PERMISSION_DENIED` | Reused from #14: outsider or inactive member; member without `configureApplication` |
 | `DEFINITION_NOT_FOUND` | Publish before any save; read with nothing published |
 | `DEFINITION_REVISION_CONFLICT` (`currentRevision`) | Stale `expectedRevision` on save or publish, including the losing concurrent publish |
-| `DEFINITION_NOTHING_TO_PUBLISH` | The draft is already the current version |
+| `DEFINITION_NOTHING_TO_PUBLISH` | The draft has no changes since the last publish, or was edited back to equal the current version |
 | `DEFINITION_VERSION_NOT_FOUND` | A version ID from another application |
 | `DEFINITION_FIELD_TYPE_UNKNOWN`, `_KEY_INVALID`, `_KEY_DUPLICATE`, `_KEY_RESERVED`, `_COUNT_INVALID`, `_LABEL_INVALID`, `_BOUNDS_INVALID`, `_REMOVED`, `_TYPE_CHANGED` | Field rules above; all but the count carry `field` |
 | `DEFINITION_LIST_COLUMNS_INVALID`, `DEFINITION_DATE_RULE_INVALID`, `DEFINITION_POLICY_INVALID`, `DEFINITION_REVIEWER_INVALID` | Layout, date rule, preset and reviewer rules |
@@ -69,7 +71,7 @@ No function accepts `organizationId`, a version number or a publisher. Strict va
 
 ### Builder UI (`src/demo/DefinitionBuilder.tsx`)
 
-The "Application builder" tab appears for members whose `listMine` grants include `configureApplication`. Each field is a `fieldset` named "Field n" with key, type, both labels, required, its bounds, and Move up, Move down and Remove buttons. Key, type and Remove are locked for the row that carries a published key. List columns, the date rule and the reviewer are searchable selects; the policy is a radio group. Save draft submits the form; Publish asks for confirmation. The form reloads from the server only when it has no unsaved edits. A revision conflict shows a focused alert with "Reload latest". Field error codes mark the matching control; other codes show a message. Reviewers appear as "Member" plus the last six characters of the membership ID, with "(you)" for the caller; no member names are exposed.
+The "Application builder" tab appears for members whose `listMine` grants include `configureApplication`. Each field is a `fieldset` named "Field n" with key, type, both labels, required, its bounds, and Move up, Move down and Remove buttons. Key, type and Remove are locked for the row that carries a published key. Labels must be 1..120 characters after trim. List columns, the date rule and the reviewer are searchable selects; the list offers "Requester (system)" before the fields, and the date range needs both a start and an end or neither. The policy is a radio group. Save draft submits the form; Publish asks for confirmation. Both buttons stop loading when the call returns, not when the toast closes. A label error marks the language that is invalid. Notices appear when the version or reviewer list is truncated. The form reloads from the server only when it has no unsaved edits. A revision conflict shows a focused alert with "Reload latest". Field error codes mark the matching control; other codes show a message. Reviewers appear as "Member" plus the last six characters of the membership ID, with "(you)" for the caller; no member names are exposed.
 
 ### Seed
 
@@ -77,7 +79,7 @@ The "Application builder" tab appears for members whose `listMine` grants includ
 
 ## Evidence
 
-Revision exercised: `351bfe61bbd0ba0f42e29cf11318f6ea3fe07f54` on `claude/issue-15-impl`, 2026-10-07. Later commits on the branch change documentation only. Target: a self-hosted Convex backend on loopback 3310/3311, instance `definition15`, its own SQLite and file store under `storage/definition-15-*/`, set up with the [baseline runbook](baseline-13.md) (`convex deploy --env-file`, static JWKS). Vite ran on 5173 against it.
+Revision exercised: `dcda10d6dc8a5c1ae8a949844185950d99fb467d` on `claude/issue-15-review-fixes`, 2026-10-07, which carries the review fixes. Later commits on the branch change documentation only. The first implementation was exercised at `351bfe61bbd0ba0f42e29cf11318f6ea3fe07f54`; the red runs and the regression journeys other than `demo:membership-journey` come from that revision. Target: a self-hosted Convex backend on loopback 3310/3311, instance `definition15`, its own SQLite and file store under `storage/definition-15-*/`, set up with the [baseline runbook](baseline-13.md) (`convex deploy --env-file`, static JWKS). Vite ran on 5173 against it.
 
 ### Commands
 
@@ -102,15 +104,19 @@ DEFINITION_DIR="$DEFINITION_DIR" VITE_CONVEX_URL=http://127.0.0.1:3310 \
 | Fixture cascade test before `removeOrganization` deleted definitions | Failed: no `definitions` or `definitionVersions` counts |
 | `i18n.test.ts` before `actionErrors.ts` existed | Suite failed to load the module |
 | Journey HTTP phase against the backend deployed from `83a9de1e6f` (no definition functions) | 8 of 10 checks failed with `FunctionNotFound`; the row-count and cleanup checks passed |
+| Review fixes, `applicationDefinitions.test.ts` against `e997370f06` | A second date rule was accepted; padded labels were stored untrimmed; a draft edited back to the current version published a duplicate version; more than 100 members threw `MEMBERSHIP_LIST_LIMIT_EXCEEDED`; no `versionsTruncated` flag |
+| Review fixes, `definitionModel.test.ts` against `e997370f06` | `listColumns` rejected the system `requester` column |
+| Review fixes, `definitionForm.test.ts` against stubs with the old behavior | 5 of 8 failed: untrimmed labels, the English label marked for a Chinese label error, a half-chosen date range accepted, and Save/Publish pending until the toast closed (timed out) |
+| Review fixes, `i18n.test.ts` before the new keys | `builder.versionLabel` was missing |
 
 ### Results
 
 | Check | Outcome |
 | --- | --- |
-| Demo unit suite | 11 files, 197 tests passed: 25 in `applicationDefinitions.test.ts`, 27 in `definitionModel.test.ts`, 5 in `i18n.test.ts`, 2 in `demo-definition-seed.test.ts` |
-| Convex and demo typecheck, demo build | Passed |
+| Demo unit suite | 12 files, 209 tests passed: 30 in `applicationDefinitions.test.ts`, 24 in `definitionModel.test.ts`, 8 in `definitionForm.test.ts`, 7 in `i18n.test.ts`, 2 in `demo-definition-seed.test.ts` |
+| Convex and demo typecheck, demo build, `quality:check --base origin/main` | Passed; the quality gate reported 0 introduced diagnostics |
 | Definition journey | 29/29 checks passed |
-| Regressions on the same target | `demo:verify`, `demo:journey`, `demo:collection-journey`, `demo:record-journey`, `demo:isolation-journey`, `demo:browse-journey` exited 0; `demo:membership-journey` 66/66 |
+| Regressions on the same target | `demo:membership-journey` 66/66 at the review-fix revision; `demo:verify`, `demo:journey`, `demo:collection-journey`, `demo:record-journey`, `demo:isolation-journey`, `demo:browse-journey` exited 0 at `351bfe61bb` and were not re-run |
 
 Journey checks, expected equal to actual for every row:
 
@@ -127,18 +133,18 @@ Journey checks, expected equal to actual for every row:
 | Seed | First run `created` (revision 2, V1); D edited the draft; the CLI run returned `skipped` (revision 3) and the rows were unchanged |
 | Cleanup | `removeOrganization` removed 1 head and 3 versions (org one), 1 head and 1 version (seed org) and nothing for org two; 0 fixture organizations, applications, memberships, heads or versions remained |
 
-Evidence files (ignored build output, regenerated by each run) in `dist/definition-journey/`: `en-US-builder.webm`, `zh-CN-builder.webm`, `en-US-{1-empty-builder,2-v1-filled,3-v1-reopened,4-v1-published,5-v2-published}.png`, `zh-CN-{1-builder,2-duplicate-key,3-conflict,4-reloaded-latest}.png`, `persisted-definition.json` (head and versions after V2, IDs normalized), `results.json` and `results-red.json`.
+Evidence files (ignored build output, regenerated by each run) in `dist/definition-journey/`: `en-US-builder.webm`, `zh-CN-builder.webm`, `en-US-{1-empty-builder,2-v1-filled,3-v1-reopened,4-v1-published,5-v2-published}.png`, `zh-CN-{1-builder,2-duplicate-key,3-conflict,4-reloaded-latest}.png`, `persisted-definition.json` (head and versions after V2, IDs normalized) and `results.json`. `results-red.json` is written only by a red run.
 
-Two journey runs failed at the zh-CN conflict step: the first run after each edit of `DefinitionBuilder.tsx` while Vite was serving. Each failure was followed by consecutive passes on the same code: 4 runs after the first, 5 after the second. The cause was not isolated; a hot-module reload resetting the form's unsaved state during that run is the leading hypothesis.
+The zh-CN conflict step is flaky after a Vite session starts or a source edit is served. At `351bfe61bb`, the first run after each of two edits failed there, followed by 4 and 5 passes. At the review-fix revision, the first three runs in a fresh Vite session failed there: after the rejected duplicate-key save, the Save button kept its loading state, so `getByRole('button', { name: '保存草稿' })` timed out (its accessible name was "loading 保存草稿"). After a hot reload of `DefinitionBuilder.tsx`, and again after restarting Vite, the next 6 runs passed with no code change. The cause was not isolated. That Vite session started by re-optimizing dependencies in the shared `node_modules/.vite` cache, which is the leading hypothesis.
 
 ## Retained resources
 
 - `storage/definition-15-*/`: the synthetic database, file store, private target configuration, JWKS, run ID, password, logs and journey output. Do not upload it. Deleting the directory removes all of it.
-- Better Auth retained 22 synthetic users and 66 sessions on that target after the final run: 6 from the definition journey and the rest from the regression journeys. Sign-out does not delete every session.
+- Better Auth retains the synthetic users and sessions that the journeys create: 6 users per definition journey run (9 runs at the review-fix revision) and 12 users with 30 sessions from the membership journey. Sign-out does not delete every session.
 - `dist/definition-journey/` and the other `dist/*-journey/` folders.
 
 ## Not covered
 
-- Rendering V2 forms for requests, validating record values and date rules at submit time, and enforcing policy presets: #16.
+- Rendering V2 forms for requests, showing the requester column, validating record values as calendar dates and date rules at submit time, and enforcing policy presets: #16. Its acceptance criteria do not yet name policy-preset enforcement or `getPublishedVersion` explicitly.
 - Pinning requests to a version, re-checking the reviewer at submit and decision time, and the effects of a reviewer change: #17.
 - Excluded by the issue: drag and drop, a full schema editor, expression or script engines, destructive field migrations, holiday or leave-balance logic, and Feishu.
