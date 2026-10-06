@@ -48,15 +48,15 @@ The demo frontend maps every membership error code to a `membershipErrors.*` key
 - Memberships: `authUserId`, `applicationId`, `organizationId`, `updatedAt` and `manageMembers` are server-owned. Public validators accept none of them. `status` changes only through `setMemberStatus` by another admin.
 - Request records (#16, #17): requester membership, organization, state, version and decision fields must be server-owned in the same way. Application-configurable fields are the only client-writable business fields.
 
-### Contracts still to build
+### Request predicates
 
-These predicates need request facts that do not exist yet. Each ticket implements and tests them against its real functions.
+Except `isEligibleReviewer`, these predicates need request facts that do not exist yet. Each ticket implements and tests them against its real functions.
 
 | Predicate | Rule | Ticket |
 | --- | --- | --- |
 | `canReadRequest` | Own request, an assigned submitted request, or `readApplicationRecords` | #16 |
 | `canEditBusinessFields` | Requester edits their own draft only; builders need an extra edit grant | #16 |
-| `isEligibleReviewer` | Active member of the same application with `reviewRequests` | #17 |
+| `isEligibleReviewer` | Active member of the same application with `reviewRequests`. Built in #15 for definition save and publish; #17 re-checks it at submit and decision time | #15, #17 |
 | `canDecideRequest` | Eligible reviewer, request pending and assigned to them, not their own request; decision fields only | #17 |
 
 ### Revocation
@@ -124,4 +124,4 @@ Journey checks, expected equal to actual for every row. Each denial also compare
 - No membership UI exists. The `membershipErrors.*` messages are ready for the first screen that shows these codes, but no rendered screen has displayed them.
 - The owner-scoped demo is not gated by membership.
 
-Next ticket: **#15**, the minimal builder and immutable published definitions, gated by `configureApplication`.
+#15 built the minimal builder and immutable published definitions, gated by `configureApplication` ([evidence](definition-15.md)).

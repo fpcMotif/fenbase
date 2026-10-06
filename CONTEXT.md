@@ -278,3 +278,57 @@ _Avoid_: sign-out, logout
 - **"role"** meant a free string (`users.role` in the legacy table) and a set of capabilities. Resolved: the legacy `users.role` column is never read. Access comes only from **Capability grants** on a **Membership**.
 - **"user ID"** meant the Better Auth `_id` and the membership `_id`. Resolved: `authUserId` names the identity; `membershipId` names the **Application principal**. They are different values.
 - **"not found" vs "denied"** for applications. Resolved: nonmember, inactive, foreign-organization, organization-mismatched and guessed applications all return `APPLICATION_ACCESS_DENIED`, so a caller cannot tell them apart.
+
+# Application Definition
+
+What a builder configures for an application and how it is published. Seeded by issue #15 (see ADR-0006 and `docs/migration/definition-15.md`).
+
+## Language
+
+**Definition head**:
+The one `applicationDefinitions` row per **Application**. It holds the draft, the draft revision and the current version pointer. Every save and publish reads and writes it.
+_Avoid_: definition record, config row
+
+**Draft**:
+The editable definition on the head: ordered fields, list columns, date rules, policy preset and reviewer. It always exists once saved; after a publish it is the next draft.
+_Avoid_: working copy, unpublished version
+
+**Draft revision**:
+The head's `revision` counter. It goes up by 1 on every changed save and every publish. Callers send it back as `expectedRevision`; a mismatch is a revision conflict.
+_Avoid_: version (a revision is not a published version), etag
+
+**Published version**:
+An insert-only `applicationDefinitionVersions` row numbered 1, 2, … per application. It never changes after insert.
+_Avoid_: release, snapshot (in code)
+
+**Current version pointer**:
+`currentVersionId` on the head: the published version that new requests use.
+_Avoid_: active version, latest draft
+
+**Published-key freeze**:
+Every field key in the current version must stay in the draft with the same type.
+_Avoid_: schema lock
+
+**Policy preset**:
+A named access rule built only from **Capability grants**: `requesterAndAssignedReviewer` or `requesterAssignedReviewerAndReaders`.
+_Avoid_: role, custom policy
+
+**Reviewer reference**:
+The draft's `reviewerMembershipId`: an active membership of the same application with `reviewRequests`, checked at save and publish.
+_Avoid_: approver user, reviewer email
+
+**Calendar date**:
+A `YYYY-MM-DD` string for a `date` field, checked as a real date without time-zone conversion.
+_Avoid_: timestamp, datetime
+
+## Relationships
+
+- An **Application** has at most one **Definition head** and zero or more **Published versions**.
+- Publishing copies the **Draft** into a new **Published version** and moves the **Current version pointer**; earlier versions stay byte-for-byte unchanged.
+- Only a member with `configureApplication` saves or publishes; any active member reads a **Published version**.
+- A **Published version** keeps the **Reviewer reference** it was published with, so changing the reviewer in a later version does not change earlier ones.
+
+## Flagged ambiguities
+
+- **"version"** meant both the draft revision and the published version number. Resolved: `revision` counts head writes; `version` numbers published rows.
+- **"date"** in the NocoBase reference is a timestamp column. Resolved: a definition `date` field is a **Calendar date**.
