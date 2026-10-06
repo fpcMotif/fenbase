@@ -71,7 +71,7 @@ No function accepts `organizationId`, a version number or a publisher. Strict va
 
 ### Builder UI (`src/demo/DefinitionBuilder.tsx`)
 
-The "Application builder" tab appears for members whose `listMine` grants include `configureApplication`. Each field is a `fieldset` named "Field n" with key, type, both labels, required, its bounds, and Move up, Move down and Remove buttons. Key, type and Remove are locked for the row that carries a published key. Labels must be 1..120 characters after trim. List columns, the date rule and the reviewer are searchable selects; the list offers "Requester (system)" before the fields, and the date range needs both a start and an end or neither. The policy is a radio group. Save draft submits the form; Publish asks for confirmation. Both buttons stop loading when the call returns, not when the toast closes. A label error marks the language that is invalid. Notices appear when the version or reviewer list is truncated. The form reloads from the server only when it has no unsaved edits. A revision conflict shows a focused alert with "Reload latest". Field error codes mark the matching control; other codes show a message. Reviewers appear as "Member" plus the last six characters of the membership ID, with "(you)" for the caller; no member names are exposed.
+The "Application builder" tab appears for members whose `listMine` grants include `configureApplication`. Each field is a `fieldset` named "Field n" with key, type, both labels, required, its bounds, and Move up, Move down and Remove buttons. Key, type and Remove are locked for the row that carries a published key. Labels must be 1..120 characters after trim. List columns, the date rule and the reviewer are searchable selects; the list offers "Requester (system)" before the fields, and the date range needs both a start and an end or neither. The policy is a radio group. Save draft submits the form; Publish asks for confirmation. Both buttons stop loading when the call returns, not when the toast closes. Their row turns antd motion off, so the loading icon leaves without an animation; see "Stuck loading icon" below. A label error marks the language that is invalid. Notices appear when the version or reviewer list is truncated. The form reloads from the server only when it has no unsaved edits. A revision conflict shows a focused alert with "Reload latest". Field error codes mark the matching control; other codes show a message. Reviewers appear as "Member" plus the last six characters of the membership ID, with "(you)" for the caller; no member names are exposed.
 
 ### Seed
 
@@ -79,7 +79,7 @@ The "Application builder" tab appears for members whose `listMine` grants includ
 
 ## Evidence
 
-Revision exercised: `dcda10d6dc8a5c1ae8a949844185950d99fb467d` on `claude/issue-15-review-fixes`, 2026-10-07, which carries the review fixes. Later commits on the branch change documentation only. The first implementation was exercised at `351bfe61bbd0ba0f42e29cf11318f6ea3fe07f54`; the red runs and the regression journeys other than `demo:membership-journey` come from that revision. Target: a self-hosted Convex backend on loopback 3310/3311, instance `definition15`, its own SQLite and file store under `storage/definition-15-*/`, set up with the [baseline runbook](baseline-13.md) (`convex deploy --env-file`, static JWKS). Vite ran on 5173 against it.
+Revision exercised: `fd04277bbe` on `claude/issue-15-spinner`, 2026-10-07, which carries the review fixes and the stuck-loading-icon fix. Later commits on the branch change documentation only. The review fixes were first exercised at `dcda10d6dc8a5c1ae8a949844185950d99fb467d` and the first implementation at `351bfe61bbd0ba0f42e29cf11318f6ea3fe07f54`; the earlier red runs come from those revisions. Target: a self-hosted Convex backend on loopback 3310/3311, instance `definition15`, its own SQLite and file store under `storage/definition-15-*/`, set up with the [baseline runbook](baseline-13.md) (`convex deploy --env-file`, static JWKS). Vite ran on 5173 against it.
 
 ### Commands
 
@@ -108,6 +108,7 @@ DEFINITION_DIR="$DEFINITION_DIR" VITE_CONVEX_URL=http://127.0.0.1:3310 \
 | Review fixes, `definitionModel.test.ts` against `e997370f06` | `listColumns` rejected the system `requester` column |
 | Review fixes, `definitionForm.test.ts` against stubs with the old behavior | 5 of 8 failed: untrimmed labels, the English label marked for a Chinese label error, a half-chosen date range accepted, and Save/Publish pending until the toast closed (timed out) |
 | Review fixes, `i18n.test.ts` before the new keys | `builder.versionLabel` was missing |
+| Journey check `ui.zh.save-button-settles-after-rejected-saves` at `f57bcc8963`, before the fix | Failed: the Save button settled after 2 of 20 rejected saves, then kept its loading icon |
 
 ### Results
 
@@ -115,8 +116,9 @@ DEFINITION_DIR="$DEFINITION_DIR" VITE_CONVEX_URL=http://127.0.0.1:3310 \
 | --- | --- |
 | Demo unit suite | 12 files, 209 tests passed: 30 in `applicationDefinitions.test.ts`, 24 in `definitionModel.test.ts`, 8 in `definitionForm.test.ts`, 7 in `i18n.test.ts`, 2 in `demo-definition-seed.test.ts` |
 | Convex and demo typecheck, demo build, `quality:check --base origin/main` | Passed; the quality gate reported 0 introduced diagnostics |
-| Definition journey | 29/29 checks passed |
-| Regressions on the same target | `demo:membership-journey` 66/66 at the review-fix revision; `demo:verify`, `demo:journey`, `demo:collection-journey`, `demo:record-journey`, `demo:isolation-journey`, `demo:browse-journey` exited 0 at `351bfe61bb` and were not re-run |
+| `convex codegen` against the target | After `oxfmt`, no change to `convex/_generated/` |
+| Definition journey | 30/30 checks passed in each of 3 runs, each in a new Vite session started after deleting `node_modules/.vite/deps` |
+| Regressions on the same target | `demo:membership-journey` 66/66, `demo:verify` 24, `demo:journey` 18, `demo:collection-journey` 31, `demo:record-journey` 37, `demo:isolation-journey` 57, `demo:browse-journey` 18; all passed and exited 0 |
 
 Journey checks, expected equal to actual for every row:
 
@@ -127,7 +129,7 @@ Journey checks, expected equal to actual for every row:
 | V2 | D added optional text `note`, added it to the list and switched the reviewer from B to C; save, reload and reopen matched; publish created V2 |
 | Immutability | The V1 row was byte-for-byte equal before and after V2 and after a later V3; the pointer moved to V2 on the same application |
 | Read API | Requester A read V2 as current through `getPublishedVersion` |
-| zh-CN, recorded | Builder controls and V2 reopened with Chinese labels; a duplicate `reason` key showed `键名 reason 被多个字段使用。` on field 6 with no write; after E saved over HTTP, the browser's stale save showed the focused conflict alert, wrote nothing, and "加载最新草稿" restored E's draft |
+| zh-CN, recorded | Builder controls and V2 reopened with Chinese labels; a duplicate `reason` key showed `键名 reason 被多个字段使用。` on field 6 with no write; after each of 20 rejected saves the button was named "保存草稿" again within 2 seconds, with no write; after E saved over HTTP, the browser's stale save showed the focused conflict alert, wrote nothing, and "加载最新草稿" restored E's draft |
 | No page errors | None in either locale, apart from the expected failed-mutation logs |
 | Concurrency | D and E published from the same revision with `Promise.allSettled`: one succeeded, one got `DEFINITION_REVISION_CONFLICT`, exactly one version was added |
 | Seed | First run `created` (revision 2, V1); D edited the draft; the CLI run returned `skipped` (revision 3) and the rows were unchanged |
@@ -135,12 +137,26 @@ Journey checks, expected equal to actual for every row:
 
 Evidence files (ignored build output, regenerated by each run) in `dist/definition-journey/`: `en-US-builder.webm`, `zh-CN-builder.webm`, `en-US-{1-empty-builder,2-v1-filled,3-v1-reopened,4-v1-published,5-v2-published}.png`, `zh-CN-{1-builder,2-duplicate-key,3-conflict,4-reloaded-latest}.png`, `persisted-definition.json` (head and versions after V2, IDs normalized) and `results.json`. `results-red.json` is written only by a red run.
 
-The zh-CN conflict step is flaky after a Vite session starts or a source edit is served. At `351bfe61bb`, the first run after each of two edits failed there, followed by 4 and 5 passes. At the review-fix revision, the first three runs in a fresh Vite session failed there: after the rejected duplicate-key save, the Save button kept its loading state, so `getByRole('button', { name: '保存草稿' })` timed out (its accessible name was "loading 保存草稿"). After a hot reload of `DefinitionBuilder.tsx`, and again after restarting Vite, the next 6 runs passed with no code change. The cause was not isolated. That Vite session started by re-optimizing dependencies in the shared `node_modules/.vite` cache, which is the leading hypothesis.
+### Stuck loading icon
+
+Before `fd04277bbe`, the zh-CN step failed intermittently: after the rejected duplicate-key save, `getByRole('button', { name: '保存草稿', exact: true })` timed out because the button's accessible name stayed "loading 保存草稿". This was a builder bug, not a Vite cache effect. It reproduced in warm Vite sessions, and a debug loop of 30 rejected saves on the real builder left the icon stuck 11 times.
+
+The cause is antd 5's Button (5.24.2; 5.29.3 has the same code). It animates its loading icon with rc-motion and removes the icon only on `transitionend`, with no deadline. A traced failure showed the sequence:
+
+1. At 92 ms, `loading` became true. The icon mounted in the `enter-start` step with width 0.
+2. At 124 ms, the mutation had rejected and `loading` was false. `ant-btn-loading` left the button, so React state was correct. The icon moved to `leave-start` (width 14px) before its enter motion reached an active frame.
+3. At 133 ms, `leave-active` set the width back to 0 before the transition had advanced. Chrome fired `transitioncancel` for width, opacity and margin, and never fired `transitionend`.
+
+rc-motion stayed in `leave-active`, so the icon stayed. The page screenshot started later, at 582 ms, and did not cause the cancel. The race needs a rejection within a frame or two of the click, which the local backend makes common.
+
+The fix turns antd motion off (`theme.token.motion: false`) for the Save and Publish row, so the icon is removed as soon as `loading` ends. The journey check `ui.zh.save-button-settles-after-rejected-saves` repeats the rejected save 20 times. At a stuck rate near 1 in 3, an unfixed builder almost always fails it.
+
+Other antd buttons with `loading` in `src/demo/App.tsx` can hit the same race. This change does not touch them.
 
 ## Retained resources
 
 - `storage/definition-15-*/`: the synthetic database, file store, private target configuration, JWKS, run ID, password, logs and journey output. Do not upload it. Deleting the directory removes all of it.
-- Better Auth retains the synthetic users and sessions that the journeys create: 6 users per definition journey run (9 runs at the review-fix revision) and 12 users with 30 sessions from the membership journey. Sign-out does not delete every session.
+- Better Auth retains the synthetic users and sessions that the journeys create: 6 users per definition journey run and 12 users with 28 sessions from the membership journey. Sign-out does not delete every session.
 - `dist/definition-journey/` and the other `dist/*-journey/` folders.
 
 ## Not covered
