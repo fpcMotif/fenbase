@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { tool } from './quality-tools';
 
 interface RuleTest {
   name: string;
@@ -48,7 +49,6 @@ let failed = 0;
 
 for (const t of tests) {
   const args = [
-    'oxlint',
     '-c',
     'test/fixtures/oxc/.oxlintrc.json',
     '--deny-warnings',
@@ -68,7 +68,7 @@ for (const t of tests) {
 
   args.push(t.file);
 
-  const res = spawnSync('bunx', args, { encoding: 'utf8' });
+  const res = spawnSync(tool(process.cwd(), 'oxlint'), args, { encoding: 'utf8' });
   const output = (res.stdout || '') + (res.stderr || '');
 
   if (t.shouldPass) {

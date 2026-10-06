@@ -161,9 +161,9 @@ class AppGenerator extends Generator {
     await fs.writeJSON(join(this.cwd, 'package.json'), json, { encoding: 'utf8', spaces: 2 });
     console.log('');
     console.log(chalk.green(`$ cd ${name}`));
-    console.log(chalk.green(`$ yarn install`));
-    console.log(chalk.green(`$ yarn nocobase install`));
-    console.log(chalk.green(`$ yarn dev`));
+    console.log(chalk.green(`$ bun install`));
+    console.log(chalk.green(`$ bun run nocobase install`));
+    console.log(chalk.green(`$ bun run dev`));
     console.log('');
   }
 }
