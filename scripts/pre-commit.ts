@@ -29,20 +29,28 @@ try {
       throw new Error('Index changed during checks; retry the commit.');
     }
     const records: string[] = [];
-    const updates: { file: string; content: Buffer }[] = [];
+    const updates: { file: string; content: Buffer; original: string }[] = [];
     for (const file of files) {
       const metadata = command(stage, 'git', ['ls-files', '--stage', '-z', '--', file], undefined, true);
       if (!metadata.startsWith('100')) throw new Error(`Unsupported staged file mode: ${file}`);
       const content = fs.readFileSync(path.join(stage, file));
-      const original = command(root, 'git', ['show', `:${file}`]);
+      const original = command(root, 'git', ['rev-parse', `:${file}`]).trim();
       const oid = command(root, 'git', ['hash-object', '-w', '--stdin'], content).trim();
       records.push(`${metadata.slice(0, 6)} ${oid}\t${file}\0`);
-      if (fs.existsSync(path.join(root, file)) && fs.readFileSync(path.join(root, file), 'utf8') === original) {
-        updates.push({ file, content });
-      }
+      updates.push({ file, content, original });
     }
     command(root, 'git', ['update-index', '-z', '--index-info'], records.join(''));
-    for (const { file, content } of updates) fs.writeFileSync(path.join(root, file), content);
+    const canonicalRoot = fs.realpathSync(root);
+    for (const { file, content, original } of updates) {
+      const workingFile = path.join(root, file);
+      if (
+        fs.existsSync(workingFile) &&
+        fs.realpathSync(workingFile) === path.join(canonicalRoot, file) &&
+        command(root, 'git', ['hash-object', '--stdin'], fs.readFileSync(workingFile)).trim() === original
+      ) {
+        fs.writeFileSync(workingFile, content);
+      }
+    }
   }
   console.log('[pre-commit] Staged snapshot checks passed.');
 } catch (error) {

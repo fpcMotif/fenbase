@@ -54,6 +54,8 @@ Missing tools, malformed output, configuration errors, and crashes always fail t
 
 The hook preserves unstaged working-tree bytes, including partially staged files.
 Binary index entries are preserved.
+Working files update only when raw-content Git blob hashes match their original index entries.
+Canonical paths exclude working-file and parent-directory symlinks from those writes.
 Staged symlinks are rejected explicitly.
 The existing license-header tool and commit-message hook remain active.
 The hk configuration disables automatic staging and stashing because the snapshot hook updates index blobs itself.
@@ -66,11 +68,13 @@ Dynamic imports and computed module loading are outside this static-import check
 
 | Check | Observed result |
 | --- | --- |
-| Quality regression suite | 14 tests, 68 assertions passed under stable Bun. |
+| Quality regression suite | 16 tests, 78 assertions passed under stable Bun. |
 | Existing Oxc fixtures | Five cases passed. |
 | Staged and committed-base fixtures | Floating promises and async void calls fail; corrections pass. |
 | Multiline policy fixtures | Added `any` is rejected even across multiline spans. |
 | Partial staging through actual Git hooks | Success and failure preserve unrelated working-tree bytes. |
+| Binary partial staging | Different invalid UTF-8 bytes remain distinct; unstaged bytes survive the commit. |
+| Working-tree symlinks | File and parent-directory links retain their external target bytes after formatting staged content. |
 | Filename and snapshot fixtures | Newlines, shell characters, binary blobs, and license headers survive. |
 | Dependency snapshot fixture | Staged Promise types are checked instead of unstaged replacement types. |
 | Configuration symlink fixture | Snapshot replacement preserves both external targets and source symlinks. |

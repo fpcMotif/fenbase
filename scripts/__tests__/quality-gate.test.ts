@@ -178,6 +178,50 @@ test('license updates stay inside the staged snapshot and binary contents remain
   expect(spawnSync('git', ['show', ':asset.bin'], { cwd: root }).stdout).toEqual(binary);
 });
 
+test('a real commit preserves unstaged binary bytes with equal UTF-8 decoding', () => {
+  const root = repository();
+  const file = path.join(root, 'asset.bin');
+  fs.writeFileSync(file, Buffer.from([0, 255]));
+  run(root, 'git', ['add', '.']);
+  fs.writeFileSync(file, Buffer.from([0, 254]));
+  const hook = path.join(root, '.git/hooks/pre-commit');
+  fs.writeFileSync(hook, `#!/bin/sh\nexec bun '${source}/scripts/pre-commit.ts'\n`, { mode: 0o755 });
+  run(root, 'git', ['config', 'core.hooksPath', path.dirname(hook)]);
+  const committed = run(root, 'git', ['commit', '-qm', 'preserve binary staging']);
+  expect(committed.status).toBe(0);
+  expect(spawnSync('git', ['show', 'HEAD:asset.bin'], { cwd: root }).stdout).toEqual(Buffer.from([0, 255]));
+  expect(fs.readFileSync(file)).toEqual(Buffer.from([0, 254]));
+});
+
+test('a real commit preserves external targets of working-file and parent-directory symlinks', () => {
+  const root = repository();
+  const external = fs.mkdtempSync(path.join(os.tmpdir(), 'quality-hook-external-'));
+  directories.push(external);
+  const contents = '{"value":1}\n';
+  fs.mkdirSync(path.join(root, 'settings'));
+  for (const name of ['direct.json', 'settings/nested.json']) {
+    fs.writeFileSync(path.join(root, name), contents);
+  }
+  run(root, 'git', ['add', '.']);
+  fs.writeFileSync(path.join(external, 'direct.json'), contents);
+  fs.writeFileSync(path.join(external, 'nested.json'), contents);
+  fs.unlinkSync(path.join(root, 'direct.json'));
+  fs.symlinkSync(path.join(external, 'direct.json'), path.join(root, 'direct.json'));
+  fs.rmSync(path.join(root, 'settings'), { recursive: true });
+  fs.symlinkSync(external, path.join(root, 'settings'));
+  const hook = path.join(root, '.git/hooks/pre-commit');
+  fs.writeFileSync(hook, `#!/bin/sh\nexec bun '${source}/scripts/pre-commit.ts'\n`, { mode: 0o755 });
+  run(root, 'git', ['config', 'core.hooksPath', path.dirname(hook)]);
+  const committed = run(root, 'git', ['commit', '-qm', 'preserve working symlinks']);
+  expect(committed.status).toBe(0);
+  expect(run(root, 'git', ['show', 'HEAD:direct.json']).stdout).toContain('"value": 1');
+  expect(run(root, 'git', ['show', 'HEAD:settings/nested.json']).stdout).toContain('"value": 1');
+  expect(fs.readFileSync(path.join(external, 'direct.json'), 'utf8')).toBe(contents);
+  expect(fs.readFileSync(path.join(external, 'nested.json'), 'utf8')).toBe(contents);
+  expect(fs.lstatSync(path.join(root, 'direct.json')).isSymbolicLink()).toBe(true);
+  expect(fs.lstatSync(path.join(root, 'settings')).isSymbolicLink()).toBe(true);
+});
+
 test('missing repository binaries fail with an installation command', () => {
   const root = repository();
   fs.unlinkSync(path.join(root, 'node_modules'));
