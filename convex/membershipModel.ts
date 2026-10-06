@@ -55,6 +55,16 @@ function permissionDenied(message: string): ConvexError<{ code: string; message:
   return new ConvexError({ code: 'PERMISSION_DENIED', message });
 }
 
+export function canSubmitRequests(principal: ApplicationPrincipal): boolean {
+  return principal.grants.has('submitRequests');
+}
+
+export function assertCanSubmitRequests(principal: ApplicationPrincipal): void {
+  if (!canSubmitRequests(principal)) {
+    throw permissionDenied('You do not have permission to submit requests in this application');
+  }
+}
+
 export function assertHasManageMembers(principal: ApplicationPrincipal): void {
   if (!principal.grants.has('manageMembers')) {
     throw permissionDenied('You do not have permission to manage members of this application');

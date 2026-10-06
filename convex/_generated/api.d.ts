@@ -22,6 +22,8 @@ import type * as membershipValidators from '../membershipValidators.js';
 import type * as memberships from '../memberships.js';
 import type * as recordQuery from '../recordQuery.js';
 import type * as records from '../records.js';
+import type * as requestValues from '../requestValues.js';
+import type * as requests from '../requests.js';
 import type * as users from '../users.js';
 import type * as workflows from '../workflows.js';
 
@@ -42,6 +44,8 @@ declare const fullApi: ApiFromModules<{
   memberships: typeof memberships;
   recordQuery: typeof recordQuery;
   records: typeof records;
+  requestValues: typeof requestValues;
+  requests: typeof requests;
   users: typeof users;
   workflows: typeof workflows;
 }>;

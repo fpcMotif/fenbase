@@ -205,3 +205,51 @@ describe('browsing collection records', () => {
     });
   });
 });
+
+describe('browsing date-only values', () => {
+  const dateFields = [
+    { name: 'startDate', type: 'date' },
+    { name: 'days', type: 'number' },
+  ] as const;
+  const leave = [
+    record('l1', 1, { startDate: '2026-03-02', days: 3 }),
+    record('l2', 2, { startDate: '2026-01-15', days: 1 }),
+    record('l3', 3, { days: 2 }),
+    record('l4', 4, { startDate: '2026-12-31', days: 5 }),
+  ];
+
+  it.each([
+    ['$eq', '2026-03-02', ['l1']],
+    ['$ne', '2026-03-02', ['l4', 'l3', 'l2']],
+    ['$gt', '2026-03-02', ['l4']],
+    ['$gte', '2026-03-02', ['l4', 'l1']],
+    ['$lt', '2026-03-02', ['l2']],
+    ['$lte', '2026-03-02', ['l2', 'l1']],
+    ['$empty', undefined, ['l3']],
+    ['$notEmpty', undefined, ['l4', 'l2', 'l1']],
+  ])('applies date operator %s %s in calendar order', (operator, value, expected) => {
+    const page = queryRecords(leave, dateFields, { filters: [{ field: 'startDate', operator, value }] });
+    expect(ids(page)).toEqual(expected);
+  });
+
+  it('sorts dates in calendar order with a missing date last', () => {
+    expect(ids(queryRecords(leave, dateFields, { sort: { field: 'startDate', direction: 'asc' } }))).toEqual([
+      'l2',
+      'l1',
+      'l4',
+      'l3',
+    ]);
+  });
+
+  it.each(['2026-02-30', '2026-3-2', '', 'tomorrow'])('rejects the filter value %j', (value) => {
+    expect(() =>
+      queryRecords(leave, dateFields, { filters: [{ field: 'startDate', operator: '$gte', value }] }),
+    ).toThrow(ConvexError);
+  });
+
+  it('rejects text operators on a date field', () => {
+    expect(() =>
+      queryRecords(leave, dateFields, { filters: [{ field: 'startDate', operator: '$includes', value: '2026' }] }),
+    ).toThrow(ConvexError);
+  });
+});

@@ -2,6 +2,7 @@ import { ConvexError, v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
 import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/server';
 import {
+  canonicalJson,
   definitionValidator,
   publishedKeysOf,
   publishedKeyValidator,
@@ -66,17 +67,6 @@ async function assertValidDefinition(
       'The reviewer must be an active member of this application who can review requests',
     );
   }
-}
-
-function canonicalJson(value: unknown): string {
-  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(',')}]`;
-  if (typeof value === 'object' && value !== null) {
-    const entries = Object.entries(value)
-      .filter(([, entry]) => entry !== undefined)
-      .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0));
-    return `{${entries.map(([key, entry]) => `${JSON.stringify(key)}:${canonicalJson(entry)}`).join(',')}}`;
-  }
-  return JSON.stringify(value);
 }
 
 async function requireBuilder(ctx: QueryCtx | MutationCtx, applicationId: Id<'applications'>) {
