@@ -7,6 +7,7 @@ import type { Capability } from './membershipValidators';
 export type ApplicationPrincipal = {
   authUserId: string;
   membershipId: Id<'memberships'>;
+  application: Doc<'applications'>;
   applicationId: Id<'applications'>;
   organizationId: Id<'organizations'>;
   grants: ReadonlySet<Capability>;
@@ -30,13 +31,14 @@ export async function requireApplicationPrincipal(
     .unique();
   if (!membership || membership.status !== 'active') throw applicationAccessDenied();
   const application = await ctx.db.get(membership.applicationId);
-  if (!application) throw applicationAccessDenied();
+  if (!application || application.organizationId !== membership.organizationId) throw applicationAccessDenied();
 
   return {
     authUserId,
     membershipId: membership._id,
-    applicationId: membership.applicationId,
-    organizationId: membership.organizationId,
+    application,
+    applicationId: application._id,
+    organizationId: application.organizationId,
     grants: new Set(membership.grants),
   };
 }

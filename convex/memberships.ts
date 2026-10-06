@@ -37,8 +37,9 @@ export const listMine = query({
     for (const membership of memberships) {
       if (membership.status !== 'active') continue;
       const application = await ctx.db.get(membership.applicationId);
-      const organization = await ctx.db.get(membership.organizationId);
-      if (!application || !organization) continue;
+      if (!application || application.organizationId !== membership.organizationId) continue;
+      const organization = await ctx.db.get(application.organizationId);
+      if (!organization) continue;
       items.push({
         membershipId: membership._id,
         applicationId: membership.applicationId,
@@ -167,9 +168,9 @@ export const getMyAccess = query({
   }),
   handler: async (ctx, args) => {
     const principal = await requireApplicationPrincipal(ctx, args.applicationId);
-    const application = await ctx.db.get(principal.applicationId);
+    const { application } = principal;
     const organization = await ctx.db.get(principal.organizationId);
-    if (!application || !organization) throw applicationAccessDenied();
+    if (!organization) throw applicationAccessDenied();
 
     return {
       membershipId: principal.membershipId,

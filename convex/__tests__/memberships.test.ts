@@ -137,6 +137,14 @@ describe('application principal', () => {
     await expectCode(invokeHandler(getMyAccess, ctx, { applicationId: 'applications:9' }), 'APPLICATION_ACCESS_DENIED');
   });
 
+  it('denies a membership whose stored organization differs from its application’s organization', async () => {
+    const ctx = fixtureContext([membership('x', 'user-x', ['manageMembers'], { organizationId: ORG_2 })]);
+    signIn('user-x');
+    await expectCode(invokeHandler(getMyAccess, ctx, { applicationId: APP_1 }), 'APPLICATION_ACCESS_DENIED');
+    await expectCode(invokeHandler(listMembers, ctx, { applicationId: APP_1 }), 'APPLICATION_ACCESS_DENIED');
+    expect(await invokeHandler(listMine, ctx, {})).toEqual([]);
+  });
+
   it('fails closed when one user has two rows for the same application', async () => {
     const ctx = fixtureContext([membership('a2', 'user-a', ['manageMembers'])]);
     signIn('user-a');
