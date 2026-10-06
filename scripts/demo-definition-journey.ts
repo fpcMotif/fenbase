@@ -450,7 +450,9 @@ async function main(): Promise<void> {
         page.setDefaultTimeout(20_000);
         const pageErrors: string[] = [];
         page.on('pageerror', (error) => pageErrors.push(error.message));
+        const consoleLines: string[] = [];
         page.on('console', (message) => {
+          consoleLines.push(`${message.type()}: ${message.text()}`);
           if (message.type() === 'error' && !/\[CONVEX M\(applicationDefinitions:/.test(message.text())) {
             pageErrors.push(message.text());
           }
@@ -728,6 +730,7 @@ async function main(): Promise<void> {
           await page
             .screenshot({ path: join(artifactsDir, `${locale}-failure.png`), fullPage: true })
             .catch(() => undefined);
+          writeFileSync(join(artifactsDir, `${locale}-failure-console.log`), `${consoleLines.join('\n')}\n`);
           throw error;
         } finally {
           const video = page.video();
