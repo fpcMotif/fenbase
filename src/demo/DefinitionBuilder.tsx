@@ -5,6 +5,7 @@ import {
   Button,
   Card,
   Checkbox,
+  ConfigProvider,
   Empty,
   Form,
   Input,
@@ -18,7 +19,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import type { FormRule, TableColumnsType } from 'antd';
+import type { FormRule, TableColumnsType, ThemeConfig } from 'antd';
 import { useMutation, useQuery } from 'convex/react';
 import type { FunctionReturnType } from 'convex/server';
 import { useTranslation } from 'react-i18next';
@@ -49,6 +50,8 @@ import {
 type BuilderApplication = FunctionReturnType<typeof api.memberships.listMine>[number];
 type BuilderState = FunctionReturnType<typeof api.applicationDefinitions.getBuilderState>;
 type VersionSummary = BuilderState['versions'][number];
+
+const withoutMotion: ThemeConfig = { token: { motion: false } };
 
 function membershipReference(membershipId: string): string {
   return membershipId.slice(-6);
@@ -509,23 +512,25 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
           </Form.Item>
         </Card>
 
-        <Space wrap style={{ marginTop: 16 }}>
-          <Button type="primary" htmlType="submit" loading={saving}>
-            {t('builder.save')}
-          </Button>
-          <Popconfirm
-            title={t('builder.publishConfirm', { version: nextVersion })}
-            okText={t('builder.publish')}
-            cancelText={t('builder.cancel')}
-            onConfirm={publishDraft}
-            disabled={!canPublish}
-          >
-            <Button disabled={!canPublish} loading={publishing}>
-              {t('builder.publish')}
+        <ConfigProvider theme={withoutMotion}>
+          <Space wrap style={{ marginTop: 16 }}>
+            <Button type="primary" htmlType="submit" loading={saving}>
+              {t('builder.save')}
             </Button>
-          </Popconfirm>
-          {dirty && <Typography.Text className="demo-muted">{t('builder.publishNeedsSave')}</Typography.Text>}
-        </Space>
+            <Popconfirm
+              title={t('builder.publishConfirm', { version: nextVersion })}
+              okText={t('builder.publish')}
+              cancelText={t('builder.cancel')}
+              onConfirm={publishDraft}
+              disabled={!canPublish}
+            >
+              <Button disabled={!canPublish} loading={publishing}>
+                {t('builder.publish')}
+              </Button>
+            </Popconfirm>
+            {dirty && <Typography.Text className="demo-muted">{t('builder.publishNeedsSave')}</Typography.Text>}
+          </Space>
+        </ConfigProvider>
       </Form>
 
       <Card title={<h3 className="demo-card-heading">{t('builder.versionsHeading')}</h3>}>
