@@ -192,6 +192,7 @@ describe('request value validation', () => {
           required: true,
           min: 0,
           max: 9,
+          integer: true,
         } as const,
         { type: 'date', key: 'valueOf', label: { enUS: 'C', zhCN: '丙' }, required: false } as const,
         { type: 'date', key: 'hasOwnProperty', label: { enUS: 'D', zhCN: '丁' }, required: false } as const,

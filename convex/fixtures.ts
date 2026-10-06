@@ -139,7 +139,7 @@ export const removeOrganization = internalMutation({
         for (;;) {
           const requests = await ctx.db
             .query('requests')
-            .withIndex('by_application', (q) => q.eq('applicationId', application._id))
+            .withIndex('by_application_requester', (q) => q.eq('applicationId', application._id))
             .take(FIXTURE_DELETE_BATCH);
           if (requests.length === 0) break;
           for (const request of requests) {
@@ -147,6 +147,11 @@ export const removeOrganization = internalMutation({
             removed.requests += 1;
           }
         }
+        const counter = await ctx.db
+          .query('requestCounts')
+          .withIndex('by_application', (q) => q.eq('applicationId', application._id))
+          .unique();
+        if (counter) await ctx.db.delete(counter._id);
         for (;;) {
           const versions = await ctx.db
             .query('applicationDefinitionVersions')

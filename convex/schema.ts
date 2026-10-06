@@ -64,9 +64,13 @@ export default defineSchema({
     values: requestValuesValidator,
     updatedAt: v.number(),
   })
-    .index('by_application', ['applicationId'])
     .index('by_application_requester', ['applicationId', 'requesterMembershipId'])
     .index('by_requester_operation', ['requesterMembershipId', 'operationId']),
+
+  requestCounts: defineTable({
+    applicationId: v.id('applications'),
+    count: v.number(),
+  }).index('by_application', ['applicationId']),
 
   demoCollections: defineTable({
     ownerId: v.string(),

@@ -425,12 +425,28 @@ describe('creating a request', () => {
     expect(ctx.writes.length).toBe(writesBefore);
   });
 
-  it('caps an application at 1000 requests', async () => {
+  it('caps an application at 1000 requests and frees a slot when one is deleted', async () => {
     const ctx = fixtureContext();
+    let last: Created | undefined;
     for (let index = 0; index < 1000; index += 1) {
-      await ctx.db.insert('requests', requestDoc(`seed-${index}`, 'memberships:a2'));
+      last = await createAs(ctx, index % 2 === 0 ? 'user-a' : 'user-a2');
     }
     await expectRejectedWithoutWrites(ctx, () => createAs(ctx, 'user-a'), 'RECORD_APPLICATION_FULL');
+    if (!last) throw new Error('No request was created');
+    await removeAs(ctx, 'user-a2', last.requestId, 1);
+    expect(await createAs(ctx, 'user-a')).toMatchObject({ created: true });
+    await expectRejectedWithoutWrites(ctx, () => createAs(ctx, 'user-a'), 'RECORD_APPLICATION_FULL');
+  });
+
+  it('checks the cap without reading the application’s requests, so creates stay cheap as it fills', async () => {
+    const ctx = fixtureContext();
+    for (let index = 0; index < 30; index += 1) await createAs(ctx, 'user-a2');
+    ctx.indexReads.length = 0;
+    await createAs(ctx, 'user-a');
+    const requestRowsRead = ctx.indexReads
+      .filter((read) => read.table === 'requests')
+      .reduce((total, read) => total + read.rows, 0);
+    expect(requestRowsRead).toBe(0);
   });
 });
 
@@ -665,5 +681,6 @@ describe('fixture cleanup', () => {
     const removed = await invokeHandler(removeOrganization, ctx, { organizationKey: 'fixture-org-1' });
     expect(removed).toMatchObject({ organizations: 1, applications: 2, requests: 2 });
     expect(ctx.rows('requests').map((row) => row.applicationId)).toEqual([APP_Z]);
+    expect(ctx.rows('requestCounts').map((row) => [row.applicationId, row.count])).toEqual([[APP_Z, 1]]);
   });
 });

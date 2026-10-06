@@ -79,6 +79,14 @@ async function findHead(ctx: QueryCtx | MutationCtx, applicationId: Id<'applicat
     .unique();
 }
 
+// One row per application keeps the request count, so the cap check reads one document instead of every request.
+async function findCounter(ctx: MutationCtx, applicationId: Id<'applications'>) {
+  return ctx.db
+    .query('requestCounts')
+    .withIndex('by_application', (q) => q.eq('applicationId', applicationId))
+    .unique();
+}
+
 async function pinnedDefinition(ctx: MutationCtx, row: Doc<'requests'>): Promise<Definition> {
   const version = await ctx.db.get(row.definitionVersionId);
   if (!version || version.applicationId !== row.applicationId) throw notFound();
@@ -171,16 +179,16 @@ export const create = mutation({
     }
     assertValidValues(version.definition, values);
 
-    const existing = await ctx.db
-      .query('requests')
-      .withIndex('by_application', (q) => q.eq('applicationId', principal.applicationId))
-      .take(MAX_REQUESTS_PER_APPLICATION + 1);
-    if (existing.length >= MAX_REQUESTS_PER_APPLICATION) {
+    const counter = await findCounter(ctx, principal.applicationId);
+    const count = counter?.count ?? 0;
+    if (count >= MAX_REQUESTS_PER_APPLICATION) {
       throw requestError(
         'RECORD_APPLICATION_FULL',
         `An application holds at most ${MAX_REQUESTS_PER_APPLICATION} requests`,
       );
     }
+    if (counter) await ctx.db.patch(counter._id, { count: count + 1 });
+    else await ctx.db.insert('requestCounts', { applicationId: principal.applicationId, count: 1 });
 
     const requestId = await ctx.db.insert('requests', {
       applicationId: principal.applicationId,
@@ -225,6 +233,8 @@ export const remove = mutation({
   handler: async (ctx, args) => {
     const { row } = await requireEditable(ctx, args.applicationId, args.requestId, args.expectedRevision);
     await ctx.db.delete(row._id);
+    const counter = await findCounter(ctx, row.applicationId);
+    if (counter) await ctx.db.patch(counter._id, { count: Math.max(0, counter.count - 1) });
     return null;
   },
 });
@@ -272,7 +282,7 @@ export const list = query({
       scope === 'application'
         ? await ctx.db
             .query('requests')
-            .withIndex('by_application', (q) => q.eq('applicationId', principal.applicationId))
+            .withIndex('by_application_requester', (q) => q.eq('applicationId', principal.applicationId))
             .take(MAX_REQUESTS_PER_APPLICATION + 1)
         : await ctx.db
             .query('requests')
