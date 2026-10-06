@@ -37,7 +37,7 @@ It updates index blobs only after every check succeeds.
 Partially staged working-tree bytes remain intact.
 The hk hook disables automatic restaging and stashing because the snapshot hook owns index updates.
 CI uses the non-mutating checker and a separate static client-runtime import check.
-Existing client-v2 test imports remain an explicit boundary-check exclusion.
+The import check ignores `__tests__`, `lib`, `dist`, and `esm` directories; all other client-v2 source is checked.
 
 Formatting keeps single quotes, trailing commas, width 120, and existing root exclusions.
 Scaffolds use the root package-manifest formatting exclusion and pinned Oxc versions.

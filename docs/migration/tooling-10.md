@@ -60,8 +60,9 @@ Staged symlinks are rejected explicitly.
 The existing license-header tool and commit-message hook remain active.
 The hk configuration disables automatic staging and stashing because the snapshot hook updates index blobs itself.
 
-The runtime-boundary check excludes seven existing client-v2 test imports.
-Production static imports remain checked.
+The runtime-boundary check ignores `__tests__`, `lib`, `dist`, and `esm` directories.
+That exclusion covers the seven existing client-v2 test imports and also exempts new test files.
+All other client-v2 static imports remain checked.
 Dynamic imports and computed module loading are outside this static-import check.
 
 ## Behavioral verification
