@@ -494,4 +494,46 @@ describe('membership fixtures', () => {
       memberships: 0,
     });
   });
+
+  it('removes every membership and application of a large fixture organization before the organization', async () => {
+    const applications = Array.from({ length: 12 }, (_, index) => ({
+      _id: `applications:big-${index}`,
+      _creationTime: 1,
+      organizationId: ORG_2,
+      key: `app-${index}`,
+      name: `App ${index}`,
+    }));
+    const members = Array.from({ length: 600 }, (_, index) =>
+      membership(`big-${index}`, `user-big-${index}`, [], {
+        applicationId: `applications:big-${index % 2}`,
+        organizationId: ORG_2,
+      }),
+    );
+    const ctx = createContext({
+      organizations: [{ _id: ORG_2, _creationTime: 1, key: 'fixture-org-2', name: 'Fixture Org Two' }],
+      applications,
+      memberships: members,
+    });
+
+    const removed = await invokeHandler(removeOrganization, ctx, { organizationKey: 'fixture-org-2' });
+
+    expect(removed).toEqual({ organizations: 1, applications: 12, memberships: 600 });
+    expect(ctx.counts.deletes).toBe(613);
+  });
+
+  it('rejects a non-fixture organization key on removal without writing', async () => {
+    const ctx = fixtureContext();
+    await expectCode(
+      invokeHandler(removeOrganization, ctx, { organizationKey: 'acme' }),
+      'FIXTURE_ORGANIZATION_KEY_INVALID',
+    );
+    expectNoWrites(ctx);
+  });
+
+  it('does not rewrite a membership when the same grants are seeded in another order', async () => {
+    const ctx = createContext();
+    await invokeHandler(upsertMember, ctx, { ...seedA, capabilities: ['submitRequests', 'reviewRequests'] });
+    await invokeHandler(upsertMember, ctx, { ...seedA, capabilities: ['reviewRequests', 'submitRequests'] });
+    expect(ctx.counts.patches).toBe(0);
+  });
 });
