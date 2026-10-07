@@ -4,7 +4,7 @@ Issue: [#16](https://github.com/fpcMotif/fenbase/issues/16), parent [#1](https:/
 
 ## At a glance
 
-Employees with `submitRequests` now create, edit, list, reopen and delete draft requests in a Requests tab. The form and the list come from the published definition; no code path names the leave application. Each request is pinned to the version it was created with, so a V1 request keeps its V1 form after V2 is published. The server owns identity, version, policy, state and revision. Submission and review are #17.
+Employees with `submitRequests` now create, edit, list, reopen and delete draft requests in a Requests tab. The form and the list come from the published definition; no code path names the leave application. Each request is pinned to the version it was created with, so a V1 request keeps its V1 form after V2 is published. The server owns identity, version, policy, state and revision. Drafts are private: only the requester reads a draft, and `readApplicationRecords` starts at submission. Submission and review are #17.
 
 ## Runtime contract
 
@@ -21,7 +21,7 @@ Employees with `submitRequests` now create, edit, list, reopen and delete draft 
 | `values` | Client; validated against the pinned version |
 | `updatedAt` | Server |
 
-Indexes: `by_application_requester [applicationId, requesterMembershipId]`, which also serves application-wide reads by ranging on `applicationId` alone, and `by_requester_operation [requesterMembershipId, operationId]`. The owner-scoped `demoCollections` and `demoRecords` are unchanged.
+Indexes: `by_application_requester [applicationId, requesterMembershipId]` for the caller's own requests, `by_application_state [applicationId, state]` for a reader's non-draft requests, and `by_requester_operation [requesterMembershipId, operationId]`. The owner-scoped `demoCollections` and `demoRecords` are unchanged.
 
 A second table, `requestCounts {applicationId, count}` with index `by_application [applicationId]`, holds one row per application. `create` reads and increments it, `remove` decrements it, and `fixtures:removeOrganization` deletes it. The cap check therefore reads one document, not the application's requests. Concurrent creates in one application still conflict on that row under Convex's optimistic concurrency, and Convex retries them one after another.
 
@@ -34,16 +34,18 @@ Every function resolves the application principal first, so anonymous callers ge
 | `create({applicationId, definitionVersionId, operationId, values})` | `submitRequests` | Normalizes the values, then checks in order: grant, operation ID, duplicate, current version, values, application cap from `requestCounts`; then increments the count and inserts. Returns `{requestId, revision, version, created}` |
 | `update({applicationId, requestId, expectedRevision, values})` | Own request and `submitRequests` | Replaces all values after normalizing them and validating them against the pinned version. An unchanged update returns the same revision and writes nothing |
 | `remove({applicationId, requestId, expectedRevision})` | Own request and `submitRequests` | Deletes the request and decrements the count |
-| `get({applicationId, requestId})` | Read rule | The request view, or `null` when it is missing, foreign or not readable |
+| `get({applicationId, requestId})` | Read rule | The request view, or `null` when it is missing, another member's draft, in another application or not readable |
 | `list({applicationId, filters?, sort?, page?, pageSize?})` | Read rule | Validates the query before reading any request, then returns a page of readable requests with `total`, `page`, `pageSize`, `pageCount` and `scope` (`own` or `application`) |
 
 The request view holds `_id`, `_creationTime`, `updatedAt`, `version`, `versionId`, `revision`, `state`, `values`, `requester: {membershipId, isMe}` and `canEdit`. It never returns `organizationId`, `policyPreset` or the operation fields.
 
 ### Read and edit rules
 
-- The requester reads their own requests, even after losing `submitRequests`.
-- A member with `readApplicationRecords` also reads every request whose own `policyPreset` is `requesterAssignedReviewerAndReaders`, drafts included. Under `requesterAndAssignedReviewer` the grant adds nothing. The preset comes from the request row, so publishing a version with another preset does not change older requests.
-- `list` reports `scope: 'application'` only when the grant reaches past the caller's own requests: the current version uses the readers preset, or a readable request does. Under `requesterAndAssignedReviewer` a reader's list is labelled `own`.
+- Drafts are private. Only the requester reads a draft; no grant or preset reveals another member's draft.
+- The requester reads their own requests in every state, even after losing `submitRequests`.
+- A member with `readApplicationRecords` also reads other members' non-draft requests whose own `policyPreset` is `requesterAssignedReviewerAndReaders`. Under `requesterAndAssignedReviewer` the grant adds nothing. The preset comes from the request row, so publishing a version with another preset does not change older requests. In #16 every request is a draft, so a reader sees only their own requests.
+- The rule holds on every read path. `get` returns `null` for another member's draft, exactly as for a missing request. `update` and `remove` fail with `RECORD_NOT_FOUND`. `list` never loads another member's draft: it reads the caller's own rows, and for a reader the non-draft rows of the application through `by_application_state`. `total`, `pageCount` and the browse limit therefore count only rows the caller may read.
+- `list` reports `scope: 'application'` only when a readable row belongs to another member, and `own` otherwise. In #16 every list is labelled `own`.
 - The reviewer branch of both presets covers submitted requests and arrives with #17. A reviewer sees no drafts.
 - Only the requester edits or deletes, and only while holding `submitRequests`. Another member's request, a request of another application and a missing request all fail with `RECORD_NOT_FOUND`.
 
@@ -79,7 +81,7 @@ Field values are read only from the object's own keys, so a field named like a b
 | Dates | `YYYY-MM-DD`, years 0001–9999, Gregorian leap years |
 | Request size | 8192 UTF-8 bytes of canonical JSON `values` |
 | Requests per application | 1000, counted in `requestCounts`; the 1001st create fails with `RECORD_APPLICATION_FULL`, and a delete frees a slot |
-| Rows read per list | at most 1000 readable rows; more fail with `RECORD_BROWSE_LIMIT_EXCEEDED`, never a cut-off list |
+| Rows read per list | at most 1001 rows per index range: one range of the caller's own requests, plus two ranges of non-draft requests for a reader. More than 1000 rows in a range or in the readable set fail with `RECORD_BROWSE_LIMIT_EXCEEDED`, never a cut-off list |
 | Page size | 1–100, default 20; a page past the end returns the last page |
 | Filters | at most 10, combined with AND, on fields of the current version: text `$includes`, `$notIncludes`, `$eq`, `$ne`, `$empty`, `$notEmpty`; number and date `$eq`, `$ne`, `$gt`, `$gte`, `$lt`, `$lte`, `$empty`, `$notEmpty`; boolean `$isTruly`, `$isFalsy`. A date filter value must be a valid calendar date |
 | Sort | one field of the current version or `_creationTime`, `asc` or `desc`; ties fall back to newest first, then ID; a missing value sorts last ascending |
@@ -87,7 +89,7 @@ Field values are read only from the object's own keys, so a field named like a b
 
 The backend accepts every filter in the table above. The demo list offers one of them: a date range on the configured date rule, with the start on or after one day and the end on or before another. Other filters are reachable only through direct calls in M1.5.
 
-Requests are filtered, sorted and paged in memory after the authorized index read, because Convex cannot index the dynamic keys inside `values`. Filtering happens before paging, so `total` counts only readable matches. With at most 1000 requests of at most 8 KiB, one list reads under Convex's per-function read limit.
+Requests are filtered, sorted and paged in memory after the authorized index reads, because Convex cannot index the dynamic keys inside `values`. Filtering happens before paging, so `total` counts only readable matches. With at most 1000 requests of at most 8 KiB, one list reads under Convex's per-function read limit.
 
 ### Error codes
 
@@ -101,7 +103,7 @@ The tab appears for any active member. With more than one application it shows a
 
 ## Evidence
 
-Revision exercised: `a0987cf8b4` on `claude/issue-16-review-fixes`, 2026-10-07, which applies the code and security review fixes to `integration/issue-16`; later commits change documentation only. Target: a fresh self-hosted Convex backend on loopback 3320/3321, instance `records16review`, its own SQLite and file store under `storage/records-16-review-*/`, set up with the [baseline runbook](baseline-13.md) (`convex deploy --env-file`, static JWKS, `SITE_URL` `http://localhost:5183`). Vite ran on 5183 against it. Each of the three request journey runs started Vite after deleting `node_modules/.vite/deps`, so dependencies were optimized from scratch every time.
+Revision exercised: `ee9d1cb0e2` on `claude/issue-16-private-drafts`, 2026-10-07, which makes drafts private on top of `integration/issue-16`; later commits change documentation only. Target: a fresh self-hosted Convex backend on loopback 3320/3321, instance `records16private`, its own SQLite and file store under `storage/records-16-private-*/`, set up with the [baseline runbook](baseline-13.md) (`convex deploy --env-file`, static JWKS, `SITE_URL` `http://localhost:5183`). Vite ran on 5183 against it. Each of the three request journey runs started Vite after deleting `node_modules/.vite/deps`, so dependencies were optimized from scratch every time.
 
 ### Commands
 
@@ -144,18 +146,22 @@ The regression journeys ran on the same target and Vite with the same three URLs
 | Review fixes, `list` scope and query validation | 3 tests failed: a reader under `requesterAndAssignedReviewer` got `application`, and a malformed query read 2 index ranges first |
 | Review fixes, client helpers (`isRequestErrorCode`, `columnTitle`, `dateRangeFilters`, `requestModalStatus`, `newCreateAttempt`) | 3 tests failed on missing exports, and `requestModal.test.ts` failed to load the module |
 | Review fixes, date filter text | 1 `i18n.test.ts` test failed without the `requests.filter*`, `clearFilter` and `noMatches` keys |
+| Private drafts, `requests.test.ts` | 5 tests failed: the reader got another member's draft from `get`; under the readers preset the reader got a foreign draft beside the submitted row; a reader who also submits listed 50 rows instead of their 25; 1001 foreign drafts made the reader's list fail with `RECORD_BROWSE_LIMIT_EXCEEDED`; Z's list of only their own request was labelled `application` |
+| Private drafts, journey HTTP phases against the backend deployed from `7e85eb8374` | 48 of 49 checks passed; `http.preset.readers-application` failed: R read A's draft (`isMe: false`) and listed 1 with scope `application` |
 
 ### Results
 
 | Check | Outcome |
 | --- | --- |
-| Demo unit suite | 16 files, 320 tests passed: 39 in `requestValues.test.ts`, 36 in `requests.test.ts`, 56 in `recordQuery.test.ts`, 13 in `i18n.test.ts`, 9 in `requestForm.test.ts`, 6 in `requestModal.test.ts` |
+| Demo unit suite | 16 files, 322 tests passed: 39 in `requestValues.test.ts`, 38 in `requests.test.ts`, 56 in `recordQuery.test.ts`, 13 in `i18n.test.ts`, 9 in `requestForm.test.ts`, 6 in `requestModal.test.ts` |
 | Convex and demo typecheck, demo build | Passed |
-| `oxlint` on touched files | No diagnostics |
+| `oxlint` and `oxfmt --check` on touched files | No diagnostics |
 | `quality:check --base origin/main` | 26 changed files, 0 introduced diagnostics |
-| `convex codegen` against the target | After `oxfmt`, `convex/_generated` is unchanged: `requestCounts` is a table, not a module, and `dataModel.d.ts` derives tables from the schema |
-| Request journey, three runs, each from a fresh Vite dependency cache | 73/73, 73/73 and 73/73 checks passed; each exited 0. No run failed, so no failure needed a root cause |
-| Regressions on the same target | `demo:verify` 24, `demo:journey` 18, `demo:collection-journey` 31, `demo:record-journey` 37, `demo:isolation-journey` 57, `demo:browse-journey` 18, `demo:membership-journey` 66/66, `demo:definition-journey` 30/30; all exited 0 on the first run |
+| `convex codegen` against the target | After `oxfmt`, `convex/_generated` is unchanged: `dataModel.d.ts` derives tables and indexes from the schema |
+| Request journey, three runs, each from a fresh Vite dependency cache | 73/73, 73/73 and 73/73 checks passed; each exited 0 |
+| Regressions on the same target | `demo:verify` 24, `demo:journey` 18, `demo:collection-journey` 31, `demo:isolation-journey` 57, `demo:browse-journey` 18, `demo:membership-journey` 66/66, `demo:definition-journey` 30/30; each exited 0. `demo:record-journey` failed once and passed 37 on the next run; see below |
+
+The failed `demo:record-journey` run stopped in zh-CN after the rejected edit: `getByRole('button', { name: '保 存', exact: true })` in the record dialog timed out. This is the antd loading-icon race recorded in [definition-15.md](definition-15.md), in the record dialog of `src/demo/App.tsx`, which #15 left unchanged. A temporary probe repeated the rejected edit save, retyping the over-long value each time, and reproduced it once in 142 saves across both locales; 60 saves without retyping did not reproduce it. The button no longer had `ant-btn-loading`, but its icon stayed in `ant-btn-loading-icon-motion-leave-active` with `width: 0px; opacity: 0`, and the accessible name was "loading 保 存". The record dialog does not render requests and this change does not touch it.
 
 Journey checks, expected equal to actual for every row:
 
@@ -167,7 +173,7 @@ Journey checks, expected equal to actual for every row:
 | Duplicates | The same operation ID with reordered values returned the original ID with `created: false` and no write; with other values: `RECORD_OPERATION_CONFLICT` |
 | Isolation | B, C and R got `null` for A's request and lists of 0, and R's list was labelled `own`; Z got `APPLICATION_ACCESS_DENIED`; B's update and delete and A's call through another application: `RECORD_NOT_FOUND` |
 | Revisions | Update to revision 2; stale update and delete: `RECORD_REVISION_CONFLICT`; a reviewer value and a reversed range on update wrote nothing |
-| Readers preset | In the readers application R read A's request (`isMe: false`, `canEdit: false`) and listed 1 with scope `application`; B (the reviewer) listed 0; R's delete: `RECORD_NOT_FOUND` |
+| Readers preset, private drafts | In the readers application R got `null` for A's draft and listed 0 with scope `own`; B (the reviewer) listed 0; A listed their 1 draft with scope `own`; R's delete: `RECORD_NOT_FOUND` |
 | Paging | 25 of A's requests with 3 of B's interleaved; the `requestCounts` row read 28, equal to the rows, and 0 after the 28 deletes: 3 pages of 10, 10 and 5 by `days` ascending held days 1–25 exactly once; page 9 returned page 3 of 3; `startDate $gte 2026-05-21` by `days` descending returned 25, 24, 23, 22, 21; B listed only their 3; page size 101 and an invalid date filter got their codes |
 | en-US, keyboard only, recorded | Empty state; a reversed range showed "End date must not be earlier than the start of the date range." under End date, focused it, and wrote nothing; the fixed form saved V1 with the exact values; focus returned to "New request"; after reload the row read Me, 2026-03-02, 2026-03-04, 3, V1 and the form reopened with the same values; an edit saved revision 2. In the date filter, "Start date on or after" 2026-03-03 hid the row and showed "No requests match these dates.", 2026-03-02 showed it again, "End date on or before" 2026-03-03 hid it, and "Clear dates" emptied both inputs and showed the row |
 | V2 and V3 | C published V2 with an optional `note` field and column through `saveDraft` and `publish`; the Note column appeared with "—" for the V1 row; the V1 request reopened with only the V1 fields and "Version 1"; Escape returned focus to Open; a new form showed "Version 2" with Note. C published V3 while the form was open: the save was refused with the "newer version" alert and no write; "Load new version" kept every typed value and added Contact; the save created a V3 request with the note. The page sent two `requests:create` mutations for this form, read from its Convex WebSocket frames: their operation IDs differed, and the stored V3 request holds the second |
@@ -179,11 +185,11 @@ Journey checks, expected equal to actual for every row:
 
 The modal's failed-query state has unit evidence only. Its reachable triggers, such as a deactivated membership, also remove the application from the member's list, which replaces the panel and closes the modal before a browser could observe it.
 
-Evidence files (ignored build output, regenerated by each run) in `dist/request-journey/`: `en-US-requests.webm`, `zh-CN-requests.webm`, `en-US-{1-empty,2-reversed-range,3-created,3a-filtered-out,4-v1-reopened-after-v2,5-outdated,6-v3-created,7-deleted}.png`, `zh-CN-{1-list,2-conflict,3-kept-and-saved,4-empty-again}.png`, `{en-US,zh-CN}-console.log`, `persisted-requests.json` (request rows after the browser phase, IDs normalized) and `results.json`; red mode writes `results-red.json` instead. The target directory keeps a copy of each run: `runs/1/` holds run 1's `results.json`, screenshots, videos and console logs, `runs/2/` and `runs/3/` hold `results.json` and console logs, and `run2.log` and `run3.log` hold the console output. `dist/request-journey/` holds run 3's files.
+Evidence files (ignored build output, regenerated by each run) in `dist/request-journey/`: `en-US-requests.webm`, `zh-CN-requests.webm`, `en-US-{1-empty,2-reversed-range,3-created,3a-filtered-out,4-v1-reopened-after-v2,5-outdated,6-v3-created,7-deleted}.png`, `zh-CN-{1-list,2-conflict,3-kept-and-saved,4-empty-again}.png`, `{en-US,zh-CN}-console.log`, `persisted-requests.json` (request rows after the browser phase, IDs normalized) and `results.json`; red mode writes `results-red.json` instead. The target directory keeps a full copy of each run in `runs/1/`, `runs/2/` and `runs/3/`, the console output in `run1.log`, `run2.log` and `run3.log`, the red run in `red.log` and `results-red.json`, each regression journey's output in `regression-*.log`, and the record-dialog probe output in `probe-record-*.log`. `dist/request-journey/` holds run 3's files.
 
 ## Retained resources
 
-- `storage/records-16-review-*/`: the synthetic database, file store, private target configuration, JWKS, run ID, password, backend log, per-run journey evidence and regression logs. Do not upload it. Deleting the directory removes all of it.
+- `storage/records-16-private-*/`: the synthetic database, file store, private target configuration, JWKS, run ID, password, backend log, per-run journey evidence and regression logs. Do not upload it. Deleting the directory removes all of it. After the runs, every application table on the target held 0 rows.
 - Better Auth retains the synthetic users and sessions that the journeys create; sign-out does not delete every session.
 - `dist/request-journey/` and the other `dist/*-journey/` folders.
 
@@ -192,7 +198,8 @@ Evidence files (ignored build output, regenerated by each run) in `dist/request-
 - Submission, reviewer assignment, decisions, decision history and the reviewer branch of the presets: #17. `state` stays the literal `draft`, so there is no "not a draft" error yet.
 - Tombstones or an operation ledger; an operation ID replayed after delete creates a new request.
 - Filters beyond the listed operators, filter controls other than the date range in the demo, indexes on dynamic fields, and more than 1000 requests per application.
-- Whether `readApplicationRecords` under `requesterAssignedReviewerAndReaders` should see other members' **drafts**. ADR-0007 decides yes; the issue's outcome calls drafts the employee's own work before submission. This needs the spec owner's decision; if drafts stay private, #17 limits the reader branch to non-draft states.
+- A reader seeing another member's request in the browser. No request leaves `draft` before #17, so the reader branch for non-draft requests has unit evidence only.
+- The loading-icon race on the record dialog's Save button in `src/demo/App.tsx`, described under Results.
 - Migrating requests between versions; a request keeps its pinned version.
 - A full designer, Feishu, ERP or CRM synchronization.
 - The design proposed an antd `DatePicker`; the form uses a native date input instead, which keeps the value a plain `YYYY-MM-DD` string with no conversion step.

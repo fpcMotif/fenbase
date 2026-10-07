@@ -21,7 +21,7 @@ Issue: [#14](https://github.com/fpcMotif/fenbase/issues/14), parent [#1](https:/
 | `configureApplication` | Builder: configure and publish the application (#15 enforces it) | Yes |
 | `submitRequests` | Employee/requester | Yes |
 | `reviewRequests` | Reviewer | Yes |
-| `readApplicationRecords` | Read every request in the application, drafts included, but only requests whose policy preset is `requesterAssignedReviewerAndReaders` (#16 enforces it) | Yes |
+| `readApplicationRecords` | Read other members' non-draft requests in the application, but only those whose policy preset is `requesterAssignedReviewerAndReaders` (#16 enforces it). Drafts stay private to their requester | Yes |
 | `manageMembers` | Membership admin | No; fixture seed only |
 
 `configureApplication` never implies `readApplicationRecords`.
@@ -54,7 +54,7 @@ The demo frontend maps every membership error code to a `membershipErrors.*` key
 
 | Predicate | Rule | Ticket |
 | --- | --- | --- |
-| `canReadRequest` | Own request; or `readApplicationRecords` when the request's own policy preset is `requesterAssignedReviewerAndReaders`; or (#17) an assigned submitted request | #16, #17 |
+| `canReadRequest` | Own request in any state; or `readApplicationRecords` when the request is not a draft and its own policy preset is `requesterAssignedReviewerAndReaders`; or (#17) an assigned submitted request | #16, #17 |
 | `canEditBusinessFields` | Requester edits or deletes their own draft only, while holding `submitRequests`; no grant lets another member edit | #16 |
 | `isEligibleReviewer` | Active member of the same application with `reviewRequests`. Built in #15 for definition save and publish; #17 re-checks it at submit and decision time | #15, #17 |
 | `canDecideRequest` | Eligible reviewer, request pending and assigned to them, not their own request; decision fields only | #17 |
