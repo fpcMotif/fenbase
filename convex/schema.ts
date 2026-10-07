@@ -1,5 +1,6 @@
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
+import { fileMetadataFields } from './attachmentModel';
 import { definitionValidator, policyPresetValidator } from './definitionModel';
 import { capabilityValidator, membershipStatusValidator } from './membershipValidators';
 import {
@@ -118,10 +119,7 @@ export default defineSchema({
     uploaderMembershipId: v.id('memberships'),
     operationId: v.string(),
     storageId: v.id('_storage'),
-    fileName: v.string(),
-    size: v.number(),
-    contentType: v.string(),
-    sha256: v.string(),
+    ...fileMetadataFields,
     createdAt: v.number(),
   })
     .index('by_request', ['requestId', 'fieldKey'])
@@ -138,10 +136,7 @@ export default defineSchema({
     kind: v.union(v.literal('attach'), v.literal('remove')),
     attachmentId: v.id('requestAttachments'),
     fieldKey: v.string(),
-    fileName: v.string(),
-    size: v.number(),
-    contentType: v.string(),
-    sha256: v.string(),
+    ...fileMetadataFields,
     revision: v.number(),
     createdAt: v.number(),
   })

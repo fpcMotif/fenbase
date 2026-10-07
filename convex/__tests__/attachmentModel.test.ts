@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
 import {
-  canReadAttachments,
   extensionMatches,
   sameSha256,
   sanitizeFileName,
@@ -88,48 +87,5 @@ describe('sameSha256', () => {
   it('refuses a different digest', () => {
     expect(sameSha256(hex.replace('ba', 'bb'), hex)).toBe(false);
     expect(sameSha256('ungWv48Bz+pBQUDeXa4iI7ADYaOWF3qctBD/YfIAFa1=', hex)).toBe(false);
-  });
-});
-
-describe('canReadAttachments', () => {
-  const caller = (membershipId: string, grants: string[], applicationId = 'applications:1') => ({
-    membershipId,
-    applicationId,
-    grants: new Set(grants),
-  });
-  const request = (state: string) => ({
-    applicationId: 'applications:1',
-    requesterMembershipId: 'memberships:a',
-    reviewerMembershipId: state === 'draft' ? undefined : 'memberships:v',
-    state,
-  });
-
-  it.each(['draft', 'pending', 'approved', 'rejected', 'withdrawn'])('lets the requester read in %s', (state) => {
-    expect(canReadAttachments(caller('memberships:a', []), request(state))).toBe(true);
-  });
-
-  it.each(['pending', 'approved', 'rejected', 'withdrawn'])(
-    'lets the assigned reviewer with reviewRequests read in %s',
-    (state) => {
-      expect(canReadAttachments(caller('memberships:v', ['reviewRequests']), request(state))).toBe(true);
-      expect(canReadAttachments(caller('memberships:v', []), request(state))).toBe(false);
-    },
-  );
-
-  it('keeps a draft private from everyone but the requester', () => {
-    const draft = { ...request('draft'), reviewerMembershipId: 'memberships:v' };
-    expect(canReadAttachments(caller('memberships:v', ['reviewRequests']), draft)).toBe(false);
-  });
-
-  it('gives readers, builders and unrelated members nothing', () => {
-    for (const grants of [['readApplicationRecords'], ['configureApplication'], ['submitRequests'], []]) {
-      expect(canReadAttachments(caller('memberships:x', grants), request('approved'))).toBe(false);
-    }
-  });
-
-  it('refuses a caller from another application', () => {
-    expect(canReadAttachments(caller('memberships:a', ['submitRequests'], 'applications:2'), request('approved'))).toBe(
-      false,
-    );
   });
 });

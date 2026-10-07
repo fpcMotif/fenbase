@@ -130,6 +130,7 @@ function validBounds(field: DefinitionField): boolean {
     return (
       inRange(field.maxFiles, MAX_ATTACHMENTS_PER_REQUEST) &&
       inRange(field.maxBytes, MAX_ATTACHMENT_BYTES) &&
+      field.maxBytes % 1024 === 0 &&
       field.accept.length > 0 &&
       field.accept.every(isAttachmentType) &&
       new Set(field.accept).size === field.accept.length

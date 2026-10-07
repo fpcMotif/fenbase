@@ -99,6 +99,11 @@ export function canRead(principal: ApplicationPrincipal, row: Doc<'requests'>): 
   return row.policyPreset === READERS_PRESET && canReadAllRecords(principal);
 }
 
+// Stricter than reading the request: readers-preset holders and builders see the request but not its files.
+export function canReadAttachments(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
+  return canRead(principal, row) && (isOwn(principal, row) || isAssignedReviewer(principal, row));
+}
+
 export function toView(principal: ApplicationPrincipal, row: Doc<'requests'>) {
   const isMe = row.requesterMembershipId === principal.membershipId;
   const ownsWithGrant = isMe && canSubmitRequests(principal);
@@ -290,8 +295,8 @@ export const update = mutation({
   },
 });
 
-// A draft's files never outnumber its attach events, and attaching stops at the event budget, so the bounds below cover
-// every row the draft can hold.
+// A draft's files never outnumber its attach events, attaching stops at the attach budget, and every remove follows an
+// attach, so the bounds below cover every row the draft can hold.
 async function removeAttachmentsOf(ctx: MutationCtx, requestId: Id<'requests'>) {
   const attachments = await ctx.db
     .query('requestAttachments')
@@ -304,7 +309,7 @@ async function removeAttachmentsOf(ctx: MutationCtx, requestId: Id<'requests'>) 
   const events = await ctx.db
     .query('attachmentEvents')
     .withIndex('by_request', (q) => q.eq('requestId', requestId))
-    .take(MAX_ATTACHMENT_EVENTS_PER_REQUEST + MAX_ATTACHMENTS_PER_REQUEST);
+    .take(MAX_ATTACHMENT_EVENTS_PER_REQUEST);
   for (const event of events) await ctx.db.delete(event._id);
 }
 

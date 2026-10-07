@@ -50,11 +50,12 @@ interface StoragePaginator {
   }>;
 }
 
-async function digestHex(bytes: Uint8Array): Promise<string> {
+// The self-hosted backend keeps `_storage.sha256` in base64 and checks `store`'s `sha256` option in base64.
+async function digestBase64(bytes: Uint8Array): Promise<string> {
   const copy = new Uint8Array(bytes.byteLength);
   copy.set(bytes);
   const digest = await crypto.subtle.digest('SHA-256', copy.buffer);
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return btoa(String.fromCharCode(...new Uint8Array(digest)));
 }
 
 export interface TestContext {
@@ -247,8 +248,8 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
   const storage: TestContext['storage'] = {
     async store(blob, options) {
       const bytes = new Uint8Array(await blob.arrayBuffer());
-      const sha256 = await digestHex(bytes);
-      if (options?.sha256 !== undefined && options.sha256 !== sha256) throw new Error('sha256 mismatch');
+      const sha256 = await digestBase64(bytes);
+      if (options?.sha256 !== undefined && options.sha256 !== sha256) throw new Error('Sha256 mismatch');
       const id = `_storage:${nextFileId++}`;
       lastCreationTime = Math.max(Date.now(), lastCreationTime + 1);
       files.set(id, { _id: id, _creationTime: lastCreationTime, sha256, size: bytes.byteLength, bytes });
