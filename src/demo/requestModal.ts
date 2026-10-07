@@ -1,3 +1,5 @@
+import { isRequestState, type RequestState } from '../../convex/requestValues';
+
 export type RequestModalStatus =
   | { kind: 'loading' }
   | { kind: 'missing' }
@@ -29,6 +31,17 @@ export function requestActions(view: ActionFlags): ReviewAction[] {
   if (view.canWithdraw) actions.push('withdraw');
   if (view.canDecide) actions.push('reject', 'approve');
   return actions;
+}
+
+export type StaleRequest = { state: RequestState; revision: number };
+
+export function staleRequest(
+  server: { currentState?: string; currentRevision?: number },
+  latest: StaleRequest | undefined,
+): StaleRequest | null {
+  const state = isRequestState(server.currentState) ? server.currentState : latest?.state;
+  if (!state) return null;
+  return { state, revision: server.currentRevision ?? latest?.revision ?? 0 };
 }
 
 export type CreateAttempt<Version> = { version: Version; operationId: string };

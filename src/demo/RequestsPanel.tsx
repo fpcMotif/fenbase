@@ -42,7 +42,14 @@ import {
   type DateRange,
   type RequestFormValues,
 } from './requestForm';
-import { newCreateAttempt, requestActions, requestModalStatus, type ReviewAction } from './requestModal';
+import {
+  newCreateAttempt,
+  requestActions,
+  requestModalStatus,
+  staleRequest,
+  type ReviewAction,
+  type StaleRequest,
+} from './requestModal';
 
 type MyApplication = FunctionReturnType<typeof api.memberships.listMine>[number];
 type PublishedVersion = FunctionReturnType<typeof api.applicationDefinitions.getPublishedVersion>;
@@ -53,7 +60,6 @@ type Inbox = FunctionReturnType<typeof api.requestReviews.inbox>;
 type InboxStatus = 'pending' | 'completed';
 type RequestEvents = FunctionReturnType<typeof api.requestReviews.history>;
 type PanelView = 'mine' | 'assigned';
-type Stale = { state: string; revision: number };
 type Sort = { field: string; direction: 'asc' | 'desc' };
 type Browse = { page: number; pageSize: number; sort: Sort; filters: RecordFilter[] };
 type ModalState = { kind: 'create' } | { kind: 'edit'; requestId: Id<'requests'> };
@@ -547,7 +553,7 @@ function RequestModal({
   const [formError, setFormError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [reviewPending, setReviewPending] = useState<ReviewAction | null>(null);
-  const [stale, setStale] = useState<Stale | null>(null);
+  const [stale, setStale] = useState<StaleRequest | null>(null);
   const conflictRef = useRef<HTMLDivElement>(null);
   const outdatedRef = useRef<HTMLDivElement>(null);
   const staleRef = useRef<HTMLDivElement>(null);
@@ -685,14 +691,12 @@ function RequestModal({
       .then((result) => onSaved(t(`reviews.${reviewDoneKeys[action]}`, { revision: result.revision })))
       .catch((error: unknown) => {
         const data = actionErrorData(error);
-        if (
-          data?.code === 'REQUEST_STATE_CONFLICT' ||
-          (action !== 'submit' && data?.code === 'RECORD_REVISION_CONFLICT')
-        ) {
-          setStale({
-            state: data.currentState ?? request?.state ?? 'draft',
-            revision: data.currentRevision ?? request?.revision ?? 0,
-          });
+        const stale =
+          data?.code === 'REQUEST_STATE_CONFLICT' || (action !== 'submit' && data?.code === 'RECORD_REVISION_CONFLICT')
+            ? staleRequest(data, request ?? loadedRequest ?? undefined)
+            : null;
+        if (stale) {
+          setStale(stale);
           return;
         }
         handleError(error);

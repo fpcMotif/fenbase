@@ -40,6 +40,10 @@ export const requestStateValidator = v.union(
 );
 export type RequestState = Infer<typeof requestStateValidator>;
 
+export function isRequestState(value: unknown): value is RequestState {
+  return requestStateValidator.members.some((member) => member.value === value);
+}
+
 export const reviewCommandValidator = v.union(
   v.literal('submit'),
   v.literal('approve'),
