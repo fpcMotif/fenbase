@@ -1,6 +1,7 @@
 import { ConvexError, v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
 import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/server';
+import { MAX_ATTACHMENT_EVENTS_PER_REQUEST, MAX_ATTACHMENTS_PER_REQUEST } from './attachmentModel';
 import { canonicalJson, type Definition } from './definitionModel';
 import {
   assertCanSubmitRequests,
@@ -138,7 +139,7 @@ async function findCounter(ctx: MutationCtx, applicationId: Id<'applications'>) 
     .unique();
 }
 
-export async function pinnedDefinition(ctx: MutationCtx, row: Doc<'requests'>): Promise<Definition> {
+export async function pinnedDefinition(ctx: QueryCtx | MutationCtx, row: Doc<'requests'>): Promise<Definition> {
   const version = await ctx.db.get(row.definitionVersionId);
   if (!version || version.applicationId !== row.applicationId) throw notFound();
   return version.definition;
@@ -162,19 +163,34 @@ async function fingerprint(definitionVersionId: Id<'applicationDefinitionVersion
   return sha256Hex({ definitionVersionId, values });
 }
 
+// The access half of an edit: the caller's own request while they hold submitRequests. Replayable commands look up
+// their replay between this and `assertEditable`, so a replay re-checks access but not the state it already changed.
+export async function requireOwnRequest(
+  ctx: QueryCtx | MutationCtx,
+  applicationId: Id<'applications'>,
+  requestId: Id<'requests'>,
+) {
+  const principal = await requireApplicationPrincipal(ctx, applicationId);
+  const row = await ctx.db.get(requestId);
+  if (!row || !isOwn(principal, row)) throw notFound();
+  assertCanSubmitRequests(principal);
+  return { principal, row };
+}
+
+export function assertEditable(row: Doc<'requests'>, expectedRevision: number): void {
+  if (row.state !== 'draft') throw stateConflict(row);
+  if (row.revision !== expectedRevision) throw revisionConflict(row);
+}
+
 async function requireEditable(
   ctx: MutationCtx,
   applicationId: Id<'applications'>,
   requestId: Id<'requests'>,
   expectedRevision: number,
 ) {
-  const principal = await requireApplicationPrincipal(ctx, applicationId);
-  const row = await ctx.db.get(requestId);
-  if (!row || !isOwn(principal, row)) throw notFound();
-  assertCanSubmitRequests(principal);
-  if (row.state !== 'draft') throw stateConflict(row);
-  if (row.revision !== expectedRevision) throw revisionConflict(row);
-  return { principal, row };
+  const owned = await requireOwnRequest(ctx, applicationId, requestId);
+  assertEditable(owned.row, expectedRevision);
+  return owned;
 }
 
 export const create = mutation({
@@ -274,11 +290,30 @@ export const update = mutation({
   },
 });
 
+// A draft's files never outnumber its attach events, and attaching stops at the event budget, so the bounds below cover
+// every row the draft can hold.
+async function removeAttachmentsOf(ctx: MutationCtx, requestId: Id<'requests'>) {
+  const attachments = await ctx.db
+    .query('requestAttachments')
+    .withIndex('by_request', (q) => q.eq('requestId', requestId))
+    .take(MAX_ATTACHMENTS_PER_REQUEST);
+  for (const attachment of attachments) {
+    await ctx.db.delete(attachment._id);
+    await ctx.storage.delete(attachment.storageId);
+  }
+  const events = await ctx.db
+    .query('attachmentEvents')
+    .withIndex('by_request', (q) => q.eq('requestId', requestId))
+    .take(MAX_ATTACHMENT_EVENTS_PER_REQUEST + MAX_ATTACHMENTS_PER_REQUEST);
+  for (const event of events) await ctx.db.delete(event._id);
+}
+
 export const remove = mutation({
   args: { applicationId: v.id('applications'), requestId: v.id('requests'), expectedRevision: v.number() },
   returns: v.null(),
   handler: async (ctx, args) => {
     const { row } = await requireEditable(ctx, args.applicationId, args.requestId, args.expectedRevision);
+    await removeAttachmentsOf(ctx, row._id);
     await ctx.db.delete(row._id);
     const counter = await findCounter(ctx, row.applicationId);
     if (counter) await ctx.db.patch(counter._id, { count: Math.max(0, counter.count - 1) });
@@ -319,10 +354,10 @@ export const list = query({
     const principal = await requireApplicationPrincipal(ctx, args.applicationId);
     const head = await findHead(ctx, principal.applicationId);
     const current = head?.currentVersionId ? await ctx.db.get(head.currentVersionId) : null;
-    const fields: RecordQueryField[] = (current?.definition.fields ?? []).map((field) => ({
-      name: field.key,
-      type: field.type,
-    }));
+    const fields: RecordQueryField[] = [];
+    for (const field of current?.definition.fields ?? []) {
+      if (field.type !== 'attachment') fields.push({ name: field.key, type: field.type });
+    }
 
     const query = { filters: args.filters, sort: args.sort, page: args.page, pageSize: args.pageSize };
     validateRecordQuery(fields, query);

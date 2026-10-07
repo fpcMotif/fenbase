@@ -1,6 +1,7 @@
 import { ConvexError, v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
 import { mutation, query, type MutationCtx } from './_generated/server';
+import type { Definition } from './definitionModel';
 import {
   assertCanReviewRequests,
   canSubmitRequests,
@@ -96,11 +97,33 @@ async function findTask(ctx: MutationCtx, requestId: Id<'requests'>) {
     .unique();
 }
 
+// Files live outside `values`, so submit checks each attachment field of the pinned version against its rows. The set
+// it accepts is the evidence: after submit no command changes it.
+async function assertEvidence(ctx: MutationCtx, row: Doc<'requests'>, definition: Definition) {
+  for (const field of definition.fields) {
+    if (field.type !== 'attachment') continue;
+    const files = await ctx.db
+      .query('requestAttachments')
+      .withIndex('by_request', (q) => q.eq('requestId', row._id).eq('fieldKey', field.key))
+      .take(field.maxFiles + 1);
+    if (field.required && files.length === 0) {
+      throw requestError('ATTACHMENT_REQUIRED', 'Attach a file before submitting', { field: field.key });
+    }
+    if (files.length > field.maxFiles) {
+      throw requestError('ATTACHMENT_LIMIT_REACHED', 'This request holds more files than the form allows', {
+        field: field.key,
+        max: field.maxFiles,
+      });
+    }
+  }
+}
+
 // Copies the reviewer from the pinned version, never the current head, after checking the values against that version
 // again.
 async function openReview(ctx: MutationCtx, principal: ApplicationPrincipal, row: Doc<'requests'>, now: number) {
   const definition = await pinnedDefinition(ctx, row);
   assertValidValues(definition, normalizeRequestValues(row.values));
+  await assertEvidence(ctx, row, definition);
   const reviewerMembershipId = definition.reviewerMembershipId;
   if (reviewerMembershipId === principal.membershipId) throw selfReview();
   if (!(await isEligibleReviewer(ctx, row.applicationId, reviewerMembershipId))) {

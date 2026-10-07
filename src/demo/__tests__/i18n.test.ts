@@ -64,7 +64,7 @@ describe('definition builder text', () => {
     }
   });
 
-  it.each(['builder', 'nav', 'requests', 'requestErrors', 'reviews'])(
+  it.each(['builder', 'nav', 'requests', 'requestErrors', 'reviews', 'attachments'])(
     'defines the same %s keys in both languages',
     (section) => {
       const english = leafKeys(i18n.getResourceBundle('en-US', 'translation')[section], section).sort();

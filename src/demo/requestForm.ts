@@ -5,6 +5,7 @@ import { normalizeRequestValues, ownValue, type RequestValue, type RequestValues
 export type RequestFormValues = Record<string, RequestValue | null | undefined>;
 
 function hasFieldType(field: DefinitionField, value: unknown): value is RequestValue {
+  if (field.type === 'attachment') return false;
   if (field.type === 'number') return typeof value === 'number';
   if (field.type === 'boolean') return typeof value === 'boolean';
   return typeof value === 'string';
@@ -24,7 +25,7 @@ export function toRequestValues(definition: Pick<Definition, 'fields'>, form: Re
   const values: RequestValues = {};
   for (const field of definition.fields) {
     const value = ownValue(form, field.key);
-    if (value === null || value === undefined) continue;
+    if (value === null || value === undefined || field.type === 'attachment') continue;
     values[field.key] = value;
   }
   return normalizeRequestValues(values);
