@@ -38,6 +38,7 @@ export type ActionErrorData = {
   code: string;
   field: string;
   currentRevision?: number;
+  currentState?: string;
   min?: number;
   max?: number;
   maxLength?: number;
@@ -63,6 +64,8 @@ export function actionErrorData(error: unknown): ActionErrorData | null {
     code: error.data.code,
     field,
     currentRevision: numberProperty(error.data, 'currentRevision'),
+    currentState:
+      'currentState' in error.data && typeof error.data.currentState === 'string' ? error.data.currentState : undefined,
     min: numberProperty(error.data, 'min'),
     max: numberProperty(error.data, 'max'),
     maxLength: numberProperty(error.data, 'maxLength'),

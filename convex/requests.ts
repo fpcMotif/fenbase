@@ -5,6 +5,7 @@ import { canonicalJson, type Definition } from './definitionModel';
 import {
   assertCanSubmitRequests,
   canReadAllRecords,
+  canReviewRequests,
   canSubmitRequests,
   requireApplicationPrincipal,
   type ApplicationPrincipal,
@@ -14,6 +15,7 @@ import {
   MAX_REQUESTS_PER_APPLICATION,
   OPERATION_ID_PATTERN,
   normalizeRequestValues,
+  requestStateValidator,
   requestValuesValidator,
   requestValueValidator,
   validateRequestValues,
@@ -24,43 +26,81 @@ import {
 // Draft requests pinned to a published definition version. The server owns identity, version, policy, state and
 // revision; callers send only field values.
 
-function requestError(code: RequestErrorCode, message: string, extra: Omit<RequestIssue, 'code'> = {}) {
+export function requestError(code: RequestErrorCode, message: string, extra: Omit<RequestIssue, 'code'> = {}) {
   return new ConvexError({ code, message, ...extra });
 }
 
-function notFound() {
+export function notFound() {
   return requestError('RECORD_NOT_FOUND', 'Request not found');
 }
 
-const requestViewValidator = v.object({
+export function stateConflict(row: Doc<'requests'>) {
+  return new ConvexError({
+    code: 'REQUEST_STATE_CONFLICT',
+    message: `The request is ${row.state}`,
+    currentState: row.state,
+    currentRevision: row.revision,
+  });
+}
+
+export function revisionConflict(row: Doc<'requests'>) {
+  return new ConvexError({
+    code: 'RECORD_REVISION_CONFLICT',
+    message: 'The request changed since you loaded it',
+    currentRevision: row.revision,
+  });
+}
+
+export function assertOperationId(operationId: string): void {
+  if (!OPERATION_ID_PATTERN.test(operationId)) {
+    throw requestError('RECORD_OPERATION_ID_INVALID', 'Use 8 to 64 letters, digits, hyphens or underscores');
+  }
+}
+
+const memberReferenceValidator = v.object({ membershipId: v.id('memberships'), isMe: v.boolean() });
+
+export const requestViewValidator = v.object({
   _id: v.id('requests'),
   _creationTime: v.number(),
   updatedAt: v.number(),
   version: v.number(),
   versionId: v.id('applicationDefinitionVersions'),
   revision: v.number(),
-  state: v.literal('draft'),
+  state: requestStateValidator,
   values: requestValuesValidator,
-  requester: v.object({ membershipId: v.id('memberships'), isMe: v.boolean() }),
+  requester: memberReferenceValidator,
+  reviewer: v.union(memberReferenceValidator, v.null()),
+  submittedAt: v.union(v.number(), v.null()),
+  decidedAt: v.union(v.number(), v.null()),
   canEdit: v.boolean(),
+  canSubmit: v.boolean(),
+  canWithdraw: v.boolean(),
+  canDecide: v.boolean(),
 });
 
 const READERS_PRESET = 'requesterAssignedReviewerAndReaders';
 
-function isOwn(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
+export function isOwn(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
   return row.applicationId === principal.applicationId && row.requesterMembershipId === principal.membershipId;
 }
 
-// The reviewer branch of the presets belongs to submitted requests, which arrive with the approval ticket.
-function canRead(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
+function isAssignedReviewer(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
+  return row.reviewerMembershipId === principal.membershipId && canReviewRequests(principal);
+}
+
+// Drafts stay private to the requester. A submitted request is also readable by its assigned reviewer while they hold
+// reviewRequests, and by readApplicationRecords holders under the readers preset.
+export function canRead(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
   if (row.applicationId !== principal.applicationId) return false;
   if (row.requesterMembershipId === principal.membershipId) return true;
   if (row.state === 'draft') return false;
+  if (isAssignedReviewer(principal, row)) return true;
   return row.policyPreset === READERS_PRESET && canReadAllRecords(principal);
 }
 
-function toView(principal: ApplicationPrincipal, row: Doc<'requests'>) {
+export function toView(principal: ApplicationPrincipal, row: Doc<'requests'>) {
   const isMe = row.requesterMembershipId === principal.membershipId;
+  const ownsWithGrant = isMe && canSubmitRequests(principal);
   return {
     _id: row._id,
     _creationTime: row._creationTime,
@@ -71,7 +111,15 @@ function toView(principal: ApplicationPrincipal, row: Doc<'requests'>) {
     state: row.state,
     values: row.values,
     requester: { membershipId: row.requesterMembershipId, isMe },
-    canEdit: isMe && canSubmitRequests(principal),
+    reviewer: row.reviewerMembershipId
+      ? { membershipId: row.reviewerMembershipId, isMe: row.reviewerMembershipId === principal.membershipId }
+      : null,
+    submittedAt: row.submittedAt ?? null,
+    decidedAt: row.decidedAt ?? null,
+    canEdit: ownsWithGrant && row.state === 'draft',
+    canSubmit: ownsWithGrant && row.state === 'draft',
+    canWithdraw: ownsWithGrant && row.state === 'pending',
+    canDecide: !isMe && row.state === 'pending' && isAssignedReviewer(principal, row),
   };
 }
 
@@ -90,13 +138,13 @@ async function findCounter(ctx: MutationCtx, applicationId: Id<'applications'>) 
     .unique();
 }
 
-async function pinnedDefinition(ctx: MutationCtx, row: Doc<'requests'>): Promise<Definition> {
+export async function pinnedDefinition(ctx: MutationCtx, row: Doc<'requests'>): Promise<Definition> {
   const version = await ctx.db.get(row.definitionVersionId);
   if (!version || version.applicationId !== row.applicationId) throw notFound();
   return version.definition;
 }
 
-function assertValidValues(definition: Definition, values: Record<string, unknown>): void {
+export function assertValidValues(definition: Definition, values: Record<string, unknown>): void {
   const issue = validateRequestValues(definition, values);
   if (issue) {
     const { code, ...extra } = issue;
@@ -104,10 +152,14 @@ function assertValidValues(definition: Definition, values: Record<string, unknow
   }
 }
 
-async function fingerprint(definitionVersionId: Id<'applicationDefinitionVersions'>, values: unknown) {
-  const bytes = new TextEncoder().encode(canonicalJson({ definitionVersionId, values }));
+export async function sha256Hex(value: unknown): Promise<string> {
+  const bytes = new TextEncoder().encode(canonicalJson(value));
   const digest = await crypto.subtle.digest('SHA-256', bytes);
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
+async function fingerprint(definitionVersionId: Id<'applicationDefinitionVersions'>, values: unknown) {
+  return sha256Hex({ definitionVersionId, values });
 }
 
 async function requireEditable(
@@ -120,13 +172,8 @@ async function requireEditable(
   const row = await ctx.db.get(requestId);
   if (!row || !isOwn(principal, row)) throw notFound();
   assertCanSubmitRequests(principal);
-  if (row.revision !== expectedRevision) {
-    throw new ConvexError({
-      code: 'RECORD_REVISION_CONFLICT',
-      message: 'The request changed since you loaded it',
-      currentRevision: row.revision,
-    });
-  }
+  if (row.state !== 'draft') throw stateConflict(row);
+  if (row.revision !== expectedRevision) throw revisionConflict(row);
   return { principal, row };
 }
 
@@ -146,9 +193,7 @@ export const create = mutation({
   handler: async (ctx, args) => {
     const principal = await requireApplicationPrincipal(ctx, args.applicationId);
     assertCanSubmitRequests(principal);
-    if (!OPERATION_ID_PATTERN.test(args.operationId)) {
-      throw requestError('RECORD_OPERATION_ID_INVALID', 'Use 8 to 64 letters, digits, hyphens or underscores');
-    }
+    assertOperationId(args.operationId);
 
     const values = normalizeRequestValues(args.values);
     const previous = await ctx.db

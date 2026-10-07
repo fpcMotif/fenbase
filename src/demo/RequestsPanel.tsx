@@ -10,12 +10,14 @@ import {
   InputNumber,
   Modal,
   Popconfirm,
+  Segmented,
   Select,
   Space,
   Spin,
   Switch,
   Table,
   Tag,
+  Timeline,
   Typography,
 } from 'antd';
 import type { TableColumnsType, TableColumnType, TablePaginationConfig, TableProps } from 'antd';
@@ -40,12 +42,24 @@ import {
   type DateRange,
   type RequestFormValues,
 } from './requestForm';
-import { newCreateAttempt, requestModalStatus } from './requestModal';
+import {
+  newCreateAttempt,
+  requestActions,
+  requestModalStatus,
+  staleRequest,
+  type ReviewAction,
+  type StaleRequest,
+} from './requestModal';
 
 type MyApplication = FunctionReturnType<typeof api.memberships.listMine>[number];
 type PublishedVersion = FunctionReturnType<typeof api.applicationDefinitions.getPublishedVersion>;
 type RequestPage = FunctionReturnType<typeof api.requests.list>;
 type RequestView = RequestPage['items'][number];
+type RequestState = RequestView['state'];
+type Inbox = FunctionReturnType<typeof api.requestReviews.inbox>;
+type InboxStatus = 'pending' | 'completed' | 'cancelled';
+type RequestEvents = FunctionReturnType<typeof api.requestReviews.history>;
+type PanelView = 'mine' | 'assigned';
 type Sort = { field: string; direction: 'asc' | 'desc' };
 type Browse = { page: number; pageSize: number; sort: Sort; filters: RecordFilter[] };
 type ModalState = { kind: 'create' } | { kind: 'edit'; requestId: Id<'requests'> };
@@ -66,6 +80,38 @@ function membershipReference(membershipId: string): string {
 
 function controlId(key: string): string {
   return `request-field-${key}`;
+}
+
+const reviewDoneKeys: Record<ReviewAction, string> = {
+  submit: 'submitted',
+  withdraw: 'withdrawn',
+  approve: 'approved',
+  reject: 'rejected',
+};
+
+const inboxEmptyKeys: Record<InboxStatus, string> = {
+  pending: 'reviews.inboxEmpty',
+  completed: 'reviews.inboxCompletedEmpty',
+  cancelled: 'reviews.inboxCancelledEmpty',
+};
+
+const stateColors: Record<RequestState, string> = {
+  draft: 'default',
+  pending: 'processing',
+  approved: 'success',
+  rejected: 'error',
+  withdrawn: 'warning',
+};
+
+function StateTag({ state }: { state: RequestState }) {
+  const { t } = useTranslation();
+  return <Tag color={stateColors[state]}>{t(`reviews.states.${state}`)}</Tag>;
+}
+
+function useMemberName() {
+  const { t } = useTranslation();
+  return (member: { membershipId: string; isMe: boolean }) =>
+    member.isMe ? t('requests.me') : t('requests.member', { ref: membershipReference(member.membershipId) });
 }
 
 export function RequestsPanel({ applications }: { applications: MyApplication[] }) {
@@ -98,6 +144,9 @@ export function RequestsPanel({ applications }: { applications: MyApplication[] 
 function ApplicationRequests({ application }: { application: MyApplication }) {
   const { t, i18n } = useTranslation();
   const canSubmit = application.grants.includes('submitRequests');
+  const canReview = application.grants.includes('reviewRequests');
+  const [view, setView] = useState<PanelView>(canReview && !canSubmit ? 'assigned' : 'mine');
+  const memberName = useMemberName();
   const [browse, setBrowse] = useState<Browse>(defaultBrowse);
   const [modal, setModal] = useState<ModalState | null>(null);
   const [status, setStatus] = useState('');
@@ -184,11 +233,7 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
   };
 
   const renderValue = (row: RequestView, key: string) => {
-    if (key === 'requester') {
-      return row.requester.isMe
-        ? t('requests.me')
-        : t('requests.member', { ref: membershipReference(row.requester.membershipId) });
-    }
+    if (key === 'requester') return memberName(row.requester);
     const value = ownValue(row.values, key);
     if (value === undefined) return t('requests.missingValue');
     if (typeof value === 'boolean') return value ? t('requests.yes') : t('requests.no');
@@ -198,7 +243,7 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
   const sortOrder = (key: string): SortOrder =>
     browse.sort.field === key ? (browse.sort.direction === 'asc' ? 'ascend' : 'descend') : null;
   const offset = page ? (page.page - 1) * page.pageSize : 0;
-  const columns: TableColumnsType<RequestView> = [
+  const valueColumns: TableColumnsType<RequestView> = [
     ...(definition?.listColumns ?? []).map((key) => {
       const field = fieldsByKey.get(key);
       return {
@@ -214,6 +259,14 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
       title: t('requests.versionColumn'),
       render: (_value, row) => <Tag>{t('requests.versionLabel', { version: row.version })}</Tag>,
     },
+    {
+      key: 'state',
+      title: t('reviews.stateColumn'),
+      render: (_value, row) => <StateTag state={row.state} />,
+    },
+  ];
+  const columns: TableColumnsType<RequestView> = [
+    ...valueColumns,
     {
       key: 'actions',
       title: t('requests.actions'),
@@ -321,19 +374,37 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
             {newButton}
           </Space>
           <Typography.Text className="demo-muted">{t('requests.description')}</Typography.Text>
+          {canReview && (
+            <Segmented<PanelView>
+              aria-label={t('reviews.viewLabel')}
+              value={view}
+              onChange={setView}
+              options={[
+                { value: 'mine', label: t('reviews.mine') },
+                { value: 'assigned', label: t('reviews.assigned') },
+              ]}
+            />
+          )}
           <output aria-live="polite">{status}</output>
         </Space>
       </Card>
 
-      {panelError && <Alert role="alert" type="error" showIcon message={panelError} />}
-      {pageResult instanceof Error && (
+      {view === 'assigned' && (
+        <ReviewInbox
+          application={application}
+          columns={valueColumns.map((column) => ({ ...column, sorter: false, sortOrder: null }))}
+          onOpen={(requestId) => openModal({ kind: 'edit', requestId })}
+        />
+      )}
+      {view === 'mine' && panelError && <Alert role="alert" type="error" showIcon message={panelError} />}
+      {view === 'mine' && pageResult instanceof Error && (
         <Alert role="alert" type="error" showIcon message={actionErrorMessage(pageResult, t)} />
       )}
       {currentResult instanceof Error && !noDefinition && (
         <Alert role="alert" type="error" showIcon message={actionErrorMessage(currentResult, t)} />
       )}
 
-      <Card>
+      <Card hidden={view !== 'mine'}>
         {!noDefinition && rangeFilter && <div style={{ marginBottom: 16 }}>{rangeFilter}</div>}
         {noDefinition ? (
           <Empty description={t('requests.noDefinition')} />
@@ -382,6 +453,78 @@ function ApplicationRequests({ application }: { application: MyApplication }) {
   );
 }
 
+function ReviewInbox({
+  application,
+  columns,
+  onOpen,
+}: {
+  application: MyApplication;
+  columns: TableColumnsType<RequestView>;
+  onOpen: (requestId: Id<'requests'>) => void;
+}) {
+  const { t, i18n } = useTranslation();
+  const [status, setStatus] = useState<InboxStatus>('pending');
+  const queries = useMemo(
+    (): RequestForQueries => ({
+      inbox: { query: api.requestReviews.inbox, args: { applicationId: application.applicationId, status } },
+    }),
+    [application.applicationId, status],
+  );
+  const result: Inbox | Error | undefined = useQueries(queries).inbox;
+  const inbox = result instanceof Error ? undefined : result;
+  const submittedAt = (value: number | null) =>
+    value === null ? t('requests.missingValue') : new Date(value).toLocaleString(i18n.language);
+
+  return (
+    <Card>
+      <Space direction="vertical" size={12} style={{ width: '100%' }}>
+        <Segmented<InboxStatus>
+          aria-label={t('reviews.inboxStatusLabel')}
+          value={status}
+          onChange={setStatus}
+          options={[
+            { value: 'pending', label: t('reviews.inboxPending') },
+            { value: 'completed', label: t('reviews.inboxCompleted') },
+            { value: 'cancelled', label: t('reviews.inboxCancelled') },
+          ]}
+        />
+        {result instanceof Error && (
+          <Alert role="alert" type="error" showIcon message={actionErrorMessage(result, t)} />
+        )}
+        {inbox?.truncated && <Alert type="info" showIcon message={t('reviews.inboxTruncated')} />}
+        {inbox && inbox.items.length === 0 ? (
+          <Empty description={t(inboxEmptyKeys[status])} />
+        ) : (
+          <Table<RequestView>
+            rowKey="_id"
+            loading={result === undefined}
+            dataSource={inbox?.items ?? []}
+            pagination={false}
+            scroll={{ x: true }}
+            columns={[
+              ...columns,
+              {
+                key: 'submittedAt',
+                title: t('reviews.submittedColumn'),
+                render: (_value, row) => submittedAt(row.submittedAt),
+              },
+              {
+                key: 'actions',
+                title: t('requests.actions'),
+                render: (_value, row, index) => (
+                  <Button aria-label={t('requests.openRow', { index: index + 1 })} onClick={() => onOpen(row._id)}>
+                    {t('requests.open')}
+                  </Button>
+                ),
+              },
+            ]}
+          />
+        )}
+      </Space>
+    </Card>
+  );
+}
+
 function RequestModal({
   application,
   state,
@@ -399,6 +542,13 @@ function RequestModal({
   const [form] = Form.useForm<RequestFormValues>();
   const createRequest = useMutation(api.requests.create);
   const updateRequest = useMutation(api.requests.update);
+  const reviewCommands = {
+    submit: useMutation(api.requestReviews.submit),
+    withdraw: useMutation(api.requestReviews.withdraw),
+    approve: useMutation(api.requestReviews.approve),
+    reject: useMutation(api.requestReviews.reject),
+  };
+  const memberName = useMemberName();
   const requestId = state.kind === 'edit' ? state.requestId : undefined;
 
   // A new request is pinned to the version shown when the form opened; it only moves on "Load new version".
@@ -409,16 +559,27 @@ function RequestModal({
   const [outdated, setOutdated] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [reviewPending, setReviewPending] = useState<ReviewAction | null>(null);
+  const [stale, setStale] = useState<StaleRequest | null>(null);
   const conflictRef = useRef<HTMLDivElement>(null);
   const outdatedRef = useRef<HTMLDivElement>(null);
+  const staleRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
   const queries = useMemo((): RequestForQueries => {
     if (!requestId) return {};
-    return { request: { query: api.requests.get, args: { applicationId: application.applicationId, requestId } } };
+    const args = { applicationId: application.applicationId, requestId };
+    return {
+      request: { query: api.requests.get, args },
+      history: { query: api.requestReviews.history, args },
+    };
   }, [application.applicationId, requestId]);
   const results = useQueries(queries);
   const requestResult: RequestView | null | Error | undefined = results.request;
   const request = requestResult instanceof Error ? undefined : requestResult;
+  const historyResult: RequestEvents | Error | undefined = results.history;
+  const history = historyResult instanceof Error ? null : historyResult;
+  const events = history?.events;
 
   const pinnedVersionId = request?.versionId;
   const versionQueries = useMemo((): RequestForQueries => {
@@ -446,8 +607,14 @@ function RequestModal({
   useEffect(() => {
     if (outdated) outdatedRef.current?.focus();
   }, [outdated]);
+  useEffect(() => {
+    if (stale) staleRef.current?.focus();
+  }, [stale]);
 
   const canEdit = state.kind === 'create' || Boolean(request?.canEdit);
+  // Review commands follow the snapshot the modal shows, so a decision made on stale content reaches the server and is
+  // refused there instead of silently applying to a request that changed.
+  const actions = loadedRequest ? requestActions(loadedRequest) : [];
   const labelOf = (key: string) => {
     const field = definition?.fields.find((candidate) => candidate.key === key);
     return field ? fieldLabel(field, i18n.language) : key;
@@ -461,6 +628,11 @@ function RequestModal({
       return;
     }
     setFormError(text);
+  };
+
+  const errorText = (error: unknown) => {
+    const data = actionErrorData(error);
+    return data && isRequestErrorCode(data.code) ? requestIssueMessage(data, t, labelOf) : actionErrorMessage(error, t);
   };
 
   const handleError = (error: unknown) => {
@@ -515,6 +687,87 @@ function RequestModal({
       .catch(handleError);
   };
 
+  const runReview = (
+    action: ReviewAction,
+    expectedRevision: () => Promise<number>,
+    savedRevision: () => number | null = () => null,
+  ) => {
+    if (!requestId) return;
+    setFormError(null);
+    const operationId = crypto.randomUUID();
+    runPendingAction(
+      (pending) => setReviewPending(pending ? action : null),
+      async () =>
+        reviewCommands[action]({
+          applicationId: application.applicationId,
+          requestId,
+          expectedRevision: await expectedRevision(),
+          operationId,
+        }),
+    )
+      .then((result) => onSaved(t(`reviews.${reviewDoneKeys[action]}`, { revision: result.revision })))
+      .catch((error: unknown) => {
+        const saved = savedRevision();
+        if (saved !== null) {
+          setFormError(t('reviews.savedNotSubmitted', { revision: saved, reason: errorText(error) }));
+          return;
+        }
+        const data = actionErrorData(error);
+        const stale =
+          data?.code === 'REQUEST_STATE_CONFLICT' || (action !== 'submit' && data?.code === 'RECORD_REVISION_CONFLICT')
+            ? staleRequest(data, request ?? loadedRequest ?? undefined)
+            : null;
+        if (stale) {
+          setStale(stale);
+          return;
+        }
+        handleError(error);
+      });
+  };
+
+  const decide = (action: Exclude<ReviewAction, 'submit'>) => {
+    if (baseRevision === null) return;
+    runReview(action, async () => baseRevision);
+  };
+
+  // Saves the form first, so the submitted request holds exactly what the requester sees.
+  const submitForReview = () => {
+    if (!definition || !requestId || baseRevision === null) return;
+    setFormError(null);
+    const values = toRequestValues(definition, form.getFieldsValue());
+    const issue = validateRequestValues(definition, values);
+    if (issue) {
+      showIssue(issue);
+      return;
+    }
+    let savedRevision: number | null = null;
+    runReview(
+      'submit',
+      async () => {
+        const saved = await updateRequest({
+          applicationId: application.applicationId,
+          requestId,
+          expectedRevision: baseRevision,
+          values,
+        });
+        if (saved.revision !== baseRevision) savedRevision = saved.revision;
+        setRevisionOverride(saved.revision);
+        return saved.revision;
+      },
+      () => savedRevision,
+    );
+  };
+
+  const showLatest = () => {
+    if (!request) return;
+    if (definition) replaceFormValues(definition.fields, request.values);
+    setLoadedRequest(request);
+    setRevisionOverride(null);
+    setStale(null);
+    // The button that had focus disappears with the alert; keep focus inside the dialog.
+    closeRef.current?.focus();
+  };
+
   // Clears only fields that show an error: resetting an already empty error list makes rc-field-form compare its shared
   // empty-list constant with itself and log a "circular references" warning.
   const clearErrors = (names: readonly string[]) => {
@@ -552,7 +805,13 @@ function RequestModal({
   };
 
   const title =
-    state.kind === 'create' ? t('requests.createTitle') : canEdit ? t('requests.editTitle') : t('requests.viewTitle');
+    state.kind === 'create'
+      ? t('requests.createTitle')
+      : canEdit
+        ? t('requests.editTitle')
+        : actions.includes('approve')
+          ? t('reviews.reviewTitle')
+          : t('requests.viewTitle');
   const status = requestModalStatus({
     mode: state.kind,
     request: requestResult,
@@ -588,6 +847,7 @@ function RequestModal({
           <span>{title}</span>
           {pinned && <Tag color="blue">{t('requests.versionTag', { version: pinned.version })}</Tag>}
           {request && <Tag>{t('requests.revision', { revision: baseRevision ?? request.revision })}</Tag>}
+          {loadedRequest && <StateTag state={loadedRequest.state} />}
         </Space>
       }
       onCancel={onClose}
@@ -595,10 +855,61 @@ function RequestModal({
       footer={
         <ConfigProvider theme={withoutMotion}>
           <Space wrap>
-            <Button onClick={onClose}>{canEdit ? t('requests.cancel') : t('requests.close')}</Button>
+            <Button ref={closeRef} onClick={onClose}>
+              {canEdit ? t('requests.cancel') : t('requests.close')}
+            </Button>
             {canEdit && !missing && !failed && (
-              <Button type="primary" loading={saving} disabled={loading} onClick={submit}>
+              <Button
+                type={actions.includes('submit') ? 'default' : 'primary'}
+                loading={saving}
+                disabled={loading || reviewPending !== null}
+                onClick={submit}
+              >
                 {t('requests.save')}
+              </Button>
+            )}
+            {canEdit && actions.includes('submit') && (
+              <Button
+                type="primary"
+                loading={reviewPending === 'submit'}
+                disabled={saving || (reviewPending !== null && reviewPending !== 'submit')}
+                onClick={submitForReview}
+              >
+                {t('reviews.submit')}
+              </Button>
+            )}
+            {actions.includes('withdraw') && (
+              <Popconfirm
+                title={t('reviews.withdrawConfirm')}
+                okText={t('reviews.withdraw')}
+                cancelText={t('requests.cancel')}
+                onConfirm={() => decide('withdraw')}
+                // Inside the modal's focus trap, so the keyboard can reach the confirmation.
+                getPopupContainer={(trigger) => trigger.parentElement ?? document.body}
+              >
+                <Button danger loading={reviewPending === 'withdraw'}>
+                  {t('reviews.withdraw')}
+                </Button>
+              </Popconfirm>
+            )}
+            {actions.includes('reject') && (
+              <Button
+                danger
+                loading={reviewPending === 'reject'}
+                disabled={reviewPending === 'approve'}
+                onClick={() => decide('reject')}
+              >
+                {t('reviews.reject')}
+              </Button>
+            )}
+            {actions.includes('approve') && (
+              <Button
+                type="primary"
+                loading={reviewPending === 'approve'}
+                disabled={reviewPending === 'reject'}
+                onClick={() => decide('approve')}
+              >
+                {t('reviews.approve')}
               </Button>
             )}
           </Space>
@@ -608,7 +919,31 @@ function RequestModal({
       <Space direction="vertical" size={12} style={{ width: '100%' }}>
         {missing && <Alert role="alert" type="warning" showIcon message={t('requests.notFound')} />}
         {failed && <Alert role="alert" type="error" showIcon message={actionErrorMessage(failed, t)} />}
-        {!canEdit && !missing && !failed && request && <Alert type="info" showIcon message={t('requests.readOnly')} />}
+        {!canEdit && !missing && !failed && request && actions.length === 0 && (
+          <Alert type="info" showIcon message={t('requests.readOnly')} />
+        )}
+        {loadedRequest?.reviewer && (
+          <Typography.Text>{t('reviews.reviewer', { name: memberName(loadedRequest.reviewer) })}</Typography.Text>
+        )}
+        {stale && (
+          <div ref={staleRef} tabIndex={-1} aria-label={t('reviews.staleTitle')}>
+            <Alert
+              role="alert"
+              type="warning"
+              showIcon
+              message={t('reviews.staleTitle')}
+              description={t('reviews.staleDescription', {
+                state: t(`reviews.states.${stale.state}`),
+                revision: stale.revision,
+              })}
+              action={
+                <Button size="small" onClick={showLatest} disabled={!request}>
+                  {t('reviews.showLatest')}
+                </Button>
+              }
+            />
+          </div>
+        )}
         {conflictRevision !== null && (
           <div ref={conflictRef} tabIndex={-1} aria-label={t('requests.conflictTitle')}>
             <Alert
@@ -682,6 +1017,30 @@ function RequestModal({
               ))}
             </Form>
           )
+        )}
+        {events && events.length > 0 && (
+          <section aria-label={t('reviews.history')}>
+            <Typography.Title level={3} style={{ fontSize: 16 }}>
+              {t('reviews.history')}
+            </Typography.Title>
+            {history?.truncated && <Alert type="info" showIcon message={t('reviews.historyTruncated')} />}
+            <Timeline
+              items={events.map((event) => ({
+                key: event._id,
+                children: (
+                  <>
+                    <div>{t(`reviews.events.${event.command}`, { actor: memberName(event.actor) })}</div>
+                    <Typography.Text type="secondary">
+                      {t('reviews.eventMeta', {
+                        revision: event.revision,
+                        at: new Date(event.at).toLocaleString(i18n.language),
+                      })}
+                    </Typography.Text>
+                  </>
+                ),
+              }))}
+            />
+          </section>
         )}
       </Space>
     </Modal>

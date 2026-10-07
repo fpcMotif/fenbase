@@ -2,7 +2,7 @@ import { ConvexError } from 'convex/values';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { removeOrganization, upsertMember } from '../fixtures';
 import { assignGrant, getMyAccess, listMembers, listMine, revokeGrant, setMemberStatus } from '../memberships';
-import { createContext, invokeHandler, type TestContext, type TestDoc } from './helpers';
+import { createContext, invokeHandler, type TestContext, type TestDoc } from './helpers.support';
 
 const auth = vi.hoisted(() => ({ currentUser: null as string | null }));
 
@@ -540,6 +540,8 @@ describe('membership fixtures', () => {
       definitions: 0,
       definitionVersions: 0,
       requests: 0,
+      reviewTasks: 0,
+      requestEvents: 0,
     });
     expect(ctx.read('organizations', ORG_2)).toBeNull();
     expect(ctx.read('memberships', 'memberships:z')).toBeNull();
@@ -552,6 +554,8 @@ describe('membership fixtures', () => {
       definitions: 0,
       definitionVersions: 0,
       requests: 0,
+      reviewTasks: 0,
+      requestEvents: 0,
     });
   });
 
@@ -584,6 +588,8 @@ describe('membership fixtures', () => {
       definitions: 0,
       definitionVersions: 0,
       requests: 0,
+      reviewTasks: 0,
+      requestEvents: 0,
     });
     expect(ctx.counts.deletes).toBe(613);
   });

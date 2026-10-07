@@ -1,3 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type { i18n as I18n } from 'i18next';
 import { ConvexError } from 'convex/values';
@@ -61,12 +64,15 @@ describe('definition builder text', () => {
     }
   });
 
-  it.each(['builder', 'nav', 'requests', 'requestErrors'])('defines the same %s keys in both languages', (section) => {
-    const english = leafKeys(i18n.getResourceBundle('en-US', 'translation')[section], section).sort();
-    const chinese = leafKeys(i18n.getResourceBundle('zh-CN', 'translation')[section], section).sort();
-    expect(english.length).toBeGreaterThan(0);
-    expect(chinese).toEqual(english);
-  });
+  it.each(['builder', 'nav', 'requests', 'requestErrors', 'reviews'])(
+    'defines the same %s keys in both languages',
+    (section) => {
+      const english = leafKeys(i18n.getResourceBundle('en-US', 'translation')[section], section).sort();
+      const chinese = leafKeys(i18n.getResourceBundle('zh-CN', 'translation')[section], section).sort();
+      expect(english.length).toBeGreaterThan(0);
+      expect(chinese).toEqual(english);
+    },
+  );
 
   it('formats version numbers, field options and the system requester column through translations', () => {
     for (const language of ['en-US', 'zh-CN']) {
@@ -121,10 +127,39 @@ describe('request text', () => {
     expect(i18n.getFixedT('zh-CN')('requests.filterTo', { field: '结束日期' })).toBe('结束日期不晚于');
   });
 
+  it('defines only review text that the demo shows', () => {
+    const demoDir = join(dirname(fileURLToPath(import.meta.url)), '..');
+    const source = readdirSync(demoDir)
+      .filter((name) => /\.tsx?$/.test(name) && name !== 'i18n.ts')
+      .map((name) => readFileSync(join(demoDir, name), 'utf8'))
+      .join('\n');
+    const used = (key: string) => {
+      if (source.includes(key)) return true;
+      const parent = key.slice(0, key.lastIndexOf('.'));
+      const leaf = key.slice(key.lastIndexOf('.') + 1);
+      if (!source.includes(`\`${parent}.\${`)) return false;
+      return parent !== 'reviews' || source.includes(`'${leaf}'`);
+    };
+    const unused = leafKeys(i18n.getResourceBundle('en-US', 'translation').reviews, 'reviews').filter(
+      (key) => !used(key),
+    );
+    expect(unused).toEqual([]);
+  });
+
   it('reads bounds and revisions from a server error', () => {
     expect(
       actionErrorData(new ConvexError({ code: 'RECORD_REVISION_CONFLICT', message: 'x', currentRevision: 4 })),
     ).toMatchObject({ code: 'RECORD_REVISION_CONFLICT', currentRevision: 4 });
+    expect(
+      actionErrorData(
+        new ConvexError({
+          code: 'REQUEST_STATE_CONFLICT',
+          message: 'x',
+          currentState: 'withdrawn',
+          currentRevision: 3,
+        }),
+      ),
+    ).toMatchObject({ code: 'REQUEST_STATE_CONFLICT', currentState: 'withdrawn', currentRevision: 3 });
     expect(
       actionErrorData(
         new ConvexError({ code: 'RECORD_NUMBER_OUT_OF_RANGE', message: 'x', field: 'days', min: 1, max: 3 }),

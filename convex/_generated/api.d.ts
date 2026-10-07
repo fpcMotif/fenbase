@@ -8,7 +8,6 @@
  * @module
  */
 
-import type * as __tests___helpers from '../__tests__/helpers.js';
 import type * as applicationDefinitions from '../applicationDefinitions.js';
 import type * as auth from '../auth.js';
 import type * as collections from '../collections.js';
@@ -22,6 +21,7 @@ import type * as membershipValidators from '../membershipValidators.js';
 import type * as memberships from '../memberships.js';
 import type * as recordQuery from '../recordQuery.js';
 import type * as records from '../records.js';
+import type * as requestReviews from '../requestReviews.js';
 import type * as requestValues from '../requestValues.js';
 import type * as requests from '../requests.js';
 import type * as users from '../users.js';
@@ -30,7 +30,6 @@ import type * as workflows from '../workflows.js';
 import type { ApiFromModules, FilterApi, FunctionReference } from 'convex/server';
 
 declare const fullApi: ApiFromModules<{
-  '__tests__/helpers': typeof __tests___helpers;
   applicationDefinitions: typeof applicationDefinitions;
   auth: typeof auth;
   collections: typeof collections;
@@ -44,6 +43,7 @@ declare const fullApi: ApiFromModules<{
   memberships: typeof memberships;
   recordQuery: typeof recordQuery;
   records: typeof records;
+  requestReviews: typeof requestReviews;
   requestValues: typeof requestValues;
   requests: typeof requests;
   users: typeof users;
