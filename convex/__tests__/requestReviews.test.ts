@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { removeOrganization } from '../fixtures';
 import { create, get, remove, update } from '../requests';
 import { approve, history, inbox, reject, submit, withdraw } from '../requestReviews';
+import { MAX_REQUESTS_PER_APPLICATION } from '../requestValues';
 import { invokeHandler, type TestContext } from './helpers.support';
 import { APP_1, ORG_1, V1, V2, fixtureContext, leave, rejectionData, seedV2 } from './requestFixture.support';
 
@@ -491,4 +492,18 @@ describe('fixture cleanup', () => {
     expect(ctx.rows('reviewTasks')).toEqual([]);
     expect(ctx.rows('requestEvents')).toEqual([]);
   });
+
+  it('removes an application at the request cap within one Convex transaction', async () => {
+    const ctx = fixtureContext();
+    for (let index = 0; index < MAX_REQUESTS_PER_APPLICATION; index += 1) {
+      const { requestId, revision } = await pendingRequest(ctx, index % 2 === 0 ? 'user-a' : 'user-a2');
+      await run(ctx, 'approve', 'user-b', requestId, revision);
+    }
+    ctx.indexReads.length = 0;
+    const before = { ...ctx.counts };
+    const removed = await invokeHandler(removeOrganization, ctx, { organizationKey: 'fixture-org-1' });
+    expect(removed).toMatchObject({ requests: 1000, reviewTasks: 1000, requestEvents: 2000 });
+    expect(ctx.indexReads.length).toBeLessThanOrEqual(4096);
+    expect(ctx.counts.deletes - before.deletes).toBeLessThanOrEqual(16_000);
+  }, 60_000);
 });
