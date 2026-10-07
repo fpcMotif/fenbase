@@ -9,6 +9,7 @@ import {
   type ApplicationPrincipal,
 } from './membershipModel';
 import {
+  assertOperationId,
   assertValidValues,
   canRead,
   isOwn,
@@ -16,12 +17,12 @@ import {
   pinnedDefinition,
   requestError,
   requestViewValidator,
+  revisionConflict,
   sha256Hex,
   stateConflict,
   toView,
 } from './requests';
 import {
-  OPERATION_ID_PATTERN,
   normalizeRequestValues,
   requestStateValidator,
   reviewCommandValidator,
@@ -132,9 +133,7 @@ async function closeReview(ctx: MutationCtx, row: Doc<'requests'>, outcome: Requ
 
 async function runCommand(ctx: MutationCtx, args: CommandArgs, command: ReviewCommand) {
   const principal = await requireApplicationPrincipal(ctx, args.applicationId);
-  if (!OPERATION_ID_PATTERN.test(args.operationId)) {
-    throw requestError('RECORD_OPERATION_ID_INVALID', 'Use 8 to 64 letters, digits, hyphens or underscores');
-  }
+  assertOperationId(args.operationId);
   const operationFingerprint = await sha256Hex({
     command,
     applicationId: args.applicationId,
@@ -165,13 +164,7 @@ async function runCommand(ctx: MutationCtx, args: CommandArgs, command: ReviewCo
   authorize(principal, row, command);
   const { from, to } = TRANSITIONS[command];
   if (row.state !== from) throw stateConflict(row);
-  if (row.revision !== args.expectedRevision) {
-    throw new ConvexError({
-      code: 'RECORD_REVISION_CONFLICT',
-      message: 'The request changed since you loaded it',
-      currentRevision: row.revision,
-    });
-  }
+  if (row.revision !== args.expectedRevision) throw revisionConflict(row);
 
   const now = Date.now();
   const revision = row.revision + 1;
