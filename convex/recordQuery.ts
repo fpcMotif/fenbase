@@ -1,11 +1,12 @@
 import { ConvexError } from 'convex/values';
 import { maxTextLength, type DemoField, type DemoValue } from './demoValidation';
+import { isCalendarDate, ownValue } from './requestValues';
 
 // Filtering, sorting, and pagination for one collection's records. Shared by the `records.browse` query (authoritative)
 // and the demo client (early validation), so it must stay free of server-only imports.
 
 export type RecordQueryValue = DemoValue;
-export type RecordQueryField = Pick<DemoField, 'name' | 'type'>;
+export type RecordQueryField = { name: DemoField['name']; type: DemoField['type'] | 'date' };
 
 export type RecordFilter = {
   field: string;
@@ -56,6 +57,7 @@ export const RECORD_FILTER_OPERATORS = {
   text: ['$includes', '$notIncludes', '$eq', '$ne', '$empty', '$notEmpty'],
   number: ['$eq', '$ne', '$gt', '$gte', '$lt', '$lte', '$empty', '$notEmpty'],
   boolean: ['$isTruly', '$isFalsy'],
+  date: ['$eq', '$ne', '$gt', '$gte', '$lt', '$lte', '$empty', '$notEmpty'],
 } as const satisfies Record<RecordQueryField['type'], readonly string[]>;
 
 const operatorsWithoutValue = new Set(['$empty', '$notEmpty', '$isTruly', '$isFalsy']);
@@ -85,9 +87,11 @@ function validateFilter(fields: readonly RecordQueryField[], filter: RecordFilte
     ? value === undefined
     : field.type === 'number'
       ? typeof value === 'number' && Number.isFinite(value)
-      : typeof value === 'string' &&
-        value.length <= maxTextLength &&
-        (value !== '' || (filter.operator !== '$includes' && filter.operator !== '$notIncludes'));
+      : field.type === 'date'
+        ? typeof value === 'string' && isCalendarDate(value)
+        : typeof value === 'string' &&
+          value.length <= maxTextLength &&
+          (value !== '' || (filter.operator !== '$includes' && filter.operator !== '$notIncludes'));
   if (!validValue) reject('RECORD_QUERY_VALUE_INVALID', `Invalid filter value for ${field.name}`, field.name);
 }
 
@@ -124,7 +128,7 @@ function isEmpty(value: RecordQueryValue | undefined): boolean {
 // Mirrors the NocoBase operators of the same names: `$ne` keeps records without a value, `$includes`/`$notIncludes`
 // ignore letter case and skip records without a value, and an empty text value counts as empty.
 function matches(record: BrowsableRecord, filter: RecordFilter): boolean {
-  const actual = record.values[filter.field];
+  const actual = ownValue(record.values, filter.field);
   const expected = filter.value;
   switch (filter.operator) {
     case '$eq':
@@ -145,7 +149,11 @@ function matches(record: BrowsableRecord, filter: RecordFilter): boolean {
     case '$gte':
     case '$lt':
     case '$lte': {
-      if (typeof actual !== 'number' || typeof expected !== 'number') return false;
+      // Numbers compare numerically; date-only values compare as YYYY-MM-DD strings, which is calendar order.
+      const comparable =
+        (typeof actual === 'number' && typeof expected === 'number') ||
+        (typeof actual === 'string' && typeof expected === 'string');
+      if (!comparable) return false;
       if (filter.operator === '$gt') return actual > expected;
       if (filter.operator === '$gte') return actual >= expected;
       if (filter.operator === '$lt') return actual < expected;
@@ -173,7 +181,7 @@ function compareValues(left: RecordQueryValue | undefined, right: RecordQueryVal
 }
 
 function sortValue(record: BrowsableRecord, field: string): RecordQueryValue | undefined {
-  return field === RECORD_CREATED_SORT_FIELD ? record._creationTime : record.values[field];
+  return field === RECORD_CREATED_SORT_FIELD ? record._creationTime : ownValue(record.values, field);
 }
 
 // Ties fall back to newest first, then to the record id, so every page boundary is stable.

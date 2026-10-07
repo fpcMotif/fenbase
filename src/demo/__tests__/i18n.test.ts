@@ -1,7 +1,9 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type { i18n as I18n } from 'i18next';
+import { ConvexError } from 'convex/values';
 import { DEFINITION_ERROR_CODES } from '../../../convex/definitionModel';
-import { actionErrorKeys } from '../actionErrors';
+import { REQUEST_ERROR_CODES } from '../../../convex/requestValues';
+import { actionErrorData, actionErrorKeys, requestIssueMessage } from '../actionErrors';
 
 const MEMBERSHIP_ERROR_CODES = [
   'APPLICATION_ACCESS_DENIED',
@@ -59,7 +61,7 @@ describe('definition builder text', () => {
     }
   });
 
-  it.each(['builder', 'nav'])('defines the same %s keys in both languages', (section) => {
+  it.each(['builder', 'nav', 'requests', 'requestErrors'])('defines the same %s keys in both languages', (section) => {
     const english = leafKeys(i18n.getResourceBundle('en-US', 'translation')[section], section).sort();
     const chinese = leafKeys(i18n.getResourceBundle('zh-CN', 'translation')[section], section).sort();
     expect(english.length).toBeGreaterThan(0);
@@ -82,5 +84,51 @@ describe('definition builder text', () => {
       }
     }
     expect(i18n.getFixedT('en-US')('builder.versionLabel', { version: 3 })).toBe('v3');
+  });
+});
+
+describe('request text', () => {
+  it('gives every request error code its own message in both languages', () => {
+    for (const code of REQUEST_ERROR_CODES) {
+      const key = `requestErrors.${code}`;
+      for (const language of ['en-US', 'zh-CN']) {
+        expect(i18n.exists(key, { lng: language, fallbackLng: false }), `${language} ${code}`).toBe(true);
+      }
+      expect(i18n.getFixedT('zh-CN')(key)).not.toBe(i18n.getFixedT('en-US')(key));
+    }
+  });
+
+  it('puts the field label and the configured bounds into the message', () => {
+    const t = i18n.getFixedT('en-US');
+    const labelOf = (key: string) => (key === 'days' ? 'Days' : key);
+    expect(
+      requestIssueMessage({ code: 'RECORD_NUMBER_OUT_OF_RANGE', field: 'days', min: 1, max: 366 }, t, labelOf),
+    ).toBe('Enter a number from 1 to 366 for Days.');
+    expect(requestIssueMessage({ code: 'RECORD_TEXT_TOO_LONG', field: 'days', maxLength: 20 }, t, labelOf)).toContain(
+      '20',
+    );
+    const zh = i18n.getFixedT('zh-CN');
+    expect(requestIssueMessage({ code: 'RECORD_DATE_RANGE_INVALID', field: 'days' }, zh, labelOf)).toContain('Days');
+  });
+
+  it('names the date filter after the configured fields in both languages', () => {
+    for (const key of ['filterTitle', 'filterFrom', 'filterTo', 'clearFilter', 'noMatches']) {
+      for (const language of ['en-US', 'zh-CN']) {
+        expect(i18n.exists(`requests.${key}`, { lng: language, fallbackLng: false }), `${language} ${key}`).toBe(true);
+      }
+    }
+    expect(i18n.getFixedT('en-US')('requests.filterFrom', { field: 'Start date' })).toBe('Start date on or after');
+    expect(i18n.getFixedT('zh-CN')('requests.filterTo', { field: '结束日期' })).toBe('结束日期不晚于');
+  });
+
+  it('reads bounds and revisions from a server error', () => {
+    expect(
+      actionErrorData(new ConvexError({ code: 'RECORD_REVISION_CONFLICT', message: 'x', currentRevision: 4 })),
+    ).toMatchObject({ code: 'RECORD_REVISION_CONFLICT', currentRevision: 4 });
+    expect(
+      actionErrorData(
+        new ConvexError({ code: 'RECORD_NUMBER_OUT_OF_RANGE', message: 'x', field: 'days', min: 1, max: 3 }),
+      ),
+    ).toMatchObject({ field: 'days', min: 1, max: 3 });
   });
 });

@@ -539,6 +539,7 @@ describe('membership fixtures', () => {
       memberships: 1,
       definitions: 0,
       definitionVersions: 0,
+      requests: 0,
     });
     expect(ctx.read('organizations', ORG_2)).toBeNull();
     expect(ctx.read('memberships', 'memberships:z')).toBeNull();
@@ -550,6 +551,7 @@ describe('membership fixtures', () => {
       memberships: 0,
       definitions: 0,
       definitionVersions: 0,
+      requests: 0,
     });
   });
 
@@ -581,6 +583,7 @@ describe('membership fixtures', () => {
       memberships: 600,
       definitions: 0,
       definitionVersions: 0,
+      requests: 0,
     });
     expect(ctx.counts.deletes).toBe(613);
   });

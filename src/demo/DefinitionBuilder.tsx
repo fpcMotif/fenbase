@@ -19,7 +19,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import type { FormRule, TableColumnsType, ThemeConfig } from 'antd';
+import type { FormRule, TableColumnsType } from 'antd';
 import { useMutation, useQuery } from 'convex/react';
 import type { FunctionReturnType } from 'convex/server';
 import { useTranslation } from 'react-i18next';
@@ -35,7 +35,7 @@ import {
   SYSTEM_LIST_COLUMNS,
 } from '../../convex/definitionModel';
 import { actionErrorData, actionErrorMessage } from './actionErrors';
-import { runPendingAction } from './pendingAction';
+import { runPendingAction, withoutMotion } from './pendingAction';
 import {
   emptyForm,
   incompleteDateRuleControl,
@@ -50,8 +50,6 @@ import {
 type BuilderApplication = FunctionReturnType<typeof api.memberships.listMine>[number];
 type BuilderState = FunctionReturnType<typeof api.applicationDefinitions.getBuilderState>;
 type VersionSummary = BuilderState['versions'][number];
-
-const withoutMotion: ThemeConfig = { token: { motion: false } };
 
 function membershipReference(membershipId: string): string {
   return membershipId.slice(-6);
