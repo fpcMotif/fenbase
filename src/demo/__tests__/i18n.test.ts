@@ -7,6 +7,7 @@ import { ConvexError } from 'convex/values';
 import { DEFINITION_ERROR_CODES } from '../../../convex/definitionModel';
 import { REQUEST_ERROR_CODES } from '../../../convex/requestValues';
 import { actionErrorData, actionErrorKeys, requestIssueMessage } from '../actionErrors';
+import { withReadableSize } from '../attachmentView';
 
 const MEMBERSHIP_ERROR_CODES = [
   'APPLICATION_ACCESS_DENIED',
@@ -64,7 +65,7 @@ describe('definition builder text', () => {
     }
   });
 
-  it.each(['builder', 'nav', 'requests', 'requestErrors', 'reviews'])(
+  it.each(['builder', 'nav', 'requests', 'requestErrors', 'reviews', 'attachments'])(
     'defines the same %s keys in both languages',
     (section) => {
       const english = leafKeys(i18n.getResourceBundle('en-US', 'translation')[section], section).sort();
@@ -115,6 +116,16 @@ describe('request text', () => {
     );
     const zh = i18n.getFixedT('zh-CN');
     expect(requestIssueMessage({ code: 'RECORD_DATE_RANGE_INVALID', field: 'days' }, zh, labelOf)).toContain('Days');
+  });
+
+  it('states a file size limit as a file size, not a byte count, in both languages', () => {
+    const issue = { code: 'ATTACHMENT_TOO_LARGE', field: 'supportingDocument', max: 2 * 1024 * 1024 };
+    expect(
+      requestIssueMessage(withReadableSize(issue, 'en-US'), i18n.getFixedT('en-US'), () => 'Supporting document'),
+    ).toBe('Choose a file of at most 2,048 KB for Supporting document.');
+    expect(requestIssueMessage(withReadableSize(issue, 'zh-CN'), i18n.getFixedT('zh-CN'), () => '证明材料')).toBe(
+      '证明材料 的文件不能超过 2,048 KB。',
+    );
   });
 
   it('names the date filter after the configured fields in both languages', () => {

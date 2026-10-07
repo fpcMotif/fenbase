@@ -1,4 +1,5 @@
 import type { Id } from '../../convex/_generated/dataModel';
+import { ATTACHMENT_TYPES, MAX_ATTACHMENT_BYTES } from '../../convex/attachmentModel';
 import {
   MAX_LABEL_LENGTH,
   type Definition,
@@ -17,6 +18,9 @@ export type FieldRow = {
   min?: number | null;
   max?: number | null;
   integer?: boolean;
+  maxFiles?: number | null;
+  maxKilobytes?: number | null;
+  accept?: string[];
 };
 
 export type BuilderFormValues = {
@@ -38,6 +42,9 @@ export const newFieldRow: FieldRow = {
   min: 0,
   max: 100,
   integer: true,
+  maxFiles: 1,
+  maxKilobytes: MAX_ATTACHMENT_BYTES / 1024,
+  accept: [...ATTACHMENT_TYPES],
 };
 
 export const emptyForm: BuilderFormValues = {
@@ -61,6 +68,9 @@ export function toFormValues(definition: Definition): BuilderFormValues {
       required: field.required,
       ...(field.type === 'text' ? { maxLength: field.maxLength } : {}),
       ...(field.type === 'number' ? { min: field.min, max: field.max, integer: field.integer } : {}),
+      ...(field.type === 'attachment'
+        ? { maxFiles: field.maxFiles, maxKilobytes: field.maxBytes / 1024, accept: field.accept }
+        : {}),
     })),
     listColumns: definition.listColumns,
     dateRuleStart: rule?.startKey ?? null,
@@ -84,6 +94,15 @@ function toField(row: FieldRow): DefinitionField {
       min: row.min ?? Number.NaN,
       max: row.max ?? Number.NaN,
       integer: Boolean(row.integer),
+    };
+  }
+  if (row.type === 'attachment') {
+    return {
+      type: 'attachment',
+      ...base,
+      maxFiles: row.maxFiles ?? Number.NaN,
+      maxBytes: (row.maxKilobytes ?? Number.NaN) * 1024,
+      accept: row.accept ?? [],
     };
   }
   return { type: row.type, ...base };

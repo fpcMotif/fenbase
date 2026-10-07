@@ -9,8 +9,10 @@
  */
 
 import type * as applicationDefinitions from '../applicationDefinitions.js';
+import type * as attachmentModel from '../attachmentModel.js';
 import type * as auth from '../auth.js';
 import type * as collections from '../collections.js';
+import type * as crons from '../crons.js';
 import type * as definitionModel from '../definitionModel.js';
 import type * as demo from '../demo.js';
 import type * as demoValidation from '../demoValidation.js';
@@ -21,6 +23,7 @@ import type * as membershipValidators from '../membershipValidators.js';
 import type * as memberships from '../memberships.js';
 import type * as recordQuery from '../recordQuery.js';
 import type * as records from '../records.js';
+import type * as requestAttachments from '../requestAttachments.js';
 import type * as requestReviews from '../requestReviews.js';
 import type * as requestValues from '../requestValues.js';
 import type * as requests from '../requests.js';
@@ -31,8 +34,10 @@ import type { ApiFromModules, FilterApi, FunctionReference } from 'convex/server
 
 declare const fullApi: ApiFromModules<{
   applicationDefinitions: typeof applicationDefinitions;
+  attachmentModel: typeof attachmentModel;
   auth: typeof auth;
   collections: typeof collections;
+  crons: typeof crons;
   definitionModel: typeof definitionModel;
   demo: typeof demo;
   demoValidation: typeof demoValidation;
@@ -43,6 +48,7 @@ declare const fullApi: ApiFromModules<{
   memberships: typeof memberships;
   recordQuery: typeof recordQuery;
   records: typeof records;
+  requestAttachments: typeof requestAttachments;
   requestReviews: typeof requestReviews;
   requestValues: typeof requestValues;
   requests: typeof requests;

@@ -223,8 +223,33 @@ describe('request value validation', () => {
   });
 });
 
+describe('attachment fields in request values', () => {
+  const evidence: DefinitionField = {
+    type: 'attachment',
+    key: 'supportingDocument',
+    label: { enUS: 'Supporting document', zhCN: '证明材料' },
+    required: true,
+    maxFiles: 2,
+    maxBytes: 1024,
+    accept: ['application/pdf'],
+  };
+  const withEvidence = { fields: [...leaveFields, evidence], dateRules: leave.dateRules };
+
+  it('leaves a required attachment field to the attachment rows, so values without it are valid', () => {
+    expect(validateRequestValues(withEvidence, valid)).toBeNull();
+  });
+
+  it.each(['_storage:1', 1, true])('refuses an attachment field sent as the value %s', (value) => {
+    expect(validateRequestValues(withEvidence, { ...valid, supportingDocument: value })).toEqual({
+      code: 'RECORD_FIELD_TYPE_INVALID',
+      field: 'supportingDocument',
+    });
+  });
+});
+
 describe('request error codes', () => {
   it('recognizes request codes and nothing else', () => {
+    expect(isRequestErrorCode('ATTACHMENT_TOO_LARGE')).toBe(true);
     expect(isRequestErrorCode('RECORD_DATE_RANGE_INVALID')).toBe(true);
     expect(isRequestErrorCode('DEFINITION_NOT_FOUND')).toBe(false);
     expect(isRequestErrorCode('')).toBe(false);

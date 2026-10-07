@@ -77,7 +77,16 @@ const texts = {
     fieldsHeading: 'Form fields',
     draft: (revision: number) => `Draft · revision ${revision}`,
     published: (version: number) => `Published v${version} · draft unchanged`,
-    types: { text: 'Text', number: 'Number', boolean: 'Yes / no', date: 'Calendar date' },
+    types: {
+      text: 'Text',
+      number: 'Number',
+      boolean: 'Yes / no',
+      date: 'Calendar date',
+      attachment: 'File attachment',
+    },
+    maxFiles: 'Maximum files',
+    maxKilobytes: 'Maximum file size (KB)',
+    acceptTypes: { 'application/pdf': 'PDF', 'image/png': 'PNG image', 'image/jpeg': 'JPEG image' },
     duplicate: (key: string) => `Key ${key} is used by more than one field.`,
     conflictTitle: 'Someone else changed this definition',
     reloadLatest: 'Reload latest',
@@ -109,7 +118,10 @@ const texts = {
     fieldsHeading: '表单字段',
     draft: (revision: number) => `草稿 · 修订 ${revision}`,
     published: (version: number) => `已发布 v${version} · 草稿无改动`,
-    types: { text: '文本', number: '数字', boolean: '是 / 否', date: '日历日期' },
+    types: { text: '文本', number: '数字', boolean: '是 / 否', date: '日历日期', attachment: '文件附件' },
+    maxFiles: '最多文件数',
+    maxKilobytes: '单个文件上限（KB）',
+    acceptTypes: { 'application/pdf': 'PDF', 'image/png': 'PNG 图片', 'image/jpeg': 'JPEG 图片' },
     duplicate: (key: string) => `键名 ${key} 被多个字段使用。`,
     conflictTitle: '其他人已修改此定义',
     reloadLatest: '加载最新草稿',
@@ -506,6 +518,21 @@ async function main(): Promise<void> {
             await keyboardInput(page, group.getByLabel(text.max, { exact: true }), String(value.max));
             await keyboardToggle(page, group.getByRole('checkbox', { name: text.integer }), value.integer);
           }
+          if (value.type === 'attachment') {
+            await keyboardInput(page, group.getByLabel(text.maxFiles, { exact: true }), String(value.maxFiles));
+            await keyboardInput(
+              page,
+              group.getByLabel(text.maxKilobytes, { exact: true }),
+              String(value.maxBytes / 1024),
+            );
+            for (const [type, label] of Object.entries(text.acceptTypes)) {
+              await keyboardToggle(
+                page,
+                group.getByRole('checkbox', { name: label, exact: true }),
+                value.accept.includes(type),
+              );
+            }
+          }
           await keyboardToggle(page, group.getByRole('checkbox', { name: text.required }), value.required);
         };
         const readForm = async () => {
@@ -525,6 +552,15 @@ async function main(): Promise<void> {
               entry.min = await group.getByLabel(text.min, { exact: true }).inputValue();
               entry.max = await group.getByLabel(text.max, { exact: true }).inputValue();
               entry.integer = await group.getByRole('checkbox', { name: text.integer }).isChecked();
+            }
+            if (type === text.types.attachment) {
+              entry.maxFiles = await group.getByLabel(text.maxFiles, { exact: true }).inputValue();
+              entry.maxKilobytes = await group.getByLabel(text.maxKilobytes, { exact: true }).inputValue();
+              const accepted: string[] = [];
+              for (const label of Object.values(text.acceptTypes)) {
+                if (await group.getByRole('checkbox', { name: label, exact: true }).isChecked()) accepted.push(label);
+              }
+              entry.accept = accepted;
             }
             fields.push(entry);
           }
@@ -553,6 +589,15 @@ async function main(): Promise<void> {
               ...(entry.type === 'text' ? { maxLength: String(entry.maxLength) } : {}),
               ...(entry.type === 'number'
                 ? { min: String(entry.min), max: String(entry.max), integer: entry.integer }
+                : {}),
+              ...(entry.type === 'attachment'
+                ? {
+                    maxFiles: String(entry.maxFiles),
+                    maxKilobytes: String(entry.maxBytes / 1024),
+                    accept: Object.entries(text.acceptTypes)
+                      .filter(([type]) => entry.accept.includes(type))
+                      .map(([, label]) => label),
+                  }
                 : {}),
             })),
             listColumns: definition.listColumns.map(columnLabel),
@@ -619,7 +664,8 @@ async function main(): Promise<void> {
             );
             await capture('4-v1-published');
 
-            await fillField(5, v2Definition.fields[4], true);
+            const noteIndex = v1Definition.fields.length;
+            await fillField(noteIndex + 1, v2Definition.fields[noteIndex], true);
             await keyboardChoose(page, form.getByLabel(text.listColumns, { exact: true }), 'note', '(note)');
             await page.keyboard.press('Escape');
             const refC = membershipOf('C').slice(-6);
@@ -675,8 +721,9 @@ async function main(): Promise<void> {
             must('ui.zh.v2-reopens-in-chinese', expectedForm(v2Definition), await readForm());
             await capture('1-builder');
 
+            const extraIndex = v2Definition.fields.length + 1;
             await fillField(
-              6,
+              extraIndex,
               {
                 type: 'text',
                 key: 'reason',
@@ -688,7 +735,7 @@ async function main(): Promise<void> {
             );
             const before = JSON.stringify(definitionRows(appOne()));
             await save();
-            const duplicateError = field(6).getByText(text.duplicate('reason'), { exact: true });
+            const duplicateError = field(extraIndex).getByText(text.duplicate('reason'), { exact: true });
             await duplicateError.waitFor();
             must(
               'ui.zh.duplicate-key-localized-and-marked',
@@ -724,7 +771,7 @@ async function main(): Promise<void> {
               { settled: rejectedSaveAttempts, unchanged: true },
               { settled: settledAfterRejectedSave, unchanged: before === JSON.stringify(definitionRows(appOne())) },
             );
-            await keyboardActivate(page, page.getByRole('button', { name: text.remove(6), exact: true }));
+            await keyboardActivate(page, page.getByRole('button', { name: text.remove(extraIndex), exact: true }));
 
             const headBefore = definitionRows(appOne()).heads[0];
             const editedByE: Definition = { ...v2Definition, listColumns: ['startDate', 'endDate', 'note'] };

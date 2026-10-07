@@ -1,5 +1,6 @@
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
+import { fileMetadataFields } from './attachmentModel';
 import { definitionValidator, policyPresetValidator } from './definitionModel';
 import { capabilityValidator, membershipStatusValidator } from './membershipValidators';
 import {
@@ -108,6 +109,40 @@ export default defineSchema({
   })
     .index('by_request', ['requestId'])
     .index('by_actor_operation', ['actorMembershipId', 'operationId']),
+
+  // Every `_storage` row belongs to one of these rows; a blob without one is an orphan the sweep deletes.
+  requestAttachments: defineTable({
+    requestId: v.id('requests'),
+    applicationId: v.id('applications'),
+    organizationId: v.id('organizations'),
+    fieldKey: v.string(),
+    uploaderMembershipId: v.id('memberships'),
+    operationId: v.string(),
+    storageId: v.id('_storage'),
+    ...fileMetadataFields,
+    createdAt: v.number(),
+  })
+    .index('by_request', ['requestId', 'fieldKey'])
+    .index('by_storage', ['storageId'])
+    .index('by_application', ['applicationId']),
+
+  attachmentEvents: defineTable({
+    requestId: v.id('requests'),
+    applicationId: v.id('applications'),
+    organizationId: v.id('organizations'),
+    actorMembershipId: v.id('memberships'),
+    operationId: v.string(),
+    fingerprint: v.string(),
+    kind: v.union(v.literal('attach'), v.literal('remove')),
+    attachmentId: v.id('requestAttachments'),
+    fieldKey: v.string(),
+    ...fileMetadataFields,
+    revision: v.number(),
+    createdAt: v.number(),
+  })
+    .index('by_actor_operation', ['actorMembershipId', 'operationId'])
+    .index('by_request', ['requestId'])
+    .index('by_application', ['applicationId']),
 
   requestCounts: defineTable({
     applicationId: v.id('applications'),

@@ -1,4 +1,10 @@
 import { v, type Infer } from 'convex/values';
+import {
+  MAX_ATTACHMENT_BYTES,
+  MAX_ATTACHMENT_FIELDS,
+  MAX_ATTACHMENTS_PER_REQUEST,
+  isAttachmentType,
+} from './attachmentModel';
 
 // The application definition contract. Shared by the Convex schema, the definition functions and the demo builder, so
 // it must stay free of server-only imports.
@@ -25,7 +31,7 @@ export const RESERVED_FIELD_KEYS: readonly string[] = [
 
 export const SYSTEM_LIST_COLUMNS = ['requester'] as const;
 
-export const DEFINITION_FIELD_TYPES = ['text', 'number', 'boolean', 'date'] as const;
+export const DEFINITION_FIELD_TYPES = ['text', 'number', 'boolean', 'date', 'attachment'] as const;
 export const POLICY_PRESETS = ['requesterAndAssignedReviewer', 'requesterAssignedReviewerAndReaders'] as const;
 
 export const DEFINITION_ERROR_CODES = [
@@ -59,6 +65,13 @@ export const definitionFieldValidator = v.union(
   v.object({ type: v.literal('number'), ...fieldBase, min: v.number(), max: v.number(), integer: v.boolean() }),
   v.object({ type: v.literal('boolean'), ...fieldBase }),
   v.object({ type: v.literal('date'), ...fieldBase }),
+  v.object({
+    type: v.literal('attachment'),
+    ...fieldBase,
+    maxFiles: v.number(),
+    maxBytes: v.number(),
+    accept: v.array(v.string()),
+  }),
 );
 
 export const policyPresetValidator = v.union(
@@ -78,7 +91,13 @@ export const definitionValidator = v.object({
 
 export const publishedKeyValidator = v.object({
   key: v.string(),
-  type: v.union(v.literal('text'), v.literal('number'), v.literal('boolean'), v.literal('date')),
+  type: v.union(
+    v.literal('text'),
+    v.literal('number'),
+    v.literal('boolean'),
+    v.literal('date'),
+    v.literal('attachment'),
+  ),
 });
 
 export type Definition = Infer<typeof definitionValidator>;
@@ -106,7 +125,24 @@ function validBounds(field: DefinitionField): boolean {
     if (!Number.isFinite(field.min) || !Number.isFinite(field.max) || field.min > field.max) return false;
     return !field.integer || (Number.isInteger(field.min) && Number.isInteger(field.max));
   }
+  if (field.type === 'attachment') {
+    const inRange = (value: number, max: number) => Number.isInteger(value) && value >= 1 && value <= max;
+    return (
+      inRange(field.maxFiles, MAX_ATTACHMENTS_PER_REQUEST) &&
+      inRange(field.maxBytes, MAX_ATTACHMENT_BYTES) &&
+      field.maxBytes % 1024 === 0 &&
+      field.accept.length > 0 &&
+      field.accept.every(isAttachmentType) &&
+      new Set(field.accept).size === field.accept.length
+    );
+  }
   return true;
+}
+
+export type AttachmentDefinitionField = Extract<DefinitionField, { type: 'attachment' }>;
+
+export function isAttachmentField(field: DefinitionField): field is AttachmentDefinitionField {
+  return field.type === 'attachment';
 }
 
 export function validateDefinition(
@@ -117,6 +153,7 @@ export function validateDefinition(
   if (fields.length < 1 || fields.length > MAX_DEFINITION_FIELDS) return { code: 'DEFINITION_FIELD_COUNT_INVALID' };
 
   const types = new Map<string, DefinitionFieldType>();
+  let attachmentFields = 0;
   for (const field of fields) {
     if (!isFieldType(field.type)) return { code: 'DEFINITION_FIELD_TYPE_UNKNOWN', field: field.key };
     if (!FIELD_KEY_PATTERN.test(field.key)) return { code: 'DEFINITION_FIELD_KEY_INVALID', field: field.key };
@@ -126,6 +163,9 @@ export function validateDefinition(
       return { code: 'DEFINITION_FIELD_LABEL_INVALID', field: field.key };
     }
     if (!validBounds(field)) return { code: 'DEFINITION_FIELD_BOUNDS_INVALID', field: field.key };
+    if (field.type === 'attachment' && ++attachmentFields > MAX_ATTACHMENT_FIELDS) {
+      return { code: 'DEFINITION_FIELD_COUNT_INVALID', field: field.key };
+    }
     types.set(field.key, field.type);
   }
 
@@ -140,7 +180,10 @@ export function validateDefinition(
     return { code: 'DEFINITION_LIST_COLUMNS_INVALID' };
   const seenColumns = new Set<string>();
   for (const column of listColumns) {
-    const known = types.has(column) || SYSTEM_LIST_COLUMNS.some((system) => system === column);
+    const fieldType = types.get(column);
+    const known =
+      (fieldType !== undefined && fieldType !== 'attachment') ||
+      SYSTEM_LIST_COLUMNS.some((system) => system === column);
     if (!known || seenColumns.has(column)) return { code: 'DEFINITION_LIST_COLUMNS_INVALID', field: column };
     seenColumns.add(column);
   }

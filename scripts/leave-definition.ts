@@ -1,4 +1,5 @@
 import type { Id } from '../convex/_generated/dataModel';
+import { ATTACHMENT_TYPES, MAX_ATTACHMENT_BYTES } from '../convex/attachmentModel';
 import type { Definition } from '../convex/definitionModel';
 
 export function leaveDefinition(reviewerMembershipId: Id<'memberships'>): Definition {
@@ -16,6 +17,15 @@ export function leaveDefinition(reviewerMembershipId: Id<'memberships'>): Defini
         integer: true,
       },
       { type: 'text', key: 'reason', label: { enUS: 'Reason', zhCN: '原因' }, required: true, maxLength: 1000 },
+      {
+        type: 'attachment',
+        key: 'supportingDocument',
+        label: { enUS: 'Supporting document', zhCN: '证明材料' },
+        required: false,
+        maxFiles: 2,
+        maxBytes: MAX_ATTACHMENT_BYTES,
+        accept: [...ATTACHMENT_TYPES],
+      },
     ],
     listColumns: ['startDate', 'endDate', 'days', 'reason'],
     dateRules: [{ startKey: 'startDate', endKey: 'endDate' }],

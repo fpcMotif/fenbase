@@ -5,6 +5,7 @@ import {
   invalidLabelControl,
   incompleteDateRuleControl,
   toDefinition,
+  toFormValues,
   type FieldRow,
 } from '../definitionForm';
 import { runPendingAction } from '../pendingAction';
@@ -27,6 +28,35 @@ describe('builder form to definition', () => {
       REVIEWER,
     );
     expect(definition.fields[0].label).toEqual({ enUS: 'Note', zhCN: '备注' });
+  });
+
+  it('round-trips an attachment field with its file limits, entering the size in KB', () => {
+    const evidenceRow: FieldRow = {
+      key: 'supportingDocument',
+      type: 'attachment',
+      labelEnUS: 'Supporting document',
+      labelZhCN: '证明材料',
+      required: false,
+      maxFiles: 2,
+      maxKilobytes: 2048,
+      accept: ['application/pdf', 'image/png'],
+    };
+    const definition = toDefinition({ ...emptyForm, fields: [noteRow, evidenceRow], listColumns: ['note'] }, REVIEWER);
+    expect(definition.fields[1]).toEqual({
+      type: 'attachment',
+      key: 'supportingDocument',
+      label: { enUS: 'Supporting document', zhCN: '证明材料' },
+      required: false,
+      maxFiles: 2,
+      maxBytes: 2 * 1024 * 1024,
+      accept: ['application/pdf', 'image/png'],
+    });
+    expect(toFormValues(definition).fields[1]).toMatchObject({
+      type: 'attachment',
+      maxFiles: 2,
+      maxKilobytes: 2048,
+      accept: ['application/pdf', 'image/png'],
+    });
   });
 
   it('keeps the system requester column in the list layout', () => {

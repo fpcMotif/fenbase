@@ -27,10 +27,11 @@ import type { FunctionReturnType } from 'convex/server';
 import { useTranslation } from 'react-i18next';
 import { api } from '../../convex/_generated/api';
 import type { Id } from '../../convex/_generated/dataModel';
-import type { DefinitionField } from '../../convex/definitionModel';
+import { isAttachmentField, type DefinitionField } from '../../convex/definitionModel';
 import { DEFAULT_RECORD_PAGE_SIZE, RECORD_CREATED_SORT_FIELD, type RecordFilter } from '../../convex/recordQuery';
 import { isRequestErrorCode, ownValue, validateRequestValues, type RequestIssue } from '../../convex/requestValues';
 import { actionErrorData, actionErrorMessage, requestIssueMessage } from './actionErrors';
+import { AttachmentField } from './AttachmentField';
 import { runPendingAction, withoutMotion } from './pendingAction';
 import {
   carryOverValues,
@@ -828,6 +829,7 @@ function RequestModal({
     if (field.type === 'boolean') return <Switch id={id} />;
     if (field.type === 'number') return <InputNumber id={id} style={{ width: '100%' }} />;
     if (field.type === 'date') return <Input id={id} type="date" min="0001-01-01" max="9999-12-31" />;
+    if (field.type === 'attachment') return null;
     if (field.maxLength > 200) {
       return <Input.TextArea id={id} maxLength={field.maxLength} showCount autoSize={{ minRows: 2, maxRows: 6 }} />;
     }
@@ -1002,22 +1004,40 @@ function RequestModal({
               onFinish={submit}
               onValuesChange={(changed) => clearErrors(Object.keys(changed))}
             >
-              {definition.fields.map((field) => (
-                <Form.Item
-                  key={field.key}
-                  name={field.key}
-                  label={fieldLabel(field, i18n.language)}
-                  htmlFor={controlId(field.key)}
-                  required={field.required}
-                  extra={help(field)}
-                  valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
-                >
-                  {control(field)}
-                </Form.Item>
-              ))}
+              {definition.fields
+                .filter((field) => !isAttachmentField(field))
+                .map((field) => (
+                  <Form.Item
+                    key={field.key}
+                    name={field.key}
+                    label={fieldLabel(field, i18n.language)}
+                    htmlFor={controlId(field.key)}
+                    required={field.required}
+                    extra={help(field)}
+                    valuePropName={field.type === 'boolean' ? 'checked' : 'value'}
+                  >
+                    {control(field)}
+                  </Form.Item>
+                ))}
             </Form>
           )
         )}
+        {definition &&
+          status.kind === 'ready' &&
+          definition.fields
+            .filter(isAttachmentField)
+            .map((field) => (
+              <AttachmentField
+                key={field.key}
+                applicationId={application.applicationId}
+                requestId={requestId}
+                field={field}
+                canEdit={canEdit}
+                revision={baseRevision}
+                onRevision={setRevisionOverride}
+                onConflict={setConflictRevision}
+              />
+            ))}
         {events && events.length > 0 && (
           <section aria-label={t('reviews.history')}>
             <Typography.Title level={3} style={{ fontSize: 16 }}>

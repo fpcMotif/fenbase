@@ -44,6 +44,23 @@ describe('request form values', () => {
     expect(toRequestValues(definition, { reason: 'x', note: '   ' })).toEqual({ reason: 'x' });
   });
 
+  it('never sends, reopens or carries over an attachment field, whose files live outside the values', () => {
+    const evidence: DefinitionField = {
+      type: 'attachment',
+      key: 'supportingDocument',
+      label: { enUS: 'Supporting document', zhCN: '证明材料' },
+      required: true,
+      maxFiles: 2,
+      maxBytes: 2048,
+      accept: ['application/pdf'],
+    };
+    const withEvidence = { fields: [...fields, evidence] };
+    const form = { reason: 'x', supportingDocument: 'scan.pdf' };
+    expect(toRequestValues(withEvidence, form)).toEqual({ reason: 'x' });
+    expect(toFormValues(withEvidence, form)).toEqual({ reason: 'x', urgent: false });
+    expect(carryOverValues(withEvidence, form)).toEqual({ reason: 'x' });
+  });
+
   it('drops keys the definition does not name', () => {
     expect(toRequestValues(definition, { reason: 'x', state: 'approved' })).toEqual({ reason: 'x' });
   });
