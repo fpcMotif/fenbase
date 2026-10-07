@@ -368,7 +368,7 @@ The request's `revision` counter. It starts at 1 and goes up by 1 on every chang
 _Avoid_: version (a revision is not a **Pinned version**)
 
 **Operation ID**:
-A client-chosen ID, 8 to 64 letters, digits, `-` or `_`, that names one create attempt or one **Review command** for one membership. Creates and **Review commands** are two separate scopes: a create ID lives on the `requests` row, a command ID on its **Request event**, so one ID can name one create and one command. Within a scope, repeating it with the same payload returns the first result; repeating it with another payload (other values, or another command, request or expected revision) is an operation conflict.
+A client-chosen ID, 8 to 64 letters, digits, `-` or `_`, that names one create attempt or one **Review command** for one membership. Creates and **Review commands** are two separate scopes: a create ID lives on the `requests` row, a command ID on its **Request event**, so one ID can name one create and one command. Within a scope, repeating it with the same payload returns the first result; repeating it with another payload (other values, or another command, request or expected revision) is an operation conflict. A repeated **Review command** first checks the caller's current access, so a caller who lost access gets the same denial as any other unauthorized call.
 _Avoid_: idempotency key (in code), request ID
 
 ## Relationships
