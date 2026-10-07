@@ -55,6 +55,7 @@ function isOwn(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
 function canRead(principal: ApplicationPrincipal, row: Doc<'requests'>): boolean {
   if (row.applicationId !== principal.applicationId) return false;
   if (row.requesterMembershipId === principal.membershipId) return true;
+  if (row.state === 'draft') return false;
   return row.policyPreset === READERS_PRESET && canReadAllRecords(principal);
 }
 
@@ -281,33 +282,44 @@ export const list = query({
     const query = { filters: args.filters, sort: args.sort, page: args.page, pageSize: args.pageSize };
     validateRecordQuery(fields, query);
 
-    const readsAll = canReadAllRecords(principal);
-    const rows = readsAll
-      ? await ctx.db
+    const limit = MAX_REQUESTS_PER_APPLICATION + 1;
+    const ranges = [
+      await ctx.db
+        .query('requests')
+        .withIndex('by_application_requester', (q) =>
+          q.eq('applicationId', principal.applicationId).eq('requesterMembershipId', principal.membershipId),
+        )
+        .take(limit),
+    ];
+    if (canReadAllRecords(principal)) {
+      ranges.push(
+        await ctx.db
           .query('requests')
-          .withIndex('by_application_requester', (q) => q.eq('applicationId', principal.applicationId))
-          .take(MAX_REQUESTS_PER_APPLICATION + 1)
-      : await ctx.db
+          .withIndex('by_application_state', (q) => q.eq('applicationId', principal.applicationId).lt('state', 'draft'))
+          .take(limit),
+        await ctx.db
           .query('requests')
-          .withIndex('by_application_requester', (q) =>
-            q.eq('applicationId', principal.applicationId).eq('requesterMembershipId', principal.membershipId),
-          )
-          .take(MAX_REQUESTS_PER_APPLICATION + 1);
-    if (rows.length > MAX_REQUESTS_PER_APPLICATION) {
+          .withIndex('by_application_state', (q) => q.eq('applicationId', principal.applicationId).gt('state', 'draft'))
+          .take(limit),
+      );
+    }
+
+    const readableById = new Map<Id<'requests'>, Doc<'requests'>>();
+    for (const row of ranges.flat()) {
+      if (canRead(principal, row)) readableById.set(row._id, row);
+    }
+    const readable = [...readableById.values()];
+    if (
+      ranges.some((rows) => rows.length > MAX_REQUESTS_PER_APPLICATION) ||
+      readable.length > MAX_REQUESTS_PER_APPLICATION
+    ) {
       throw requestError(
         'RECORD_BROWSE_LIMIT_EXCEEDED',
         `Browsing is limited to ${MAX_REQUESTS_PER_APPLICATION} requests per application`,
       );
     }
 
-    const readable = rows.filter((row) => canRead(principal, row));
-    // The grant widens the list only where a readers preset applies: the current form, or a request pinned to one.
-    const scope: 'own' | 'application' =
-      readsAll &&
-      (current?.definition.policyPreset === READERS_PRESET ||
-        readable.some((row) => row.policyPreset === READERS_PRESET))
-        ? 'application'
-        : 'own';
+    const scope: 'own' | 'application' = readable.some((row) => !isOwn(principal, row)) ? 'application' : 'own';
     const page = queryRecords(readable, fields, query);
     return { ...page, items: page.items.map((row) => toView(principal, row)), scope };
   },
