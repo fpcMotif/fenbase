@@ -1,3 +1,4 @@
+import { getFunctionName, type FunctionReference } from 'convex/server';
 import schema from '../schema';
 
 export type TableName =
@@ -13,7 +14,9 @@ export type TableName =
   | 'requests'
   | 'requestCounts'
   | 'reviewTasks'
-  | 'requestEvents';
+  | 'requestEvents'
+  | 'requestAttachments'
+  | 'attachmentEvents';
 
 export type WriteOperation = 'insert' | 'patch' | 'replace' | 'delete';
 
@@ -37,6 +40,23 @@ interface IndexedQuery {
   unique(): TestDoc | null;
 }
 
+export type StoredFile = { _id: string; _creationTime: number; sha256: string; size: number; contentType?: string };
+
+interface StoragePaginator {
+  paginate(options: { cursor: string | null; numItems: number }): Promise<{
+    page: StoredFile[];
+    isDone: boolean;
+    continueCursor: string;
+  }>;
+}
+
+async function digestHex(bytes: Uint8Array): Promise<string> {
+  const copy = new Uint8Array(bytes.byteLength);
+  copy.set(bytes);
+  const digest = await crypto.subtle.digest('SHA-256', copy.buffer);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
 export interface TestContext {
   db: {
     get(id: string): Promise<TestDoc | null>;
@@ -46,7 +66,21 @@ export interface TestContext {
     insert(table: TableName, value: Record<string, unknown>): Promise<string>;
     patch(id: string, value: Record<string, unknown>): Promise<void>;
     delete(id: string): Promise<void>;
+    system: {
+      get(tableOrId: string, maybeId?: string): Promise<StoredFile | null>;
+      query(table: '_storage'): { order(direction: 'asc' | 'desc'): StoragePaginator };
+    };
   };
+  storage: {
+    store(blob: Blob, options?: { sha256?: string }): Promise<string>;
+    get(storageId: string): Promise<Blob | null>;
+    delete(storageId: string): Promise<void>;
+    getUrl(storageId: string): Promise<string | null>;
+  };
+  scheduler: { runAfter(delayMs: number, functionReference: unknown, args: unknown): Promise<string> };
+  scheduled: Array<{ delayMs: number; name: string; args: unknown }>;
+  // Tests age a blob or change its stored bytes through this map, the way a crash or a corrupt disk would.
+  files: Map<string, StoredFile & { bytes: Uint8Array }>;
   counts: { inserts: number; patches: number; deletes: number };
   writes: Array<{ table: TableName; operation: WriteOperation; id: string }>;
   indexReads: Array<{ table: TableName; index: string; rows: number }>;
@@ -71,6 +105,8 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
     'requestCounts',
     'reviewTasks',
     'requestEvents',
+    'requestAttachments',
+    'attachmentEvents',
   ];
   for (const table of tableNames) {
     tables.set(table, new Map((seed[table] ?? []).map((doc) => [doc._id, doc])));
@@ -176,10 +212,74 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
       getTable(table).delete(id);
       writes.push({ table, operation: 'delete', id });
     },
+    system: {
+      async get(tableOrId, maybeId) {
+        const file = files.get(maybeId ?? tableOrId);
+        if (!file) return null;
+        const { bytes: _bytes, ...metadata } = file;
+        return metadata;
+      },
+      query() {
+        let direction: 'asc' | 'desc' = 'asc';
+        const paginator: StoragePaginator = {
+          async paginate({ cursor, numItems }) {
+            const all = [...files.values()].sort(
+              (left, right) => (direction === 'asc' ? 1 : -1) * (left._creationTime - right._creationTime),
+            );
+            const start = cursor === null ? 0 : Number(cursor);
+            const page = all.slice(start, start + numItems).map(({ bytes: _bytes, ...metadata }) => metadata);
+            const end = start + page.length;
+            return { page, isDone: end >= all.length, continueCursor: String(end) };
+          },
+        };
+        return {
+          order(next) {
+            direction = next;
+            return paginator;
+          },
+        };
+      },
+    },
+  };
+
+  const files: TestContext['files'] = new Map();
+  let nextFileId = 1;
+  const storage: TestContext['storage'] = {
+    async store(blob, options) {
+      const bytes = new Uint8Array(await blob.arrayBuffer());
+      const sha256 = await digestHex(bytes);
+      if (options?.sha256 !== undefined && options.sha256 !== sha256) throw new Error('sha256 mismatch');
+      const id = `_storage:${nextFileId++}`;
+      lastCreationTime = Math.max(Date.now(), lastCreationTime + 1);
+      files.set(id, { _id: id, _creationTime: lastCreationTime, sha256, size: bytes.byteLength, bytes });
+      return id;
+    },
+    async get(storageId) {
+      const file = files.get(storageId);
+      return file ? new Blob([file.bytes.slice()]) : null;
+    },
+    async delete(storageId) {
+      if (!files.delete(storageId)) throw new Error(`Storage file not found: ${storageId}`);
+    },
+    async getUrl() {
+      throw new Error('Attachments must never be served through storage URLs');
+    },
+  };
+
+  const scheduled: TestContext['scheduled'] = [];
+  const scheduler: TestContext['scheduler'] = {
+    async runAfter(delayMs, functionReference, args) {
+      scheduled.push({ delayMs, name: functionName(functionReference), args });
+      return `_scheduled_functions:${scheduled.length}`;
+    },
   };
 
   return {
     db,
+    storage,
+    scheduler,
+    scheduled,
+    files,
     counts,
     writes,
     indexReads,
@@ -195,7 +295,36 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
   };
 }
 
-export async function invokeHandler(registeredFunction: unknown, ctx: TestContext, args: unknown): Promise<unknown> {
+function functionName(functionReference: unknown): string {
+  return getFunctionName(functionReference as FunctionReference<'query' | 'mutation' | 'action'>);
+}
+
+export type ActionTestContext = Pick<TestContext, 'storage' | 'scheduler'> & {
+  runQuery(functionReference: unknown, args: unknown): Promise<unknown>;
+  runMutation(functionReference: unknown, args: unknown): Promise<unknown>;
+};
+
+// An action context whose `runQuery` and `runMutation` call the registered handlers by name, such as
+// `requestAttachments:attach`, against the same in-memory tables and storage.
+export function createActionContext(ctx: TestContext, registry: Record<string, unknown>): ActionTestContext {
+  const run = (functionReference: unknown, args: unknown) => {
+    const name = functionName(functionReference);
+    if (!(name in registry)) throw new Error(`No test handler registered for ${name}`);
+    const entry = registry[name];
+    // A plain function stands in for a handler, such as one that fails the way a crashed mutation would.
+    if (typeof entry === 'function' && Reflect.get(entry, '_handler') === undefined) {
+      return Promise.resolve(Reflect.apply(entry, undefined, [args]));
+    }
+    return invokeHandler(entry, ctx, args);
+  };
+  return { storage: ctx.storage, scheduler: ctx.scheduler, runQuery: run, runMutation: run };
+}
+
+export async function invokeHandler(
+  registeredFunction: unknown,
+  ctx: TestContext | ActionTestContext,
+  args: unknown,
+): Promise<unknown> {
   if (typeof registeredFunction !== 'function') throw new Error('Convex function is not registered');
   const handler = Reflect.get(registeredFunction, '_handler');
   if (typeof handler !== 'function') throw new Error('Convex function handler is unavailable');

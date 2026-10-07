@@ -214,3 +214,67 @@ describe('validateDefinition', () => {
     ).toBeNull();
   });
 });
+
+describe('attachment fields', () => {
+  const evidence: FieldOf<'attachment'> = {
+    type: 'attachment',
+    key: 'supportingDocument',
+    label: { enUS: 'Supporting document', zhCN: '证明材料' },
+    required: false,
+    maxFiles: 2,
+    maxBytes: 2 * 1024 * 1024,
+    accept: ['application/pdf', 'image/png', 'image/jpeg'],
+  };
+  const withEvidence = (field: FieldOf<'attachment'>, overrides: Partial<Definition> = {}) =>
+    leave({ fields: [...leaveFields, field], ...overrides });
+
+  it('accepts one attachment field inside the server ceilings', () => {
+    expect(validateDefinition(withEvidence(evidence), [])).toBeNull();
+    expect(validateDefinition(withEvidence({ ...evidence, maxFiles: 5, accept: ['image/png'] }), [])).toBeNull();
+  });
+
+  it.each<[string, FieldOf<'attachment'>]>([
+    ['no files', { ...evidence, maxFiles: 0 }],
+    ['six files', { ...evidence, maxFiles: 6 }],
+    ['a fractional file count', { ...evidence, maxFiles: 1.5 }],
+    ['an empty file', { ...evidence, maxBytes: 0 }],
+    ['more than 2 MiB', { ...evidence, maxBytes: 2 * 1024 * 1024 + 1 }],
+    ['no accepted type', { ...evidence, accept: [] }],
+    ['a repeated type', { ...evidence, accept: ['image/png', 'image/png'] }],
+    ['an unsupported type', { ...evidence, accept: ['text/html'] }],
+  ])('rejects bounds that allow %s', (_label, field) => {
+    expect(validateDefinition(withEvidence(field), [])).toEqual({
+      code: 'DEFINITION_FIELD_BOUNDS_INVALID',
+      field: 'supportingDocument',
+    });
+  });
+
+  it('allows one attachment field per definition', () => {
+    const second = { ...evidence, key: 'medicalNote' };
+    expect(validateDefinition(leave({ fields: [...leaveFields, evidence, second] }), [])).toEqual({
+      code: 'DEFINITION_FIELD_COUNT_INVALID',
+      field: 'medicalNote',
+    });
+  });
+
+  it('keeps attachment fields out of list columns and date rules', () => {
+    expect(validateDefinition(withEvidence(evidence, { listColumns: ['supportingDocument'] }), [])).toEqual({
+      code: 'DEFINITION_LIST_COLUMNS_INVALID',
+      field: 'supportingDocument',
+    });
+    expect(
+      validateDefinition(
+        withEvidence(evidence, { dateRules: [{ startKey: 'startDate', endKey: 'supportingDocument' }] }),
+        [],
+      ),
+    ).toEqual({ code: 'DEFINITION_DATE_RULE_INVALID', field: 'supportingDocument' });
+  });
+
+  it('freezes the type of a published attachment key', () => {
+    const published = [...leaveFields, evidence].map(({ key, type }) => ({ key, type }));
+    expect(validateDefinition(withEvidence(evidence), published)).toBeNull();
+    expect(
+      validateDefinition(leave({ fields: [...leaveFields, { ...reasonField, key: 'supportingDocument' }] }), published),
+    ).toEqual({ code: 'DEFINITION_FIELD_TYPE_CHANGED', field: 'supportingDocument' });
+  });
+});

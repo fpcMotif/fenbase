@@ -34,6 +34,12 @@ import {
   POLICY_PRESETS,
   SYSTEM_LIST_COLUMNS,
 } from '../../convex/definitionModel';
+import {
+  ATTACHMENT_TYPES,
+  MAX_ATTACHMENT_BYTES,
+  MAX_ATTACHMENTS_PER_REQUEST,
+  type AttachmentType,
+} from '../../convex/attachmentModel';
 import { actionErrorData, actionErrorMessage } from './actionErrors';
 import { runPendingAction, withoutMotion } from './pendingAction';
 import {
@@ -50,6 +56,12 @@ import {
 type BuilderApplication = FunctionReturnType<typeof api.memberships.listMine>[number];
 type BuilderState = FunctionReturnType<typeof api.applicationDefinitions.getBuilderState>;
 type VersionSummary = BuilderState['versions'][number];
+
+const ATTACHMENT_TYPE_KEYS: Record<AttachmentType, string> = {
+  'application/pdf': 'pdf',
+  'image/png': 'png',
+  'image/jpeg': 'jpeg',
+};
 
 function membershipReference(membershipId: string): string {
   return membershipId.slice(-6);
@@ -129,7 +141,10 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
 
   const head = state.head;
   const publishedKeys = new Map(state.publishedKeys.map((entry) => [entry.key, entry.type]));
-  const fieldKeys = watchedFields.map((row) => row?.key?.trim()).filter((key): key is string => Boolean(key));
+  const columnKeys = watchedFields
+    .filter((row) => row?.type !== 'attachment')
+    .map((row) => row?.key?.trim())
+    .filter((key): key is string => Boolean(key));
   const dateKeys = watchedFields.filter((row) => row?.type === 'date' && row.key?.trim()).map((row) => row.key.trim());
   const fieldLabel = (key: string) => {
     const row = watchedFields.find((candidate) => candidate?.key?.trim() === key);
@@ -154,7 +169,7 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
   });
   const listColumnOptions = [
     ...SYSTEM_LIST_COLUMNS.map((column) => ({ value: column, label: t(`builder.systemColumns.${column}`) })),
-    ...fieldKeys.map((key) => ({ value: key, label: fieldLabel(key) })),
+    ...columnKeys.map((key) => ({ value: key, label: fieldLabel(key) })),
   ];
   const reviewerLabel = (membershipId: string) => {
     const candidate = state.reviewerCandidates.find((entry) => entry.membershipId === membershipId);
@@ -198,7 +213,14 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
           : code === 'DEFINITION_FIELD_TYPE_UNKNOWN' || code === 'DEFINITION_FIELD_TYPE_CHANGED'
             ? 'type'
             : 'key';
-    const boundsTarget = target === 'maxLength' && rows[index].type === 'number' ? 'min' : target;
+    const boundsTarget =
+      target !== 'maxLength'
+        ? target
+        : rows[index].type === 'number'
+          ? 'min'
+          : rows[index].type === 'attachment'
+            ? 'maxFiles'
+            : target;
     form.setFields([{ name: ['fields', index, boundsTarget], errors: [text] }]);
     return true;
   };
@@ -375,6 +397,47 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
                             </Form.Item>
                             <Form.Item name={[row.name, 'integer']} valuePropName="checked" label=" " colon={false}>
                               <Checkbox>{t('builder.integer')}</Checkbox>
+                            </Form.Item>
+                          </>
+                        )}
+                        {current?.type === 'attachment' && (
+                          <>
+                            <Form.Item
+                              name={[row.name, 'maxFiles']}
+                              label={t('builder.maxFiles')}
+                              rules={[{ required: true, message: t('auth.required') }]}
+                            >
+                              <InputNumber
+                                min={1}
+                                max={MAX_ATTACHMENTS_PER_REQUEST}
+                                precision={0}
+                                style={{ width: '100%' }}
+                              />
+                            </Form.Item>
+                            <Form.Item
+                              name={[row.name, 'maxKilobytes']}
+                              label={t('builder.maxKilobytes')}
+                              extra={t('builder.maxKilobytesHelp', { max: MAX_ATTACHMENT_BYTES / 1024 })}
+                              rules={[{ required: true, message: t('auth.required') }]}
+                            >
+                              <InputNumber
+                                min={1}
+                                max={MAX_ATTACHMENT_BYTES / 1024}
+                                precision={0}
+                                style={{ width: '100%' }}
+                              />
+                            </Form.Item>
+                            <Form.Item
+                              name={[row.name, 'accept']}
+                              label={t('builder.accept')}
+                              rules={[{ required: true, type: 'array', min: 1, message: t('builder.acceptRule') }]}
+                            >
+                              <Checkbox.Group
+                                options={ATTACHMENT_TYPES.map((type) => ({
+                                  value: type,
+                                  label: t(`builder.acceptTypes.${ATTACHMENT_TYPE_KEYS[type]}`),
+                                }))}
+                              />
                             </Form.Item>
                           </>
                         )}

@@ -1,11 +1,12 @@
 import { ConvexError, v } from 'convex/values';
-import { internalMutation } from './_generated/server';
+import { internalAction, internalMutation, type MutationCtx } from './_generated/server';
 import { capabilityValidator, membershipStatusValidator, type Capability } from './membershipValidators';
 
 const FIXTURE_ORGANIZATION_PREFIX = 'fixture-';
 const FIXTURE_APPLICATION_KEY = 'leaveRequests';
 const FIXTURE_APPLICATION_NAME = 'Leave requests';
 const FIXTURE_DELETE_BATCH = 500;
+const ATTACHMENT_DELETE_BATCH = 100;
 
 function assertFixtureOrganizationKey(organizationKey: string): void {
   if (!organizationKey.startsWith(FIXTURE_ORGANIZATION_PREFIX)) {
@@ -103,6 +104,64 @@ export const upsertMember = internalMutation({
   },
 });
 
+// Stores a blob that no attachment owns: what an upload leaves when it stops between storing and linking.
+export const storeOrphanFile = internalAction({
+  args: { text: v.string() },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    await ctx.storage.store(new Blob([args.text], { type: 'application/pdf' }));
+    return null;
+  },
+});
+
+async function fixtureOrganization(ctx: MutationCtx, organizationKey: string) {
+  assertFixtureOrganizationKey(organizationKey);
+  return ctx.db
+    .query('organizations')
+    .withIndex('by_key', (q) => q.eq('key', organizationKey))
+    .unique();
+}
+
+// Removes a fixture organization's attachment rows, their blobs and attachment events, at most `limit` of each per
+// application in one call. Callers repeat it until `isDone` before `removeOrganization`.
+export const removeRequestAttachments = internalMutation({
+  args: { organizationKey: v.string(), limit: v.optional(v.number()) },
+  returns: v.object({ attachments: v.number(), attachmentEvents: v.number(), files: v.number(), isDone: v.boolean() }),
+  handler: async (ctx, args) => {
+    const limit = Math.min(Math.max(Math.floor(args.limit ?? ATTACHMENT_DELETE_BATCH), 1), ATTACHMENT_DELETE_BATCH);
+    const removed = { attachments: 0, attachmentEvents: 0, files: 0, isDone: true };
+    const organization = await fixtureOrganization(ctx, args.organizationKey);
+    if (!organization) return removed;
+    const applications = await ctx.db
+      .query('applications')
+      .withIndex('by_organization_key', (q) => q.eq('organizationId', organization._id))
+      .take(FIXTURE_DELETE_BATCH);
+    for (const application of applications) {
+      const attachments = await ctx.db
+        .query('requestAttachments')
+        .withIndex('by_application', (q) => q.eq('applicationId', application._id))
+        .take(limit + 1);
+      for (const attachment of attachments.slice(0, limit)) {
+        await ctx.db.delete(attachment._id);
+        await ctx.storage.delete(attachment.storageId);
+        removed.attachments += 1;
+        removed.files += 1;
+      }
+      const events = await ctx.db
+        .query('attachmentEvents')
+        .withIndex('by_application', (q) => q.eq('applicationId', application._id))
+        .take(limit + 1);
+      for (const event of events.slice(0, limit)) {
+        await ctx.db.delete(event._id);
+        removed.attachmentEvents += 1;
+      }
+      if (attachments.length > limit || events.length > limit) removed.isDone = false;
+    }
+    if (applications.length === FIXTURE_DELETE_BATCH) removed.isDone = false;
+    return removed;
+  },
+});
+
 export const removeOrganization = internalMutation({
   args: { organizationKey: v.string() },
   returns: v.object({
@@ -140,6 +199,21 @@ export const removeOrganization = internalMutation({
         .take(FIXTURE_DELETE_BATCH);
       if (applications.length === 0) break;
       for (const application of applications) {
+        const attachmentLeft =
+          (await ctx.db
+            .query('requestAttachments')
+            .withIndex('by_application', (q) => q.eq('applicationId', application._id))
+            .first()) ??
+          (await ctx.db
+            .query('attachmentEvents')
+            .withIndex('by_application', (q) => q.eq('applicationId', application._id))
+            .first());
+        if (attachmentLeft) {
+          throw new ConvexError({
+            code: 'FIXTURE_ATTACHMENTS_REMAIN',
+            message: 'Run fixtures:removeRequestAttachments until it is done first',
+          });
+        }
         for (;;) {
           const requests = await ctx.db
             .query('requests')

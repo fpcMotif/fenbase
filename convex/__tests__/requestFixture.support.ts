@@ -97,8 +97,29 @@ function headRow(id: string, applicationId: string, organizationId: string, curr
   };
 }
 
+export const EVIDENCE_MAX_BYTES = 4096;
+
+export function evidenceField(required = false) {
+  return {
+    type: 'attachment',
+    key: 'supportingDocument',
+    label: { enUS: 'Supporting document', zhCN: '证明材料' },
+    required,
+    maxFiles: 2,
+    maxBytes: EVIDENCE_MAX_BYTES,
+    accept: ['application/pdf', 'image/png', 'image/jpeg'],
+  };
+}
+
+function v1Definition(preset: Preset | undefined, evidence: { required: boolean } | undefined) {
+  const definition = leaveDefinition(preset);
+  return evidence ? { ...definition, fields: [...definition.fields, evidenceField(evidence.required)] } : definition;
+}
+
 // Membership b submits and reviews and is V1's reviewer; membership v only reviews and is the reviewer of a later V2.
-export function fixtureContext(options: { app1Preset?: Preset; app1Published?: boolean } = {}): TestContext {
+export function fixtureContext(
+  options: { app1Preset?: Preset; app1Published?: boolean; evidence?: { required: boolean } } = {},
+): TestContext {
   const published = options.app1Published ?? true;
   return createContext({
     organizations: [
@@ -132,7 +153,7 @@ export function fixtureContext(options: { app1Preset?: Preset; app1Published?: b
       headRow('applicationDefinitions:z', APP_Z, ORG_2, V_Z),
     ],
     applicationDefinitionVersions: [
-      ...(published ? [versionRow(V1, APP_1, ORG_1, 1, leaveDefinition(options.app1Preset))] : []),
+      ...(published ? [versionRow(V1, APP_1, ORG_1, 1, v1Definition(options.app1Preset, options.evidence))] : []),
       versionRow(
         V_APP_2,
         APP_2,

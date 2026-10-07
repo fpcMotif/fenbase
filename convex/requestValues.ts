@@ -29,6 +29,11 @@ export const REQUEST_ERROR_CODES = [
   'REQUEST_STATE_CONFLICT',
   'REQUEST_REVIEWER_UNAVAILABLE',
   'REQUEST_SELF_REVIEW',
+  'ATTACHMENT_TOO_LARGE',
+  'ATTACHMENT_TYPE_NOT_ALLOWED',
+  'ATTACHMENT_LIMIT_REACHED',
+  'ATTACHMENT_REQUIRED',
+  'ATTACHMENT_NAME_INVALID',
 ] as const;
 
 export const requestStateValidator = v.union(
@@ -131,6 +136,11 @@ export function validateRequestValues(
 
   for (const field of definition.fields) {
     const value = ownValue(values, field.key);
+    // Files live in their own rows; submit checks a required attachment field against them.
+    if (field.type === 'attachment') {
+      if (value !== undefined) return { code: 'RECORD_FIELD_TYPE_INVALID', field: field.key };
+      continue;
+    }
     if (isBlank(value)) {
       if (field.required) return { code: 'RECORD_FIELD_REQUIRED', field: field.key };
       continue;
