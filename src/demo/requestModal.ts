@@ -19,13 +19,12 @@ export function requestModalStatus(input: {
   return { kind: 'ready' };
 }
 
-export type RequestAction = 'save' | 'submit' | 'withdraw' | 'reject' | 'approve';
+export type ReviewAction = 'submit' | 'withdraw' | 'reject' | 'approve';
 
-type ActionFlags = { canEdit: boolean; canSubmit: boolean; canWithdraw: boolean; canDecide: boolean };
+type ActionFlags = { canSubmit: boolean; canWithdraw: boolean; canDecide: boolean };
 
-export function requestActions(view: ActionFlags): RequestAction[] {
-  const actions: RequestAction[] = [];
-  if (view.canEdit) actions.push('save');
+export function requestActions(view: ActionFlags): ReviewAction[] {
+  const actions: ReviewAction[] = [];
   if (view.canSubmit) actions.push('submit');
   if (view.canWithdraw) actions.push('withdraw');
   if (view.canDecide) actions.push('reject', 'approve');

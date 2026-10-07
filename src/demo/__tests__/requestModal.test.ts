@@ -69,10 +69,10 @@ describe('request modal status', () => {
 });
 
 describe('request actions', () => {
-  const flags = { canEdit: false, canSubmit: false, canWithdraw: false, canDecide: false };
+  const flags = { canSubmit: false, canWithdraw: false, canDecide: false };
 
-  it('offers each side only the commands the server allows for the snapshot it shows', () => {
-    expect(requestActions({ ...flags, canEdit: true, canSubmit: true })).toEqual(['save', 'submit']);
+  it('offers each side only the review commands the server allows for the snapshot it shows', () => {
+    expect(requestActions({ ...flags, canSubmit: true })).toEqual(['submit']);
     expect(requestActions({ ...flags, canWithdraw: true })).toEqual(['withdraw']);
     expect(requestActions({ ...flags, canDecide: true })).toEqual(['reject', 'approve']);
     expect(requestActions(flags)).toEqual([]);

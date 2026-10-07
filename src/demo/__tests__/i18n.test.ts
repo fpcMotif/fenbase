@@ -130,6 +130,16 @@ describe('request text', () => {
     ).toMatchObject({ code: 'RECORD_REVISION_CONFLICT', currentRevision: 4 });
     expect(
       actionErrorData(
+        new ConvexError({
+          code: 'REQUEST_STATE_CONFLICT',
+          message: 'x',
+          currentState: 'withdrawn',
+          currentRevision: 3,
+        }),
+      ),
+    ).toMatchObject({ code: 'REQUEST_STATE_CONFLICT', currentState: 'withdrawn', currentRevision: 3 });
+    expect(
+      actionErrorData(
         new ConvexError({ code: 'RECORD_NUMBER_OUT_OF_RANGE', message: 'x', field: 'days', min: 1, max: 3 }),
       ),
     ).toMatchObject({ field: 'days', min: 1, max: 3 });
