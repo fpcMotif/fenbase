@@ -335,7 +335,7 @@ _Avoid_: timestamp, datetime
 
 # Requests
 
-Requests that employees fill in through the published definition, submit, and have one reviewer decide. Seeded by issue #16 (ADR-0007, `docs/migration/records-16.md`); submission and review come from issue #17 (ADR-0009, `docs/migration/approval-17.md`).
+Requests that employees fill in through the published definition, submit, and have one reviewer decide. Seeded by issue #16 (ADR-0007, `docs/migration/records-16.md`); submission and review come from issue #17 (ADR-0009, `docs/migration/approval-17.md`); protected attachments come from issue #18 (ADR-0010, `docs/migration/attachments-18.md`).
 
 ## Language
 
@@ -371,6 +371,26 @@ _Avoid_: version (a revision is not a **Pinned version**)
 A client-chosen ID, 8 to 64 letters, digits, `-` or `_`, that names one create attempt or one **Review command** for one membership. Creates and **Review commands** are two separate scopes: a create ID lives on the `requests` row, a command ID on its **Request event**, so one ID can name one create and one command. Within a scope, repeating it with the same payload returns the first result; repeating it with another payload (other values, or another command, request or expected revision) is an operation conflict. A repeated **Review command** first checks the caller's current access, so a caller who lost access gets the same denial as any other unauthorized call.
 _Avoid_: idempotency key (in code), request ID
 
+**Attachment field**:
+A definition field of type `attachment` with `maxFiles`, `maxBytes` and an `accept` list of PDF, PNG and JPEG. A definition holds at most one. Its files are never part of the request's values.
+_Avoid_: file column, upload field
+
+**Attachment**:
+One `requestAttachments` row: a file the requester uploaded to one draft **Request** through `requestAttachments.upload`, with the server-measured name, size, type and SHA-256, and the one storage blob it owns.
+_Avoid_: file URL, storage ID (no caller ever sees one)
+
+**Evidence**:
+The set of **Attachments** a **Request** holds when it is submitted. Submit pins it; no command changes it afterwards.
+_Avoid_: supporting files (fine in UI copy, not as a term)
+
+**Attachment event**:
+One append-only `attachmentEvents` row per accepted attach or remove: actor, file metadata, resulting **Request revision** and operation fingerprint. It never holds file contents, storage IDs or links.
+_Avoid_: request event (those are review commands only)
+
+**Orphan upload**:
+A storage blob that no **Attachment** owns, left by an upload that stopped between storing and linking. The sweep deletes it once it is older than 15 minutes.
+_Avoid_: temp file
+
 ## Relationships
 
 - A **Request** belongs to one **Application** and one requester **Membership**; the server copies the organization, **Pinned version** and **Policy preset** onto it.
@@ -380,6 +400,8 @@ _Avoid_: idempotency key (in code), request ID
 - Only the requester edits or deletes a **Request**, only while it is a draft, and only while holding `submitRequests`.
 - Submit, the **Review task** and the first **Request event** commit together; a failed submit leaves the draft unchanged with no task.
 - A pending request whose **Assigned reviewer** became inactive or lost `reviewRequests` stays pending; only the requester's withdraw ends it.
+- **Attachments** are readable by the requester and, once submitted, by the **Assigned reviewer** holding `reviewRequests`. A `readApplicationRecords` holder who can read the **Request** sees no files (ADR-0010).
+- Attaching or removing a file needs the requester's own draft and `submitRequests`, and raises the **Request revision**.
 
 ## Flagged ambiguities
 

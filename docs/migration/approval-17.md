@@ -163,4 +163,4 @@ Journey checks, expected equal to actual in every run:
 - Reassigning or delegating a stranded task, reopening, multi-stage review and workflow graphs.
 - Display names for memberships; the UI shows "Me" or "Member" plus six characters of the membership ID.
 - A reader under the readers preset viewing a submitted request; that read path has unit evidence only.
-- Protected attachments (#18).
+- Protected attachments; #18 added them ([attachments-18.md](attachments-18.md)).
