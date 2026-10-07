@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { create, get, remove, update } from '../collections';
-import { createContext, invokeHandler, type TestContext, type TestDoc } from './helpers';
+import { createContext, invokeHandler, type TestContext, type TestDoc } from './helpers.support';
 
 vi.mock('../auth', () => ({ requireUser: async () => 'user-1' }));
 

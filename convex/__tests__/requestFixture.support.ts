@@ -1,5 +1,5 @@
 import { ConvexError } from 'convex/values';
-import { createContext, type TestContext, type TestDoc } from './helpers';
+import { createContext, type TestContext, type TestDoc } from './helpers.support';
 
 export const ORG_1 = 'organizations:1';
 export const ORG_2 = 'organizations:2';

@@ -3,8 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { removeOrganization } from '../fixtures';
 import { create, get, remove, update } from '../requests';
 import { approve, history, inbox, reject, submit, withdraw } from '../requestReviews';
-import { invokeHandler, type TestContext } from './helpers';
-import { APP_1, ORG_1, V1, V2, fixtureContext, leave, rejectionData, seedV2 } from './requestFixture';
+import { invokeHandler, type TestContext } from './helpers.support';
+import { APP_1, ORG_1, V1, V2, fixtureContext, leave, rejectionData, seedV2 } from './requestFixture.support';
 
 const auth = vi.hoisted(() => ({ currentUser: null as string | null }));
 

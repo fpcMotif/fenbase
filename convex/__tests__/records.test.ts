@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { browse, create, get, list, remove, update } from '../records';
-import { createContext, invokeHandler } from './helpers';
+import { createContext, invokeHandler } from './helpers.support';
 
 vi.mock('../auth', () => ({ requireUser: async () => 'user-1' }));
 
