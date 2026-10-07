@@ -1,5 +1,6 @@
 import { ConvexError, v } from 'convex/values';
 import { internalAction, internalMutation, type MutationCtx } from './_generated/server';
+import { clampBatch } from './attachmentModel';
 import { capabilityValidator, membershipStatusValidator, type Capability } from './membershipValidators';
 
 const FIXTURE_ORGANIZATION_PREFIX = 'fixture-';
@@ -128,7 +129,7 @@ export const removeRequestAttachments = internalMutation({
   args: { organizationKey: v.string(), limit: v.optional(v.number()) },
   returns: v.object({ attachments: v.number(), attachmentEvents: v.number(), files: v.number(), isDone: v.boolean() }),
   handler: async (ctx, args) => {
-    const limit = Math.min(Math.max(Math.floor(args.limit ?? ATTACHMENT_DELETE_BATCH), 1), ATTACHMENT_DELETE_BATCH);
+    const limit = clampBatch(args.limit, ATTACHMENT_DELETE_BATCH);
     const removed = { attachments: 0, attachmentEvents: 0, files: 0, isDone: true };
     const organization = await fixtureOrganization(ctx, args.organizationKey);
     if (!organization) return removed;

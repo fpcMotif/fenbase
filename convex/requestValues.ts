@@ -34,6 +34,7 @@ export const REQUEST_ERROR_CODES = [
   'ATTACHMENT_LIMIT_REACHED',
   'ATTACHMENT_REQUIRED',
   'ATTACHMENT_NAME_INVALID',
+  'ATTACHMENT_INTEGRITY_FAILED',
 ] as const;
 
 export const requestStateValidator = v.union(

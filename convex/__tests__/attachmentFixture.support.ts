@@ -26,6 +26,11 @@ export function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
   return copy.buffer;
 }
 
+export async function base64Sha256(bytes: Uint8Array): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', toArrayBuffer(bytes));
+  return btoa(String.fromCharCode(...new Uint8Array(digest)));
+}
+
 export async function hexSha256(bytes: Uint8Array): Promise<string> {
   const digest = await crypto.subtle.digest('SHA-256', toArrayBuffer(bytes));
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');

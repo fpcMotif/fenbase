@@ -1,6 +1,6 @@
 import { ConvexError } from 'convex/values';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { MAX_ATTACHMENT_EVENTS_PER_REQUEST, ORPHAN_GRACE_MS } from '../attachmentModel';
+import { MAX_ATTACHES_PER_REQUEST, ORPHAN_GRACE_MS } from '../attachmentModel';
 import { removeOrganization, removeRequestAttachments } from '../fixtures';
 import {
   attach,
@@ -15,7 +15,15 @@ import {
 import { approve, submit } from '../requestReviews';
 import { create, remove as removeRequest } from '../requests';
 import { createActionContext, invokeHandler, type ActionTestContext, type TestContext } from './helpers.support';
-import { JPEG_BYTES, PDF_BYTES, PNG_BYTES, bytesOf, hexSha256, toArrayBuffer } from './attachmentFixture.support';
+import {
+  JPEG_BYTES,
+  PDF_BYTES,
+  PNG_BYTES,
+  base64Sha256,
+  bytesOf,
+  hexSha256,
+  toArrayBuffer,
+} from './attachmentFixture.support';
 import {
   APP_1,
   APP_2,
@@ -52,6 +60,7 @@ type Uploaded = {
   attachmentId: string;
   revision: number;
   replayed: boolean;
+  removed: boolean;
   fileName: string;
   size: number;
   contentType: string;
@@ -207,6 +216,7 @@ describe('uploading evidence to a draft', () => {
       attachmentId: expect.any(String),
       revision: 2,
       replayed: false,
+      removed: false,
       fileName: '病假证明.pdf',
       size: PDF_BYTES.byteLength,
       contentType: 'application/pdf',
@@ -224,7 +234,7 @@ describe('uploading evidence to a draft', () => {
       contentType: 'application/pdf',
       sha256,
     });
-    expect(ctx.files.get(String(row.storageId))?.sha256).toBe(sha256);
+    expect(ctx.files.get(String(row.storageId))?.sha256).toBe(await base64Sha256(PDF_BYTES));
     expect(ctx.read('requests', requestId)).toMatchObject({ revision: 2 });
     expect(ctx.rows('attachmentEvents')).toEqual([
       expect.objectContaining({
@@ -333,16 +343,47 @@ describe('uploading evidence to a draft', () => {
     await expectDenied(ctx, () => uploadAs(action, 'user-a', requestId, 3), 'ATTACHMENT_LIMIT_REACHED');
   });
 
-  it('stops attaching once a draft has used its attachment event budget', async () => {
+  it('counts only attaches against the draft budget, so removals never use it up', async () => {
     const { ctx, action } = setup();
     const { requestId } = await draftAs(ctx, 'user-a');
     let revision = 1;
-    for (let index = 0; index < MAX_ATTACHMENT_EVENTS_PER_REQUEST / 2; index += 1) {
+    for (let index = 0; index < MAX_ATTACHES_PER_REQUEST; index += 1) {
       const uploaded = await uploadAs(action, 'user-a', requestId, revision);
       revision = (await removeAs(ctx, 'user-a', requestId, uploaded.attachmentId, uploaded.revision)).revision;
     }
-    expect(ctx.rows('attachmentEvents')).toHaveLength(MAX_ATTACHMENT_EVENTS_PER_REQUEST);
+    expect(ctx.rows('attachmentEvents')).toHaveLength(2 * MAX_ATTACHES_PER_REQUEST);
     await expectDenied(ctx, () => uploadAs(action, 'user-a', requestId, revision), 'ATTACHMENT_LIMIT_REACHED');
+
+    await deleteDraftAs(ctx, 'user-a', requestId, revision);
+    expect(ctx.rows('attachmentEvents')).toEqual([]);
+  });
+
+  it('measures no bytes before the caller is allowed to upload them', async () => {
+    const { ctx, action } = setup();
+    const { requestId } = await draftAs(ctx, 'user-a');
+    const overLimit = new Uint8Array(EVIDENCE_MAX_BYTES + 1);
+    overLimit.set(PDF_BYTES);
+    const digest = vi.spyOn(crypto.subtle, 'digest');
+    try {
+      await expectDenied(ctx, () => uploadAs(action, null, requestId, 1), 'Unauthenticated');
+      await expectDenied(ctx, () => uploadAs(action, 'user-r', requestId, 1), 'RECORD_NOT_FOUND');
+      await expectDenied(
+        ctx,
+        () => uploadAs(action, 'user-a', requestId, 1, { bytes: overLimit }),
+        'ATTACHMENT_TOO_LARGE',
+      );
+      expect(digest).not.toHaveBeenCalled();
+    } finally {
+      digest.mockRestore();
+    }
+  });
+
+  it('asks storage to verify the digest it measured', async () => {
+    const { ctx, action } = setup();
+    const { requestId } = await draftAs(ctx, 'user-a');
+    const store = vi.spyOn(action.storage, 'store');
+    await uploadAs(action, 'user-a', requestId, 1);
+    expect(store).toHaveBeenCalledWith(expect.any(Blob), { sha256: await base64Sha256(PDF_BYTES) });
   });
 
   it('refuses a stale revision with the current one', async () => {
@@ -399,6 +440,19 @@ describe('replaying an upload', () => {
     expect(ctx.files.size).toBe(1);
   });
 
+  it('says so when the replayed attachment was removed after the first call', async () => {
+    const { ctx, action } = setup();
+    const { requestId } = await draftAs(ctx, 'user-a');
+    const first = await uploadAs(action, 'user-a', requestId, 1, { operationId: 'upload-0004' });
+    expect(first.removed).toBe(false);
+    await removeAs(ctx, 'user-a', requestId, first.attachmentId, first.revision);
+
+    const again = await uploadAs(action, 'user-a', requestId, 1, { operationId: 'upload-0004' });
+
+    expect(again).toEqual({ ...first, replayed: true, removed: true });
+    expect(ctx.files.size).toBe(0);
+  });
+
   it('refuses the same operation id for a different file', async () => {
     const { ctx, action } = setup();
     const { requestId } = await draftAs(ctx, 'user-a');
@@ -446,7 +500,7 @@ describe('a failed upload', () => {
     const { requestId } = await draftAs(ctx, 'user-a');
     const storageId = await action.storage.store(new Blob([PNG_BYTES.slice()]));
     signIn('user-a');
-    await expect(
+    await expectCode(
       invokeHandler(attach, ctx, {
         applicationId: APP_1,
         requestId,
@@ -460,7 +514,8 @@ describe('a failed upload', () => {
         size: PDF_BYTES.byteLength,
         sha256: await hexSha256(PDF_BYTES),
       }),
-    ).rejects.toThrow(/storage/i);
+      'ATTACHMENT_INTEGRITY_FAILED',
+    );
     expect(ctx.rows('requestAttachments')).toEqual([]);
   });
 
@@ -469,7 +524,7 @@ describe('a failed upload', () => {
     const { requestId, revision } = await draftWithFile(ctx, action);
     const [row] = ctx.rows('requestAttachments');
     signIn('user-a');
-    await expect(
+    await expectCode(
       invokeHandler(attach, ctx, {
         applicationId: APP_1,
         requestId,
@@ -483,7 +538,8 @@ describe('a failed upload', () => {
         size: row.size,
         sha256: row.sha256,
       }),
-    ).rejects.toThrow(/already/i);
+      'ATTACHMENT_INTEGRITY_FAILED',
+    );
     expect(ctx.rows('requestAttachments')).toHaveLength(1);
   });
 });
@@ -631,7 +687,15 @@ describe('who can read evidence', () => {
     const file = ctx.files.get(String(row.storageId));
     if (!file) throw new Error('missing file');
     file.bytes = PNG_BYTES;
-    await expect(downloadAs(action, 'user-a', attachmentId)).rejects.toThrow(/integrity/i);
+    await expectCode(downloadAs(action, 'user-a', attachmentId), 'ATTACHMENT_INTEGRITY_FAILED');
+  });
+
+  it('reports a stored file that went missing as an integrity failure', async () => {
+    const { ctx, action } = setup();
+    const { attachmentId } = await draftWithFile(ctx, action);
+    const [row] = ctx.rows('requestAttachments');
+    ctx.files.delete(String(row.storageId));
+    await expectCode(downloadAs(action, 'user-a', attachmentId), 'ATTACHMENT_INTEGRITY_FAILED');
   });
 });
 
@@ -668,6 +732,15 @@ describe('the orphan sweep', () => {
     expect(result).toEqual({ scanned: 3, deleted: 1, isDone: true });
     expect([...ctx.files.keys()].sort()).toEqual([linked, freshOrphan].sort());
     expect(ctx.scheduled).toEqual([]);
+  });
+
+  it('refuses a negative grace window, which would reach blobs an upload is about to link', async () => {
+    const { ctx, action } = setup();
+    await action.storage.store(new Blob([PDF_BYTES.slice()]));
+    await expect(invokeHandler(sweepOrphans, ctx, { cursor: null, olderThanMs: -60_000 })).rejects.toThrow(
+      /grace window/i,
+    );
+    expect(ctx.files.size).toBe(1);
   });
 
   it('works in bounded batches and schedules the rest', async () => {

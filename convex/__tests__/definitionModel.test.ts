@@ -239,6 +239,7 @@ describe('attachment fields', () => {
     ['a fractional file count', { ...evidence, maxFiles: 1.5 }],
     ['an empty file', { ...evidence, maxBytes: 0 }],
     ['more than 2 MiB', { ...evidence, maxBytes: 2 * 1024 * 1024 + 1 }],
+    ['a size the builder cannot show in whole KB', { ...evidence, maxBytes: 1536 }],
     ['no accepted type', { ...evidence, accept: [] }],
     ['a repeated type', { ...evidence, accept: ['image/png', 'image/png'] }],
     ['an unsupported type', { ...evidence, accept: ['text/html'] }],

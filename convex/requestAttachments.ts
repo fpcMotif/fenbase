@@ -11,12 +11,16 @@ import {
   type QueryCtx,
 } from './_generated/server';
 import {
+  MAX_ATTACHES_PER_REQUEST,
   MAX_ATTACHMENT_EVENTS_PER_REQUEST,
   MAX_ATTACHMENTS_PER_REQUEST,
   MAX_SWEEP_BATCH,
   ORPHAN_GRACE_MS,
-  canReadAttachments,
+  clampBatch,
   extensionMatches,
+  fileMetadataFields,
+  fileMetadataOf,
+  hexToBase64,
   sameSha256,
   sanitizeFileName,
   sniffContentType,
@@ -27,6 +31,7 @@ import {
   assertEditable,
   assertOperationId,
   canRead,
+  canReadAttachments,
   notFound,
   pinnedDefinition,
   requestError,
@@ -50,40 +55,26 @@ const uploadResultValidator = v.object({
   attachmentId: v.id('requestAttachments'),
   revision: v.number(),
   replayed: v.boolean(),
-  fileName: v.string(),
-  size: v.number(),
-  contentType: v.string(),
-  sha256: v.string(),
+  removed: v.boolean(),
+  ...fileMetadataFields,
+});
+
+const replayValidator = v.object({
+  kind: v.literal('replay'),
+  fingerprint: v.string(),
+  result: uploadResultValidator,
 });
 
 const authorizedUploadValidator = v.union(
-  v.object({ kind: v.literal('replay'), result: uploadResultValidator }),
+  replayValidator,
   v.object({ kind: v.literal('ok'), maxBytes: v.number(), accept: v.array(v.string()) }),
 );
 
-const authorizedDownloadValidator = v.union(
-  v.object({
-    storageId: v.id('_storage'),
-    fileName: v.string(),
-    contentType: v.string(),
-    size: v.number(),
-    sha256: v.string(),
-  }),
-  v.null(),
-);
+const authorizedDownloadValidator = v.union(v.object({ storageId: v.id('_storage'), ...fileMetadataFields }), v.null());
 
-const downloadResultValidator = v.object({
-  fileName: v.string(),
-  contentType: v.string(),
-  size: v.number(),
-  sha256: v.string(),
-  bytes: v.bytes(),
-});
+const downloadResultValidator = v.object({ ...fileMetadataFields, bytes: v.bytes() });
 
-const attachResultValidator = v.union(
-  v.object({ kind: v.literal('replay'), result: uploadResultValidator }),
-  uploadResultValidator,
-);
+const attachResultValidator = v.union(replayValidator, uploadResultValidator);
 
 // Actions that call functions of their own module need explicit types to break the inference cycle.
 type UploadResult = Infer<typeof uploadResultValidator>;
@@ -95,10 +86,7 @@ type DownloadResult = Infer<typeof downloadResultValidator>;
 const attachmentViewValidator = v.object({
   _id: v.id('requestAttachments'),
   fieldKey: v.string(),
-  fileName: v.string(),
-  size: v.number(),
-  contentType: v.string(),
-  sha256: v.string(),
+  ...fileMetadataFields,
   createdAt: v.number(),
 });
 
@@ -108,7 +96,7 @@ type UploadCheckArgs = {
   fieldKey: string;
   expectedRevision: number;
   operationId: string;
-  fingerprint: string;
+  fingerprint?: string;
 };
 
 export async function bytesSha256Hex(bytes: ArrayBuffer): Promise<string> {
@@ -127,27 +115,52 @@ function operationConflict() {
   return requestError('RECORD_OPERATION_CONFLICT', 'This operation id was already used for a different file change');
 }
 
-function replayOf(event: Doc<'attachmentEvents'>) {
+function integrityFailure(message: string) {
+  return requestError('ATTACHMENT_INTEGRITY_FAILED', message);
+}
+
+async function replayOf(ctx: QueryCtx | MutationCtx, event: Doc<'attachmentEvents'>) {
   return {
-    attachmentId: event.attachmentId,
-    revision: event.revision,
-    replayed: true,
-    fileName: event.fileName,
-    size: event.size,
-    contentType: event.contentType,
-    sha256: event.sha256,
+    kind: 'replay' as const,
+    fingerprint: event.fingerprint,
+    result: {
+      attachmentId: event.attachmentId,
+      revision: event.revision,
+      replayed: true,
+      removed: (await ctx.db.get(event.attachmentId)) === null,
+      ...fileMetadataOf(event),
+    },
   };
+}
+
+function uploadFingerprint(
+  args: { requestId: Id<'requests'>; fieldKey: string; expectedRevision: number },
+  file: {
+    fileName: string;
+    sha256: string;
+  },
+) {
+  return sha256Hex({
+    kind: 'attach',
+    requestId: args.requestId,
+    fieldKey: args.fieldKey,
+    fileName: file.fileName,
+    sha256: file.sha256,
+    expectedRevision: args.expectedRevision,
+  });
 }
 
 // The order matches the review commands: access, then the replay, then the request state and revision, then the field
 // and its limits. Both the authorizing query and the linking mutation run it, so the link re-checks what the upload saw.
+// The authorizing query runs before any byte is hashed, so it has no fingerprint yet and hands the replay's back.
 async function checkUpload(ctx: QueryCtx | MutationCtx, args: UploadCheckArgs) {
   const { principal, row } = await requireOwnRequest(ctx, args.applicationId, args.requestId);
   assertOperationId(args.operationId);
   const previous = await findOperation(ctx, principal.membershipId, args.operationId);
   if (previous) {
-    if (previous.kind !== 'attach' || previous.fingerprint !== args.fingerprint) throw operationConflict();
-    return { kind: 'replay' as const, result: replayOf(previous) };
+    if (previous.kind !== 'attach') throw operationConflict();
+    if (args.fingerprint !== undefined && previous.fingerprint !== args.fingerprint) throw operationConflict();
+    return replayOf(ctx, previous);
   }
   assertEditable(row, args.expectedRevision);
   const definition = await pinnedDefinition(ctx, row);
@@ -167,10 +180,11 @@ async function checkUpload(ctx: QueryCtx | MutationCtx, args: UploadCheckArgs) {
     .query('attachmentEvents')
     .withIndex('by_request', (q) => q.eq('requestId', row._id))
     .take(MAX_ATTACHMENT_EVENTS_PER_REQUEST);
+  const attaches = events.filter((event) => event.kind === 'attach').length;
   if (
     inField.length >= field.maxFiles ||
     inRequest.length >= MAX_ATTACHMENTS_PER_REQUEST ||
-    events.length >= MAX_ATTACHMENT_EVENTS_PER_REQUEST
+    attaches >= MAX_ATTACHES_PER_REQUEST
   ) {
     throw requestError('ATTACHMENT_LIMIT_REACHED', 'This request holds no more files', {
       field: field.key,
@@ -181,7 +195,7 @@ async function checkUpload(ctx: QueryCtx | MutationCtx, args: UploadCheckArgs) {
 }
 
 export const authorizeUpload = internalQuery({
-  args: { ...uploadArgs, fingerprint: v.string() },
+  args: uploadArgs,
   returns: authorizedUploadValidator,
   handler: async (ctx, args) => {
     const check = await checkUpload(ctx, args);
@@ -193,12 +207,9 @@ export const authorizeUpload = internalQuery({
 export const attach = internalMutation({
   args: {
     ...uploadArgs,
+    ...fileMetadataFields,
     fingerprint: v.string(),
     storageId: v.id('_storage'),
-    fileName: v.string(),
-    contentType: v.string(),
-    size: v.number(),
-    sha256: v.string(),
   },
   returns: attachResultValidator,
   handler: async (ctx, args) => {
@@ -207,23 +218,17 @@ export const attach = internalMutation({
     const { principal, row, field } = check;
     const stored = await ctx.db.system.get('_storage', args.storageId);
     if (!stored || stored.size !== args.size || !sameSha256(stored.sha256, args.sha256)) {
-      throw new Error('The stored file does not match the uploaded bytes (storage metadata mismatch)');
+      throw integrityFailure('The stored file does not match the uploaded bytes (storage metadata mismatch)');
     }
     const linked = await ctx.db
       .query('requestAttachments')
       .withIndex('by_storage', (q) => q.eq('storageId', args.storageId))
       .first();
-    if (linked) throw new Error('This stored file is already linked to an attachment');
+    if (linked) throw integrityFailure('This stored file is already linked to an attachment');
 
     const now = Date.now();
     const revision = row.revision + 1;
-    const metadata = {
-      fieldKey: field.key,
-      fileName: args.fileName,
-      size: args.size,
-      contentType: args.contentType,
-      sha256: args.sha256,
-    };
+    const file = fileMetadataOf(args);
     const attachmentId = await ctx.db.insert('requestAttachments', {
       requestId: row._id,
       applicationId: row.applicationId,
@@ -231,8 +236,9 @@ export const attach = internalMutation({
       uploaderMembershipId: principal.membershipId,
       operationId: args.operationId,
       storageId: args.storageId,
+      fieldKey: field.key,
       createdAt: now,
-      ...metadata,
+      ...file,
     });
     await ctx.db.patch(row._id, { revision, updatedAt: now });
     await ctx.db.insert('attachmentEvents', {
@@ -244,12 +250,12 @@ export const attach = internalMutation({
       fingerprint: args.fingerprint,
       kind: 'attach',
       attachmentId,
+      fieldKey: field.key,
       revision,
       createdAt: now,
-      ...metadata,
+      ...file,
     });
-    const { fieldKey: _fieldKey, ...file } = metadata;
-    return { attachmentId, revision, replayed: false, ...file };
+    return { attachmentId, revision, replayed: false, removed: false, ...file };
   },
 });
 
@@ -257,26 +263,25 @@ export const upload = action({
   args: { ...uploadArgs, fileName: v.string(), bytes: v.bytes() },
   returns: uploadResultValidator,
   handler: async (ctx, args): Promise<UploadResult> => {
-    const bytes = new Uint8Array(args.bytes);
-    const sha256 = await bytesSha256Hex(args.bytes);
     const checkArgs = {
       applicationId: args.applicationId,
       requestId: args.requestId,
       fieldKey: args.fieldKey,
       expectedRevision: args.expectedRevision,
       operationId: args.operationId,
-      fingerprint: await sha256Hex({
-        kind: 'attach',
-        requestId: args.requestId,
-        fieldKey: args.fieldKey,
-        fileName: args.fileName,
-        sha256,
-        expectedRevision: args.expectedRevision,
-      }),
     };
+    // No byte is hashed before the caller is allowed to upload to this draft.
     const authorized: AuthorizedUpload = await ctx.runQuery(internal.requestAttachments.authorizeUpload, checkArgs);
-    if (authorized.kind === 'replay') return authorized.result;
+    if (authorized.kind === 'replay') {
+      const fingerprint = await uploadFingerprint(args, {
+        fileName: args.fileName,
+        sha256: await bytesSha256Hex(args.bytes),
+      });
+      if (fingerprint !== authorized.fingerprint) throw operationConflict();
+      return authorized.result;
+    }
 
+    const bytes = new Uint8Array(args.bytes);
     if (bytes.byteLength > authorized.maxBytes) {
       throw requestError('ATTACHMENT_TOO_LARGE', 'The file is larger than this field allows', {
         field: args.fieldKey,
@@ -294,11 +299,17 @@ export const upload = action({
       });
     }
 
-    const storageId = await ctx.storage.store(new Blob([args.bytes], { type: contentType }));
+    const sha256 = await bytesSha256Hex(args.bytes);
+    const fingerprint = await uploadFingerprint(args, { fileName: args.fileName, sha256 });
+    // The backend checks the digest itself, in base64.
+    const storageId = await ctx.storage.store(new Blob([args.bytes], { type: contentType }), {
+      sha256: hexToBase64(sha256),
+    });
     let linked: AttachResult;
     try {
       linked = await ctx.runMutation(internal.requestAttachments.attach, {
         ...checkArgs,
+        fingerprint,
         storageId,
         fileName,
         contentType,
@@ -359,10 +370,7 @@ export const remove = mutation({
       kind: 'remove',
       attachmentId: attachment._id,
       fieldKey: attachment.fieldKey,
-      fileName: attachment.fileName,
-      size: attachment.size,
-      contentType: attachment.contentType,
-      sha256: attachment.sha256,
+      ...fileMetadataOf(attachment),
       revision,
       createdAt: now,
     });
@@ -386,10 +394,7 @@ export const list = query({
     return attachments.map((attachment) => ({
       _id: attachment._id,
       fieldKey: attachment.fieldKey,
-      fileName: attachment.fileName,
-      size: attachment.size,
-      contentType: attachment.contentType,
-      sha256: attachment.sha256,
+      ...fileMetadataOf(attachment),
       createdAt: attachment.createdAt,
     }));
   },
@@ -404,14 +409,8 @@ export const authorizeDownload = internalQuery({
     const attachment = await ctx.db.get(args.attachmentId);
     if (!attachment || attachment.applicationId !== principal.applicationId) return null;
     const row = await ctx.db.get(attachment.requestId);
-    if (!row || !canRead(principal, row) || !canReadAttachments(principal, row)) return null;
-    return {
-      storageId: attachment.storageId,
-      fileName: attachment.fileName,
-      contentType: attachment.contentType,
-      size: attachment.size,
-      sha256: attachment.sha256,
-    };
+    if (!row || !canReadAttachments(principal, row)) return null;
+    return { storageId: attachment.storageId, ...fileMetadataOf(attachment) };
   },
 });
 
@@ -422,13 +421,12 @@ export const download = action({
     const authorized: AuthorizedDownload = await ctx.runQuery(internal.requestAttachments.authorizeDownload, args);
     if (!authorized) throw notFound();
     const blob = await ctx.storage.get(authorized.storageId);
-    if (!blob) throw new Error('Attachment integrity check failed: the stored file is missing');
+    if (!blob) throw integrityFailure('Attachment integrity check failed: the stored file is missing');
     const bytes = await blob.arrayBuffer();
     if (bytes.byteLength !== authorized.size || (await bytesSha256Hex(bytes)) !== authorized.sha256) {
-      throw new Error('Attachment integrity check failed: the stored bytes changed');
+      throw integrityFailure('Attachment integrity check failed: the stored bytes changed');
     }
-    const { storageId: _storageId, ...metadata } = authorized;
-    return { ...metadata, bytes };
+    return { ...fileMetadataOf(authorized), bytes };
   },
 });
 
@@ -438,8 +436,10 @@ export const sweepOrphans = internalMutation({
   args: { cursor: v.union(v.string(), v.null()), olderThanMs: v.optional(v.number()), limit: v.optional(v.number()) },
   returns: v.object({ scanned: v.number(), deleted: v.number(), isDone: v.boolean() }),
   handler: async (ctx, args) => {
-    const limit = Math.min(Math.max(Math.floor(args.limit ?? MAX_SWEEP_BATCH), 1), MAX_SWEEP_BATCH);
-    const cutoff = Date.now() - (args.olderThanMs ?? ORPHAN_GRACE_MS);
+    const olderThanMs = args.olderThanMs ?? ORPHAN_GRACE_MS;
+    if (!(olderThanMs >= 0)) throw new Error('The sweep grace window cannot be negative');
+    const limit = clampBatch(args.limit, MAX_SWEEP_BATCH);
+    const cutoff = Date.now() - olderThanMs;
     const page = await ctx.db.system.query('_storage').order('asc').paginate({ cursor: args.cursor, numItems: limit });
     let deleted = 0;
     for (const file of page.page) {

@@ -1,12 +1,11 @@
-import { extensionMatches, isAttachmentType, type AttachmentType } from '../../convex/attachmentModel';
+import {
+  ATTACHMENT_EXTENSIONS,
+  extensionMatches,
+  isAttachmentType,
+  type AttachmentType,
+} from '../../convex/attachmentModel';
 import type { AttachmentDefinitionField } from '../../convex/definitionModel';
 import type { RequestIssue } from '../../convex/requestValues';
-
-const EXTENSIONS: Record<AttachmentType, string> = {
-  'application/pdf': '.pdf',
-  'image/png': '.png',
-  'image/jpeg': '.jpg,.jpeg',
-};
 
 function allowedTypes(field: AttachmentDefinitionField): AttachmentType[] {
   return field.accept.filter(isAttachmentType);
@@ -14,7 +13,7 @@ function allowedTypes(field: AttachmentDefinitionField): AttachmentType[] {
 
 export function acceptAttribute(field: AttachmentDefinitionField): string {
   return allowedTypes(field)
-    .map((type) => `${type},${EXTENSIONS[type]}`)
+    .flatMap((type) => [type, ...ATTACHMENT_EXTENSIONS[type].map((extension) => `.${extension}`)])
     .join(',');
 }
 
@@ -35,6 +34,29 @@ export function formatFileSize(bytes: number, language: string): string {
   return `${new Intl.NumberFormat(language).format(Math.ceil(bytes / 1024))} KB`;
 }
 
+// A size limit reads as a file size, not a raw byte count.
+export function withReadableSize<Issue extends { code: string; max?: number }>(
+  issue: Issue,
+  language: string,
+): Omit<Issue, 'max'> & { max?: number | string } {
+  if (issue.code !== 'ATTACHMENT_TOO_LARGE' || issue.max === undefined) return issue;
+  return { ...issue, max: formatFileSize(issue.max, language) };
+}
+
 export function shortHash(sha256: string): string {
   return sha256.slice(0, 12);
+}
+
+// Saves bytes the server returned through a short-lived object URL; no storage URL ever reaches the browser.
+export function saveBytes(bytes: ArrayBuffer, fileName: string, contentType: string): void {
+  const url = URL.createObjectURL(new Blob([bytes], { type: contentType }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  link.hidden = true;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  // Some browsers cancel a download whose object URL is revoked in the same task as the click.
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }

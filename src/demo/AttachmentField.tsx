@@ -10,26 +10,20 @@ import type { Id } from '../../convex/_generated/dataModel';
 import type { AttachmentDefinitionField } from '../../convex/definitionModel';
 import { isRequestErrorCode } from '../../convex/requestValues';
 import { actionErrorData, actionErrorMessage, requestIssueMessage } from './actionErrors';
-import { acceptAttribute, formatFileSize, precheckFile, shortHash } from './attachmentView';
+import {
+  acceptAttribute,
+  formatFileSize,
+  precheckFile,
+  saveBytes,
+  shortHash,
+  withReadableSize,
+} from './attachmentView';
 import { runPendingAction, withoutMotion } from './pendingAction';
 import { fieldLabel } from './requestForm';
 
 type AttachmentList = FunctionReturnType<typeof api.requestAttachments.list>;
 type AttachmentView = NonNullable<AttachmentList>[number];
 type CustomRequest = NonNullable<UploadProps['customRequest']>;
-
-// Saves bytes the server returned through a short-lived object URL; no storage URL ever reaches the browser.
-function saveBytes(bytes: ArrayBuffer, fileName: string, contentType: string): void {
-  const url = URL.createObjectURL(new Blob([bytes], { type: contentType }));
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = fileName;
-  link.hidden = true;
-  document.body.append(link);
-  link.click();
-  link.remove();
-  URL.revokeObjectURL(url);
-}
 
 export function AttachmentField({
   applicationId,
@@ -77,7 +71,7 @@ export function AttachmentField({
       return;
     }
     if (data && isRequestErrorCode(data.code)) {
-      setError(requestIssueMessage(data, t, () => label));
+      setError(requestIssueMessage(withReadableSize(data, i18n.language), t, () => label));
       return;
     }
     setError(data ? actionErrorMessage(failure, t) : t('attachments.interrupted'));
@@ -89,7 +83,7 @@ export function AttachmentField({
     setStatus('');
     const issue = precheckFile(field, file);
     if (issue) {
-      setError(requestIssueMessage(issue, t, () => label));
+      setError(requestIssueMessage(withReadableSize(issue, i18n.language), t, () => label));
       return;
     }
     const operationId = crypto.randomUUID();
