@@ -635,10 +635,10 @@ async function main(): Promise<void> {
     type EventView = { command: string; toState: string; revision: number; actor: { membershipId: string } };
     const historyOf = async (key: ActorKey, requestId: string) =>
       (
-        (await client(key).query(looseQuery('requestReviews:history'), { applicationId: appOne(), requestId })) as
-          | EventView[]
-          | null
-      )?.map((event) => [event.command, event.toState, event.revision, event.actor.membershipId]);
+        (await client(key).query(looseQuery('requestReviews:history'), { applicationId: appOne(), requestId })) as {
+          events: EventView[];
+        } | null
+      )?.events.map((event) => [event.command, event.toState, event.revision, event.actor.membershipId]);
     check(
       'RUN-02.history-attributes-each-transition',
       {

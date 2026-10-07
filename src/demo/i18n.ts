@@ -373,6 +373,7 @@ const resources = {
         staleDescription: 'It is now {{state}} at revision {{revision}}. Nothing was changed by your action.',
         showLatest: 'Show latest',
         history: 'History',
+        historyTruncated: 'Showing the first 100 events.',
         events: {
           submit: '{{actor}} submitted the request',
           approve: '{{actor}} approved the request',
@@ -740,6 +741,7 @@ const resources = {
         staleDescription: '它现在是“{{state}}”，修订 {{revision}}。你的操作没有改变任何内容。',
         showLatest: '显示最新内容',
         history: '处理记录',
+        historyTruncated: '仅显示最早的 100 条记录。',
         events: {
           submit: '{{actor}}提交了申请',
           approve: '{{actor}}批准了申请',

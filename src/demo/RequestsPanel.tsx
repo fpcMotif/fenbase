@@ -571,7 +571,8 @@ function RequestModal({
   const requestResult: RequestView | null | Error | undefined = results.request;
   const request = requestResult instanceof Error ? undefined : requestResult;
   const historyResult: RequestEvents | Error | undefined = results.history;
-  const events = historyResult instanceof Error ? null : historyResult;
+  const history = historyResult instanceof Error ? null : historyResult;
+  const events = history?.events;
 
   const pinnedVersionId = request?.versionId;
   const versionQueries = useMemo((): RequestForQueries => {
@@ -995,6 +996,7 @@ function RequestModal({
             <Typography.Title level={3} style={{ fontSize: 16 }}>
               {t('reviews.history')}
             </Typography.Title>
+            {history?.truncated && <Alert type="info" showIcon message={t('reviews.historyTruncated')} />}
             <Timeline
               items={events.map((event) => ({
                 key: event._id,

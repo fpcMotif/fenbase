@@ -385,6 +385,16 @@ function inboxAs(ctx: TestContext, user: string, status: 'pending' | 'completed'
   return invokeHandler(inbox, ctx, { applicationId: APP_1, status }) as Promise<{ items: View[]; truncated: boolean }>;
 }
 
+type HistoryEvent = { command: string; toState: string; actor: { membershipId: string; isMe: boolean } };
+
+function historyAs(ctx: TestContext, user: string, requestId: string) {
+  signIn(user);
+  return invokeHandler(history, ctx, { applicationId: APP_1, requestId }) as Promise<{
+    events: HistoryEvent[];
+    truncated: boolean;
+  } | null>;
+}
+
 describe('reading reviews', () => {
   it('shows the assigned reviewer submitted requests only, with the actions each side may take', async () => {
     const ctx = fixtureContext();
@@ -445,20 +455,28 @@ describe('reading reviews', () => {
     const { requestId, revision } = await pendingRequest(ctx);
     await run(ctx, 'reject', 'user-b', requestId, revision);
 
-    signIn('user-a');
-    const events = (await invokeHandler(history, ctx, { applicationId: APP_1, requestId })) as Array<{
-      command: string;
-      toState: string;
-      actor: { membershipId: string; isMe: boolean };
-    }>;
-    expect(events.map((event) => [event.command, event.toState, event.actor])).toEqual([
+    const result = await historyAs(ctx, 'user-a', requestId);
+    expect(result?.events.map((event) => [event.command, event.toState, event.actor])).toEqual([
       ['submit', 'pending', { membershipId: 'memberships:a', isMe: true }],
       ['reject', 'rejected', { membershipId: 'memberships:b', isMe: false }],
     ]);
-    signIn('user-a2');
-    expect(await invokeHandler(history, ctx, { applicationId: APP_1, requestId })).toBeNull();
-    signIn('user-b');
-    expect(await invokeHandler(history, ctx, { applicationId: APP_1, requestId })).toHaveLength(2);
+    expect(result?.truncated).toBe(false);
+    expect(await historyAs(ctx, 'user-a2', requestId)).toBeNull();
+    expect((await historyAs(ctx, 'user-b', requestId))?.events).toHaveLength(2);
+  });
+
+  it('bounds the history to 100 events and says when older ones are left out', async () => {
+    const ctx = fixtureContext();
+    const { requestId } = await pendingRequest(ctx);
+    const [submitted] = ctx.rows('requestEvents');
+    const { _id: _ignored, _creationTime: _time, ...event } = submitted;
+    for (let index = 0; index < 100; index += 1) await ctx.db.insert('requestEvents', event);
+
+    ctx.indexReads.length = 0;
+    const result = await historyAs(ctx, 'user-a', requestId);
+    expect(result?.events).toHaveLength(100);
+    expect(result?.truncated).toBe(true);
+    expect(ctx.indexReads).toContainEqual({ table: 'requestEvents', index: 'by_request', rows: 101 });
   });
 });
 

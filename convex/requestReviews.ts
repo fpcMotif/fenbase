@@ -257,7 +257,7 @@ const eventViewValidator = v.object({
 
 export const history = query({
   args: { applicationId: v.id('applications'), requestId: v.id('requests') },
-  returns: v.union(v.array(eventViewValidator), v.null()),
+  returns: v.union(v.object({ events: v.array(eventViewValidator), truncated: v.boolean() }), v.null()),
   handler: async (ctx, args) => {
     const principal = await requireApplicationPrincipal(ctx, args.applicationId);
     const row = await ctx.db.get(args.requestId);
@@ -265,15 +265,18 @@ export const history = query({
     const events = await ctx.db
       .query('requestEvents')
       .withIndex('by_request', (q) => q.eq('requestId', row._id))
-      .take(MAX_HISTORY_EVENTS);
-    return events.map((event) => ({
-      _id: event._id,
-      command: event.command,
-      fromState: event.fromState,
-      toState: event.toState,
-      revision: event.revision,
-      at: event.at,
-      actor: { membershipId: event.actorMembershipId, isMe: event.actorMembershipId === principal.membershipId },
-    }));
+      .take(MAX_HISTORY_EVENTS + 1);
+    return {
+      events: events.slice(0, MAX_HISTORY_EVENTS).map((event) => ({
+        _id: event._id,
+        command: event.command,
+        fromState: event.fromState,
+        toState: event.toState,
+        revision: event.revision,
+        at: event.at,
+        actor: { membershipId: event.actorMembershipId, isMe: event.actorMembershipId === principal.membershipId },
+      })),
+      truncated: events.length > MAX_HISTORY_EVENTS,
+    };
   },
 });
