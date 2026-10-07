@@ -1,5 +1,5 @@
 import { ConvexError, v } from 'convex/values';
-import { internalMutation, type MutationCtx } from './_generated/server';
+import { internalAction, internalMutation, type MutationCtx } from './_generated/server';
 import { capabilityValidator, membershipStatusValidator, type Capability } from './membershipValidators';
 
 const FIXTURE_ORGANIZATION_PREFIX = 'fixture-';
@@ -101,6 +101,16 @@ export const upsertMember = internalMutation({
         membership: !existingMembership,
       },
     };
+  },
+});
+
+// Stores a blob that no attachment owns: what an upload leaves when it stops between storing and linking.
+export const storeOrphanFile = internalAction({
+  args: { text: v.string() },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    await ctx.storage.store(new Blob([args.text], { type: 'application/pdf' }));
+    return null;
   },
 });
 
