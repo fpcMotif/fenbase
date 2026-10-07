@@ -258,7 +258,7 @@ An active member with `manageMembers`. They can list members, change other membe
 _Avoid_: owner, superuser
 
 **Server-owned field**:
-A field that no public argument can set. For memberships: `authUserId`, `applicationId`, `organizationId`, `updatedAt` and `manageMembers`. For requests: requester, organization, version, policy preset, state, revision and (with #17) decision.
+A field that no public argument can set. For memberships: `authUserId`, `applicationId`, `organizationId`, `updatedAt` and `manageMembers`. For requests: requester, organization, version, policy preset, state, revision, reviewer, and submission and decision times.
 _Avoid_: hidden field, read-only field
 
 **Revocation**:
@@ -335,24 +335,40 @@ _Avoid_: timestamp, datetime
 
 # Requests
 
-Draft requests that employees fill in through the published definition. Seeded by issue #16 (see ADR-0007 and `docs/migration/records-16.md`).
+Requests that employees fill in through the published definition, submit, and have one reviewer decide. Seeded by issue #16 (ADR-0007, `docs/migration/records-16.md`); submission and review come from issue #17 (ADR-0008, `docs/migration/approval-17.md`).
 
 ## Language
 
 **Request**:
-One `requests` row: field values entered by a requester, pinned to one **Published version**. In #16 its state is always `draft`; #17 adds submission and decisions.
+One `requests` row: field values entered by a requester, pinned to one **Published version**. Its state is `draft`, `pending`, `approved`, `rejected` or `withdrawn`; only **Review commands** change it.
 _Avoid_: record (the owner-scoped demo collections also have records), form entry
+
+**Review command**:
+One of the four state changes: submit (`draft` → `pending`, by the requester), approve or reject (`pending` → `approved` or `rejected`, by the assigned reviewer), and withdraw (`pending` → `withdrawn`, by the requester). `approved`, `rejected` and `withdrawn` are terminal.
+_Avoid_: status update, action (the generic `update` cannot change state)
+
+**Assigned reviewer**:
+The membership named by the **Pinned version**'s **Reviewer reference**, copied onto the request at submit. It must be active, hold `reviewRequests`, and differ from the requester.
+_Avoid_: approver, current reviewer (a later version's reviewer never applies)
+
+**Review task**:
+The one `reviewTasks` row a submit creates. It is also the request's execution: `pending` until a decision (`completed`) or a withdrawal (`cancelled`). The reviewer's inbox reads it.
+_Avoid_: workflow run (that is the #8 field-update demo), job
+
+**Request event**:
+One append-only `requestEvents` row per accepted **Review command**: actor, command, from and to state, resulting revision, pinned version, operation ID and time. It commits with the state change.
+_Avoid_: log line, audit record (it is the history the UI shows)
 
 **Pinned version**:
 The **Published version** a **Request** was created against (`definitionVersionId`, `version`). Edits validate against it forever; a later version never changes it.
 _Avoid_: current version (that is the head's pointer), schema version
 
 **Request revision**:
-The request's `revision` counter. It starts at 1 and goes up by 1 on every changed edit. Callers send it back as `expectedRevision`; a mismatch is a revision conflict.
+The request's `revision` counter. It starts at 1 and goes up by 1 on every changed edit and every accepted **Review command**. Callers send it back as `expectedRevision`; a mismatch is a revision conflict.
 _Avoid_: version (a revision is not a **Pinned version**)
 
 **Operation ID**:
-A client-chosen ID, 8 to 64 letters, digits, `-` or `_`, that names one create attempt for one membership. Repeating it with the same values returns the first **Request**; repeating it with other values is an operation conflict.
+A client-chosen ID, 8 to 64 letters, digits, `-` or `_`, that names one create attempt or one **Review command** for one membership. Repeating it with the same payload returns the first result; repeating it with another payload (other values, or another command, request or expected revision) is an operation conflict.
 _Avoid_: idempotency key (in code), request ID
 
 ## Relationships
@@ -360,8 +376,10 @@ _Avoid_: idempotency key (in code), request ID
 - A **Request** belongs to one **Application** and one requester **Membership**; the server copies the organization, **Pinned version** and **Policy preset** onto it.
 - New requests must use the **Current version pointer**; a form built from an older version is refused until it loads the new one.
 - A draft **Request** is private: only its requester reads it.
-- The requester reads their own requests in every state. `readApplicationRecords` also reads other members' non-draft requests, only where the request's own **Policy preset** is `requesterAssignedReviewerAndReaders`. Until #17 adds submission, every request is a draft, so a reader sees only their own.
-- Only the requester edits or deletes a **Request**, and only while holding `submitRequests`.
+- The requester reads their own requests in every state. The **Assigned reviewer** reads a submitted request while holding `reviewRequests`. `readApplicationRecords` also reads other members' non-draft requests, only where the request's own **Policy preset** is `requesterAssignedReviewerAndReaders`.
+- Only the requester edits or deletes a **Request**, only while it is a draft, and only while holding `submitRequests`.
+- Submit, the **Review task** and the first **Request event** commit together; a failed submit leaves the draft unchanged with no task.
+- A pending request whose **Assigned reviewer** became inactive or lost `reviewRequests` stays pending; only the requester's withdraw ends it.
 
 ## Flagged ambiguities
 

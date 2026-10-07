@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { OPERATION_ID_PATTERN } from '../../../convex/requestValues';
-import { newCreateAttempt, requestModalStatus } from '../requestModal';
+import { newCreateAttempt, requestActions, requestModalStatus } from '../requestModal';
 
 const view = { _id: 'requests:1' };
 
@@ -65,6 +65,17 @@ describe('request modal status', () => {
     const create = { mode: 'create', request: undefined, pinnedVersion: undefined, hasSnapshot: false } as const;
     expect(requestModalStatus({ ...create, hasDefinition: false })).toEqual({ kind: 'loading' });
     expect(requestModalStatus({ ...create, hasDefinition: true })).toEqual({ kind: 'ready' });
+  });
+});
+
+describe('request actions', () => {
+  const flags = { canSubmit: false, canWithdraw: false, canDecide: false };
+
+  it('offers each side only the review commands the server allows for the snapshot it shows', () => {
+    expect(requestActions({ ...flags, canSubmit: true })).toEqual(['submit']);
+    expect(requestActions({ ...flags, canWithdraw: true })).toEqual(['withdraw']);
+    expect(requestActions({ ...flags, canDecide: true })).toEqual(['reject', 'approve']);
+    expect(requestActions(flags)).toEqual([]);
   });
 });
 

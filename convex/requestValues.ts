@@ -26,7 +26,29 @@ export const REQUEST_ERROR_CODES = [
   'RECORD_APPLICATION_FULL',
   'RECORD_DEFINITION_OUTDATED',
   'RECORD_BROWSE_LIMIT_EXCEEDED',
+  'REQUEST_STATE_CONFLICT',
+  'REQUEST_REVIEWER_UNAVAILABLE',
+  'REQUEST_SELF_REVIEW',
 ] as const;
+
+export const requestStateValidator = v.union(
+  v.literal('draft'),
+  v.literal('pending'),
+  v.literal('approved'),
+  v.literal('rejected'),
+  v.literal('withdrawn'),
+);
+export type RequestState = Infer<typeof requestStateValidator>;
+
+export const reviewCommandValidator = v.union(
+  v.literal('submit'),
+  v.literal('approve'),
+  v.literal('reject'),
+  v.literal('withdraw'),
+);
+export type ReviewCommand = Infer<typeof reviewCommandValidator>;
+
+export const reviewTaskStatusValidator = v.union(v.literal('pending'), v.literal('completed'), v.literal('cancelled'));
 
 export type RequestErrorCode = (typeof REQUEST_ERROR_CODES)[number];
 

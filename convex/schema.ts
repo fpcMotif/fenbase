@@ -2,7 +2,12 @@ import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 import { definitionValidator, policyPresetValidator } from './definitionModel';
 import { capabilityValidator, membershipStatusValidator } from './membershipValidators';
-import { requestValuesValidator } from './requestValues';
+import {
+  requestStateValidator,
+  requestValuesValidator,
+  reviewCommandValidator,
+  reviewTaskStatusValidator,
+} from './requestValues';
 
 export default defineSchema({
   organizations: defineTable({
@@ -57,16 +62,52 @@ export default defineSchema({
     definitionVersionId: v.id('applicationDefinitionVersions'),
     version: v.number(),
     policyPreset: policyPresetValidator,
-    state: v.literal('draft'),
+    state: requestStateValidator,
     revision: v.number(),
     operationId: v.string(),
     operationFingerprint: v.string(),
     values: requestValuesValidator,
     updatedAt: v.number(),
+    reviewerMembershipId: v.optional(v.id('memberships')),
+    submittedAt: v.optional(v.number()),
+    decidedAt: v.optional(v.number()),
   })
     .index('by_application_requester', ['applicationId', 'requesterMembershipId'])
     .index('by_application_state', ['applicationId', 'state'])
     .index('by_requester_operation', ['requesterMembershipId', 'operationId']),
+
+  reviewTasks: defineTable({
+    requestId: v.id('requests'),
+    applicationId: v.id('applications'),
+    organizationId: v.id('organizations'),
+    requesterMembershipId: v.id('memberships'),
+    reviewerMembershipId: v.id('memberships'),
+    definitionVersionId: v.id('applicationDefinitionVersions'),
+    version: v.number(),
+    status: reviewTaskStatusValidator,
+    outcome: v.optional(requestStateValidator),
+    createdAt: v.number(),
+    completedAt: v.optional(v.number()),
+  })
+    .index('by_request', ['requestId'])
+    .index('by_reviewer_status', ['reviewerMembershipId', 'status']),
+
+  requestEvents: defineTable({
+    requestId: v.id('requests'),
+    applicationId: v.id('applications'),
+    organizationId: v.id('organizations'),
+    actorMembershipId: v.id('memberships'),
+    command: reviewCommandValidator,
+    fromState: requestStateValidator,
+    toState: requestStateValidator,
+    revision: v.number(),
+    definitionVersionId: v.id('applicationDefinitionVersions'),
+    operationId: v.string(),
+    operationFingerprint: v.string(),
+    at: v.number(),
+  })
+    .index('by_request', ['requestId'])
+    .index('by_actor_operation', ['actorMembershipId', 'operationId']),
 
   requestCounts: defineTable({
     applicationId: v.id('applications'),

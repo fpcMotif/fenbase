@@ -11,7 +11,9 @@ export type TableName =
   | 'applicationDefinitions'
   | 'applicationDefinitionVersions'
   | 'requests'
-  | 'requestCounts';
+  | 'requestCounts'
+  | 'reviewTasks'
+  | 'requestEvents';
 
 export type WriteOperation = 'insert' | 'patch' | 'replace' | 'delete';
 
@@ -67,6 +69,8 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
     'applicationDefinitionVersions',
     'requests',
     'requestCounts',
+    'reviewTasks',
+    'requestEvents',
   ];
   for (const table of tableNames) {
     tables.set(table, new Map((seed[table] ?? []).map((doc) => [doc._id, doc])));

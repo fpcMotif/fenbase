@@ -19,6 +19,18 @@ export function requestModalStatus(input: {
   return { kind: 'ready' };
 }
 
+export type ReviewAction = 'submit' | 'withdraw' | 'reject' | 'approve';
+
+type ActionFlags = { canSubmit: boolean; canWithdraw: boolean; canDecide: boolean };
+
+export function requestActions(view: ActionFlags): ReviewAction[] {
+  const actions: ReviewAction[] = [];
+  if (view.canSubmit) actions.push('submit');
+  if (view.canWithdraw) actions.push('withdraw');
+  if (view.canDecide) actions.push('reject', 'approve');
+  return actions;
+}
+
 export type CreateAttempt<Version> = { version: Version; operationId: string };
 
 // The server fingerprints an operation with its version, so values moved to a newer version are a new operation.

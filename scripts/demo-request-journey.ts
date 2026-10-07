@@ -165,22 +165,22 @@ const texts = {
 const looseMutation = (name: string) => makeFunctionReference<'mutation', Record<string, unknown>, unknown>(name);
 const looseQuery = (name: string) => makeFunctionReference<'query', Record<string, unknown>, unknown>(name);
 
-function readPrivate(dir: string, name: string): string {
+export function readPrivate(dir: string, name: string): string {
   return readFileSync(join(dir, name), 'utf8').trim();
 }
 
-function convexCli(envFile: string, args: string[]): string {
+export function convexCli(envFile: string, args: string[]): string {
   return execFileSync('node_modules/.bin/convex', [...args.slice(0, 1), '--env-file', envFile, ...args.slice(1)], {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'ignore'],
   });
 }
 
-function runInternal<T>(envFile: string, name: string, args: Record<string, unknown>): T {
+export function runInternal<T>(envFile: string, name: string, args: Record<string, unknown>): T {
   return JSON.parse(convexCli(envFile, ['run', name, JSON.stringify(args)])) as T;
 }
 
-function tableRows(envFile: string, table: string, component?: string): Row[] {
+export function tableRows(envFile: string, table: string, component?: string): Row[] {
   let output: string;
   try {
     output = convexCli(envFile, [
@@ -202,7 +202,7 @@ function tableRows(envFile: string, table: string, component?: string): Row[] {
     .map((line) => JSON.parse(line) as Row);
 }
 
-function outcomeOf(error: unknown): string {
+export function outcomeOf(error: unknown): string {
   if (error instanceof ConvexError) {
     const data: unknown = error.data;
     if (typeof data === 'string') return data;
@@ -215,7 +215,7 @@ function outcomeOf(error: unknown): string {
   return `unexpected: ${message.split('\n')[0]}`;
 }
 
-async function keyboardFocus(page: Page, target: Locator): Promise<void> {
+export async function keyboardFocus(page: Page, target: Locator): Promise<void> {
   await target.waitFor({ state: 'visible' });
   for (let presses = 0; presses < 250; presses += 1) {
     if (await target.evaluate((element) => element === document.activeElement)) return;
@@ -224,12 +224,12 @@ async function keyboardFocus(page: Page, target: Locator): Promise<void> {
   throw new Error('Keyboard could not reach the requested control');
 }
 
-async function keyboardActivate(page: Page, target: Locator): Promise<void> {
+export async function keyboardActivate(page: Page, target: Locator): Promise<void> {
   await keyboardFocus(page, target);
   await page.keyboard.press('Enter');
 }
 
-async function keyboardInput(page: Page, target: Locator, value: string): Promise<void> {
+export async function keyboardInput(page: Page, target: Locator, value: string): Promise<void> {
   await keyboardFocus(page, target);
   await page.keyboard.press('ControlOrMeta+A');
   if (value === '') await page.keyboard.press('Backspace');
@@ -238,7 +238,7 @@ async function keyboardInput(page: Page, target: Locator, value: string): Promis
 
 // A native date input takes digits per segment in the operating system's date order, not the page locale's; Tab lands
 // on its first segment. The recorded runs used a year-month-day system order.
-async function keyboardDate(page: Page, target: Locator, digits: string): Promise<void> {
+export async function keyboardDate(page: Page, target: Locator, digits: string): Promise<void> {
   await keyboardFocus(page, target);
   await page.keyboard.type(digits);
 }
