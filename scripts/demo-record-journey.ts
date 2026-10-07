@@ -294,6 +294,31 @@ async function main(): Promise<void> {
         assert((await list()).items.length === 0, 'Rejected create wrote a record');
         await capture('3-backend-error');
         report(`${locale}: backend create rejection is translated, preserves input, and writes nothing`);
+        const rejectedSaveAttempts = 20;
+        let settledAfterRejectedSave = 0;
+        for (let attempt = 1; attempt <= rejectedSaveAttempts; attempt += 1) {
+          await keyboardInput(page, dialog.getByLabel('company', { exact: true }), 'x'.repeat(4001));
+          const rejected = page.waitForEvent('console', (message) =>
+            message.text().startsWith('[CONVEX M(records:create)]'),
+          );
+          await keyboardActivate(page, dialog.getByRole('button', { name: text.save, exact: true }));
+          await rejected;
+          await dialog.locator('button.ant-btn-loading').waitFor({ state: 'hidden' });
+          const settled = await dialog
+            .getByRole('button', { name: text.save, exact: true })
+            .waitFor({ timeout: 2_000 })
+            .then(
+              () => true,
+              () => false,
+            );
+          if (!settled) break;
+          settledAfterRejectedSave += 1;
+        }
+        assert(
+          settledAfterRejectedSave === rejectedSaveAttempts && (await list()).items.length === 0,
+          `Save button settled after ${settledAfterRejectedSave} of ${rejectedSaveAttempts} rejected saves`,
+        );
+        report(`${locale}: save-button-settles-after-rejected-saves (${rejectedSaveAttempts} rejected creates)`);
         await keyboardInput(page, dialog.getByLabel('company', { exact: true }), `${locale} keyboard lead`);
         await keyboardInput(page, dialog.getByLabel('note', { exact: true }), 'Optional detail');
         await keyboardActivate(page, dialog.getByRole('button', { name: text.save, exact: true }));
