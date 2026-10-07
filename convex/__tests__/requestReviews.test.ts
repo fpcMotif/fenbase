@@ -298,6 +298,64 @@ describe('operation ids', () => {
   });
 });
 
+describe('replays check the caller’s current access', () => {
+  // Each case runs a command once, takes access away from its actor, then replays the same operation id.
+  async function acceptedCommand(ctx: TestContext, command: Command) {
+    const { requestId } = await draftAs(ctx, 'user-a');
+    if (command === 'submit') {
+      const result = await run(ctx, 'submit', 'user-a', requestId, 1, 'replay-me');
+      return { requestId, expectedRevision: 1, actor: 'user-a', membership: 'memberships:a', result };
+    }
+    await run(ctx, 'submit', 'user-a', requestId, 1);
+    const actor = command === 'withdraw' ? 'user-a' : 'user-b';
+    const result = await run(ctx, command, actor, requestId, 2, 'replay-me');
+    return {
+      requestId,
+      expectedRevision: 2,
+      actor,
+      membership: actor === 'user-a' ? 'memberships:a' : 'memberships:b',
+      result,
+    };
+  }
+
+  it.each<[Command, string, Record<string, unknown>, string]>([
+    ['approve', 'deactivated', { status: 'inactive' }, 'APPLICATION_ACCESS_DENIED'],
+    ['reject', 'deactivated', { status: 'inactive' }, 'APPLICATION_ACCESS_DENIED'],
+    ['approve', 'without reviewRequests', { grants: ['submitRequests'] }, 'RECORD_NOT_FOUND'],
+    ['reject', 'without reviewRequests', { grants: ['submitRequests'] }, 'RECORD_NOT_FOUND'],
+    ['submit', 'deactivated', { status: 'inactive' }, 'APPLICATION_ACCESS_DENIED'],
+    ['withdraw', 'deactivated', { status: 'inactive' }, 'APPLICATION_ACCESS_DENIED'],
+    ['submit', 'without submitRequests', { grants: [] }, 'PERMISSION_DENIED'],
+    ['withdraw', 'without submitRequests', { grants: [] }, 'PERMISSION_DENIED'],
+  ])('refuses to replay %s for an actor now %s and writes nothing', async (command, _lost, change, code) => {
+    const ctx = fixtureContext();
+    const { requestId, expectedRevision, actor, membership } = await acceptedCommand(ctx, command);
+    await ctx.db.patch(membership, change);
+    await expectDenied(ctx, () => run(ctx, command, actor, requestId, expectedRevision, 'replay-me'), code);
+  });
+
+  it.each<Command>(['submit', 'approve', 'reject', 'withdraw'])(
+    'returns the original %s result again once the actor has access back',
+    async (command) => {
+      const ctx = fixtureContext();
+      const { requestId, expectedRevision, actor, membership, result } = await acceptedCommand(ctx, command);
+      await ctx.db.patch(membership, { status: 'inactive' });
+      await expectDenied(
+        ctx,
+        () => run(ctx, command, actor, requestId, expectedRevision, 'replay-me'),
+        'APPLICATION_ACCESS_DENIED',
+      );
+      await ctx.db.patch(membership, { status: 'active' });
+      const writesBefore = ctx.writes.length;
+      expect(await run(ctx, command, actor, requestId, expectedRevision, 'replay-me')).toEqual({
+        ...result,
+        replayed: true,
+      });
+      expect(ctx.writes.length).toBe(writesBefore);
+    },
+  );
+});
+
 describe('generic edits cannot bypass the commands', () => {
   it('refuses to update or delete a pending or terminal request', async () => {
     const ctx = fixtureContext();

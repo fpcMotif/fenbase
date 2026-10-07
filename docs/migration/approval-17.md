@@ -1,6 +1,6 @@
 # Issue #17: submit leave requests and complete one versioned review
 
-Requesters now submit a draft request, and the reviewer named by the request's pinned version approves or rejects it. The requester can withdraw a pending request. Each command checks the actor, the expected state and the expected revision. It writes the new state, the review task and one history event in a single Convex mutation. The decisions are recorded in [ADR-0009](../adr/0009-one-versioned-review-per-request.md).
+Requesters now submit a draft request, and the reviewer named by the request's pinned version approves or rejects it. The requester can withdraw a pending request. Each command checks the actor, the expected state and the expected revision. It writes the new state, the review task and one history event in a single Convex mutation. The decisions are recorded in [ADR-0009](../adr/0009-one-versioned-review-per-request.md). The spec owner settled two of them before merge: a repeated command re-checks the caller's current access, and one `reviewTasks` row serves as both the review task and its execution.
 
 ## Transition contract
 
@@ -17,9 +17,9 @@ Each command takes `{applicationId, requestId, expectedRevision, operationId}` a
 
 1. The principal: `Unauthenticated` for an anonymous caller, `APPLICATION_ACCESS_DENIED` for an inactive member, a non-member or another organization.
 2. The operation ID pattern: `RECORD_OPERATION_ID_INVALID`.
-3. A replay: the same actor and operation ID with the same `{command, applicationId, requestId, expectedRevision}` returns the stored result with `replayed: true` and writes nothing. Another payload fails with `RECORD_OPERATION_CONFLICT`.
-4. The read rule: `RECORD_NOT_FOUND` for a request the caller cannot read, the same as a missing one.
-5. The role: `REQUEST_SELF_REVIEW` when the requester approves or rejects, otherwise `PERMISSION_DENIED`.
+3. The read rule: `RECORD_NOT_FOUND` for a request the caller cannot read, the same as a missing one.
+4. The role: `REQUEST_SELF_REVIEW` when the requester approves or rejects, otherwise `PERMISSION_DENIED`.
+5. A replay: the same actor and operation ID with the same `{command, applicationId, requestId, expectedRevision}` returns the stored result with `replayed: true` and writes nothing. Another payload fails with `RECORD_OPERATION_CONFLICT`. Because steps 1, 3 and 4 run first, a replay by a caller who lost access since the first call fails like any other unauthorized call.
 6. The state: `REQUEST_STATE_CONFLICT`.
 7. The revision: `RECORD_REVISION_CONFLICT` with `currentRevision`.
 8. Submit only: the stored values are validated against the pinned version again. The reviewer is read from that version. `REQUEST_SELF_REVIEW` if it is the requester, `REQUEST_REVIEWER_UNAVAILABLE` if it is not an active member holding `reviewRequests`.
@@ -29,7 +29,7 @@ Generic `requests.update` and `requests.remove` fail with `REQUEST_STATE_CONFLIC
 ### Data
 
 - `requests` gains the server-owned `reviewerMembershipId`, `submittedAt` and `decidedAt`. `state` is `draft | pending | approved | rejected | withdrawn`.
-- `reviewTasks`: one row per submitted request with the requester, reviewer, pinned version, `status` (`pending`, `completed`, `cancelled`), `outcome` and times. It is both the review task and the execution. Indexes `by_request` and `by_reviewer_status`.
+- `reviewTasks`: one row per submitted request with the requester, reviewer, pinned version, `status` (`pending`, `completed`, `cancelled`), `outcome` and times. It is both the review task and the execution; the spec owner accepted this single row for #17. Indexes `by_request` and `by_reviewer_status`.
 - `requestEvents`: one append-only row per accepted command with the actor, command, from and to state, resulting revision, pinned version, operation ID and fingerprint, and time. Indexes `by_request` and `by_actor_operation`.
 - The request view adds `state`, `reviewer: {membershipId, isMe} | null`, `submittedAt`, `decidedAt`, `canSubmit`, `canWithdraw` and `canDecide`. `canEdit` is true only for a draft.
 - `requestReviews.inbox({applicationId, status})` needs `reviewRequests`. `status` is `pending`, `completed` or `cancelled`. It reads at most 100 of the caller's tasks plus a `truncated` flag. `requestReviews.history({applicationId, requestId})` returns `{events, truncated}` with the first 100 events, or `null` when the caller cannot read the request.
@@ -50,24 +50,26 @@ The dialog shows the state tag, the reviewer and a history timeline, with a noti
 
 ## Runbook
 
-The target is a fresh self-hosted backend set up with the [baseline runbook](baseline-13.md) on loopback 3350/3351, instance `approval17fix`, with `SITE_URL` `http://localhost:5213`. Other targets used 3330/3331/5193 and 3340/3341/5203 during this work.
+The target is a fresh self-hosted backend set up with the [baseline runbook](baseline-13.md) on loopback 3360/3361, instance `approval17replay`, with `SITE_URL` `http://localhost:5223`. Other targets used 3330/3331/5193, 3340/3341/5203 and 3350/3351/5213 during this work.
 
 ```sh
 umask 077
 REVIEW_DIR=$(mktemp -d "$PWD/storage/approval-17-XXXXXX")
 # target.env, instance-name, instance-secret, run-id and password live in REVIEW_DIR (mode 600, never printed).
-"$BIN" --interface 127.0.0.1 --port 3350 --site-proxy-port 3351 --instance-name approval17fix \
+"$BIN" --interface 127.0.0.1 --port 3360 --site-proxy-port 3361 --instance-name approval17replay \
   --instance-secret "$(cat "$REVIEW_DIR/instance-secret")" --local-storage "$REVIEW_DIR/files" \
   --disable-beacon "$REVIEW_DIR/backend.sqlite3" >> "$REVIEW_DIR/backend.log" 2>&1
 node_modules/.bin/convex deploy --env-file "$REVIEW_DIR/target.env" --typecheck enable --codegen disable -y
 # With CONVEX_SELF_HOSTED_URL and CONVEX_SELF_HOSTED_ADMIN_KEY exported from target.env:
 node_modules/.bin/convex codegen --typecheck=enable && node_modules/.bin/oxfmt --write convex/_generated
 rm -rf node_modules/.vite/deps   # with Vite stopped, before each run
-VITE_CONVEX_URL=http://127.0.0.1:3350 VITE_CONVEX_SITE_URL=http://127.0.0.1:3351 \
-  bun run demo:dev --host 127.0.0.1 --port 5213 --strictPort
-REVIEW_DIR="$REVIEW_DIR" REVIEW_JOURNEY_MODE=full VITE_CONVEX_URL=http://127.0.0.1:3350 \
-  VITE_CONVEX_SITE_URL=http://127.0.0.1:3351 DEMO_APP_URL=http://localhost:5213 bun run demo:review-journey
+VITE_CONVEX_URL=http://127.0.0.1:3360 VITE_CONVEX_SITE_URL=http://127.0.0.1:3361 \
+  bun run demo:dev --host 127.0.0.1 --port 5223 --strictPort
+REVIEW_DIR="$REVIEW_DIR" REVIEW_JOURNEY_MODE=full VITE_CONVEX_URL=http://127.0.0.1:3360 \
+  VITE_CONVEX_SITE_URL=http://127.0.0.1:3361 DEMO_APP_URL=http://localhost:5223 bun run demo:review-journey
 ```
+
+The regression journeys use the same URLs, with `MEMBERSHIP_DIR`, `DEFINITION_DIR` and `REQUEST_DIR` set to `REVIEW_DIR`.
 
 `REVIEW_JOURNEY_MODE` is `red` (backend phase, `results-red.json`), `backend` (backend phase) or `full` (default: backend phase, browsers and restart). Results go to `dist/review-journey/results-<mode>.json`, with ids, times, member references and the run ID labelled, so two runs of one mode write identical files. `evidence-<mode>.json` keeps what varies: the git revision, the winner of each race and the retained auth rows.
 
@@ -84,7 +86,7 @@ The full mode restarts both local processes and expects the same data back:
 
 ## Evidence
 
-Revision exercised: `d420674d22` on `claude/issue-17-review-fixes`, which applies the code and security review fixes to `integration/issue-17`, for the unit suite, the gates, three full journey runs and the regressions. Date: 2026-10-07. Target: the isolated backend above, `storage/approval-17-fix-iy1lYV/`. The first implementation was exercised the same way at `5fb422c6c7` and `c1da26e3f7` on `storage/approval-17-bV72GS/`; its red rows stay below.
+Revision exercised: `4533509551` on `claude/issue-17-replay-access`, which merges `main` (#24) into `integration/issue-17` and makes replays re-check access, for the unit suite, the gates, three full journey runs and the regressions. Date: 2026-10-07. Target: the isolated backend above, `storage/approval-17-replay-0rHVdR/`. Earlier revisions were exercised the same way: the first implementation at `5fb422c6c7` and `c1da26e3f7` on `storage/approval-17-bV72GS/`, and the review fixes at `d420674d22` on `storage/approval-17-fix-iy1lYV/` (64/64 in three runs); their red rows stay below.
 
 ### Red before green
 
@@ -107,6 +109,8 @@ Revision exercised: `d420674d22` on `claude/issue-17-review-fixes`, which applie
 | Review fix: journey `ui.*.reviewer-reopens-withdrawn-request` | Failed: the inbox had no "Withdrawn by requester" option, so the reviewer could not reach the withdrawn request (45 checks passed before it) |
 | Review fix: journey `ui.en.refused-submit-after-edits-reports-the-saved-draft` | Failed: the dialog showed only the `REQUEST_REVIEWER_UNAVAILABLE` text, not that the draft was saved |
 | Review fix: one full run during development | `ui.zh` timed out waiting for the dialog to close after Escape. rc-dialog moves focus inside, and handles Escape, only when its opening motion ends; the screenshots show the Open button behind the mask still focused. The journey now waits for focus inside the dialog before pressing Escape |
+| Replay access: `requestReviews.test.ts` "refuses a reviewer who lost reviewRequests replaying a decision", the first tracer | Failed: the replay returned the original approve result |
+| Replay access: the 12 replay tests run against the previous `requestReviews.ts` | 4 failed: approve and reject replays by B without `reviewRequests`, and submit and withdraw replays by A without `submitRequests`, all returned the original result. The 4 deactivated-actor cases and the 4 restored-access cases passed, because the principal check already ran before the replay lookup |
 
 The backend command tests were written as a batch after the first red tracer, so most passed on their first run; the mutation check above shows the bypass test fails without its guard. Two review fixes had no failing test: sharing the revision-conflict and operation-ID helpers is a refactor covered by the existing tests, and the cleanup test at the request cap passed before and after (it measures the transaction against Convex's limits).
 
@@ -114,13 +118,13 @@ The backend command tests were written as a batch after the first red tracer, so
 
 | Check | Outcome |
 | --- | --- |
-| `bunx vitest run -c vitest.demo.config.ts` | 18 files, 353 tests passed; 24 in `requestReviews.test.ts`, 38 in `requests.test.ts`, 15 in `i18n.test.ts`, 10 in `requestModal.test.ts`, 1 in `demo-convex-modules.test.ts`, 3 in `workflows.test.ts` |
+| `bunx vitest run -c vitest.demo.config.ts` | 18 files, 365 tests passed; 36 in `requestReviews.test.ts`, 38 in `requests.test.ts`, 15 in `i18n.test.ts`, 10 in `requestModal.test.ts`, 1 in `demo-convex-modules.test.ts`, 3 in `workflows.test.ts` |
 | `node_modules/.bin/tsc --noEmit -p convex/tsconfig.json`, `bun run demo:typecheck`, `bun run demo:build` | Passed |
 | `bun run quality:check --base origin/main` | 25 changed files, 0 introduced diagnostics |
-| `convex codegen` against the target | `api.d.ts` lists `requestReviews` and no `__tests__` module; nothing edited by hand |
-| `demo:review-journey`, mode `full`, three runs from a fresh Vite dependency cache | 64/64 checks each; the three `results-full.json` files are byte-identical (sha256 `70fecd3f…`) |
-| Race winners across the three runs (20 rounds each) | Approve against reject: 11/9, 13/7, 14/6 approved/rejected. Approve against withdraw: 17/3, 11/9, 13/7 approved/withdrawn. Every loser got `REQUEST_STATE_CONFLICT` |
-| Regressions on the same target and Vite | `demo:verify` 24, `demo:journey` 18, `demo:collection-journey` 31, `demo:record-journey` 37, `demo:isolation-journey` 57, `demo:browse-journey` 18, `demo:membership-journey` 66/66, `demo:definition-journey` 30/30, `demo:request-journey` 73/73; each exited 0 |
+| `convex codegen` against the target | No diff: `api.d.ts` lists `requestReviews` and no `__tests__` module; nothing edited by hand |
+| `demo:review-journey`, mode `full`, three runs from a fresh Vite dependency cache | 67/67 checks each; the three `results-full.json` files are byte-identical (sha256 `e547a545…`). No run failed, so there was no flake to diagnose |
+| Race winners across the three runs (20 rounds each) | Approve against reject: 11/9, 10/10, 14/6 approved/rejected. Approve against withdraw: 12/8, 15/5, 11/9 approved/withdrawn. Every loser got `REQUEST_STATE_CONFLICT` |
+| Regressions on the same target and Vite | `demo:verify` 24, `demo:journey` 18, `demo:collection-journey` 31, `demo:record-journey` 39, `demo:isolation-journey` 57, `demo:browse-journey` 18, `demo:membership-journey` 66/66, `demo:definition-journey` 30/30, `demo:request-journey` 73/73; each exited 0 |
 
 Journey checks, expected equal to actual in every run:
 
@@ -129,7 +133,7 @@ Journey checks, expected equal to actual in every run:
 | RUN-01 | Submit returns `pending`, revision 2; one task assigned to V1's reviewer B and one `submit` event by A; a repeated submit returns the same event with `replayed: true` and writes nothing |
 | AUTH-01 | Anonymous `Unauthenticated`; unrelated employee and V2's reviewer `RECORD_NOT_FOUND`; inactive member and second organization `APPLICATION_ACCESS_DENIED`; requester approving `REQUEST_SELF_REVIEW`; reviewer withdrawing `PERMISSION_DENIED`; malformed operation ID and stale revision refused; B submitting a request B reviews `REQUEST_SELF_REVIEW`. Each left all three tables unchanged. Only B's inbox lists the request; A's inbox is `PERMISSION_DENIED`; an unrelated member gets `null` from `get` and `history` |
 | BYPASS-01 | Generic update and remove of a pending request `REQUEST_STATE_CONFLICT`; `state`, `reviewerMembershipId`, `requesterMembershipId`, `version` and `definitionVersionId` on submit `ArgumentValidationError`; `state` inside draft values `RECORD_FIELD_SERVER_OWNED` |
-| RUN-02 | B approves one request and rejects another; the repeated approve returns the original event; the same ID for reject `RECORD_OPERATION_CONFLICT`; approve, reject, withdraw and remove on a terminal request `REQUEST_STATE_CONFLICT`; history lists `submit` by A then the decision by B; tasks `completed` with the outcome |
+| RUN-02 | B approves one request and rejects another; the repeated approve returns the original event; the same ID for reject `RECORD_OPERATION_CONFLICT`; replaying that approve is `RECORD_NOT_FOUND` while B lacks `reviewRequests` and `APPLICATION_ACCESS_DENIED` while B is inactive, with all three tables unchanged, and returns the original event again once B is restored; approve, reject, withdraw and remove on a terminal request `REQUEST_STATE_CONFLICT`; history lists `submit` by A then the decision by B; tasks `completed` with the outcome |
 | VERSION-01 | After V2 names V, a pending V1 request and a V1 draft submitted later both keep B and version 1; a V2 request goes to V; V cannot decide the V1 request; inactive B is denied and the task stays pending; reactivated B and V each decide their own version's request |
 | RACE-01 | 20 rounds of concurrent duplicate submits (one effect, one replay), approve against reject, and approve against withdraw (one accepted transition each, task status matching the winner) |
 | Browser, en-US and zh-CN | Two signed-in sessions at once, keyboard only, recorded: the requester's submit appears in the reviewer's inbox without a reload; a request withdrawn while the reviewer has it open refuses 5 stale approvals with a focused alert and the button settles each time; "Show latest" hides the decision and shows the withdrawal; the reviewer sees the values read-only; the decision reaches the requester's list live; after both pages reload the history and the "Decided by me" list come back; the reviewer opens the withdrawn request from "Withdrawn by requester" and sees its submit and withdraw history with no decision buttons; no page errors |
@@ -150,8 +154,8 @@ Journey checks, expected equal to actual in every run:
 
 ## Retained resources
 
-- `storage/approval-17-fix-iy1lYV/`: the synthetic SQLite database and file store, private target configuration, run ID, password, backend and Vite logs, the three runs' `results-full.json` and `evidence-full.json` (`final-run-{1,2,3}/`), and regression logs. Do not upload it. After cleanup the fixture tables hold no review rows. The first implementation's `storage/approval-17-bV72GS/` stays in the worktree that produced it.
-- The backend (3350/3351) and Vite (5213) relaunched by the last restart keep running until stopped by port.
+- `storage/approval-17-replay-0rHVdR/`: the synthetic SQLite database and file store, private target configuration, run ID, password, backend and Vite logs, the three runs' logs, `results-full.json` and `evidence-full.json` (`final-run-{1,2,3}/`), and regression logs (`regressions/`). Do not upload it. After the runs every application table (organizations, applications, memberships, definitions, versions, requests, request counts, review tasks, request events, collections, demo records and workflows) holds 0 rows. Earlier targets stay in the worktrees that produced them.
+- The backend (3360/3361) and Vite (5223) were stopped after the last run; no process listens on those ports.
 - Better Auth keeps the synthetic users and sessions the journeys create.
 
 ## Not covered

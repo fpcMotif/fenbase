@@ -151,7 +151,7 @@ rc-motion stayed in `leave-active`, so the icon stayed. The page screenshot star
 
 The fix turns antd motion off (`theme.token.motion: false`) for the Save and Publish row, so the icon is removed as soon as `loading` ends. The journey check `ui.zh.save-button-settles-after-rejected-saves` repeats the rejected save 20 times. At a stuck rate near 1 in 3, an unfixed builder almost always fails it.
 
-Other antd buttons with `loading` in `src/demo/App.tsx` can hit the same race. This change does not touch them.
+Every other pending antd button in `src/demo` uses the same `withoutMotion` theme from `src/demo/pendingAction.ts`. In `src/demo/App.tsx` that covers sign-in, Load sample, the record row Edit and Delete, Delete empty collection, Create collection, collection settings Save, the record dialog Save, workflow Run and Create workflow. The record dialog Save hit this race in `demo:record-journey` about once in 142 rejected saves. The journey check `save-button-settles-after-rejected-saves` now repeats the rejected create 20 times in each locale. Before the fix, a 150-save version of that check left the icon stuck after 121 settled saves; after the fix, 150 of 150 settled in both locales.
 
 ## Retained resources
 

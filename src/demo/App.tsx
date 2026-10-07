@@ -14,6 +14,7 @@ import {
   Popconfirm,
   Row,
   Col,
+  ConfigProvider,
   Select,
   Space,
   Spin,
@@ -42,6 +43,7 @@ import { useTranslation } from 'react-i18next';
 import i18n from './i18n';
 import { actionErrorMessage } from './actionErrors';
 import { DefinitionBuilder } from './DefinitionBuilder';
+import { runPendingAction, withoutMotion } from './pendingAction';
 import { RequestsPanel } from './RequestsPanel';
 
 type DemoValue = string | number | boolean;
@@ -294,9 +296,11 @@ function AuthScreen() {
             <Input.Password autoComplete={mode === 'signUp' ? 'new-password' : 'current-password'} />
           </Form.Item>
           {failed && <Alert type="error" showIcon message={t('auth.failed')} style={{ marginBottom: 16 }} />}
-          <Button type="primary" htmlType="submit" block loading={busy}>
-            {t('auth.submit')}
-          </Button>
+          <ConfigProvider theme={withoutMotion}>
+            <Button type="primary" htmlType="submit" block loading={busy}>
+              {t('auth.submit')}
+            </Button>
+          </ConfigProvider>
         </Form>
       </Card>
     </main>
@@ -468,16 +472,13 @@ function CollectionsPanel({
     setRecordModalOpen(true);
   };
 
-  const deleteRecord = async (record: DemoRecord) => {
-    setDeletingRecordId(record._id);
-    try {
-      await removeRecord({ recordId: record._id });
-      await message.success(t('collections.recordDeleted'));
-    } catch (error) {
-      await message.error(actionErrorMessage(error, t));
-    } finally {
-      setDeletingRecordId(undefined);
-    }
+  const deleteRecord = (record: DemoRecord) => {
+    runPendingAction(
+      (pending) => setDeletingRecordId(pending ? record._id : undefined),
+      () => removeRecord({ recordId: record._id }),
+    )
+      .then(() => message.success(t('collections.recordDeleted')))
+      .catch((error: unknown) => message.error(actionErrorMessage(error, t)));
   };
 
   const applyRecordQuery = (query: AppliedRecordQuery) => {
@@ -488,15 +489,14 @@ function CollectionsPanel({
     setBrowseState({ ...browse, page: pageSize === browse.pageSize ? page : 1, pageSize });
   };
 
-  const deleteCollection = async () => {
+  const deleteCollection = () => {
     if (!selected) return;
-    try {
-      await removeCollection({ collectionId: selected._id });
-      setSelectedId(undefined);
-      await message.success(t('collections.collectionDeleted'));
-    } catch (error) {
-      await message.error(actionErrorMessage(error, t));
-    }
+    removeCollection({ collectionId: selected._id })
+      .then(() => {
+        setSelectedId(undefined);
+        return message.success(t('collections.collectionDeleted'));
+      })
+      .catch((error: unknown) => message.error(actionErrorMessage(error, t)));
   };
 
   const columns: TableColumnsType<DemoRecord> = [
@@ -510,26 +510,28 @@ function CollectionsPanel({
       key: 'actions',
       width: 150,
       render: (_: unknown, record: DemoRecord) => (
-        <Space>
-          <Button size="small" disabled={deletingRecordId !== undefined} onClick={() => openRecord(record)}>
-            {t('common.edit')}
-          </Button>
-          <Popconfirm
-            title={t('records.deleteConfirm')}
-            okText={t('common.delete')}
-            cancelText={t('common.cancel')}
-            onConfirm={() => deleteRecord(record)}
-          >
-            <Button
-              size="small"
-              danger
-              loading={deletingRecordId === record._id}
-              disabled={deletingRecordId !== undefined}
-            >
-              {t('common.delete')}
+        <ConfigProvider theme={withoutMotion}>
+          <Space>
+            <Button size="small" disabled={deletingRecordId !== undefined} onClick={() => openRecord(record)}>
+              {t('common.edit')}
             </Button>
-          </Popconfirm>
-        </Space>
+            <Popconfirm
+              title={t('records.deleteConfirm')}
+              okText={t('common.delete')}
+              cancelText={t('common.cancel')}
+              onConfirm={() => deleteRecord(record)}
+            >
+              <Button
+                size="small"
+                danger
+                loading={deletingRecordId === record._id}
+                disabled={deletingRecordId !== undefined}
+              >
+                {t('common.delete')}
+              </Button>
+            </Popconfirm>
+          </Space>
+        </ConfigProvider>
       ),
     },
   ];
@@ -548,22 +550,27 @@ function CollectionsPanel({
           <Typography.Title level={3}>{t('collections.title')}</Typography.Title>
           <Typography.Text className="demo-muted">{t('collections.description')}</Typography.Text>
         </div>
-        <Space wrap>
-          {collections.length === 0 && (
-            <Button
-              loading={seeding}
-              onClick={async () => {
-                const id = await onLoadSample();
-                if (id) setSelectedId(id);
-              }}
-            >
-              {t('collections.loadSample')}
+        <ConfigProvider theme={withoutMotion}>
+          <Space wrap>
+            {collections.length === 0 && (
+              <Button
+                loading={seeding}
+                onClick={() => {
+                  onLoadSample()
+                    .then((id) => {
+                      if (id) setSelectedId(id);
+                    })
+                    .catch((error: unknown) => message.error(actionErrorMessage(error, t)));
+                }}
+              >
+                {t('collections.loadSample')}
+              </Button>
+            )}
+            <Button type="primary" onClick={() => setCollectionModalOpen(true)}>
+              {t('collections.add')}
             </Button>
-          )}
-          <Button type="primary" onClick={() => setCollectionModalOpen(true)}>
-            {t('collections.add')}
-          </Button>
-        </Space>
+          </Space>
+        </ConfigProvider>
       </div>
       {collections.length === 0 ? (
         <Card className="demo-section-card">
@@ -603,15 +610,17 @@ function CollectionsPanel({
                 </Space>
               }
               extra={
-                <Space wrap>
-                  <Button onClick={() => setSettingsOpen(true)}>{t('collections.settings')}</Button>
-                  <Button onClick={() => openRecord()}>{t('collections.addRecord')}</Button>
-                  {recordPage !== undefined && recordPage.collectionTotal === 0 && selected && (
-                    <Popconfirm title={t('collections.removeConfirm')} onConfirm={deleteCollection}>
-                      <Button danger>{t('collections.deleteEmpty')}</Button>
-                    </Popconfirm>
-                  )}
-                </Space>
+                <ConfigProvider theme={withoutMotion}>
+                  <Space wrap>
+                    <Button onClick={() => setSettingsOpen(true)}>{t('collections.settings')}</Button>
+                    <Button onClick={() => openRecord()}>{t('collections.addRecord')}</Button>
+                    {recordPage !== undefined && recordPage.collectionTotal === 0 && selected && (
+                      <Popconfirm title={t('collections.removeConfirm')} onConfirm={deleteCollection}>
+                        <Button danger>{t('collections.deleteEmpty')}</Button>
+                      </Popconfirm>
+                    )}
+                  </Space>
+                </ConfigProvider>
               }
             >
               {selected && (recordPage === undefined || recordPage.collectionTotal > 0 || filtersApplied) && (
@@ -744,12 +753,14 @@ function CollectionsPanel({
             )}
           </Form.List>
           <Form.Item style={{ marginTop: 20, marginBottom: 0 }}>
-            <Space>
-              <Button onClick={() => setCollectionModalOpen(false)}>{t('common.cancel')}</Button>
-              <Button type="primary" htmlType="submit" loading={busy}>
-                {t('common.create')}
-              </Button>
-            </Space>
+            <ConfigProvider theme={withoutMotion}>
+              <Space>
+                <Button onClick={() => setCollectionModalOpen(false)}>{t('common.cancel')}</Button>
+                <Button type="primary" htmlType="submit" loading={busy}>
+                  {t('common.create')}
+                </Button>
+              </Space>
+            </ConfigProvider>
           </Form.Item>
         </Form>
       </Modal>
@@ -793,12 +804,14 @@ function CollectionsPanel({
               ))}
             </ul>
             <Form.Item style={{ marginTop: 20, marginBottom: 0 }}>
-              <Space>
-                <Button onClick={() => setSettingsOpen(false)}>{t('common.cancel')}</Button>
-                <Button type="primary" htmlType="submit" loading={settingsBusy}>
-                  {t('common.save')}
-                </Button>
-              </Space>
+              <ConfigProvider theme={withoutMotion}>
+                <Space>
+                  <Button onClick={() => setSettingsOpen(false)}>{t('common.cancel')}</Button>
+                  <Button type="primary" htmlType="submit" loading={settingsBusy}>
+                    {t('common.save')}
+                  </Button>
+                </Space>
+              </ConfigProvider>
             </Form.Item>
           </Form>
         )}
@@ -844,14 +857,16 @@ function CollectionsPanel({
             <Alert role="alert" type="error" showIcon message={recordError} style={{ marginBottom: 16 }} />
           )}
           <Form.Item style={{ marginBottom: 0 }}>
-            <Space>
-              <Button disabled={busy} onClick={() => setRecordModalOpen(false)}>
-                {t('common.cancel')}
-              </Button>
-              <Button type="primary" htmlType="submit" loading={busy}>
-                {t('common.save')}
-              </Button>
-            </Space>
+            <ConfigProvider theme={withoutMotion}>
+              <Space>
+                <Button disabled={busy} onClick={() => setRecordModalOpen(false)}>
+                  {t('common.cancel')}
+                </Button>
+                <Button type="primary" htmlType="submit" loading={busy}>
+                  {t('common.save')}
+                </Button>
+              </Space>
+            </ConfigProvider>
           </Form.Item>
         </Form>
       </Modal>
@@ -893,17 +908,11 @@ function WorkflowsPanel() {
     }
   };
 
-  const run = async () => {
+  const run = () => {
     if (!selectedWorkflow) return;
-    setBusy(true);
-    try {
-      const result = await runWorkflow({ workflowId: selectedWorkflow._id });
-      await message.success(t('workflows.updated', { count: result.updatedCount }));
-    } catch (error) {
-      await message.error(t('workflows.runFailed'));
-    } finally {
-      setBusy(false);
-    }
+    runPendingAction(setBusy, () => runWorkflow({ workflowId: selectedWorkflow._id }))
+      .then((result) => message.success(t('workflows.updated', { count: result.updatedCount })))
+      .catch(() => message.error(t('workflows.runFailed')));
   };
 
   if (workflowData === undefined || collectionsData === undefined)
@@ -955,9 +964,11 @@ function WorkflowsPanel() {
               className="demo-section-card"
               title={selectedWorkflow?.name}
               extra={
-                <Button type="primary" loading={busy} onClick={run}>
-                  {t('workflows.run')}
-                </Button>
+                <ConfigProvider theme={withoutMotion}>
+                  <Button type="primary" loading={busy} onClick={run}>
+                    {t('workflows.run')}
+                  </Button>
+                </ConfigProvider>
               }
             >
               <Typography.Paragraph>
@@ -1045,12 +1056,14 @@ function WorkflowsPanel() {
           </Form.Item>
           <WorkflowValueField fields={selectedCollection?.fields ?? []} />
           <Form.Item style={{ marginBottom: 0 }}>
-            <Space>
-              <Button onClick={() => setModalOpen(false)}>{t('common.cancel')}</Button>
-              <Button type="primary" htmlType="submit" loading={busy}>
-                {t('common.create')}
-              </Button>
-            </Space>
+            <ConfigProvider theme={withoutMotion}>
+              <Space>
+                <Button onClick={() => setModalOpen(false)}>{t('common.cancel')}</Button>
+                <Button type="primary" htmlType="submit" loading={busy}>
+                  {t('common.create')}
+                </Button>
+              </Space>
+            </ConfigProvider>
           </Form.Item>
         </Form>
       </Modal>
