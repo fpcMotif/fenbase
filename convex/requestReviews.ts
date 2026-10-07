@@ -140,6 +140,9 @@ async function runCommand(ctx: MutationCtx, args: CommandArgs, command: ReviewCo
     requestId: args.requestId,
     expectedRevision: args.expectedRevision,
   });
+  const row = await ctx.db.get(args.requestId);
+  if (!row || !canRead(principal, row)) throw notFound();
+  authorize(principal, row, command);
   const previous = await ctx.db
     .query('requestEvents')
     .withIndex('by_actor_operation', (q) =>
@@ -159,9 +162,6 @@ async function runCommand(ctx: MutationCtx, args: CommandArgs, command: ReviewCo
     };
   }
 
-  const row = await ctx.db.get(args.requestId);
-  if (!row || !canRead(principal, row)) throw notFound();
-  authorize(principal, row, command);
   const { from, to } = TRANSITIONS[command];
   if (row.state !== from) throw stateConflict(row);
   if (row.revision !== args.expectedRevision) throw revisionConflict(row);

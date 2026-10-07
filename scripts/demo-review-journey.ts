@@ -395,13 +395,13 @@ async function main(): Promise<void> {
       (value) => value,
       (error: unknown) => outcomeOf(error),
     );
-  const setMember = (key: ActorKey, status: 'active' | 'inactive') => {
+  const setMember = (key: ActorKey, status: 'active' | 'inactive', capabilities?: Capability[]) => {
     const entry = actor(key).plan[0];
     runInternal(envFile, 'fixtures:upsertMember', {
       organizationKey: organizationKeys[entry.organization],
       organizationName: `Review fixture ${entry.organization}`,
       authUserId: actor(key).authUserId,
-      capabilities: entry.capabilities,
+      capabilities: capabilities ?? entry.capabilities,
       status,
     });
   };
@@ -628,6 +628,25 @@ async function main(): Promise<void> {
     );
     await deny('RUN-02.reused-operation-id-for-reject', 'RECORD_OPERATION_CONFLICT', () =>
       command('B', 'reject', run1, 2, approveOperation),
+    );
+    // A replay checks the actor's current access first, so a reviewer who lost access cannot replay the decision.
+    setMember('B', 'active', ['submitRequests']);
+    await deny('RUN-02.replay-after-losing-reviewRequests', 'RECORD_NOT_FOUND', () =>
+      command('B', 'approve', run1, 2, approveOperation),
+    );
+    setMember('B', 'inactive');
+    await deny('RUN-02.replay-by-inactive-reviewer', 'APPLICATION_ACCESS_DENIED', () =>
+      command('B', 'approve', run1, 2, approveOperation),
+    );
+    setMember('B', 'active');
+    const restoredReplay = await settle(command('B', 'approve', run1, 2, approveOperation));
+    check(
+      'RUN-02.replay-after-access-restored-returns-original',
+      { replayed: true, sameEvent: true },
+      {
+        replayed: restoredReplay.ok ? restoredReplay.value.replayed : restoredReplay.outcome,
+        sameEvent: restoredReplay.ok && approved.ok && restoredReplay.value.eventId === approved.value.eventId,
+      },
     );
     for (const [name, key] of [
       ['approve', 'B'],
