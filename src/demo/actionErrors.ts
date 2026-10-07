@@ -72,7 +72,7 @@ export function actionErrorData(error: unknown): ActionErrorData | null {
   };
 }
 
-type RequestIssueText = { code: string; field?: string; min?: number; max?: number; maxLength?: number };
+type RequestIssueText = { code: string; field?: string; min?: number; max?: number | string; maxLength?: number };
 
 // Request errors name a field by key; the message shows the label of the pinned version in the active language.
 export function requestIssueMessage(

@@ -35,10 +35,10 @@ import {
   SYSTEM_LIST_COLUMNS,
 } from '../../convex/definitionModel';
 import {
+  ATTACHMENT_EXTENSIONS,
   ATTACHMENT_TYPES,
   MAX_ATTACHMENT_BYTES,
   MAX_ATTACHMENTS_PER_REQUEST,
-  type AttachmentType,
 } from '../../convex/attachmentModel';
 import { actionErrorData, actionErrorMessage } from './actionErrors';
 import { runPendingAction, withoutMotion } from './pendingAction';
@@ -56,12 +56,6 @@ import {
 type BuilderApplication = FunctionReturnType<typeof api.memberships.listMine>[number];
 type BuilderState = FunctionReturnType<typeof api.applicationDefinitions.getBuilderState>;
 type VersionSummary = BuilderState['versions'][number];
-
-const ATTACHMENT_TYPE_KEYS: Record<AttachmentType, string> = {
-  'application/pdf': 'pdf',
-  'image/png': 'png',
-  'image/jpeg': 'jpeg',
-};
 
 function membershipReference(membershipId: string): string {
   return membershipId.slice(-6);
@@ -435,7 +429,7 @@ function ApplicationDefinitionEditor({ application }: { application: BuilderAppl
                               <Checkbox.Group
                                 options={ATTACHMENT_TYPES.map((type) => ({
                                   value: type,
-                                  label: t(`builder.acceptTypes.${ATTACHMENT_TYPE_KEYS[type]}`),
+                                  label: t(`builder.acceptTypes.${ATTACHMENT_EXTENSIONS[type][0]}`),
                                 }))}
                               />
                             </Form.Item>

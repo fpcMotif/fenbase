@@ -61,6 +61,7 @@ type Uploaded = {
   attachmentId: Id<'requestAttachments'>;
   revision: number;
   replayed: boolean;
+  removed: boolean;
   fileName: string;
   size: number;
   contentType: string;
@@ -113,7 +114,7 @@ const texts = {
     none: 'No files attached.',
     interrupted:
       'The connection dropped before the server confirmed this file action. Nothing is shown as attached until the list below includes it.',
-    tooLarge: 'Choose a file of at most 2097152 bytes for Supporting document.',
+    tooLarge: 'Choose a file of at most 2,048 KB for Supporting document.',
     dates: { first: '2026-06-01', interrupted: '2026-06-15' },
     fileName: 'medical-note.pdf',
     extraName: 'scan.png',
@@ -142,7 +143,7 @@ const texts = {
     meta: (size: string, hash: string) => `${size} · SHA-256 ${hash}`,
     none: '尚未上传文件。',
     interrupted: '服务器确认前连接已中断。只有下方列表中出现的文件才算已上传。',
-    tooLarge: '证明材料 的文件不能超过 2097152 字节。',
+    tooLarge: '证明材料 的文件不能超过 2,048 KB。',
     dates: { first: '2026-07-01', interrupted: '2026-07-15' },
     fileName: '病假证明.pdf',
     extraName: '扫描件.png',
@@ -657,15 +658,43 @@ async function main(): Promise<void> {
     );
     check(
       'FILE-09.replayed-upload-returns-first-attachment',
-      { replayed: true, same: true, blobsAdded: 0 },
+      { replayed: true, removed: false, same: true, blobsAdded: 0 },
       {
         replayed: typeof replaySecond === 'object' ? replaySecond.replayed : replaySecond,
+        removed: typeof replaySecond === 'object' ? replaySecond.removed : replaySecond,
         same:
           typeof replayFirst === 'object' &&
           typeof replaySecond === 'object' &&
           replayFirst.attachmentId === replaySecond.attachmentId,
         blobsAdded: storageRows().length - blobsBefore,
       },
+    );
+    // A replay of an upload whose file was removed since says so instead of pointing at a missing attachment.
+    const r5 = await draft('A', 'r5');
+    const removedReplayId = operationId('replay-removed');
+    const removedReplayBytes = syntheticPdf('replay-removed');
+    const removedFirst = await upload('A', r5, 1, 'gone.pdf', removedReplayBytes, {
+      operationId: removedReplayId,
+    }).catch(outcomeOf);
+    const removedOutcome =
+      typeof removedFirst === 'object'
+        ? await removeFile('A', r5, removedFirst.attachmentId, removedFirst.revision).then(
+            () => outcome(upload('A', r5, 1, 'gone.pdf', removedReplayBytes, { operationId: removedReplayId })),
+            outcomeOf,
+          )
+        : removedFirst;
+    const removedReplay = typeof removedOutcome === 'object' ? (removedOutcome as Uploaded) : null;
+    check(
+      'FILE-09.replay-after-remove-says-removed',
+      { replayed: true, removed: true, same: true, rows: 0 },
+      removedReplay && typeof removedFirst === 'object'
+        ? {
+            replayed: removedReplay.replayed,
+            removed: removedReplay.removed,
+            same: removedReplay.attachmentId === removedFirst.attachmentId,
+            rows: attachmentsOf(r5).length,
+          }
+        : removedOutcome,
     );
 
     // FILE-04 and FILE-05: submit pins the evidence; the requester and the assigned reviewer read it, nobody else.
@@ -817,6 +846,16 @@ async function main(): Promise<void> {
           runInternal<{ deleted: number; isDone: boolean }>(envFile, 'requestAttachments:sweepOrphans', args),
         ),
       );
+    const beforeNegativeGrace = storageRows().length;
+    const negativeGrace = await sweepRun({ cursor: null, olderThanMs: -60_000 });
+    check(
+      'FILE-07.negative-grace-window-refused',
+      { refused: true, blobsRemoved: 0 },
+      {
+        refused: typeof negativeGrace === 'string',
+        blobsRemoved: beforeNegativeGrace - storageRows().length,
+      },
+    );
     const withinGrace = await sweepRun({ cursor: null });
     const swept = await outcome(
       Promise.resolve().then(() =>
@@ -1008,6 +1047,29 @@ async function main(): Promise<void> {
           await openRow(page, locale, text.dates.first);
           const evidencePdf = syntheticPdf(`ui-${tag}`, 6000);
           const evidenceHash = sha256Hex(evidencePdf);
+
+          // The attach control is one keyboard stop: no interactive wrapper around the button.
+          check(
+            `ui.${tag}.attach-control-is-one-tab-stop`,
+            { interactiveAncestors: 0, tabStops: 1 },
+            await dialogOf(page)
+              .getByRole('button', { name: text.attachTo, exact: true })
+              .evaluate((element) => {
+                const interactive = 'button, a[href], input, select, textarea, [role="button"], [tabindex]';
+                const chain: HTMLElement[] = [];
+                for (
+                  let node: HTMLElement | null = element instanceof HTMLElement ? element : null;
+                  node && node.tagName !== 'SECTION';
+                  node = node.parentElement
+                ) {
+                  chain.push(node);
+                }
+                return {
+                  interactiveAncestors: chain.slice(1).filter((node) => node.matches(interactive)).length,
+                  tabStops: chain.filter((node) => node.tabIndex >= 0).length,
+                };
+              }),
+          );
 
           // An oversize file is refused in the browser before any byte is sent.
           await attachByKeyboard(

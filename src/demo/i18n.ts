@@ -188,7 +188,7 @@ const resources = {
         maxKilobytesHelp: 'At most {{max}} KB per file.',
         accept: 'Allowed file types',
         acceptRule: 'Choose at least one file type.',
-        acceptTypes: { pdf: 'PDF', png: 'PNG image', jpeg: 'JPEG image' },
+        acceptTypes: { pdf: 'PDF', png: 'PNG image', jpg: 'JPEG image' },
         labelEnUS: 'Label (English)',
         labelZhCN: 'Label (Chinese)',
         required: 'Required',
@@ -350,13 +350,15 @@ const resources = {
         REQUEST_REVIEWER_UNAVAILABLE:
           'The reviewer of this form version can no longer review requests. Ask an administrator, or create a new request.',
         REQUEST_SELF_REVIEW: 'You cannot review your own request.',
-        ATTACHMENT_TOO_LARGE: 'Choose a file of at most {{max}} bytes for {{field}}.',
+        ATTACHMENT_TOO_LARGE: 'Choose a file of at most {{max}} for {{field}}.',
         ATTACHMENT_TYPE_NOT_ALLOWED:
           'This file type is not allowed for {{field}}. Use a PDF, PNG or JPEG file whose name ends in the matching extension.',
         ATTACHMENT_LIMIT_REACHED:
           '{{field}} already holds its {{max}} files, or this draft changed its files too often.',
         ATTACHMENT_REQUIRED: 'Attach a file to {{field}} before submitting.',
         ATTACHMENT_NAME_INVALID: 'Rename the file: its name has no usable characters.',
+        ATTACHMENT_INTEGRITY_FAILED:
+          'The stored copy of this file failed an integrity check, so nothing was changed. Try again, and tell an administrator if it happens again.',
       },
       attachments: {
         limits: 'Files: at most {{count}} · up to {{size}} each · {{types}}',
@@ -598,7 +600,7 @@ const resources = {
         maxKilobytesHelp: '每个文件最多 {{max}} KB。',
         accept: '允许的文件类型',
         acceptRule: '请至少选择一种文件类型。',
-        acceptTypes: { pdf: 'PDF', png: 'PNG 图片', jpeg: 'JPEG 图片' },
+        acceptTypes: { pdf: 'PDF', png: 'PNG 图片', jpg: 'JPEG 图片' },
         labelEnUS: '标签（英文）',
         labelZhCN: '标签（中文）',
         required: '必填',
@@ -755,11 +757,13 @@ const resources = {
         REQUEST_STATE_CONFLICT: '此申请的当前状态不允许此操作。',
         REQUEST_REVIEWER_UNAVAILABLE: '此表单版本的审批人已无法审批申请。请联系管理员，或新建申请。',
         REQUEST_SELF_REVIEW: '不能审批自己的申请。',
-        ATTACHMENT_TOO_LARGE: '{{field}} 的文件不能超过 {{max}} 字节。',
+        ATTACHMENT_TOO_LARGE: '{{field}} 的文件不能超过 {{max}}。',
         ATTACHMENT_TYPE_NOT_ALLOWED: '{{field}} 不允许此文件类型。请使用扩展名与内容一致的 PDF、PNG 或 JPEG 文件。',
         ATTACHMENT_LIMIT_REACHED: '{{field}} 已有 {{max}} 个文件，或此草稿的文件改动次数已达上限。',
         ATTACHMENT_REQUIRED: '提交前请为 {{field}} 上传文件。',
         ATTACHMENT_NAME_INVALID: '请重命名文件：文件名中没有可用字符。',
+        ATTACHMENT_INTEGRITY_FAILED:
+          '此文件的存储副本未通过完整性校验，因此未做任何更改。请重试；若再次发生，请联系管理员。',
       },
       attachments: {
         limits: '文件：最多 {{count}} 个 · 每个不超过 {{size}} · {{types}}',

@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type { AttachmentDefinitionField } from '../../../convex/definitionModel';
-import { acceptAttribute, formatFileSize, precheckFile, shortHash } from '../attachmentView';
+import { acceptAttribute, formatFileSize, precheckFile, saveBytes, shortHash } from '../attachmentView';
 
 const evidence: AttachmentDefinitionField = {
   type: 'attachment',
@@ -28,6 +28,26 @@ describe('attachment view helpers', () => {
       field: 'supportingDocument',
     });
     expect(precheckFile(evidence, { name: 'photo.JPG', size: 2048 })).toBeNull();
+  });
+
+  it('keeps the object URL alive until the browser has started saving the file', () => {
+    vi.useFakeTimers();
+    const revoke = vi.spyOn(URL, 'revokeObjectURL');
+    const clicked: string[] = [];
+    const link = { href: '', download: '', hidden: false, remove: vi.fn(), click: () => clicked.push(link.href) };
+    vi.stubGlobal('document', { createElement: () => link, body: { append: vi.fn() } });
+    try {
+      saveBytes(new ArrayBuffer(4), 'note.pdf', 'application/pdf');
+      expect(clicked).toEqual([link.href]);
+      expect(link).toMatchObject({ download: 'note.pdf', hidden: true });
+      expect(revoke).not.toHaveBeenCalled();
+      vi.runAllTimers();
+      expect(revoke).toHaveBeenCalledWith(link.href);
+    } finally {
+      revoke.mockRestore();
+      vi.unstubAllGlobals();
+      vi.useRealTimers();
+    }
   });
 
   it('shows sizes in bytes or KB and the first 12 characters of the hash', () => {
