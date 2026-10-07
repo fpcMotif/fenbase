@@ -350,7 +350,6 @@ const resources = {
         inboxCompletedEmpty: 'You have not decided any requests yet.',
         inboxTruncated: 'Showing the newest 100 review tasks.',
         stateColumn: 'State',
-        requesterColumn: 'Requester',
         submittedColumn: 'Submitted',
         states: {
           draft: 'Draft',
@@ -374,7 +373,6 @@ const resources = {
         staleDescription: 'It is now {{state}} at revision {{revision}}. Nothing was changed by your action.',
         showLatest: 'Show latest',
         history: 'History',
-        historyEmpty: 'No review activity yet.',
         events: {
           submit: '{{actor}} submitted the request',
           approve: '{{actor}} approved the request',
@@ -719,7 +717,6 @@ const resources = {
         inboxCompletedEmpty: '你还没有处理过申请。',
         inboxTruncated: '仅显示最新的 100 个审批任务。',
         stateColumn: '状态',
-        requesterColumn: '申请人',
         submittedColumn: '提交时间',
         states: {
           draft: '草稿',
@@ -743,7 +740,6 @@ const resources = {
         staleDescription: '它现在是“{{state}}”，修订 {{revision}}。你的操作没有改变任何内容。',
         showLatest: '显示最新内容',
         history: '处理记录',
-        historyEmpty: '暂无审批记录。',
         events: {
           submit: '{{actor}}提交了申请',
           approve: '{{actor}}批准了申请',
