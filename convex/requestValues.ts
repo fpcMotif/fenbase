@@ -31,9 +31,6 @@ export const REQUEST_ERROR_CODES = [
   'REQUEST_SELF_REVIEW',
 ] as const;
 
-export const REQUEST_STATES = ['draft', 'pending', 'approved', 'rejected', 'withdrawn'] as const;
-export type RequestState = (typeof REQUEST_STATES)[number];
-export const TERMINAL_STATES: readonly RequestState[] = ['approved', 'rejected', 'withdrawn'];
 export const requestStateValidator = v.union(
   v.literal('draft'),
   v.literal('pending'),
@@ -41,18 +38,17 @@ export const requestStateValidator = v.union(
   v.literal('rejected'),
   v.literal('withdrawn'),
 );
+export type RequestState = Infer<typeof requestStateValidator>;
 
-export const REVIEW_COMMANDS = ['submit', 'approve', 'reject', 'withdraw'] as const;
-export type ReviewCommand = (typeof REVIEW_COMMANDS)[number];
 export const reviewCommandValidator = v.union(
   v.literal('submit'),
   v.literal('approve'),
   v.literal('reject'),
   v.literal('withdraw'),
 );
+export type ReviewCommand = Infer<typeof reviewCommandValidator>;
 
 export const reviewTaskStatusValidator = v.union(v.literal('pending'), v.literal('completed'), v.literal('cancelled'));
-export type ReviewTaskStatus = Infer<typeof reviewTaskStatusValidator>;
 
 export type RequestErrorCode = (typeof REQUEST_ERROR_CODES)[number];
 

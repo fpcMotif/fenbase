@@ -259,6 +259,7 @@ async function main(): Promise<void> {
   const appOne = (): Id<'applications'> => membership('C').applicationId;
 
   const labels = new Map<string, string>();
+  const memberReferences = new Map<string, string>();
   const timeKeys = new Set([
     'updatedAt',
     'publishedAt',
@@ -271,13 +272,20 @@ async function main(): Promise<void> {
     'at',
   ]);
   const normalize = (value: unknown): unknown => {
-    if (typeof value === 'string') return labels.get(value) ?? value.replaceAll(runId, '<run>');
+    if (typeof value === 'string') {
+      const labelled = labels.get(value);
+      if (labelled) return labelled;
+      // The UI names other members by the last six characters of their membership id.
+      let text = value.replaceAll(runId, '<run>');
+      for (const [reference, label] of memberReferences) text = text.replaceAll(reference, label);
+      return text;
+    }
     if (Array.isArray(value)) return value.map(normalize);
     if (typeof value === 'object' && value !== null) {
       return Object.fromEntries(
         Object.entries(value)
           .sort(([left], [right]) => left.localeCompare(right))
-          .map(([key, entry]) => [key, timeKeys.has(key) ? `<${key}>` : normalize(entry)]),
+          .map(([key, entry]) => [key.replaceAll(runId, '<run>'), timeKeys.has(key) ? `<${key}>` : normalize(entry)]),
       );
     }
     return value;
@@ -423,6 +431,7 @@ async function main(): Promise<void> {
         fixtureApplications.add(seeded.applicationId);
         target.memberships[entry.organization] = seeded;
         labels.set(seeded.membershipId, `<membership:${target.key}>`);
+        memberReferences.set(memberRef(seeded.membershipId), `<ref:${target.key}>`);
         labels.set(seeded.applicationId, `<application:${entry.organization}>`);
         labels.set(seeded.organizationId, `<organization:${entry.organization}>`);
       }
