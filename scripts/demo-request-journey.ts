@@ -688,7 +688,7 @@ async function main(): Promise<void> {
       }),
     );
 
-    // The readers preset: R reads every request in the readers application, B (the reviewer) still sees no drafts.
+    // The readers preset: drafts stay private, so neither R (the reader) nor B (the reviewer) sees A's draft.
     try {
       const readersRequest = (await createAs('A', {
         applicationId: app('readers'),
@@ -704,10 +704,12 @@ async function main(): Promise<void> {
       check(
         'http.preset.readers-application',
         {
-          readerSees: { isMe: false, canEdit: false },
-          readerTotal: 1,
-          readerScope: 'application',
+          readerSees: null,
+          readerTotal: 0,
+          readerScope: 'own',
           reviewerTotal: 0,
+          requesterTotal: 1,
+          requesterScope: 'own',
           readerEdit: 'RECORD_NOT_FOUND',
         },
         {
@@ -715,6 +717,8 @@ async function main(): Promise<void> {
           readerScope: await listScope('R', app('readers')),
           readerTotal: await listTotal('R', app('readers')),
           reviewerTotal: await listTotal('B', app('readers')),
+          requesterTotal: await listTotal('A', app('readers')),
+          requesterScope: await listScope('A', app('readers')),
           readerEdit: await client('R')
             .mutation(looseMutation('requests:remove'), {
               applicationId: app('readers'),
