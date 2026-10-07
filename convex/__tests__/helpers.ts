@@ -22,7 +22,11 @@ export interface TestDoc extends Record<string, unknown> {
 
 interface IndexRange {
   eq(field: string, value: unknown): IndexRange;
+  gt(field: string, value: string): IndexRange;
+  lt(field: string, value: string): IndexRange;
 }
+
+type RangeCondition = { field: string; matches: (value: unknown) => boolean };
 
 interface IndexedQuery {
   order(direction: 'asc' | 'desc'): IndexedQuery;
@@ -95,10 +99,18 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
     query(table) {
       return {
         withIndex(indexName, buildRange) {
-          const conditions: Array<{ field: string; value: unknown }> = [];
+          const conditions: RangeCondition[] = [];
           const range: IndexRange = {
             eq(field, value) {
-              conditions.push({ field, value });
+              conditions.push({ field, matches: (actual) => actual === value });
+              return range;
+            },
+            gt(field, value) {
+              conditions.push({ field, matches: (actual) => typeof actual === 'string' && actual > value });
+              return range;
+            },
+            lt(field, value) {
+              conditions.push({ field, matches: (actual) => typeof actual === 'string' && actual < value });
               return range;
             },
           };
@@ -110,7 +122,7 @@ export function createContext(seed: Partial<Record<TableName, TestDoc[]>> = {}):
             if (index.fields[position] !== field) throw new Error(`${table}.${indexName} cannot range on ${field}`);
           });
           let docs = [...getTable(table).values()].filter((doc) =>
-            conditions.every(({ field, value }) => doc[field] === value),
+            conditions.every(({ field, matches }) => matches(doc[field])),
           );
           const record = (rows: number) => indexReads.push({ table, index: indexName, rows });
 

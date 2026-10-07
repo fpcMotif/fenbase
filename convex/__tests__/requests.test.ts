@@ -583,37 +583,105 @@ describe('reading requests', () => {
     expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, items: [], scope: 'own' });
   });
 
-  it('lets readApplicationRecords read every request only under the readers preset, per pinned version', async () => {
+  it('keeps drafts private: a reader cannot get, list or count another member’s draft, even under the readers preset', async () => {
     const ctx = fixtureContext({ app1Preset: 'requesterAssignedReviewerAndReaders' });
-    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, scope: 'application' });
     const first = await createAs(ctx, 'user-a');
     await createAs(ctx, 'user-a2');
-    const readerView = await getAs(ctx, 'user-r', first.requestId);
-    expect(readerView).toMatchObject({ requester: { membershipId: 'memberships:a', isMe: false }, canEdit: false });
-    expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 2, scope: 'application' });
-    expect(await listAs(ctx, 'user-b')).toMatchObject({ total: 0 });
+    const deleted = await createAs(ctx, 'user-a2');
+    await removeAs(ctx, 'user-a2', deleted.requestId, 1);
 
-    // V2 switches to the narrower preset: V1 requests keep their readers, V2 requests do not get them.
-    await seedV2(ctx, 'requesterAndAssignedReviewer');
-    const v2 = await createAs(ctx, 'user-a', leave, { definitionVersionId: V2 });
-    expect(await getAs(ctx, 'user-r', v2.requestId)).toBeNull();
-    const readable = await listAs(ctx, 'user-r');
-    expect(readable).toMatchObject({ total: 2, scope: 'application' });
-    expect(readable.items.map((item) => item._id)).not.toContain(v2.requestId);
+    // A foreign draft looks exactly like a missing request.
+    expect(await getAs(ctx, 'user-r', first.requestId)).toBeNull();
+    expect(await getAs(ctx, 'user-r', deleted.requestId)).toBeNull();
+    expect(await listAs(ctx, 'user-r')).toEqual({
+      items: [],
+      total: 0,
+      page: 1,
+      pageSize: 20,
+      pageCount: 1,
+      scope: 'own',
+    });
+    expect(await listAs(ctx, 'user-b')).toMatchObject({ total: 0, scope: 'own' });
+    expect(await listAs(ctx, 'user-a')).toMatchObject({ total: 1, scope: 'own' });
   });
 
-  it('labels the list as own when the grant reads nothing beyond the reader’s requests', async () => {
+  it('lets readApplicationRecords read other members’ non-draft requests only under the readers preset, per pinned version', async () => {
     const ctx = fixtureContext({ app1Preset: 'requesterAssignedReviewerAndReaders' });
     await seedV2(ctx, 'requesterAndAssignedReviewer');
-    await createAs(ctx, 'user-a', leave, { definitionVersionId: V2 });
+    const readersSubmitted = await ctx.db.insert('requests', {
+      ...requestDoc('submitted-v1', 'memberships:a'),
+      policyPreset: 'requesterAssignedReviewerAndReaders',
+      state: 'submitted',
+    });
+    const narrowSubmitted = await ctx.db.insert('requests', {
+      ...requestDoc('submitted-v2', 'memberships:a'),
+      definitionVersionId: V2,
+      version: 2,
+      state: 'submitted',
+    });
+    const readersDraft = await ctx.db.insert('requests', {
+      ...requestDoc('draft-v1', 'memberships:a2'),
+      policyPreset: 'requesterAssignedReviewerAndReaders',
+    });
+
+    expect(await getAs(ctx, 'user-r', readersSubmitted)).toMatchObject({
+      requester: { membershipId: 'memberships:a', isMe: false },
+      canEdit: false,
+    });
+    expect(await getAs(ctx, 'user-r', narrowSubmitted)).toBeNull();
+    expect(await getAs(ctx, 'user-r', readersDraft)).toBeNull();
+    const readable = await listAs(ctx, 'user-r');
+    expect(readable).toMatchObject({ total: 1, scope: 'application' });
+    expect(readable.items.map((item) => item._id)).toEqual([readersSubmitted]);
+  });
+
+  it('shows a reader who also submits their own drafts, paged without gaps among foreign drafts', async () => {
+    const ctx = fixtureContext({ app1Preset: 'requesterAssignedReviewerAndReaders' });
+    ctx.seed('memberships', membership('ra', 'user-ra', ['submitRequests', 'readApplicationRecords']));
+    const mine: string[] = [];
+    for (let index = 1; index <= 25; index += 1) {
+      const day = String(index).padStart(2, '0');
+      const own = await createAs(ctx, 'user-ra', {
+        ...leave,
+        startDate: `2026-05-${day}`,
+        endDate: `2026-05-${day}`,
+        days: index,
+      });
+      mine.push(own.requestId);
+      await createAs(ctx, 'user-a2', { ...leave, days: index });
+    }
+    const seen: string[] = [];
+    for (let page = 1; page <= 3; page += 1) {
+      const result = await listAs(ctx, 'user-ra', { page, pageSize: 10, sort: { field: 'days', direction: 'asc' } });
+      expect(result).toMatchObject({ total: 25, pageCount: 3, scope: 'own' });
+      expect(result.items.every((item) => item.requester.isMe && item.canEdit)).toBe(true);
+      seen.push(...result.items.map((item) => item._id));
+    }
+    expect(seen).toEqual(mine);
+    expect(await getAs(ctx, 'user-ra', mine[0])).toMatchObject({ requester: { isMe: true }, canEdit: true });
+  });
+
+  it('never reads other members’ drafts for a reader, so they cannot fill the browse limit', async () => {
+    const ctx = fixtureContext({ app1Preset: 'requesterAssignedReviewerAndReaders' });
+    for (let index = 0; index < 1001; index += 1) {
+      await ctx.db.insert('requests', {
+        ...requestDoc(`bulk-${index}`, 'memberships:a'),
+        policyPreset: 'requesterAssignedReviewerAndReaders',
+      });
+    }
+    ctx.indexReads.length = 0;
     expect(await listAs(ctx, 'user-r')).toMatchObject({ total: 0, scope: 'own' });
+    const rowsRead = ctx.indexReads
+      .filter((read) => read.table === 'requests')
+      .reduce((sum, read) => sum + read.rows, 0);
+    expect(rowsRead).toBe(0);
   });
 
   it('keeps a second organization apart even when it holds the same grants', async () => {
     const ctx = fixtureContext();
     await createAs(ctx, 'user-a');
     const foreign = await createAs(ctx, 'user-z', leave, { applicationId: APP_Z, definitionVersionId: V_Z });
-    expect(await listAs(ctx, 'user-z', {}, APP_Z)).toMatchObject({ total: 1, scope: 'application' });
+    expect(await listAs(ctx, 'user-z', {}, APP_Z)).toMatchObject({ total: 1, scope: 'own' });
     expect(await getAs(ctx, 'user-a', foreign.requestId)).toBeNull();
     signIn('user-a');
     await expectCode(invokeHandler(list, ctx, { applicationId: APP_Z }), 'APPLICATION_ACCESS_DENIED');

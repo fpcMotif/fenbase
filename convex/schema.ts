@@ -65,6 +65,7 @@ export default defineSchema({
     updatedAt: v.number(),
   })
     .index('by_application_requester', ['applicationId', 'requesterMembershipId'])
+    .index('by_application_state', ['applicationId', 'state'])
     .index('by_requester_operation', ['requesterMembershipId', 'operationId']),
 
   requestCounts: defineTable({

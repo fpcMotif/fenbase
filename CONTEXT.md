@@ -359,7 +359,8 @@ _Avoid_: idempotency key (in code), request ID
 
 - A **Request** belongs to one **Application** and one requester **Membership**; the server copies the organization, **Pinned version** and **Policy preset** onto it.
 - New requests must use the **Current version pointer**; a form built from an older version is refused until it loads the new one.
-- The requester reads their own requests. `readApplicationRecords` reads every request only where the request's own **Policy preset** is `requesterAssignedReviewerAndReaders`.
+- A draft **Request** is private: only its requester reads it.
+- The requester reads their own requests in every state. `readApplicationRecords` also reads other members' non-draft requests, only where the request's own **Policy preset** is `requesterAssignedReviewerAndReaders`. Until #17 adds submission, every request is a draft, so a reader sees only their own.
 - Only the requester edits or deletes a **Request**, and only while holding `submitRequests`.
 
 ## Flagged ambiguities
