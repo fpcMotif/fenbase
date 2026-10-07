@@ -102,6 +102,7 @@ const texts = {
     assigned: 'Assigned to me',
     inboxPending: 'Waiting for me',
     inboxCompleted: 'Decided by me',
+    inboxCancelled: 'Withdrawn by requester',
     inboxEmpty: 'Nothing is waiting for your review.',
     openRow: 'Open request',
     labels: { startDate: 'Start date', endDate: 'End date', days: 'Days', reason: 'Reason' },
@@ -121,7 +122,10 @@ const texts = {
     },
     me: 'Me',
     member: (ref: string) => `Member ${ref}`,
-    dates: { first: '2026-06-01', second: '2026-06-08' },
+    savedNotSubmitted: (revision: number) => `Draft saved · revision ${revision}. It was not submitted:`,
+    reviewerUnavailable:
+      'The reviewer of this form version can no longer review requests. Ask an administrator, or create a new request.',
+    dates: { first: '2026-06-01', second: '2026-06-08', unavailable: '2026-08-03' },
   },
   'zh-CN': {
     email: '邮箱',
@@ -139,6 +143,7 @@ const texts = {
     assigned: '待我审批',
     inboxPending: '等待我处理',
     inboxCompleted: '我已处理',
+    inboxCancelled: '申请人已撤回',
     inboxEmpty: '没有等待你审批的申请。',
     openRow: '打开申请',
     labels: { startDate: '开始日期', endDate: '结束日期', days: '天数', reason: '原因' },
@@ -158,7 +163,9 @@ const texts = {
     },
     me: '我',
     member: (ref: string) => `成员 ${ref}`,
-    dates: { first: '2026-07-01', second: '2026-07-08' },
+    savedNotSubmitted: (revision: number) => `草稿已保存 · 修订 ${revision}，但未提交：`,
+    reviewerUnavailable: '此表单版本的审批人已无法审批申请。请联系管理员，或新建申请。',
+    dates: { first: '2026-07-01', second: '2026-07-08', unavailable: '2026-09-07' },
   },
 } as const;
 
@@ -635,10 +642,10 @@ async function main(): Promise<void> {
     type EventView = { command: string; toState: string; revision: number; actor: { membershipId: string } };
     const historyOf = async (key: ActorKey, requestId: string) =>
       (
-        (await client(key).query(looseQuery('requestReviews:history'), { applicationId: appOne(), requestId })) as
-          | EventView[]
-          | null
-      )?.map((event) => [event.command, event.toState, event.revision, event.actor.membershipId]);
+        (await client(key).query(looseQuery('requestReviews:history'), { applicationId: appOne(), requestId })) as {
+          events: EventView[];
+        } | null
+      )?.events.map((event) => [event.command, event.toState, event.revision, event.actor.membershipId]);
     check(
       'RUN-02.history-attributes-each-transition',
       {
@@ -873,6 +880,8 @@ async function main(): Promise<void> {
         }
         assert(await radio.isChecked(), `Keyboard could not select ${name}`);
       };
+      const waitUntilDialogOpenedAndFocused = (page: Page) =>
+        page.waitForFunction(() => Boolean(document.activeElement?.closest('.ant-modal-wrap')));
       const rowWith = (page: Page, value: string) => page.getByRole('row').filter({ hasText: value });
       const dialogOf = (page: Page) => page.getByRole('dialog');
       const button = (scope: Page | Locator, name: string) => scope.getByRole('button', { name, exact: true });
@@ -1090,6 +1099,28 @@ async function main(): Promise<void> {
             .getByText(text.states[decidedState], { exact: true })
             .waitFor();
           await capture(reviewer, '5-completed-after-reload');
+
+          await chooseRadio(reviewer.page, text.inboxCancelled);
+          await rowWith(reviewer.page, text.dates.second).getByText(text.states.withdrawn, { exact: true }).waitFor();
+          await openRow(reviewer.page, locale, text.dates.second);
+          await dialogOf(reviewer.page).getByRole('region', { name: text.history }).waitFor();
+          must(
+            `ui.${tag}.reviewer-reopens-withdrawn-request`,
+            {
+              lines: [text.events.submit(text.member(aRef)), text.events.withdraw(text.member(aRef))],
+              actions: 0,
+            },
+            {
+              lines: await historyLines(reviewer.page, locale),
+              actions:
+                (await button(dialogOf(reviewer.page), text.approve).count()) +
+                (await button(dialogOf(reviewer.page), text.reject).count()),
+            },
+          );
+          await capture(reviewer, '6-withdrawn-reopened');
+          await waitUntilDialogOpenedAndFocused(reviewer.page);
+          await reviewer.page.keyboard.press('Escape');
+          await dialogOf(reviewer.page).waitFor({ state: 'hidden' });
           must(
             `ui.${tag}.no-page-errors`,
             { requester: [], reviewer: [] },
@@ -1110,6 +1141,74 @@ async function main(): Promise<void> {
         } finally {
           await Promise.all([closeSession(requester), closeSession(reviewer)]);
         }
+      }
+
+      const requester = await openSession('A', 'en-US', 'en-US-requester-unavailable-reviewer');
+      try {
+        const text = texts['en-US'];
+        const { page } = requester;
+        await openRequests(page, 'en-US');
+        await fillAndCreate(requester, text.dates.unavailable, 'Reviewer away');
+        const unavailableId = String(requestByDate(text.dates.unavailable)?._id);
+        labels.set(unavailableId, '<request:ui-unavailable-reviewer>');
+        setMember('V', 'inactive');
+        await openRow(page, 'en-US', text.dates.unavailable);
+        const dialog = dialogOf(page);
+        const persisted = () => ({
+          state: requestRow(unavailableId)?.state,
+          revision: requestRow(unavailableId)?.revision,
+          tasks: taskOf(unavailableId),
+          events: eventsOf(unavailableId),
+        });
+
+        await keyboardActivate(page, button(dialog, text.submit));
+        const unchanged = dialog.getByRole('alert').filter({ hasText: text.reviewerUnavailable });
+        await unchanged.waitFor();
+        must(
+          'ui.en.refused-submit-without-edits-reports-only-the-reason',
+          { alert: text.reviewerUnavailable, state: 'draft', revision: 1, tasks: [], events: [] },
+          { alert: await unchanged.innerText(), ...persisted() },
+        );
+
+        await keyboardInput(page, dialog.getByLabel(text.labels.reason, { exact: true }), 'Reviewer away, edited');
+        await keyboardActivate(page, button(dialog, text.submit));
+        const saved = dialog.getByRole('alert').filter({ hasText: text.savedNotSubmitted(2) });
+        await saved.waitFor();
+        must(
+          'ui.en.refused-submit-after-edits-reports-the-saved-draft',
+          {
+            alert: `${text.savedNotSubmitted(2)} ${text.reviewerUnavailable}`,
+            state: 'draft',
+            revision: 2,
+            tasks: [],
+            events: [],
+          },
+          { alert: await saved.innerText(), ...persisted() },
+        );
+        await capture(requester, '1-saved-not-submitted');
+
+        setMember('V', 'active');
+        await keyboardActivate(page, button(dialog, text.submit));
+        await page.locator('output').getByText(text.submitted(3), { exact: true }).waitFor();
+        must(
+          'ui.en.submit-after-refusal-succeeds',
+          { state: 'pending', revision: 3, tasks: ['pending'], events: ['submit'], errors: [] },
+          {
+            state: requestRow(unavailableId)?.state,
+            revision: requestRow(unavailableId)?.revision,
+            tasks: taskOf(unavailableId).map((task) => task.status),
+            events: eventsOf(unavailableId).map((event) => event.command),
+            errors: requester.errors,
+          },
+        );
+      } catch (error) {
+        await requester.page
+          .screenshot({ path: join(artifactsDir, `${requester.name}-failure.png`), fullPage: true })
+          .catch(() => undefined);
+        throw error;
+      } finally {
+        setMember('V', 'active');
+        await closeSession(requester);
       }
 
       // RESTART: a pending task and the decisions survive stopping the backend and Vite.

@@ -42,7 +42,14 @@ import {
   type DateRange,
   type RequestFormValues,
 } from './requestForm';
-import { newCreateAttempt, requestActions, requestModalStatus, type ReviewAction } from './requestModal';
+import {
+  newCreateAttempt,
+  requestActions,
+  requestModalStatus,
+  staleRequest,
+  type ReviewAction,
+  type StaleRequest,
+} from './requestModal';
 
 type MyApplication = FunctionReturnType<typeof api.memberships.listMine>[number];
 type PublishedVersion = FunctionReturnType<typeof api.applicationDefinitions.getPublishedVersion>;
@@ -50,10 +57,9 @@ type RequestPage = FunctionReturnType<typeof api.requests.list>;
 type RequestView = RequestPage['items'][number];
 type RequestState = RequestView['state'];
 type Inbox = FunctionReturnType<typeof api.requestReviews.inbox>;
-type InboxStatus = 'pending' | 'completed';
+type InboxStatus = 'pending' | 'completed' | 'cancelled';
 type RequestEvents = FunctionReturnType<typeof api.requestReviews.history>;
 type PanelView = 'mine' | 'assigned';
-type Stale = { state: string; revision: number };
 type Sort = { field: string; direction: 'asc' | 'desc' };
 type Browse = { page: number; pageSize: number; sort: Sort; filters: RecordFilter[] };
 type ModalState = { kind: 'create' } | { kind: 'edit'; requestId: Id<'requests'> };
@@ -81,6 +87,12 @@ const reviewDoneKeys: Record<ReviewAction, string> = {
   withdraw: 'withdrawn',
   approve: 'approved',
   reject: 'rejected',
+};
+
+const inboxEmptyKeys: Record<InboxStatus, string> = {
+  pending: 'reviews.inboxEmpty',
+  completed: 'reviews.inboxCompletedEmpty',
+  cancelled: 'reviews.inboxCancelledEmpty',
 };
 
 const stateColors: Record<RequestState, string> = {
@@ -473,6 +485,7 @@ function ReviewInbox({
           options={[
             { value: 'pending', label: t('reviews.inboxPending') },
             { value: 'completed', label: t('reviews.inboxCompleted') },
+            { value: 'cancelled', label: t('reviews.inboxCancelled') },
           ]}
         />
         {result instanceof Error && (
@@ -480,7 +493,7 @@ function ReviewInbox({
         )}
         {inbox?.truncated && <Alert type="info" showIcon message={t('reviews.inboxTruncated')} />}
         {inbox && inbox.items.length === 0 ? (
-          <Empty description={t(status === 'pending' ? 'reviews.inboxEmpty' : 'reviews.inboxCompletedEmpty')} />
+          <Empty description={t(inboxEmptyKeys[status])} />
         ) : (
           <Table<RequestView>
             rowKey="_id"
@@ -547,7 +560,7 @@ function RequestModal({
   const [formError, setFormError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [reviewPending, setReviewPending] = useState<ReviewAction | null>(null);
-  const [stale, setStale] = useState<Stale | null>(null);
+  const [stale, setStale] = useState<StaleRequest | null>(null);
   const conflictRef = useRef<HTMLDivElement>(null);
   const outdatedRef = useRef<HTMLDivElement>(null);
   const staleRef = useRef<HTMLDivElement>(null);
@@ -565,7 +578,8 @@ function RequestModal({
   const requestResult: RequestView | null | Error | undefined = results.request;
   const request = requestResult instanceof Error ? undefined : requestResult;
   const historyResult: RequestEvents | Error | undefined = results.history;
-  const events = historyResult instanceof Error ? null : historyResult;
+  const history = historyResult instanceof Error ? null : historyResult;
+  const events = history?.events;
 
   const pinnedVersionId = request?.versionId;
   const versionQueries = useMemo((): RequestForQueries => {
@@ -614,6 +628,11 @@ function RequestModal({
       return;
     }
     setFormError(text);
+  };
+
+  const errorText = (error: unknown) => {
+    const data = actionErrorData(error);
+    return data && isRequestErrorCode(data.code) ? requestIssueMessage(data, t, labelOf) : actionErrorMessage(error, t);
   };
 
   const handleError = (error: unknown) => {
@@ -668,7 +687,11 @@ function RequestModal({
       .catch(handleError);
   };
 
-  const runReview = (action: ReviewAction, expectedRevision: () => Promise<number>) => {
+  const runReview = (
+    action: ReviewAction,
+    expectedRevision: () => Promise<number>,
+    savedRevision: () => number | null = () => null,
+  ) => {
     if (!requestId) return;
     setFormError(null);
     const operationId = crypto.randomUUID();
@@ -684,15 +707,18 @@ function RequestModal({
     )
       .then((result) => onSaved(t(`reviews.${reviewDoneKeys[action]}`, { revision: result.revision })))
       .catch((error: unknown) => {
+        const saved = savedRevision();
+        if (saved !== null) {
+          setFormError(t('reviews.savedNotSubmitted', { revision: saved, reason: errorText(error) }));
+          return;
+        }
         const data = actionErrorData(error);
-        if (
-          data?.code === 'REQUEST_STATE_CONFLICT' ||
-          (action !== 'submit' && data?.code === 'RECORD_REVISION_CONFLICT')
-        ) {
-          setStale({
-            state: data.currentState ?? request?.state ?? 'draft',
-            revision: data.currentRevision ?? request?.revision ?? 0,
-          });
+        const stale =
+          data?.code === 'REQUEST_STATE_CONFLICT' || (action !== 'submit' && data?.code === 'RECORD_REVISION_CONFLICT')
+            ? staleRequest(data, request ?? loadedRequest ?? undefined)
+            : null;
+        if (stale) {
+          setStale(stale);
           return;
         }
         handleError(error);
@@ -714,16 +740,22 @@ function RequestModal({
       showIssue(issue);
       return;
     }
-    runReview('submit', async () => {
-      const saved = await updateRequest({
-        applicationId: application.applicationId,
-        requestId,
-        expectedRevision: baseRevision,
-        values,
-      });
-      setRevisionOverride(saved.revision);
-      return saved.revision;
-    });
+    let savedRevision: number | null = null;
+    runReview(
+      'submit',
+      async () => {
+        const saved = await updateRequest({
+          applicationId: application.applicationId,
+          requestId,
+          expectedRevision: baseRevision,
+          values,
+        });
+        if (saved.revision !== baseRevision) savedRevision = saved.revision;
+        setRevisionOverride(saved.revision);
+        return saved.revision;
+      },
+      () => savedRevision,
+    );
   };
 
   const showLatest = () => {
@@ -991,6 +1023,7 @@ function RequestModal({
             <Typography.Title level={3} style={{ fontSize: 16 }}>
               {t('reviews.history')}
             </Typography.Title>
+            {history?.truncated && <Alert type="info" showIcon message={t('reviews.historyTruncated')} />}
             <Timeline
               items={events.map((event) => ({
                 key: event._id,

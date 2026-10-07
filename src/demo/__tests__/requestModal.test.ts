@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { OPERATION_ID_PATTERN } from '../../../convex/requestValues';
-import { newCreateAttempt, requestActions, requestModalStatus } from '../requestModal';
+import { newCreateAttempt, requestActions, requestModalStatus, staleRequest } from '../requestModal';
 
 const view = { _id: 'requests:1' };
 
@@ -76,6 +76,30 @@ describe('request actions', () => {
     expect(requestActions({ ...flags, canWithdraw: true })).toEqual(['withdraw']);
     expect(requestActions({ ...flags, canDecide: true })).toEqual(['reject', 'approve']);
     expect(requestActions(flags)).toEqual([]);
+  });
+});
+
+describe('stale request notice', () => {
+  const latest = { state: 'pending', revision: 2 } as const;
+
+  it('reports the state and revision the server sent', () => {
+    expect(staleRequest({ currentState: 'withdrawn', currentRevision: 3 }, latest)).toEqual({
+      state: 'withdrawn',
+      revision: 3,
+    });
+  });
+
+  it('falls back to the latest loaded request when the server sends no known state', () => {
+    expect(staleRequest({ currentState: 'archived', currentRevision: 4 }, latest)).toEqual({
+      state: 'pending',
+      revision: 4,
+    });
+    expect(staleRequest({ currentRevision: 5 }, latest)).toEqual({ state: 'pending', revision: 5 });
+    expect(staleRequest({}, latest)).toEqual(latest);
+  });
+
+  it('has nothing to report when neither the server nor the dialog knows the state', () => {
+    expect(staleRequest({ currentState: 'archived', currentRevision: 4 }, undefined)).toBeNull();
   });
 });
 

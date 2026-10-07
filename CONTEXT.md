@@ -335,7 +335,7 @@ _Avoid_: timestamp, datetime
 
 # Requests
 
-Requests that employees fill in through the published definition, submit, and have one reviewer decide. Seeded by issue #16 (ADR-0007, `docs/migration/records-16.md`); submission and review come from issue #17 (ADR-0008, `docs/migration/approval-17.md`).
+Requests that employees fill in through the published definition, submit, and have one reviewer decide. Seeded by issue #16 (ADR-0007, `docs/migration/records-16.md`); submission and review come from issue #17 (ADR-0009, `docs/migration/approval-17.md`).
 
 ## Language
 
@@ -368,7 +368,7 @@ The request's `revision` counter. It starts at 1 and goes up by 1 on every chang
 _Avoid_: version (a revision is not a **Pinned version**)
 
 **Operation ID**:
-A client-chosen ID, 8 to 64 letters, digits, `-` or `_`, that names one create attempt or one **Review command** for one membership. Repeating it with the same payload returns the first result; repeating it with another payload (other values, or another command, request or expected revision) is an operation conflict.
+A client-chosen ID, 8 to 64 letters, digits, `-` or `_`, that names one create attempt or one **Review command** for one membership. Creates and **Review commands** are two separate scopes: a create ID lives on the `requests` row, a command ID on its **Request event**, so one ID can name one create and one command. Within a scope, repeating it with the same payload returns the first result; repeating it with another payload (other values, or another command, request or expected revision) is an operation conflict.
 _Avoid_: idempotency key (in code), request ID
 
 ## Relationships

@@ -3,8 +3,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { removeOrganization } from '../fixtures';
 import { create, get, remove, update } from '../requests';
 import { approve, history, inbox, reject, submit, withdraw } from '../requestReviews';
-import { invokeHandler, type TestContext } from './helpers';
-import { APP_1, ORG_1, V1, V2, fixtureContext, leave, rejectionData, seedV2 } from './requestFixture';
+import { MAX_REQUESTS_PER_APPLICATION } from '../requestValues';
+import { invokeHandler, type TestContext } from './helpers.support';
+import { APP_1, ORG_1, V1, V2, fixtureContext, leave, rejectionData, seedV2 } from './requestFixture.support';
 
 const auth = vi.hoisted(() => ({ currentUser: null as string | null }));
 
@@ -385,6 +386,16 @@ function inboxAs(ctx: TestContext, user: string, status: 'pending' | 'completed'
   return invokeHandler(inbox, ctx, { applicationId: APP_1, status }) as Promise<{ items: View[]; truncated: boolean }>;
 }
 
+type HistoryEvent = { command: string; toState: string; actor: { membershipId: string; isMe: boolean } };
+
+function historyAs(ctx: TestContext, user: string, requestId: string) {
+  signIn(user);
+  return invokeHandler(history, ctx, { applicationId: APP_1, requestId }) as Promise<{
+    events: HistoryEvent[];
+    truncated: boolean;
+  } | null>;
+}
+
 describe('reading reviews', () => {
   it('shows the assigned reviewer submitted requests only, with the actions each side may take', async () => {
     const ctx = fixtureContext();
@@ -445,20 +456,28 @@ describe('reading reviews', () => {
     const { requestId, revision } = await pendingRequest(ctx);
     await run(ctx, 'reject', 'user-b', requestId, revision);
 
-    signIn('user-a');
-    const events = (await invokeHandler(history, ctx, { applicationId: APP_1, requestId })) as Array<{
-      command: string;
-      toState: string;
-      actor: { membershipId: string; isMe: boolean };
-    }>;
-    expect(events.map((event) => [event.command, event.toState, event.actor])).toEqual([
+    const result = await historyAs(ctx, 'user-a', requestId);
+    expect(result?.events.map((event) => [event.command, event.toState, event.actor])).toEqual([
       ['submit', 'pending', { membershipId: 'memberships:a', isMe: true }],
       ['reject', 'rejected', { membershipId: 'memberships:b', isMe: false }],
     ]);
-    signIn('user-a2');
-    expect(await invokeHandler(history, ctx, { applicationId: APP_1, requestId })).toBeNull();
-    signIn('user-b');
-    expect(await invokeHandler(history, ctx, { applicationId: APP_1, requestId })).toHaveLength(2);
+    expect(result?.truncated).toBe(false);
+    expect(await historyAs(ctx, 'user-a2', requestId)).toBeNull();
+    expect((await historyAs(ctx, 'user-b', requestId))?.events).toHaveLength(2);
+  });
+
+  it('bounds the history to 100 events and says when older ones are left out', async () => {
+    const ctx = fixtureContext();
+    const { requestId } = await pendingRequest(ctx);
+    const [submitted] = ctx.rows('requestEvents');
+    const { _id: _ignored, _creationTime: _time, ...event } = submitted;
+    for (let index = 0; index < 100; index += 1) await ctx.db.insert('requestEvents', event);
+
+    ctx.indexReads.length = 0;
+    const result = await historyAs(ctx, 'user-a', requestId);
+    expect(result?.events).toHaveLength(100);
+    expect(result?.truncated).toBe(true);
+    expect(ctx.indexReads).toContainEqual({ table: 'requestEvents', index: 'by_request', rows: 101 });
   });
 });
 
@@ -473,4 +492,18 @@ describe('fixture cleanup', () => {
     expect(ctx.rows('reviewTasks')).toEqual([]);
     expect(ctx.rows('requestEvents')).toEqual([]);
   });
+
+  it('removes an application at the request cap within one Convex transaction', async () => {
+    const ctx = fixtureContext();
+    for (let index = 0; index < MAX_REQUESTS_PER_APPLICATION; index += 1) {
+      const { requestId, revision } = await pendingRequest(ctx, index % 2 === 0 ? 'user-a' : 'user-a2');
+      await run(ctx, 'approve', 'user-b', requestId, revision);
+    }
+    ctx.indexReads.length = 0;
+    const before = { ...ctx.counts };
+    const removed = await invokeHandler(removeOrganization, ctx, { organizationKey: 'fixture-org-1' });
+    expect(removed).toMatchObject({ requests: 1000, reviewTasks: 1000, requestEvents: 2000 });
+    expect(ctx.indexReads.length).toBeLessThanOrEqual(4096);
+    expect(ctx.counts.deletes - before.deletes).toBeLessThanOrEqual(16_000);
+  }, 60_000);
 });

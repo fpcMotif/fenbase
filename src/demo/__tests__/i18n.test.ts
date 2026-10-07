@@ -1,3 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 import type { i18n as I18n } from 'i18next';
 import { ConvexError } from 'convex/values';
@@ -122,6 +125,25 @@ describe('request text', () => {
     }
     expect(i18n.getFixedT('en-US')('requests.filterFrom', { field: 'Start date' })).toBe('Start date on or after');
     expect(i18n.getFixedT('zh-CN')('requests.filterTo', { field: '结束日期' })).toBe('结束日期不晚于');
+  });
+
+  it('defines only review text that the demo shows', () => {
+    const demoDir = join(dirname(fileURLToPath(import.meta.url)), '..');
+    const source = readdirSync(demoDir)
+      .filter((name) => /\.tsx?$/.test(name) && name !== 'i18n.ts')
+      .map((name) => readFileSync(join(demoDir, name), 'utf8'))
+      .join('\n');
+    const used = (key: string) => {
+      if (source.includes(key)) return true;
+      const parent = key.slice(0, key.lastIndexOf('.'));
+      const leaf = key.slice(key.lastIndexOf('.') + 1);
+      if (!source.includes(`\`${parent}.\${`)) return false;
+      return parent !== 'reviews' || source.includes(`'${leaf}'`);
+    };
+    const unused = leafKeys(i18n.getResourceBundle('en-US', 'translation').reviews, 'reviews').filter(
+      (key) => !used(key),
+    );
+    expect(unused).toEqual([]);
   });
 
   it('reads bounds and revisions from a server error', () => {

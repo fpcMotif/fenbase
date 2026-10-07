@@ -9,6 +9,7 @@ import {
   type ApplicationPrincipal,
 } from './membershipModel';
 import {
+  assertOperationId,
   assertValidValues,
   canRead,
   isOwn,
@@ -16,12 +17,12 @@ import {
   pinnedDefinition,
   requestError,
   requestViewValidator,
+  revisionConflict,
   sha256Hex,
   stateConflict,
   toView,
 } from './requests';
 import {
-  OPERATION_ID_PATTERN,
   normalizeRequestValues,
   requestStateValidator,
   reviewCommandValidator,
@@ -132,9 +133,7 @@ async function closeReview(ctx: MutationCtx, row: Doc<'requests'>, outcome: Requ
 
 async function runCommand(ctx: MutationCtx, args: CommandArgs, command: ReviewCommand) {
   const principal = await requireApplicationPrincipal(ctx, args.applicationId);
-  if (!OPERATION_ID_PATTERN.test(args.operationId)) {
-    throw requestError('RECORD_OPERATION_ID_INVALID', 'Use 8 to 64 letters, digits, hyphens or underscores');
-  }
+  assertOperationId(args.operationId);
   const operationFingerprint = await sha256Hex({
     command,
     applicationId: args.applicationId,
@@ -165,13 +164,7 @@ async function runCommand(ctx: MutationCtx, args: CommandArgs, command: ReviewCo
   authorize(principal, row, command);
   const { from, to } = TRANSITIONS[command];
   if (row.state !== from) throw stateConflict(row);
-  if (row.revision !== args.expectedRevision) {
-    throw new ConvexError({
-      code: 'RECORD_REVISION_CONFLICT',
-      message: 'The request changed since you loaded it',
-      currentRevision: row.revision,
-    });
-  }
+  if (row.revision !== args.expectedRevision) throw revisionConflict(row);
 
   const now = Date.now();
   const revision = row.revision + 1;
@@ -257,7 +250,7 @@ const eventViewValidator = v.object({
 
 export const history = query({
   args: { applicationId: v.id('applications'), requestId: v.id('requests') },
-  returns: v.union(v.array(eventViewValidator), v.null()),
+  returns: v.union(v.object({ events: v.array(eventViewValidator), truncated: v.boolean() }), v.null()),
   handler: async (ctx, args) => {
     const principal = await requireApplicationPrincipal(ctx, args.applicationId);
     const row = await ctx.db.get(args.requestId);
@@ -265,15 +258,18 @@ export const history = query({
     const events = await ctx.db
       .query('requestEvents')
       .withIndex('by_request', (q) => q.eq('requestId', row._id))
-      .take(MAX_HISTORY_EVENTS);
-    return events.map((event) => ({
-      _id: event._id,
-      command: event.command,
-      fromState: event.fromState,
-      toState: event.toState,
-      revision: event.revision,
-      at: event.at,
-      actor: { membershipId: event.actorMembershipId, isMe: event.actorMembershipId === principal.membershipId },
-    }));
+      .take(MAX_HISTORY_EVENTS + 1);
+    return {
+      events: events.slice(0, MAX_HISTORY_EVENTS).map((event) => ({
+        _id: event._id,
+        command: event.command,
+        fromState: event.fromState,
+        toState: event.toState,
+        revision: event.revision,
+        at: event.at,
+        actor: { membershipId: event.actorMembershipId, isMe: event.actorMembershipId === principal.membershipId },
+      })),
+      truncated: events.length > MAX_HISTORY_EVENTS,
+    };
   },
 });

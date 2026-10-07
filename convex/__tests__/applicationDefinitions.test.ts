@@ -2,7 +2,7 @@ import { ConvexError } from 'convex/values';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { getBuilderState, getPublishedVersion, publish, saveDraft } from '../applicationDefinitions';
 import { removeOrganization } from '../fixtures';
-import { createContext, invokeHandler, type TestContext, type TestDoc } from './helpers';
+import { createContext, invokeHandler, type TestContext, type TestDoc } from './helpers.support';
 
 const auth = vi.hoisted(() => ({ currentUser: null as string | null }));
 

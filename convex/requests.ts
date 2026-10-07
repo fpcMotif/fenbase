@@ -43,6 +43,20 @@ export function stateConflict(row: Doc<'requests'>) {
   });
 }
 
+export function revisionConflict(row: Doc<'requests'>) {
+  return new ConvexError({
+    code: 'RECORD_REVISION_CONFLICT',
+    message: 'The request changed since you loaded it',
+    currentRevision: row.revision,
+  });
+}
+
+export function assertOperationId(operationId: string): void {
+  if (!OPERATION_ID_PATTERN.test(operationId)) {
+    throw requestError('RECORD_OPERATION_ID_INVALID', 'Use 8 to 64 letters, digits, hyphens or underscores');
+  }
+}
+
 const memberReferenceValidator = v.object({ membershipId: v.id('memberships'), isMe: v.boolean() });
 
 export const requestViewValidator = v.object({
@@ -159,13 +173,7 @@ async function requireEditable(
   if (!row || !isOwn(principal, row)) throw notFound();
   assertCanSubmitRequests(principal);
   if (row.state !== 'draft') throw stateConflict(row);
-  if (row.revision !== expectedRevision) {
-    throw new ConvexError({
-      code: 'RECORD_REVISION_CONFLICT',
-      message: 'The request changed since you loaded it',
-      currentRevision: row.revision,
-    });
-  }
+  if (row.revision !== expectedRevision) throw revisionConflict(row);
   return { principal, row };
 }
 
@@ -185,9 +193,7 @@ export const create = mutation({
   handler: async (ctx, args) => {
     const principal = await requireApplicationPrincipal(ctx, args.applicationId);
     assertCanSubmitRequests(principal);
-    if (!OPERATION_ID_PATTERN.test(args.operationId)) {
-      throw requestError('RECORD_OPERATION_ID_INVALID', 'Use 8 to 64 letters, digits, hyphens or underscores');
-    }
+    assertOperationId(args.operationId);
 
     const values = normalizeRequestValues(args.values);
     const previous = await ctx.db
