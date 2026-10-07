@@ -65,6 +65,16 @@ export function assertCanSubmitRequests(principal: ApplicationPrincipal): void {
   }
 }
 
+export function canReviewRequests(principal: ApplicationPrincipal): boolean {
+  return principal.grants.has('reviewRequests');
+}
+
+export function assertCanReviewRequests(principal: ApplicationPrincipal): void {
+  if (!canReviewRequests(principal)) {
+    throw permissionDenied('You do not have permission to review requests in this application');
+  }
+}
+
 export function assertHasManageMembers(principal: ApplicationPrincipal): void {
   if (!principal.grants.has('manageMembers')) {
     throw permissionDenied('You do not have permission to manage members of this application');

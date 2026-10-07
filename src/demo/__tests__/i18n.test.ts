@@ -61,12 +61,15 @@ describe('definition builder text', () => {
     }
   });
 
-  it.each(['builder', 'nav', 'requests', 'requestErrors'])('defines the same %s keys in both languages', (section) => {
-    const english = leafKeys(i18n.getResourceBundle('en-US', 'translation')[section], section).sort();
-    const chinese = leafKeys(i18n.getResourceBundle('zh-CN', 'translation')[section], section).sort();
-    expect(english.length).toBeGreaterThan(0);
-    expect(chinese).toEqual(english);
-  });
+  it.each(['builder', 'nav', 'requests', 'requestErrors', 'reviews'])(
+    'defines the same %s keys in both languages',
+    (section) => {
+      const english = leafKeys(i18n.getResourceBundle('en-US', 'translation')[section], section).sort();
+      const chinese = leafKeys(i18n.getResourceBundle('zh-CN', 'translation')[section], section).sort();
+      expect(english.length).toBeGreaterThan(0);
+      expect(chinese).toEqual(english);
+    },
+  );
 
   it('formats version numbers, field options and the system requester column through translations', () => {
     for (const language of ['en-US', 'zh-CN']) {
